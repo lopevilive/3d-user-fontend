@@ -1,0 +1,43 @@
+
+// 圆角
+$bdrH: 8px;
+$bdrM: 5px;
+
+// 外边距
+$mrH: 16px;
+$mrM: 12px;
+$mrL: 8px;
+
+// 内边距
+$pdH: 16px;
+$pdM: 12px;
+$pdL: 8px;
+
+// 字体大小
+$fsB: 20px;
+$fsH: 16px;
+$fsM: 14px;
+$fsL: 12px;
+
+// 字体颜色
+$grey: #626262;
+
+// 背景颜色
+$bgWhite: #fff;
+$bgGrey: #f5f5f5;
+
+// 阴影
+$shadow: 0px 0px 5px 2px #e3e3e3;
+$shadowBlack: 0px 0px 5px 5px #3c3c3c;
+
+.mrM {
+  margin: $mrM $mrM 0 $mrM;
+}
+
+.ellipsis{
+  overflow:hidden; //超出的文本隐藏
+  text-overflow:ellipsis; //溢出用省略号显示
+  white-space:nowrap; //溢出不换行
+}
+
+

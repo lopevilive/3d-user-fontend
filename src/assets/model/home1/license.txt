@@ -1,0 +1,11 @@
+Model Information:
+* title:	Home spa
+* source:	https://sketchfab.com/3d-models/home-spa-ca9d77704cc4463f81c8bcf9388107be
+* author:	Neospace (https://sketchfab.com/neospace)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Home spa" (https://sketchfab.com/3d-models/home-spa-ca9d77704cc4463f81c8bcf9388107be) by Neospace (https://sketchfab.com/neospace) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
