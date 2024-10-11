@@ -66,8 +66,7 @@ export class ModelManage {
   }
   startAnimate() {
     this.renderer.render(this.scene, this.camera)
-    console.log(1)
-   this.timer = requestAnimationFrame(() => {
+    this.timer = requestAnimationFrame(() => {
       this.renderer.render(this.scene, this.camera)
       this.startAnimate()
     })

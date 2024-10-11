@@ -8,7 +8,7 @@
           </div>
         </VanSwipeItem>
       </VanSwipe>
-      <VanButton class="see-3d" icon="eye-o" text="查看3D效果" size="mini" @click="handleView3D"/>
+      <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看3D效果" size="mini" @click="handleView3D"/>
     </div>
     <div class="name-share">
       <div class="name">{{ info.name }}</div>
@@ -26,16 +26,18 @@
       </div>
     </div>
     <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
+    <Setting />
   </div>
 </template>
 
 <script setup>
-import {ref, computed} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import { useRoute } from 'vue-router'
-import { getProduct } from '@/http/cgi.js'
-import { commonFetch } from '@/util/index.js'
-import {globalData} from '@/sotre/index.js'
+import { getProduct } from '@/http'
+import { commonFetch } from '@/util'
+import {globalData} from '@/store'
 import ModelDisplay from '@/components/model-display/index.vue'
+import Setting from '@/components/setting/index.vue'
 
 const route = useRoute()
 const {id: productId, shopId} = route.params
@@ -85,11 +87,19 @@ const handleView3D = () => {
 const init = async () => {
   if (!productId) return
   const data = await commonFetch(getProduct, {productId})
-  info.value = data?.[0] ?? info.value
+  if (data.list.length) {
+    info.value = data.list[0]
+  }
 }
 
-init()
-  
+onMounted(init)
+
+</script>
+
+<script>
+export default {
+  name: 'ProductDetial'
+}
 </script>
 
 <style scoped lang="scss">

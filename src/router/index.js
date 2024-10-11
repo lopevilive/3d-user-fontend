@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
-import { globalData } from '@/sotre/index.js'
+import { globalData } from '@/store'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,9 +23,6 @@ const router = createRouter({
           path: '',
           name: 'product-manage',
           component:  () => import('@/views/product-manage/index.vue'),
-          meta: {
-            keepAlive: true
-          }
         },
         {
           path: 'product-detial/:id',

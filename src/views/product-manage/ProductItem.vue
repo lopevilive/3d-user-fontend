@@ -35,7 +35,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { globalData } from '@/sotre/index.js'
+import { globalData } from '@/store'
 import { useProductItem } from './hook'
 
 const router = useRouter()

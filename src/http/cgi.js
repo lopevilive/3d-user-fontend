@@ -10,17 +10,6 @@ export const shopMod = (payload) => {
   return post(`/${pathName}/ShopMod`, payload);
 };
 
-export const uploadFile = (file) => {
-  const payload = new FormData()
-  payload.append('file', file.file)
-  const config = {
-    headers: { //添加请求头
-      'Content-Type': 'multipart/form-data'
-    }
-  }
-  return post('/upload/', payload, config)
-}
-
 export const productMod = (payload) => {
   return post(`/${pathName}/ProductMod`, payload)
 }
@@ -43,4 +32,8 @@ export const productTypesMod = (payload) => {
 
 export const productTypesDel = (payload) => {
   return post(`/${pathName}/ProductTypesDel`, payload)
+}
+
+export const getCosTempKeys = () => {
+  return post(`/${pathName}/GetCosTempKeys`)
 }

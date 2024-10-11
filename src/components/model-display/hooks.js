@@ -35,6 +35,8 @@ export const useModelDisplay = (props, emits, domId) => {
   }
 
   const initModel = async () => {
+    if(props.productInfo.type3D !== 1) return
+    
     md = new ModelManage()
     document.querySelector(domId).appendChild( md.renderer.domElement );
     const cfg = modelCfg[0]

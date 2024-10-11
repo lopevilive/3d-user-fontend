@@ -12,7 +12,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { globalLoading } from '/Users/crushcaca/Desktop/pro/3d-plat/user-font-end/src/util/index.js'
+import { globalLoading } from '@/util'
 
 const loading = ref(false)
 globalLoading.setRef(loading)

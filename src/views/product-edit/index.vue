@@ -1,7 +1,7 @@
 <template>
   <div class="product-edit">
     <VanForm label-align="right" label-width="70" ref="formRef">
-      <VanCellGroup inset>
+      <VanCellGroup>
         <VanField label="产品主图:" :required="true" :rules="[{required: true, message: '主图不能为空'}]">
           <template #input>
             <UploadImgs v-model="data.url"  preview-size="16vw" :max-count="1" />
@@ -62,7 +62,15 @@
           <Select v-model="data.model3D" :columns="model3dOpts" v-model:show="showModel3d"  />
         </template>
         <template v-if="data.type3D === 2">
-          
+          <VanField label="地址:" :required="true" :rules="[{required: true, message: '地址不能为空'}]" v-model="data.modelUrl" readonly>
+            <template #input>
+              <div class="model-url">
+                <VanField placeholder="请扫描二维码或输入地址" v-model="data.modelUrl"/>
+                <VanButton icon="scan" size="small"/>
+                <VanButton icon="delete-o" size="small" @click="data.modelUrl = ''"/>
+              </div>
+            </template>
+          </VanField>
         </template>
       </VanCellGroup>
       <div style="margin: 16px;">
@@ -100,12 +108,21 @@ init()
 <style scoped lang="scss">
 .product-edit {
   background: $bgWhite;
-  :deep(.van-cell) {
-    padding: $pdM 0;
-  }
   :deep(.van-cell-group) {
     border-bottom: 1px solid #ebedf0;
     border-radius: 0;
+    .model-url {
+      display: flex;
+      justify-content: space-between;
+      flex: 1;
+      .van-cell {
+        padding: 0;
+      }
+      .van-button {
+        border: none;
+        font-size: 18px;
+      }
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import { showNotify, showSuccessToast } from 'vant';
 export * from './enum'
+export * from './cos'
 
 
 class LoadingManage {

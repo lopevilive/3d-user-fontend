@@ -7,7 +7,9 @@
     @closed="destoryModel"
   >
     <div class="content" id="scene" v-if="isShow">
-      <iframe class="iframe-wrap" src="https://vr.justeasy.cn/view/1t68i47165dr73p1-1684715734.html"> </iframe>
+      <template v-if="productInfo.type3D === 2">
+        <iframe class="iframe-wrap" :src="productInfo.modelUrl"> </iframe>
+      </template>
       <VanLoading v-if="isShowLoading" />
       <div class="close">
         <VanIcon name="cross" @click="handleClose"/>
@@ -38,7 +40,7 @@ const {
 defineExpose({
   showModelDisplay: () => {
     isShow.value = true
-    // nextTick(initModel)
+    nextTick(initModel)
   }
 })
 

@@ -1,7 +1,7 @@
 <template>
   <div class="view-album-mod">
     <VanForm label-align="right" label-width="70" ref="formRef">
-      <VanCellGroup inset>
+      <VanCellGroup>
         <VanField label="Logo:" :required="true" :rules="[{required: true, message: 'logo 不能为空'}]">
           <template #input>
             <UploadImgs preview-size="16vw" v-model="data.logo" :max-count="1"/>
@@ -31,12 +31,12 @@
 
 
 <script setup>
-import { shopMod, getShop } from '@/http/cgi.js'
-import { commonFetch } from '@/util/index.js'
+import { shopMod, getShop } from '@/http'
+import { commonFetch } from '@/util'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import UploadImgs from '@/components/uploadImgs/index.vue'
-import { globalData } from '@/sotre/index.js'
+import { globalData } from '@/store'
 
 const router = useRouter()
 const route = useRoute()
@@ -74,9 +74,6 @@ init()
 <style scoped lang="scss">
 .view-album-mod {
   background: $bgWhite;
-  :deep(.van-cell) {
-    padding: $pdM 0;
-  }
   :deep(.van-cell-group) {
     border-bottom: 1px solid #ebedf0;
     border-radius: 0;

@@ -14,7 +14,7 @@
       </div>
     </VanFloatingBubble>
     <VanActionSheet
-      :actions="actions"
+      :actions="actionDisplay"
       v-model:show="show"
       @select="selectHandle"
       close-on-click-action
@@ -28,7 +28,7 @@
 import { ref } from 'vue'
 import { useSetting } from './hook'
 
-const { actions, isShow, isShowDone, handleDone } = useSetting()
+const { actionDisplay, isShow, isShowDone, handleDone } = useSetting()
 
 const offset = ref({ x: document.body.clientWidth * 0.872, y: document.body.clientHeight * 0.7});
 

@@ -1,6 +1,6 @@
 import { ref, computed} from 'vue'
-import { productTypesMod } from '@/http/cgi.js'
-import { commonFetch } from '@/util/index.js'
+import { productTypesMod } from '@/http'
+import { commonFetch } from '@/util'
 import { useRoute } from 'vue-router'
 
 export const useDialogEdit = (emits) => {

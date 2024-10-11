@@ -18,9 +18,9 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Card from '@/components/card/index.vue'
-import {getShop} from '@/http/cgi.js'
-import { commonFetch } from '@/util/index.js'
-import { globalData } from '@/sotre/index.js'
+import {getShop} from '@/http'
+import { commonFetch } from '@/util'
+import { globalData } from '@/store'
 
 const router = useRouter()
 

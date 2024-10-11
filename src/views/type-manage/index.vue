@@ -21,8 +21,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getProductTypes, productTypesDel } from '@/http/cgi.js'
-import { commonFetch } from '@/util/index.js'
+import { getProductTypes, productTypesDel } from '@/http'
+import { commonFetch } from '@/util'
 import DialogEdit from './dialog-edit.vue'
 import { showConfirmDialog } from 'vant';
 

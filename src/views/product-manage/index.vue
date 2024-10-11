@@ -6,7 +6,8 @@
         <!-- <div class="search"></div> -->
       </div>
       <div class="tabs">
-        <VanTabs v-model:active="activeTab">
+        <!-- 切换太快导致bug，上一个请求的数据覆盖下一个 todo -->
+        <VanTabs v-model:active="activeTab" @change="tabChangeHandle">
           <VanTab v-for="item in productTypes" :key="item.id" :title="item.name"></VanTab>
         </VanTabs>
       </div>
@@ -14,7 +15,16 @@
     <div class="product-content">
       <div class="wrap">
         <div class="list">
-          <productItem v-for="item in prodcutList" :data="item" :key="item.id" @update="fetchProducts"/>
+          <VanList
+            @load="loadHandle"
+            :offset="-150"
+            :immediate-check="false"
+            :finished="finished"
+            v-model:loading="fetchLoading"
+            finished-text="没有更多了"
+          >
+            <productItem v-for="item in prodcutList" :data="item" :key="item.id" @update="activedHandle"/>
+          </VanList>
         </div>
       </div>
     </div>
@@ -23,40 +33,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { getProduct, getShop } from '@/http/cgi.js'
-import { commonFetch } from '@/util/index.js'
-import { globalData } from '@/sotre/index.js'
+import { onActivated } from 'vue'
 import Setting from '@/components/setting/index.vue'
 import productItem from './ProductItem.vue'
+import {useProductManage} from './hook'
 
-const route = useRoute()
-const {shopId} = route.params
+const {
+  init,
+  shopInfo,
+  activeTab,
+  productTypes,
+  prodcutList,
+  loadHandle,
+  finished,
+  fetchLoading,
+  activedHandle,
+  tabChangeHandle
+} = useProductManage()
 
-const prodcutList = ref([])
-const shopInfo = ref({})
-const activeTab = ref(0)
-const productTypes = globalData.value.getProductTypes(shopId)
-
-const fetchProducts = () => {
-  commonFetch(getProduct, {shopId}).then((data) => {
-    prodcutList.value = data || []
-  })
-}
-
-const fetchShop = async () => {
-  const res = await commonFetch(getShop, {shopId})
-  if (res?.[0])shopInfo.value = res[0]
-}
-
-const init = async () => {
-  fetchProducts()
-  fetchShop()
-}
+onActivated(activedHandle)
 
 init()
 
+</script>
+
+<script>
+export default {
+  name: 'ProductManage'
+}
 </script>
 
 <style lang="scss" scoped>
@@ -109,11 +113,20 @@ init()
       width: 100%;
       max-height: 100%;
       overflow: auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content:space-between;
-      align-items:flex-start;
       padding: $pdL;
+      :deep(.van-list) {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:space-between;
+        align-items:flex-start;
+      }
+      :deep(.van-list__loading) {
+        width: 100%;
+      }
+      :deep(.van-list__finished-text) {
+        width: 100%;
+      }
     }
   }
 }
