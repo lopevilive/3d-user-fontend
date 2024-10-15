@@ -1,6 +1,8 @@
 import COS from 'cos-js-sdk-v5';
 import { getCosTempKeys } from '@/http'
 import { showNotify } from 'vant';
+import { md5File } from './util'
+import { useRoute } from 'vue-router'
 
 export const cos = new COS({
   getAuthorization: async function (options, callback) {
@@ -17,7 +19,11 @@ export const cos = new COS({
   }
 });
 
-export const uploadFile = async (file, fileName) => {
+export const uploadFile = async (file, shopId) => {
+  let fileName = await md5File(file)
+  if (shopId) {
+    fileName = `${shopId}_${fileName}`
+  }
   try {
     const data = await cos.uploadFile({
       Bucket: 'upload-1259129443', // 填写自己的 bucket，必须字段

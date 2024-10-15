@@ -3,10 +3,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, getShop } from '@/http'
 import { commonFetch } from '@/util'
 import {globalData} from '@/store'
+import axios from 'axios';
 
 export const useProductItem = (emits) => {
   const router = useRouter()
-
   const isShow = ref(false)
 
   const actions = [
@@ -56,6 +56,7 @@ export const useProductItem = (emits) => {
 export const useProductManage = () => {
   const route = useRoute()
   const shopId = +route.params.shopId
+  let source = axios.CancelToken.source()
 
   const finished = ref(false)
   const fetchLoading = ref(false)
@@ -81,7 +82,8 @@ export const useProductManage = () => {
       productType: activeTab.value
     }
     try {
-      const {data} = await getProduct(payload)
+      fetchLoading.value = true
+      const {data} = await getProduct(payload, {cancelToken: source.token})
       fetchLoading.value = false
       if (data.finished) finished.value = data.finished
       currPage.value += 1
@@ -103,6 +105,8 @@ export const useProductManage = () => {
     currPage.value = 0
     finished.value = false
     prodcutList.value = []
+    source.cancel()
+    source = axios.CancelToken.source()
     loadHandle()
   }
 

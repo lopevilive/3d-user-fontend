@@ -4,7 +4,7 @@
       <VanCellGroup>
         <VanField label="Logo:" :required="true" :rules="[{required: true, message: 'logo 不能为空'}]">
           <template #input>
-            <UploadImgs preview-size="16vw" v-model="data.logo" :max-count="1"/>
+            <UploadImgs v-model="data.logo"/>
           </template>
         </VanField>
         <VanField
@@ -57,6 +57,9 @@ const saveHandle = async () => {
   const payload = {...data.value, userId}
   const res =  await commonFetch(shopMod, payload, '保存成功')
   router.replace({name: 'product-manage', params: {shopId: res}})
+  setTimeout(() => {
+    if (window.history.state.back === window.history.state.current) router.go(-1)
+  }, 0);
 }
 
 const init = async () => {

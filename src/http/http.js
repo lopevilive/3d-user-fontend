@@ -28,6 +28,7 @@ const responseSuccess = (response) => {
 };
 
 const responseFailed = (error) => {
+  if (error.code === 'ERR_CANCELED') return Promise.reject(error);
   showNotify({message: error.message || '未知出错，请联系管理员～', type: 'danger'});
   return Promise.reject(error);
 };

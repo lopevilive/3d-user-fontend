@@ -6,7 +6,6 @@
         <!-- <div class="search"></div> -->
       </div>
       <div class="tabs">
-        <!-- 切换太快导致bug，上一个请求的数据覆盖下一个 todo -->
         <VanTabs v-model:active="activeTab" @change="tabChangeHandle">
           <VanTab v-for="item in productTypes" :key="item.id" :title="item.name"></VanTab>
         </VanTabs>

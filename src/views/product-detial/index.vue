@@ -49,14 +49,9 @@ const info = ref({})
 const productTypes = globalData.value.getProductTypes(shopId)
 
 const imgList = computed(() => {
-  const {url, imgs} = info.value
-  if (!url && !imgs) return []
-  let ret = []
-  ret = [url]
-  if (imgs) {
-    ret = ret.concat(imgs.split(','))
-  }
-  return ret
+  const {url} = info.value
+  if (!url) return []
+  return url.split(',')
 })
 
 const descDisplay = computed(() => {

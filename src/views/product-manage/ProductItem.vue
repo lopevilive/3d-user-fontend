@@ -2,7 +2,7 @@
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content" @click="handleClick">
       <div class="img">
-        <VanImage fit="contain" :src="data.url" />
+        <VanImage fit="contain" :src="urlDisplay" />
       </div>
       <div class="line"></div>
       <div class="desc ellipsis">{{ data.name }}</div>
@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import {computed} from 'vue'
 import { useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { useProductItem } from './hook'
@@ -56,6 +57,12 @@ const handleClick = () => {
     router.push({name: 'product-detial', params: {id}})
   }
 }
+
+const urlDisplay = computed(() => {
+  const {url} = props.data
+  if (!url) return ''
+  return url.split(',')[0]
+})
 
 
 </script>

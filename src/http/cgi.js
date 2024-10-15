@@ -18,8 +18,8 @@ export const productDel = (payload) => {
   return post(`/${pathName}/ProductDel`, payload)
 }
 
-export const getProduct = (payload) => {
-  return post(`/${pathName}/GetProduct`, payload);
+export const getProduct = (...args) => {
+  return post(`/${pathName}/GetProduct`, ...args);
 };
 
 export const getProductTypes = (payload) => {

@@ -11,10 +11,12 @@
   "dependencies": {
     "axios": "^1.7.7",
     "cos-js-sdk-v5": "^1.8.4",
+    "crypto-js": "^4.2.0",
     "three": "^0.167.1",
     "vant": "^4.9.4",
     "vue": "^3.4.31",
     "vue-router": "^4.4.3",
+    "vue3-smooth-dnd": "^0.0.6",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

@@ -2,14 +2,15 @@
   <div class="product-edit">
     <VanForm label-align="right" label-width="70" ref="formRef">
       <VanCellGroup>
-        <VanField label="产品主图:" :required="true" :rules="[{required: true, message: '主图不能为空'}]">
+        <VanField
+          label="产品图片:"
+          v-model="data.url"
+          :required="true"
+          :rules="[{validator: validUrl, message: '图片不能为空'}]"
+          readonly
+        >
           <template #input>
-            <UploadImgs v-model="data.url"  preview-size="16vw" :max-count="1" />
-          </template>
-        </VanField>
-        <VanField label="其他图片:">
-          <template #input>
-            <UploadImgs v-model="data.imgs" preview-size="16vw" :max-count="5"/>
+            <UploadImgs v-model="data.url" />
           </template>
         </VanField>
         <VanField
@@ -96,7 +97,8 @@ const {
   init,
   model3DDisplay,
   model3dOpts,
-  showModel3d
+  showModel3d,
+  validUrl
 }  = useProductEdit()
 
 init()

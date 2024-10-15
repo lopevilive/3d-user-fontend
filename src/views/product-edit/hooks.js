@@ -16,7 +16,6 @@ export const useProductEdit = () => {
       id: id ? id : 0,
       shopId,
       url: '',
-      imgs: '',
       name: '',
       price: '',
       productType: '',
@@ -106,6 +105,11 @@ export const useProductEdit = () => {
     })
   })
 
+  const validUrl = async (value, rule) => {
+    if (!data.value.url) return false
+    return true
+  }
+
   const init = async () => {
     if (!id) return
     const res = await commonFetch(getProduct, {productId: id})
@@ -124,6 +128,7 @@ export const useProductEdit = () => {
     init,
     model3DDisplay,
     showModel3d,
-    model3dOpts
+    model3dOpts,
+    validUrl
   }
 }
