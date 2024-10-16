@@ -15,7 +15,7 @@ export const globalData = ref({
     return computed(() => {
       let res = globalData.value.productTypes?.[shopId]
       if (!res?.length) {
-        fetchProductTypes(shopId)
+        upDateProductTypes(shopId)
         res = []
       }
       res = [{name: '全部',id: 0}, ...res]
@@ -24,9 +24,13 @@ export const globalData = ref({
   }
 })
 
-export const fetchProductTypes = async (shopId) => {
+export const upDateProductTypes = async (shopId) => {
   const {data} = await getProductTypes({shopId})
   if (data?.length) globalData.value.productTypes[shopId] = data
+}
+
+export const initProductTypes = () => {
+  globalData.value.productTypes = {}
 }
 
 // todo

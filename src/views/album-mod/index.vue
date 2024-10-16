@@ -1,6 +1,6 @@
 <template>
   <div class="view-album-mod">
-    <VanForm label-align="right" label-width="70" ref="formRef">
+    <VanForm label-align="right" ref="formRef">
       <VanCellGroup>
         <VanField label="Logo:" :required="true" :rules="[{required: true, message: 'logo 不能为空'}]">
           <template #input>
@@ -22,7 +22,7 @@
           :rules="[{required: true, message: '业务介绍不能为空'}]"
         />
       </VanCellGroup>
-      <div style="margin: 16px;">
+      <div class="bottom">
         <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
       </div>
     </VanForm>
@@ -80,6 +80,12 @@ init()
   :deep(.van-cell-group) {
     border-bottom: 1px solid #ebedf0;
     border-radius: 0;
+    .van-field__label {
+      width: 70px;
+    }
+  }
+  .bottom {
+    margin: 16px;
   }
 
 }

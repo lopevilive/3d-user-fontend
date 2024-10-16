@@ -44,7 +44,7 @@ export const useProductEdit = () => {
 
   const productTypeDisplay = computed(() => {
     let {productType} = data.value
-    if (!productType) return ''
+    if (!productType) return '点击选择分类'
     productType = +productType
     for (const item of productTypes.value) {
       if (item.value === productType) return item.text
@@ -110,6 +110,11 @@ export const useProductEdit = () => {
     return true
   }
 
+  const productTypeDialogRef = ref()
+  const showProductTypeDialog = async () => {
+    productTypeDialogRef.value.show({id: 0, name: ''})
+  }
+
   const init = async () => {
     if (!id) return
     const res = await commonFetch(getProduct, {productId: id})
@@ -129,6 +134,8 @@ export const useProductEdit = () => {
     model3DDisplay,
     showModel3d,
     model3dOpts,
-    validUrl
+    validUrl,
+    showProductTypeDialog,
+    productTypeDialogRef
   }
 }

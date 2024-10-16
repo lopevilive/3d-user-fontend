@@ -1,6 +1,6 @@
 <template>
   <div class="product-edit">
-    <VanForm label-align="right" label-width="70" ref="formRef">
+    <VanForm label-align="right" ref="formRef">
       <VanCellGroup>
         <VanField
           label="产品图片:"
@@ -26,13 +26,19 @@
           placeholder="请输入价格"
         />
         <VanField
-          v-model="productTypeDisplay"
           label="产品分类:"
-          @click="showTypePicker = true"
-          placeholder="点击选择分类"
-          is-link
           readonly
-        />
+        >
+          <template #input>
+            <div class="type-select">
+              <div class="text" @click="showTypePicker = true">
+                <div :class="{'none': !data.productType}">{{ productTypeDisplay }}</div>
+                <div class="line">|</div>
+              </div>
+              <VanButton size="mini" type="primary" icon="plus" @click="showProductTypeDialog">新增</VanButton>
+            </div>
+          </template>
+        </VanField>
         <Select v-model="data.productType" :columns="productTypes" v-model:show="showTypePicker" />
         <VanField
           v-model="data.desc"
@@ -74,10 +80,11 @@
           </VanField>
         </template>
       </VanCellGroup>
-      <div style="margin: 16px;">
+      <div class="bottom">
         <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
       </div>
     </VanForm>
+    <ProductTypeDialog ref="productTypeDialogRef"/>
   </div>
 </template>
 
@@ -86,6 +93,7 @@ import UploadImgs from '@/components/uploadImgs/index.vue'
 import Select from '@/components/select/index.vue'
 import { E_3D_TYPES } from '@/util'
 import {useProductEdit} from './hooks'
+import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 
 const {
   showTypePicker,
@@ -98,7 +106,10 @@ const {
   model3DDisplay,
   model3dOpts,
   showModel3d,
-  validUrl
+  validUrl,
+  addType,
+  productTypeDialogRef,
+  showProductTypeDialog
 }  = useProductEdit()
 
 init()
@@ -125,6 +136,30 @@ init()
         font-size: 18px;
       }
     }
+    .van-field__label {
+      width: 70px;
+    }
+  }
+  .type-select {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    .text {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-right: 10px;
+      .none {
+        color: $greyPlaceholder;
+      }
+      .line {
+        color: $greyPlaceholder;
+      }
+    }
+  }
+  .bottom {
+    margin: 16px;
   }
 }
 

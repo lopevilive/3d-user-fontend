@@ -1,7 +1,6 @@
 
 <template>
   <div class="view-type-manage">
-    <VanSearch v-model="searchStr" placeholder="请输入分类名" @search="searchHandle" show-action @cancel="cancelHandle"/>
     <div class="tit">分类列表</div>
     <VanList :finished="true">
       <VanCell v-for="item in data" :key="item.id" :title="item.name">
@@ -14,7 +13,7 @@
     <div class="bottom-btn">
       <VanButton text="新增分类" block type="primary" native-type="submit" @click="addHandle"/>
     </div>
-    <DialogEdit ref="dialogEditRef" @update="init"/>
+    <ProductTypeDialog ref="dialogEditRef" @update="init"/>
   </div>
 </template>
 
@@ -23,32 +22,23 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getProductTypes, productTypesDel } from '@/http'
 import { commonFetch } from '@/util'
-import DialogEdit from './dialog-edit.vue'
 import { showConfirmDialog } from 'vant';
+import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
+import {initProductTypes} from '@/store'
 
 const route = useRoute()
 const dialogEditRef = ref()
 
 const { shopId } = route.params
 
-const searchStr = ref('')
-
 const data = ref([])
-
-const searchHandle = (val) => {
-  console.log('search')
-}
-
-const cancelHandle = () => {
-  console.log('cancel')
-}
 
 const editHandle = (item) => {
   dialogEditRef.value.show({...item})
 }
 
 const addHandle = () => {
-  dialogEditRef.value.show({id: 0, name: ''})
+  dialogEditRef.value.show({id: 0, name: ''}, true)
 }
 
 const delHandle = async (item) => {
@@ -58,6 +48,7 @@ const delHandle = async (item) => {
       message: `确定删除【${item.name}】?`
     })
     await commonFetch(productTypesDel, {id: item.id})
+    initProductTypes()
     init()
   } catch (error) {}
 }
@@ -76,7 +67,7 @@ init()
   background: $bgWhite;
   min-height: 100%;
   .tit {
-    padding:0 $pdM;
+    padding:$pdH $pdM 0 $pdM;
     color: #528cb1;
   }
   .opt {
