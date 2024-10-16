@@ -53,7 +53,7 @@
         <VanField label="3D场景:">
           <template #input>
             <VanRadioGroup direction="horizontal" v-model="data.type3D">
-              <vanRadio v-for="item in E_3D_TYPES" :name="item.key">{{ item.val }}</vanRadio>
+              <vanRadio v-for="item in E_type3D" :name="item.key">{{ item.val }}</vanRadio>
             </VanRadioGroup>
           </template>
         </VanField>
@@ -91,7 +91,7 @@
 <script setup>
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import Select from '@/components/select/index.vue'
-import { E_3D_TYPES } from '@/util'
+import { E_type3D } from '@/util'
 import {useProductEdit} from './hooks'
 import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 

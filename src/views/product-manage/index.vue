@@ -7,7 +7,7 @@
       </div>
       <div class="tabs">
         <VanTabs v-model:active="activeTab" @change="tabChangeHandle">
-          <VanTab v-for="item in productTypes" :key="item.id" :title="item.name"></VanTab>
+          <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
         </VanTabs>
       </div>
     </div>

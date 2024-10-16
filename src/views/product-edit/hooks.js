@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct } from '@/http'
-import { commonFetch, E_3D_MODELS } from '@/util'
+import { commonFetch, E_model3D } from '@/util'
 import { showConfirmDialog } from 'vant';
 
 export const useProductEdit = () => {
@@ -33,7 +33,7 @@ export const useProductEdit = () => {
   const formRef = ref()
 
   const productTypes = computed(() => {
-    const ret = globalData.value.getProductTypes(shopId).value
+    const ret = globalData.value.getProductTypes(shopId, false).value
     return ret.map((item) => {
       return {
         text: item.name,
@@ -93,14 +93,14 @@ export const useProductEdit = () => {
 
   const model3DDisplay = computed(() => {
     if (!data.value.model3D) return ''
-    for (const item of E_3D_MODELS) {
+    for (const item of E_model3D) {
       if (item.key === data.value.model3D) return item.val
     }
     return ''
   })
 
   const model3dOpts = computed(() => {
-    return E_3D_MODELS.map((item) => {
+    return E_model3D.map((item) => {
       return {text: item.val,value: item.key}
     })
   })

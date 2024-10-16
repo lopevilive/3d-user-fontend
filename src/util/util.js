@@ -2,7 +2,6 @@ import { showNotify, showSuccessToast } from 'vant';
 import md5 from 'crypto-js/md5'
 import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
-import { cos } from './cos';
 
 
 class LoadingManage {
@@ -16,9 +15,11 @@ class LoadingManage {
   }
   stop() {
     this.count --
-    if (this.count === 0) {
-      this.loadingRef.value = false
-    }
+    setTimeout(() => {
+      if (this.count === 0) {
+        this.loadingRef.value = false
+      }
+    }, 0);
   }
   setRef (ref) {
     this.loadingRef = ref

@@ -20,9 +20,9 @@ export default defineConfig({
     },
     preprocessorOptions: {
       scss: {
-        // additionalData: '@import "@/assets/scss/global.scss";'
         additionalData: '@import "@/assets/style/global.scss";',
-        javascriptEnabled: true
+        javascriptEnabled: true,
+        api: 'modern-compiler'
       }
     }
   },

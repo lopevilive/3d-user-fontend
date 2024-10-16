@@ -5,8 +5,7 @@
     <VanList :finished="true">
       <VanCell v-for="item in data" :key="item.id" :title="item.name">
          <div class="opt">
-          <VanIcon name="edit" @click="editHandle(item)" />
-          <VanIcon name="delete-o" @click="delHandle(item)"/>
+          <VanIcon name="setting-o" @click="settingClickHandle(item)"/>
         </div>
       </VanCell>
     </VanList>
@@ -14,49 +13,30 @@
       <VanButton text="新增分类" block type="primary" native-type="submit" @click="addHandle"/>
     </div>
     <ProductTypeDialog ref="dialogEditRef" @update="init"/>
+    <VanActionSheet
+      :actions="actions"
+      v-model:show="showAction"
+      @select="selectHandle"
+      close-on-click-action
+      cancel-text="取消"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { getProductTypes, productTypesDel } from '@/http'
-import { commonFetch } from '@/util'
-import { showConfirmDialog } from 'vant';
 import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
-import {initProductTypes} from '@/store'
+import { useTypeManage } from './hook'
 
-const route = useRoute()
-const dialogEditRef = ref()
-
-const { shopId } = route.params
-
-const data = ref([])
-
-const editHandle = (item) => {
-  dialogEditRef.value.show({...item})
-}
-
-const addHandle = () => {
-  dialogEditRef.value.show({id: 0, name: ''}, true)
-}
-
-const delHandle = async (item) => {
-  try {
-    await showConfirmDialog({
-      title: '删除分类',
-      message: `确定删除【${item.name}】?`
-    })
-    await commonFetch(productTypesDel, {id: item.id})
-    initProductTypes()
-    init()
-  } catch (error) {}
-}
-
-const init = async () => {
-  const res = await commonFetch(getProductTypes, {shopId})
-  data.value = res
-}
+const {
+  data,
+  dialogEditRef,
+  init,
+  addHandle,
+  actions,
+  showAction,
+  selectHandle,
+  settingClickHandle
+} = useTypeManage()
 
 init()
 
@@ -71,15 +51,9 @@ init()
     color: #528cb1;
   }
   .opt {
-    font-size: 20px;
+    font-size: 24px;
     :deep(.van-icon) {
       padding: 5px;
-    }
-    :deep(.van-icon-edit) {
-      color: #528cb1;
-    }
-    :deep(.van-icon-delete-o) {
-      color: red;
     }
   }
   .bottom-btn {
@@ -91,6 +65,5 @@ init()
     background: $bgWhite;
   }
 }
-
 
 </style>

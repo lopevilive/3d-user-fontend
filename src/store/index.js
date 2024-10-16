@@ -10,7 +10,7 @@ export const globalData = ref({
   adminList: [6], // 我管理的图册 todo
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
   productManageNeedUpdate:  false, // 商品列表是否需要更新，比如修改商品后此属性应为 true
-  getProductTypes: (shopId) => {
+  getProductTypes: (shopId, all = true) => {
     shopId = +shopId
     return computed(() => {
       let res = globalData.value.productTypes?.[shopId]
@@ -18,7 +18,9 @@ export const globalData = ref({
         upDateProductTypes(shopId)
         res = []
       }
-      res = [{name: '全部',id: 0}, ...res]
+      if (all) {
+        res = [{name: '全部',id: 0}, ...res]
+      }
       return res
     })
   }
