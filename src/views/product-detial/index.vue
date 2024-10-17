@@ -26,7 +26,7 @@
       </div>
     </div>
     <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
-    <Setting />
+    <Setting :runtimeData="info" />
   </div>
 </template>
 

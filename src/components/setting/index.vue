@@ -6,17 +6,17 @@
       magnetic="x"
       :gap="0"
       v-model:offset="offset"
-      @click="show = true"
+      @click="bubbleClickHandle"
       v-if="isShow"
     >
       <div class="content">
         <VanIcon name="setting-o"/>
       </div>
     </VanFloatingBubble>
-    <VanActionSheet
+    <ActionsSheet
+      ref="actionsSheetRef"
       :actions="actionDisplay"
-      v-model:show="show"
-      @select="selectHandle"
+      @select="actionHandle"
       close-on-click-action
       cancel-text="取消"
     />
@@ -25,20 +25,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useSetting } from './hook'
+import ActionsSheet from '@/components/actions-sheet/index.vue'
 
-const { actionDisplay, isShow, isShowDone, handleDone } = useSetting()
+const props = defineProps({
+  runtimeData: {type: Object}
+})
 
-const offset = ref({ x: document.body.clientWidth * 0.872, y: document.body.clientHeight * 0.7});
-
-
-const show = ref(false)
-
-const selectHandle = (item) => {
-  item?.action()
-}
-
+const {
+  actionDisplay,
+  isShow,
+  isShowDone,
+  handleDone,
+  actionsSheetRef,
+  offset,
+  bubbleClickHandle,
+  actionHandle
+} = useSetting(props)
 
 </script>
 
