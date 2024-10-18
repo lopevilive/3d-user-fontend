@@ -25,67 +25,35 @@
         </div>
       </div>
     </div>
+    <div class="desc-content" v-if="insideDesc.length">
+      <div class="tit">内部参数(不向客户展示)</div>
+      <div class="desc-list">
+        <div class="list-item" v-for="item in insideDesc">
+          <div class="name">{{item.label}}：</div>
+          <div class="desc">{{ item.val }}</div>
+        </div>
+      </div>
+    </div>
     <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
     <Setting :runtimeData="info" />
   </div>
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from 'vue'
-import { useRoute } from 'vue-router'
-import { getProduct } from '@/http'
-import { commonFetch } from '@/util'
-import {globalData} from '@/store'
+import { onMounted } from 'vue'
 import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
+import { useProductDetial } from './hook'
 
-const route = useRoute()
-const {id: productId, shopId} = route.params
-
-const modelDisplayRef = ref()
-
-const info = ref({})
-
-const productTypes = globalData.value.getProductTypes(shopId)
-
-const imgList = computed(() => {
-  const {url} = info.value
-  if (!url) return []
-  return url.split(',')
-})
-
-const descDisplay = computed(() => {
-  let ret = []
-  for (const key of Object.keys(info.value)) {
-    let val = info.value[key]
-    if (!val) continue;
-    if (key === 'desc') {
-      ret.push({label: '产品描述', val})
-    }
-    if (key === 'productType') {
-      val = +val
-      for (const item of productTypes.value) {
-        if (item.id === val) {
-          ret.push({label: '产品类别', val: item.name})
-        }
-      }
-    }
-  }
-  return ret
-})
-
-const handleView3D = () => {
-  modelDisplayRef.value.showModelDisplay()
-}
-
-
-const init = async () => {
-  if (!productId) return
-  const data = await commonFetch(getProduct, {productId})
-  if (data.list.length) {
-    info.value = data.list[0]
-  }
-}
+const {
+  info,
+  imgList,
+  descDisplay,
+  handleView3D,
+  init,
+  modelDisplayRef,
+  insideDesc
+} = useProductDetial()
 
 onMounted(init)
 
@@ -150,7 +118,10 @@ export default {
   }
   .desc-content {
     margin-top: $mrL;
-    flex: 1;
+    .tit {
+      padding: $pdL $pdM;
+      font-weight: bold;
+    }
     .desc-list {
       .list-item {
         display: flex;
@@ -161,7 +132,6 @@ export default {
         .name {
           width: 70px;
           flex-shrink: 0;
-          text-align: right;
         }
         .desc {
           flex: 1;

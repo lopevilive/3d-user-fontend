@@ -1,6 +1,6 @@
 export const E_type3D = [
   {key: 0, val: '无'},
-  {key: 1, val: '默认'},
+  {key: 1, val: '自动生成'},
   {key: 2, val: '扫二维码'},
 ]
 
