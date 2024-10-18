@@ -4,8 +4,8 @@
       <div class="img">
         <VanImage fit="contain" :src="urlDisplay" />
       </div>
-      <div class="line"></div>
-      <div class="desc ellipsis">{{ data.name }}</div>
+      <div class="desc">{{ data.name }}</div>
+      <div class="price" v-if="data.price">¥ {{ data.price }}</div>
     </div>
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">
       <VanIcon name="setting-o" />
@@ -56,43 +56,40 @@ const urlDisplay = computed(() => {
 
 <style lang="scss" scoped>
 .com-product-item {
-  width: 48.5%;
+  width: 94%;
   flex-shrink: 0;
-  border-radius: $bdrM;
+  background-color: #f8f8f8;
   margin-bottom: $mrM;
-  padding-top: $pdM;
-  box-shadow: $shadow;
   box-sizing: border-box;
   position: relative;
   .content {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  .line {
-    border-top: 1px solid #e3e3e3;
-    width: 90%;
-    margin-top: $mrL;
+    padding: $pdM;
+    box-sizing: border-box;
   }
   .img {
     overflow: hidden;
-    width: 140px;
-    height: 140px;
+    // width: 140px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    :deep(.van-image) {
-      height: 100%;
-    }
+    // margin: $mrL 0;
   }
   .desc {
-    text-align: center;
-    font-size: $fsL;
-    line-height: 16px;
+    line-height: 20px;
     color: $grey;
-    padding: $pdL;
     width: 100%;
+    padding-top: $pdM;
     box-sizing: border-box;
+  }
+  .price {
+    font-weight: bold;
+    width: 100%;
+    margin-top: $mrL;
+    color: $grey;
   }
   .setting {
     position: absolute;

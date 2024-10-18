@@ -45,7 +45,7 @@ export const useModelDisplay = (props, emits, domId) => {
     try {
       isShowLoading.value = true
       await md.loadModel(path)
-      exec(md, props.productInfo.url)
+      exec(md, props.productInfo.url.split(',')[0])
     } finally {
       isShowLoading.value = false
     }

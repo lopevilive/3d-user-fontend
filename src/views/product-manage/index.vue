@@ -13,17 +13,15 @@
     </div>
     <div class="product-content">
       <div class="wrap">
-        <div class="list">
-          <VanList
-            @load="loadHandle"
-            :offset="-150"
-            :immediate-check="false"
-            :finished="finished"
-            v-model:loading="fetchLoading"
-            finished-text="没有更多了"
-          >
-            <productItem v-for="item in prodcutList" :data="item" :key="item.id" @update="activedHandle"/>
-          </VanList>
+        <div class="list" ref="listRef" @scroll="scrollHandle">
+            <div ref="leftListRef" class="left-list list-item">
+              <productItem v-for="item in leftList" :data="item" :key="item.id" @update="activedHandle"/>
+            </div>
+            <div ref="rightListRef" class="right-list list-item">
+              <productItem v-for="item in rightList" :data="item" :key="item.id" @update="activedHandle"/>
+            </div>
+            <div v-if="fetchLoading" class="loading"><VanLoading /></div>
+            <div v-if="finished" class="done">到底啦～</div>
         </div>
       </div>
     </div>
@@ -42,12 +40,16 @@ const {
   shopInfo,
   activeTab,
   productTypes,
-  prodcutList,
-  loadHandle,
-  finished,
-  fetchLoading,
   activedHandle,
-  tabChangeHandle
+  tabChangeHandle,
+  leftList,
+  rightList,
+  leftListRef,
+  rightListRef,
+  listRef,
+  scrollHandle,
+  finished,
+  fetchLoading
 } = useProductManage()
 
 onActivated(activedHandle)
@@ -85,11 +87,9 @@ export default {
     margin-top: $mrL;
     :deep(.van-tabs__nav) {
       .van-tabs__line {
-        width: 6px;
-        height: 6px;
-        background: #000;
-        border-radius: 50%;
-        opacity: 0.7;
+        background: #ec6443;
+        width: 20px;
+        height: 4px;
       }
     }
   }
@@ -113,18 +113,28 @@ export default {
       max-height: 100%;
       overflow: auto;
       padding: $pdL;
-      :deep(.van-list) {
-        width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content:space-between;
+      align-items:flex-start;
+      .list-item {
+        width: 50%;
         display: flex;
         flex-wrap: wrap;
-        justify-content:space-between;
-        align-items:flex-start;
+        justify-content: center;
       }
-      :deep(.van-list__loading) {
+      .loading {
         width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-      :deep(.van-list__finished-text) {
+      .done {
         width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $greyPlaceholder;
       }
     }
   }

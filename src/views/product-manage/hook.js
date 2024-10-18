@@ -79,14 +79,37 @@ export const useProductManage = () => {
   const pageSize = 6
   const currPage = ref(0)
 
-  const prodcutList = ref([])
   const shopInfo = ref({})
   const activeTab = ref(0)
   const productTypes = globalData.value.getProductTypes(shopId)
 
+  const listRef = ref()
+
+  const leftList = ref([])
+  const rightList = ref([])
+  const leftListRef = ref()
+  const rightListRef = ref()
+  let leftIdx = 0
+  let rightIdx = 0
+
   const fetchShop = async () => {
     const res = await commonFetch(getShop, {shopId})
     if (res?.[0])shopInfo.value = res[0]
+  }
+
+  const handleRes = (list) => {
+    const lH = window.getComputedStyle(leftListRef.value).height
+    const rH = window.getComputedStyle(rightListRef.value).height
+    if (lH > rH) rightIdx += 1
+    for (const item of list) {
+      if (leftIdx >= rightIdx) {
+        leftList.value.push(item)
+        rightIdx += 1
+      } else {
+        rightList.value.push(item)
+        leftIdx += 1
+      }
+    }
   }
 
   const loadHandle = async () => {
@@ -100,10 +123,12 @@ export const useProductManage = () => {
     try {
       fetchLoading.value = true
       const {data} = await getProduct(payload, {cancelToken: source.token})
-      fetchLoading.value = false
       if (data.finished) finished.value = data.finished
       currPage.value += 1
-      prodcutList.value = [...prodcutList.value, ...data.list]
+      handleRes(data.list)
+      setTimeout(() => {
+        fetchLoading.value = false
+      }, 0);
     }catch(e) {
       fetchLoading.value = false
       console.error(e)
@@ -120,10 +145,24 @@ export const useProductManage = () => {
     globalData.value.productManageNeedUpdate = false
     currPage.value = 0
     finished.value = false
-    prodcutList.value = []
+    leftList.value = []
+    rightList.value = []
+    leftIdx = 0
+    rightIdx = 0
     source.cancel()
     source = axios.CancelToken.source()
     loadHandle()
+  }
+
+  const scrollHandle = (e) => {
+    const {scrollTop, clientHeight, scrollHeight} = e.target
+    const a = scrollTop + clientHeight
+    const b = scrollHeight
+    if (Math.abs(b - a) < 10){
+      if (finished.value) return
+      if (fetchLoading.value) return
+      loadHandle()
+    }
   }
 
 
@@ -137,11 +176,16 @@ export const useProductManage = () => {
     productTypes,
     activeTab,
     shopInfo,
-    prodcutList,
     loadHandle,
     finished,
     fetchLoading,
     activedHandle,
-    tabChangeHandle
+    tabChangeHandle,
+    leftList,
+    rightList,
+    leftListRef,
+    rightListRef,
+    listRef,
+    scrollHandle
   }
 }
