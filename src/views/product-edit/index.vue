@@ -40,16 +40,9 @@
           </template>
         </VanField>
         <Select v-model="data.productType" :columns="productTypes" v-model:show="showTypePicker" />
-        <VanField
-          v-model="data.desc"
-          label="产品介绍:"
-          rows="2"
-          :autosize="true"
-          show-word-limit
-          maxlength="100"
-          type="textarea"
-          placeholder="请输入说明"
-        />
+      </VanCellGroup>
+
+      <VanCellGroup>
         <VanField label="3D场景:">
           <template #input>
             <VanRadioGroup direction="horizontal" v-model="data.type3D">
@@ -79,6 +72,19 @@
             </template>
           </VanField>
         </template>
+      </VanCellGroup>
+      
+      <VanCellGroup>
+        <VanField
+          v-model="data.desc"
+          label="产品介绍:"
+          rows="2"
+          :autosize="true"
+          show-word-limit
+          maxlength="100"
+          type="textarea"
+          placeholder="请输入说明"
+        />
       </VanCellGroup>
       <div class="bottom">
         <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
@@ -120,10 +126,9 @@ init()
 
 <style scoped lang="scss">
 .product-edit {
-  background: $bgWhite;
+  background: $bgGrey;
   :deep(.van-cell-group) {
-    border-bottom: 1px solid #ebedf0;
-    border-radius: 0;
+    margin-bottom: $mrL;
     .model-url {
       display: flex;
       justify-content: space-between;

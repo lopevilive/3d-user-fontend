@@ -11,13 +11,13 @@
       <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看3D效果" size="mini" @click="handleView3D"/>
     </div>
     <div class="name-share">
-      <div class="name">{{ info.name }}</div>
+      <div class="left">
+        <div class="name">{{ info.name }}</div>
+        <div class="price" v-if="info.price">¥ {{ info.price }}</div>
+      </div>
       <VanButton size="small" icon="share-o" icon-position="right">分享</VanButton>
     </div>
     <div class="desc-content">
-      <div class="desc-head">
-        <div class="tit">产品参数</div>
-      </div>
       <div class="desc-list">
         <div class="list-item" v-for="item in descDisplay">
           <div class="name">{{item.label}}：</div>
@@ -103,14 +103,17 @@ export default {
   flex-direction: column;
   min-height: 100%;
   .swipe {
-    box-shadow: $shadow;
     width: 375px;
     height: 375px;
     position: relative;
+    background: $bgWhite;
     .see-3d {
       position: absolute;
       bottom: 10px;
       right: 10px;
+    }
+    :deep(.van-swipe__indicator) {
+      opacity: 1;
     }
   }
   .swipe-item {
@@ -124,39 +127,37 @@ export default {
   .name-share {
     padding: $pdM;
     display: flex;
-    align-items: center;
     background: $bgWhite;
-    .name {
+    margin-top: 1px;
+    .left {
+      margin-right: $mrL;
       flex: 1;
+    }
+    .name {
       line-height: 20px;
       font-weight: bold;
       font-size: $fsH;
-      display: flex;
+    }
+    .price {
+      color: $red;
+      font-size: $fsH;
+      font-weight: bold;
+      margin-top: $mrL;
     }
     .share {
       flex-shrink: 0;
     }
   }
   .desc-content {
-    background: #fff;
     margin-top: $mrL;
     flex: 1;
-    padding: $pdL $pdM;
-    .desc-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: $pdL;
-      .tit{
-        color: $grey;
-      }
-    }
     .desc-list {
       .list-item {
         display: flex;
-        align-items: center;
-        border-top: 1px solid #e3e3e3;
+        border-bottom: 1px solid #e3e3e3;
         padding: $pdL 0;
+        padding: $pdL $pdM;
+        background: $bgWhite;
         .name {
           width: 70px;
           flex-shrink: 0;
