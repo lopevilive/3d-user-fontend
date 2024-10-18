@@ -7,6 +7,7 @@
   <!-- 这里的目的是加载样式  s-->
   <VanNotify />
   <VanToast />
+  <VanDialog />
   <!-- 这里的目的是加载样式  e-->
 </template>
 

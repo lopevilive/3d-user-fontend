@@ -11,25 +11,12 @@
       <VanIcon name="setting-o" />
     </div>
     <VanActionSheet
+      :actions="actions"
       v-model:show="isShow"
       cancel-text="取消"
       teleport="body"
-    >
-      <template v-for="item in actions">
-        <VanButton
-          v-if="!['前移'].includes(item.name)"
-          class="van-action-sheet__item"
-          :text="item.name"
-          @click="selectHandle(item, data)"
-        />
-        <div v-if="item.name === '前移'" class="move">
-          <span>前移:</span>
-          <VanField placeholder="请输入数字" />
-          <span>位</span>
-          <VanButton size="small">确认</VanButton>
-        </div>
-      </template>
-    </VanActionSheet>
+      @select="selectHandle"
+    />
   </div>
 </template>
 
@@ -47,7 +34,7 @@ const props = defineProps({
 
 const emits = defineEmits(['update'])
 
-const {actions, isShow, settingClickHandle, selectHandle} = useProductItem(emits)
+const {actions, isShow, settingClickHandle, selectHandle} = useProductItem(props,emits)
 
 const handleClick = () => {
   const {id} = props.data
@@ -133,17 +120,6 @@ const urlDisplay = computed(() => {
   25%, 50% { transform: rotate(0deg); }
   50%, 75% { transform: rotate(-1deg); }
   75%, 100% { transform: rotate(0deg); }
-}
-.move {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  :deep(.van-cell) {
-    width: 110px;
-  }
-  :deep(.van-button) {
-    margin: 0 12px;
-  }
 }
 
 </style>

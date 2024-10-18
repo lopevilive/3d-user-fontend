@@ -1,44 +1,60 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { productDel, getProduct, getShop } from '@/http'
+import { productDel, getProduct, getShop, moveTopProduct } from '@/http'
 import { commonFetch } from '@/util'
 import {globalData} from '@/store'
 import axios from 'axios';
+import { showConfirmDialog } from 'vant';
 
-export const useProductItem = (emits) => {
+export const useProductItem = (props, emits) => {
   const router = useRouter()
+  const route = useRoute()
+
   const isShow = ref(false)
+  const shopId = + route.params.shopId
 
   const actions = [
     {
-      name: '修改',
-      action: (data) => {
-        const {id} = data
-        router.push({name: 'product-edit', params: {id}})
-      }
-    },
-    {
-      name: '删除',
-      action: async (data) => {
-        const {id} = data
-        await commonFetch(productDel, {id})
+      name: '移到最前',
+      icon: 'back-top',
+      action: async () => {
+        const {id} = props.data
+        await commonFetch(moveTopProduct, {id, shopId})
         globalData.value.productManageNeedUpdate = true
         emits('update')
       }
     },
     {
-      name: '置顶',
-      action: () => {}
+      name: '修改商品',
+      icon: 'edit',
+      color: '#52b4f8',
+      action: () => {
+        const {id} = props.data
+        router.push({name: 'product-edit', params: {id}})
+      }
     },
     {
-      name: '前移'
-    }
+      name: '删除商品',
+      icon: 'delete-o',
+      color: '#ee0a24',
+      action: async () => {
+        const {id, name} = props.data
+        await showConfirmDialog({
+          title: '删除商品',
+          message: `确定删除【${name}】?`
+        })
+        await commonFetch(productDel, {id})
+        globalData.value.productManageNeedUpdate = true
+        emits('update')
+      }
+    },
+    
   ]
 
-  const selectHandle = (item, data) => {
+  const selectHandle = (item) => {
     isShow.value = false
     const {action} = item
-    action(data)
+    action()
   }
 
   const  settingClickHandle = () => {

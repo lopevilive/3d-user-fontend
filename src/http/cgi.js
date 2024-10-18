@@ -14,6 +14,10 @@ export const productMod = (payload) => {
   return post(`/${pathName}/ProductMod`, payload)
 }
 
+export const moveTopProduct = (payload) => {
+  return post(`/${pathName}/MoveTopProduct`, payload)
+}
+
 export const moveTopProductType = (payload) => {
   return post(`/${pathName}/MoveTopProductType`, payload)
 }
