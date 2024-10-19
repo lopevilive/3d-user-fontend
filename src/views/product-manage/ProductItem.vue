@@ -58,7 +58,7 @@ const urlDisplay = computed(() => {
 .com-product-item {
   width: 94%;
   flex-shrink: 0;
-  background-color: #f8f8f8;
+  background-color: $bgWhite;
   margin-bottom: $mrM;
   box-sizing: border-box;
   position: relative;

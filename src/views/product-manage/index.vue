@@ -82,7 +82,7 @@ export default {
     }
   }
   .tabs{
-    padding: 0 $pdM;
+    padding: 0 $pdM $pdL 0;
     background: $bgWhite;
     margin-top: $mrL;
     :deep(.van-tabs__nav) {
@@ -95,8 +95,6 @@ export default {
   }
   .product-content {
     flex: 1;
-    background: $bgWhite;
-    padding: $pdL;
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
@@ -107,7 +105,6 @@ export default {
     }
     .list {
       position: absolute;
-      // padding-bottom: 50px;
       box-sizing: border-box;
       width: 100%;
       max-height: 100%;

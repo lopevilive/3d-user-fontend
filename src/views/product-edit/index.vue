@@ -43,7 +43,7 @@
       </VanCellGroup>
 
       <VanCellGroup>
-        <VanField label="3D场景:">
+        <VanField label="720°全景:">
           <template #input>
             <VanRadioGroup direction="horizontal" v-model="data.type3D">
               <vanRadio v-for="item in E_type3D" :name="item.key">{{ item.val }}</vanRadio>

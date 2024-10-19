@@ -48,12 +48,12 @@ export const useProductDetial = () => {
         if (val === 1) {
           for (const item of E_model3D) {
             if (item.key === info.value.model3D) {
-              ret.push({label: '3D场景', val: `自动生成-${item.val}`})
+              ret.push({label: '720°全景', val: `自动生成-${item.val}`})
             }
           }
         }
         if (val === 2) {
-          ret.push({label: '3D场景', val: '二维码链接'})
+          ret.push({label: '720°全景', val: '二维码链接'})
         }
       }
     }

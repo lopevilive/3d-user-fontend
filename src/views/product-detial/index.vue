@@ -8,7 +8,7 @@
           </div>
         </VanSwipeItem>
       </VanSwipe>
-      <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看3D效果" size="mini" @click="handleView3D"/>
+      <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看720°全景" size="mini" @click="handleView3D"/>
     </div>
     <div class="name-share">
       <div class="left">
@@ -130,7 +130,7 @@ export default {
         padding: $pdL $pdM;
         background: $bgWhite;
         .name {
-          width: 70px;
+          width: 80px;
           flex-shrink: 0;
         }
         .desc {
