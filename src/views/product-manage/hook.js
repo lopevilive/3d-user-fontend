@@ -76,7 +76,7 @@ export const useProductManage = () => {
 
   const finished = ref(false)
   const fetchLoading = ref(false)
-  const pageSize = 6
+  const pageSize = 10
   const currPage = ref(0)
 
   const shopInfo = ref({})
@@ -98,9 +98,16 @@ export const useProductManage = () => {
   }
 
   const handleRes = (list) => {
-    const lH = window.getComputedStyle(leftListRef.value).height
-    const rH = window.getComputedStyle(rightListRef.value).height
-    if (lH > rH) rightIdx += 1
+    const itemH = window.innerHeight / 3
+    const lH = parseInt(window.getComputedStyle(leftListRef.value).height)
+    const rH =  parseInt(window.getComputedStyle(rightListRef.value).height)
+    const gap = Math.abs(rH - lH)
+    const num =  Math.floor(gap / itemH)
+    if (lH > rH) {
+      rightIdx += (num + 1)
+    } else {
+      leftIdx += num
+    }
     for (const item of list) {
       if (leftIdx >= rightIdx) {
         leftList.value.push(item)
