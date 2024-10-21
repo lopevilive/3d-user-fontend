@@ -66,7 +66,7 @@
             <template #input>
               <div class="model-url">
                 <VanField placeholder="请扫描二维码或输入地址" v-model="data.modelUrl"/>
-                <VanButton icon="scan" size="small"/>
+                <VanButton icon="scan" size="small" @click="scanClickHandle" />
                 <VanButton icon="delete-o" size="small" @click="data.modelUrl = ''"/>
               </div>
             </template>
@@ -91,6 +91,7 @@
       </div>
     </VanForm>
     <ProductTypeDialog ref="productTypeDialogRef"/>
+    <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
   </div>
 </template>
 
@@ -100,6 +101,7 @@ import Select from '@/components/select/index.vue'
 import { E_type3D } from '@/util'
 import {useProductEdit} from './hooks'
 import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
+import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
 
 const {
   showTypePicker,
@@ -113,9 +115,11 @@ const {
   model3dOpts,
   showModel3d,
   validUrl,
-  addType,
   productTypeDialogRef,
-  showProductTypeDialog
+  showProductTypeDialog,
+  scanClickHandle,
+  qrcodeScannerRef,
+  scanHandle
 }  = useProductEdit()
 
 init()

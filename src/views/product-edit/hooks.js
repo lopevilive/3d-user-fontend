@@ -115,6 +115,15 @@ export const useProductEdit = () => {
     productTypeDialogRef.value.show({id: 0, name: ''})
   }
 
+  const qrcodeScannerRef = ref()
+  const scanClickHandle = () => {
+    qrcodeScannerRef.value.show()
+  }
+
+  const scanHandle = (url) => {
+    data.value.modelUrl = url
+  }
+
   const init = async () => {
     if (!id) return
     const res = await commonFetch(getProduct, {productId: id})
@@ -136,6 +145,9 @@ export const useProductEdit = () => {
     model3dOpts,
     validUrl,
     showProductTypeDialog,
-    productTypeDialogRef
+    productTypeDialogRef,
+    qrcodeScannerRef,
+    scanClickHandle,
+    scanHandle
   }
 }

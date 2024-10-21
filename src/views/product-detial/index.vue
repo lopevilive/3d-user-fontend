@@ -129,8 +129,9 @@ export default {
         padding: $pdL 0;
         padding: $pdL $pdM;
         background: $bgWhite;
+        font-size: 12px;
         .name {
-          width: 80px;
+          width: 70px;
           flex-shrink: 0;
         }
         .desc {
