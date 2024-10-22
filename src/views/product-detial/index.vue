@@ -1,6 +1,7 @@
 <template>
   <div class="view-product-detial">
-    <div class="swipe" >
+    <ImgSwipe :list="imgList" />
+    <!-- <div class="swipe" >
       <VanSwipe>
         <VanSwipeItem v-for="item in imgList">
           <div class="swipe-item">
@@ -9,7 +10,7 @@
         </VanSwipeItem>
       </VanSwipe>
       <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看720°全景" size="mini" @click="handleView3D"/>
-    </div>
+    </div> -->
     <div class="name-share">
       <div class="left">
         <div class="name">{{ info.name }}</div>
@@ -44,6 +45,7 @@ import { onMounted } from 'vue'
 import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
+import ImgSwipe from '@/components/img-swipe/index.vue'
 
 const {
   info,
@@ -70,28 +72,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  .swipe {
-    width: 375px;
-    height: 375px;
-    position: relative;
-    background: $bgWhite;
-    .see-3d {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-    }
-    :deep(.van-swipe__indicator) {
-      opacity: 1;
-    }
-  }
-  .swipe-item {
-    width: 375px;
-    height: 375px;
-    :deep(.van-image) {
-      width: 100%;
-      height: 100%;
-    }
-  }
   .name-share {
     padding: $pdM;
     display: flex;

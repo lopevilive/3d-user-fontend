@@ -8,6 +8,7 @@
   <VanNotify />
   <VanToast />
   <VanDialog />
+  <VanImagePreview />
   <!-- 这里的目的是加载样式  e-->
 </template>
 

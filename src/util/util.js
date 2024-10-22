@@ -64,3 +64,8 @@ export const getSuffix = (str) => {
   }
   return ''
 }
+
+export const  getImageUrl = (url, quality = 100) => {
+  // return url
+  return `${url}?imageMogr2/quality/${quality}/format/jpg`
+}

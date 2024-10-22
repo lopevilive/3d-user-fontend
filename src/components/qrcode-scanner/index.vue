@@ -45,9 +45,7 @@ const {
   afterRead
 } = useQrcodeScanner(emits)
 
-defineExpose({
-  show
-})
+defineExpose({show})
 
 onBeforeUnmount(close)
 

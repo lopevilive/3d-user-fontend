@@ -98,7 +98,7 @@ export const useProductManage = () => {
   }
 
   const handleRes = (list) => {
-    const itemH = window.innerHeight / 3
+    const itemH = window.innerWidth
     const lH = parseInt(window.getComputedStyle(leftListRef.value).height)
     const rH =  parseInt(window.getComputedStyle(rightListRef.value).height)
     const gap = Math.abs(rH - lH)

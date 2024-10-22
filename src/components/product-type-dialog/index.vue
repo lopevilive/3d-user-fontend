@@ -30,9 +30,7 @@ const {
   dataList
 } = useDialogEdit(emits)
 
-defineExpose({
-  show
-})
+defineExpose({show})
 
 
 </script>

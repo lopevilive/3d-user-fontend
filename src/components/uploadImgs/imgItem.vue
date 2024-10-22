@@ -1,6 +1,6 @@
 <template>
   <div class="com-img-item">
-    <VanImage :src="url" />
+    <VanImage :src="getImageUrl(url)" />
     <div class="close" v-if="!isLoading" @click="clickHandle">
       <VanIcon name="cross" />
     </div>
@@ -13,6 +13,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Image as VanImage } from 'vant';
+import { getImageUrl } from '@/util'
 
 const props = defineProps({
   data: {type: Object}

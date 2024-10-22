@@ -2,7 +2,7 @@
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content" @click="handleClick">
       <div class="img">
-        <VanImage fit="contain" :src="urlDisplay" />
+        <VanImage fit="contain" :src="getImageUrl(urlDisplay)" />
       </div>
       <div class="desc">{{ data.name }}</div>
       <div class="price" v-if="data.price">¥ {{ data.price }}</div>
@@ -25,6 +25,7 @@ import {computed} from 'vue'
 import { useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { useProductItem } from './hook'
+import { getImageUrl } from '@/util'
 
 const router = useRouter()
 
@@ -71,12 +72,11 @@ const urlDisplay = computed(() => {
   }
   .img {
     overflow: hidden;
-    // width: 140px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    // margin: $mrL 0;
+    min-height: 100px;
   }
   .desc {
     line-height: 20px;

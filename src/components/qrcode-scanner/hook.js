@@ -39,6 +39,7 @@ export const useQrcodeScanner = (emits) => {
   }
 
   const close = async () => {
+    if (!instance) return
     try {
       if (instance.isScanning) {
         await instance.stop()
