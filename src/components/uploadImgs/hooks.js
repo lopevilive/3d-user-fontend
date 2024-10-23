@@ -1,7 +1,7 @@
 import {computed, ref} from 'vue'
 import { uploadFile } from '@/util'
 import { useRoute } from 'vue-router'
-import { showFailToast} from 'vant'
+import { showFailToast, showImagePreview} from 'vant'
 
 export const useUploadImages = (props, emits) => {
   const route = useRoute()
@@ -79,6 +79,11 @@ export const useUploadImages = (props, emits) => {
     showFailToast(`最大支持上传 ${maxSize}M 的图片`)
   }
 
+  const viewHandle = (idx) => {
+    const list = fileList.value.map((item) => item.url)
+    showImagePreview(list, idx)
+  }
+
 
   
   return {
@@ -89,6 +94,7 @@ export const useUploadImages = (props, emits) => {
     uploadings,
     isShowUpload,
     oversizeHandle,
-    maxSize
+    maxSize,
+    viewHandle
   }
 }

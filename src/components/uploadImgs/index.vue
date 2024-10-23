@@ -2,8 +2,8 @@
   <div class="com-upload-imgs">
     <div class="wrap">
       <Container v-if="uploadings.length === 0" @drop="onDrop" orientation="horizontal" lock-axis="x">
-        <Draggable v-for="item in fileList">
-          <ImgItem :data="item" @delete="deleteHandle"/>
+        <Draggable v-for="(item, idx) in fileList">
+          <ImgItem :data="item" @delete="deleteHandle" @view="viewHandle(idx)"/>
         </Draggable>
       </Container>
       <ImgItem v-else v-for="item in fileList" :data="item" />
@@ -39,7 +39,8 @@ const {
   uploadings,
   isShowUpload,
   oversizeHandle,
-  maxSize
+  maxSize,
+  viewHandle
 } = useUploadImages(props, emits)
 
 </script>
