@@ -15,7 +15,7 @@ export const useSetting = (props) => {
   const offset = ref({ x: document.body.clientWidth * 0.872, y: document.body.clientHeight * 0.7});
 
   const acToAlbum = () => {
-    router.push({name: 'album-mod', params: {id: shopId}})
+    router.push({name: 'album-mod', params: {shopId}})
   }
 
   const acProdMod = () => {

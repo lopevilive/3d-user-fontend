@@ -11,7 +11,7 @@ const router = createRouter({
       component: Home
     },
     {
-      path: '/album-mod/:id?',
+      path: '/album-mod/:shopId?',
       name: 'album-mod',
       component: () => import('@/views/album-mod/index.vue')
     },

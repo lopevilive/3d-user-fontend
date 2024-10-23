@@ -8,10 +8,10 @@ import { globalData } from '@/store'
 export const useAlbumMod = () => {
   const router = useRouter()
   const route = useRoute()
-  const {id} = route.params
+  const {shopId} = route.params
 
   const data = ref({
-    id: id ? +id : 0, // 0 新建
+    id: shopId ? +shopId : 0, // 0 新建
     name: '',
     desc: '',
     logo: '',
@@ -31,8 +31,8 @@ export const useAlbumMod = () => {
   }
 
   const init = async () => {
-    if (!id) return
-    const res = await commonFetch(getShop, {shopId: id})
+    if (!shopId) return
+    const res = await commonFetch(getShop, {shopId})
     if (res?.length) data.value = res[0]
   }
 

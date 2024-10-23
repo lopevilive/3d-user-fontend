@@ -20,6 +20,10 @@ export const cos = new COS({
 });
 
 export const uploadFile = async (file, shopId) => {
+  if (!shopId) {
+    console.error(shopId)
+    return // 必须传 shopId
+  }
   let fileName = await md5File(file)
   if (shopId) {
     fileName = `${shopId}_${fileName}`

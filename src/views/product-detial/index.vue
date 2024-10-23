@@ -1,16 +1,9 @@
 <template>
   <div class="view-product-detial">
-    <ImgSwipe :list="imgList" />
-    <!-- <div class="swipe" >
-      <VanSwipe>
-        <VanSwipeItem v-for="item in imgList">
-          <div class="swipe-item">
-            <VanImage fit="contain" :src="item" />
-          </div>
-        </VanSwipeItem>
-      </VanSwipe>
+    <div class="swipe-wrap">
+      <ImgSwipe :list="imgList" />
       <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看720°全景" size="mini" @click="handleView3D"/>
-    </div> -->
+    </div>
     <div class="name-share">
       <div class="left">
         <div class="name">{{ info.name }}</div>
@@ -72,6 +65,14 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  .swipe-wrap {
+    position: relative;
+    .see-3d {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+  }
   .name-share {
     padding: $pdM;
     display: flex;
