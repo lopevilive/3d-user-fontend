@@ -2,13 +2,14 @@
   <div class="com-card" @click="handleClick">
     <div class="company-name">{{ data.name }}</div>
     <div class="content">
-      <VanImage fit="contain" :src="getImageUrl(data.logo)" />
+      <VanImage fit="contain" :src="getImageUrl(logo)" />
       <div class="desc">{{ data.desc }}</div>
     </div>
   </div>
 </template>
 
 <script setup>
+import {computed} from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/util'
 
@@ -17,6 +18,12 @@ const props = defineProps({
 })
 
 const router = useRouter()
+
+const logo = computed(() => {
+  const {url} = props.data
+  if (!url) return ''
+  return props.data.url.split(',')[0]
+})
 
 
 const handleClick = () => {

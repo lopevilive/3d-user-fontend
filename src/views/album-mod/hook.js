@@ -14,15 +14,23 @@ export const useAlbumMod = () => {
     id: shopId ? +shopId : 0, // 0 新建
     name: '',
     desc: '',
-    logo: '',
+    url: '',
+    area: ''
   })
 
   const formRef = ref()
+  const areaSelectRef = ref()
+
+  const areaClick = () => {
+    areaSelectRef.value.show()
+  }
 
   const saveHandle = async () => {
     await formRef.value.validate()
     const { userId } = globalData.value
     const payload = {...data.value, userId}
+    // console.log(payload)
+    // return
     const res =  await commonFetch(shopMod, payload, '保存成功')
     router.replace({name: 'product-manage', params: {shopId: res}})
     setTimeout(() => {
@@ -40,6 +48,8 @@ export const useAlbumMod = () => {
     data,
     formRef,
     saveHandle,
-    init
+    init,
+    areaSelectRef,
+    areaClick
   }
 }

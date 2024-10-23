@@ -1,9 +1,9 @@
 <template>
   <div class="product-edit">
-    <VanForm label-align="right" ref="formRef">
+    <VanForm label-align="left" ref="formRef">
       <VanCellGroup>
         <VanField
-          label="产品图片:"
+          label="产品图片"
           v-model="data.url"
           :required="true"
           :rules="[{validator: validUrl, message: '图片不能为空'}]"
@@ -15,18 +15,18 @@
         </VanField>
         <VanField
           v-model="data.name"
-          label="产品名称:"
+          label="产品名称"
           :required="true"
           placeholder="请输入名称"
           :rules="[{required: true, message: '名称不能为空'}]"
         />
         <VanField
           v-model="data.price"
-          label="产品价格:"
+          label="产品价格"
           placeholder="请输入价格"
         />
         <VanField
-          label="产品分类:"
+          label="产品分类"
           readonly
         >
           <template #input>
@@ -43,7 +43,7 @@
       </VanCellGroup>
 
       <VanCellGroup>
-        <VanField label="720°全景:">
+        <VanField label="720°全景">
           <template #input>
             <VanRadioGroup direction="horizontal" v-model="data.type3D">
               <vanRadio v-for="item in E_type3D" :name="item.key">{{ item.val }}</vanRadio>
@@ -53,7 +53,7 @@
         <template v-if="data.type3D === 1">
           <VanField
             v-model="model3DDisplay"
-            label="场景类型:"
+            label="场景类型"
             placeholder="点击选择场景"
             @click="showModel3d = true"
             is-link
@@ -62,7 +62,7 @@
           <Select v-model="data.model3D" :columns="model3dOpts" v-model:show="showModel3d"  />
         </template>
         <template v-if="data.type3D === 2">
-          <VanField label="地址:" :required="true" :rules="[{required: true, message: '地址不能为空'}]" v-model="data.modelUrl" readonly>
+          <VanField label="地址" :required="true" :rules="[{required: true, message: '地址不能为空'}]" v-model="data.modelUrl" readonly>
             <template #input>
               <div class="model-url">
                 <VanField placeholder="请扫描二维码或输入地址" v-model="data.modelUrl"/>
@@ -77,9 +77,8 @@
       <VanCellGroup>
         <VanField
           v-model="data.desc"
-          label="产品介绍:"
+          label="产品介绍"
           rows="2"
-          :autosize="true"
           show-word-limit
           maxlength="100"
           type="textarea"
@@ -146,7 +145,7 @@ init()
       }
     }
     .van-field__label {
-      width: 70px;
+      width: 84px;
     }
   }
   .type-select {

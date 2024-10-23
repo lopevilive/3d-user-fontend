@@ -43,4 +43,10 @@ $shadowBlack: 0px 0px 5px 5px #3c3c3c;
   white-space:nowrap; //溢出不换行
 }
 
+.field-no-padding {
+  .van-field {
+    padding: 0;
+  }
+}
+
 
