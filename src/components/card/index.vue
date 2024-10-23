@@ -2,7 +2,7 @@
   <div class="com-card" @click="handleClick">
     <div class="company-name">{{ data.name }}</div>
     <div class="content">
-      <VanImage fit="contain" :src="getImageUrl(data.logo, 40)" />
+      <VanImage fit="contain" :src="getImageUrl(data.logo)" />
       <div class="desc">{{ data.desc }}</div>
     </div>
   </div>

@@ -10,7 +10,7 @@
           readonly
         >
           <template #input>
-            <UploadImgs v-model="data.url" />
+            <UploadImgs v-model="data.url" :maxCount="6"/>
           </template>
         </VanField>
         <VanField

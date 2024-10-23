@@ -34,6 +34,15 @@ export const uploadFile = async (file, shopId) => {
       onProgress: function(progressData) {
         console.log('上传进度：', progressData);
       },
+      Headers: {
+        'Pic-Operations': JSON.stringify({
+          "is_pic_info": 1,
+          "rules": [{
+              "fileid": fileName,
+              "rule": "imageMogr2/quality/100/format/jpg"
+          }]
+        })
+      }
     });
     return data
   } catch (e) {

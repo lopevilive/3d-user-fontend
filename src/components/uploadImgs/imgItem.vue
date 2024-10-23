@@ -1,6 +1,6 @@
 <template>
   <div class="com-img-item">
-    <VanImage :src="getImageUrl(url)" />
+    <VanImage :src="url" />
     <div class="close" v-if="!isLoading" @click="clickHandle">
       <VanIcon name="cross" />
     </div>
@@ -22,7 +22,8 @@ const emits = defineEmits(['delete'])
 
 const url = computed(() => {
   const {url, objectUrl} = props.data
-  return url || objectUrl
+  if (url) return getImageUrl(url)
+  return objectUrl
 })
 
 const isLoading = computed(() => {

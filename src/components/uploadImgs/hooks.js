@@ -1,12 +1,14 @@
 import {computed, ref} from 'vue'
 import { uploadFile } from '@/util'
 import { useRoute } from 'vue-router'
+import { showFailToast} from 'vant'
 
 export const useUploadImages = (props, emits) => {
   const route = useRoute()
   const {shopId} = route.params
 
   const uploadings = ref([])
+  const maxSize = 10 // M
   
   const handleUpload = async (file) => {
     uploadings.value.push(file)
@@ -67,6 +69,16 @@ export const useUploadImages = (props, emits) => {
     emits('update:modelValue', list.join(','))
   }
 
+  const isShowUpload = computed(() => {
+    const len = fileList.value.length
+    if (len >= props.maxCount) return false
+    return true
+  })
+
+  const oversizeHandle = (file) => {
+    showFailToast(`最大支持上传 ${maxSize}M 的图片`)
+  }
+
 
   
   return {
@@ -74,6 +86,9 @@ export const useUploadImages = (props, emits) => {
     deleteHandle,
     fileList,
     onDrop,
-    uploadings
+    uploadings,
+    isShowUpload,
+    oversizeHandle,
+    maxSize
   }
 }

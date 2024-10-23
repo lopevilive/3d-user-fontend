@@ -4,7 +4,7 @@
       <VanCellGroup>
         <VanField label="Logo:" :required="true" :rules="[{required: true, message: 'logo 不能为空'}]">
           <template #input>
-            <UploadImgs v-model="data.logo"/>
+            <UploadImgs v-model="data.logo" :maxCount="1"/>
           </template>
         </VanField>
         <VanField
@@ -31,42 +31,17 @@
 
 
 <script setup>
-import { shopMod, getShop } from '@/http'
-import { commonFetch } from '@/util'
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import UploadImgs from '@/components/uploadImgs/index.vue'
-import { globalData } from '@/store'
+import {useAlbumMod} from './hook'
 
-const router = useRouter()
-const route = useRoute()
-const {id} = route.params
 
-const formRef = ref()
+const {
+  data,
+  formRef,
+  saveHandle,
+  init
+} = useAlbumMod()
 
-const data = ref({
-  id: id ? +id : 0, // 0 新建
-  name: '',
-  desc: '',
-  logo: '',
-})
-
-const saveHandle = async () => {
-  await formRef.value.validate()
-  const { userId } = globalData.value
-  const payload = {...data.value, userId}
-  const res =  await commonFetch(shopMod, payload, '保存成功')
-  router.replace({name: 'product-manage', params: {shopId: res}})
-  setTimeout(() => {
-    if (window.history.state.back === window.history.state.current) router.go(-1)
-  }, 0);
-}
-
-const init = async () => {
-  if (!id) return
-  const res = await commonFetch(getShop, {shopId: id})
-  if (res?.length) data.value = res[0]
-}
 
 init()
 

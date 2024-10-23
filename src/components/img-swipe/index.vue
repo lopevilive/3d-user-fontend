@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { getImageUrl } from '@/util'
 import { showImagePreview } from 'vant';
 
@@ -15,12 +14,8 @@ const props = defineProps({
   list: {type: Array, default: () => []}
 })
 
-const previewList = computed(() => {
-  return props.list.map((item) => getImageUrl(item, 100))
-})
-
 const clickHandle = (idx) => {
-  showImagePreview(previewList.value, idx)
+  showImagePreview(props.list, idx)
 }
 
 </script>

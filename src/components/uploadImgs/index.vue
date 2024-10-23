@@ -11,6 +11,10 @@
         :after-read="afterRead"
         :multiple="true"
         preview-size="16vw"
+        :max-count="maxCount"
+        :max-size="1024 * 1024 * maxSize"
+        @oversize="oversizeHandle"
+        v-if="isShowUpload"
       />
     </div>
   </div>
@@ -23,10 +27,20 @@ import { Container, Draggable } from "vue3-smooth-dnd";
 
 const props = defineProps({
   modelValue: {type: String, default: ''},
+  maxCount: {type: Number, default: 1}
 })
 const emits = defineEmits(['update:modelValue'])
 
-const {afterRead, deleteHandle, fileList, onDrop, uploadings} = useUploadImages(props, emits)
+const {
+  afterRead,
+  deleteHandle,
+  fileList,
+  onDrop,
+  uploadings,
+  isShowUpload,
+  oversizeHandle,
+  maxSize
+} = useUploadImages(props, emits)
 
 </script>
 

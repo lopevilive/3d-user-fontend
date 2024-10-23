@@ -50,11 +50,11 @@ export const useSetting = (props) => {
       {name: '商品管理', icon: 'apps-o', color: '#52b4f8', action: acProdMod, includes: ['product-manage']},
       {name: '新增商品', icon: 'add-o', color: '#64b486', action: acAddProd, includes: ['product-manage']},
       {name: '编辑商品', icon: 'edit', color: '#52b4f8', action: acProdEdit, includes: ['product-detial']},
-      {name: '删除商品', icon: 'delete-o', color: '#ee0a24', action: acProdDel, includes: ['product-detial']}
+      {name: '删除商品', icon: 'delete-o', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
+      {name: '分类管理', icon:'bars', action: acTypesMod, includes: ['product-manage', 'product-detial']}
     ],
     [
       {name: '图册管理', icon: 'column', action: acToAlbum, includes: ['product-manage', 'product-detial']},
-      {name: '分类管理', icon:'bars', action: acTypesMod, includes: ['product-manage', 'product-detial']}
     ],
   ]
 

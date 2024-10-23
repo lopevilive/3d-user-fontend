@@ -9,3 +9,8 @@ export const E_model3D = [
   {key: 2, val: '地板'},
   {key: 3, val: '瓷砖'}
 ]
+
+export const E_business = [
+  {key: 1, val: '全屋定制/衣柜定制'},
+  {key: 999, val: '其他'},
+]
