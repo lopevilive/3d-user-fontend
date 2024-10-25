@@ -38,6 +38,7 @@ export const useAlbumMod = () => {
     const res =  await commonFetch(shopMod, payload, '保存成功')
     router.replace({name: 'contact', params: {shopId: res}})
     setTimeout(() => {
+      console.log('8888888')
       if (window.history.state.back === window.history.state.current) router.go(-1)
     }, 0);
   }

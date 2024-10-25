@@ -2,7 +2,13 @@ import COS from 'cos-js-sdk-v5';
 import { getCosTempKeys } from '@/http'
 import { showNotify } from 'vant';
 import { md5File } from './util'
-import { useRoute } from 'vue-router'
+
+
+let keyData = null
+const getKey = async () => {
+  if (keyData) return keyData
+}
+
 
 export const cos = new COS({
   getAuthorization: async function (options, callback) {

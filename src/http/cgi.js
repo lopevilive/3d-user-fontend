@@ -30,6 +30,10 @@ export const getProduct = (...args) => {
   return post(`/${pathName}/GetProduct`, ...args);
 };
 
+export const countProduct = (payload) => {
+  return post(`/${pathName}/CountProduct`, payload);
+}
+
 export const getProductTypes = (payload) => {
   return post(`/${pathName}/GetProductTypes`, payload);
 };

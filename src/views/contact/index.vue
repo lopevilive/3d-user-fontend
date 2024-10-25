@@ -8,10 +8,10 @@
           <VanButton size="small" text="复制地址" @click="copyStr(addressDisplay)" />
         </template>
       </VanCell>
-      <VanCell v-if="shopInfo.phone" title="联系方式" :label="shopInfo.phone">
+      <VanCell v-if="shopInfo.phone || shopInfo.qrcodeUrl" title="联系方式" :label="shopInfo.phone">
         <template #value>
-          <a :href="`tel:${shopInfo.phone}`"><VanButton size="small" text="拨打" /></a>
-          <VanButton class="mr-l" size="small" text="复制号码" @click="copyStr(shopInfo.phone)"/>
+          <a v-if="shopInfo.phone" :href="`tel:${shopInfo.phone}`"><VanButton size="small" text="拨打" /></a>
+          <VanButton v-if="shopInfo.phone" class="mr-l" size="small" text="复制号码" @click="copyStr(shopInfo.phone)"/>
           <!-- todo -->
           <VanButton v-if="shopInfo.qrcodeUrl" class="mr-l" size="small" text="添加微信" />
         </template>

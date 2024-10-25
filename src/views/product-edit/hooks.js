@@ -1,15 +1,24 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productMod, getProduct } from '@/http'
-import { commonFetch, E_model3D } from '@/util'
+import { productMod, getProduct, getShop, countProduct } from '@/http'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D } from '@/util'
 import { showConfirmDialog } from 'vant';
 
 export const useProductEdit = () => {
   const route = useRoute()
   const router = useRouter()
 
-  const {id, shopId} = route.params
+  const id = +route.params.id
+  const shopId = +route.params.shopId
+
+  const shopInfo = ref({})
+
+  const busiCfg = computed(() => {
+    const {business} = shopInfo.value
+    if (!business) return {}
+    return getBusinessCfg(business)
+  })
 
   const getDefaultData = () => {
     return {
@@ -87,6 +96,7 @@ export const useProductEdit = () => {
     }
     router.replace({name: 'product-detial', params: {id: id ? id : res?.id}})
     setTimeout(() => {
+      console.log('99999')
       if (window.history.state.back === window.history.state.current) router.go(-1)
     }, 0);
   }
@@ -100,9 +110,13 @@ export const useProductEdit = () => {
   })
 
   const model3dOpts = computed(() => {
-    return E_model3D.map((item) => {
+    const {model3D} = busiCfg.value
+    if (!model3D?.length) return []
+    let res = E_model3D.filter((item) => model3D.includes(item.key))
+    res = res.map((item) => {
       return {text: item.val,value: item.key}
     })
+    return res
   })
 
   const validUrl = async (value, rule) => {
@@ -124,12 +138,79 @@ export const useProductEdit = () => {
     data.value.modelUrl = url
   }
 
-  const init = async () => {
+  const type3DOpts = computed(() => {
+    const {type3D} = busiCfg.value
+    if (!type3D) return []
+    const res = E_type3D.filter((item) => {
+      if (item.key === 0) return true
+      if (type3D.includes(item.key)) return true
+      return false
+    })
+    if (res.length === 1) return []
+    return res
+
+  })
+
+  const getProductInfo = async () => {
     if (!id) return
     const res = await commonFetch(getProduct, {productId: id})
     if (res.list.length) {
       data.value = res.list[0]
     }
+  }
+
+  const getShopInfo = async () => {
+    const res = await commonFetch(getShop, {shopId})
+    shopInfo.value = res[0]
+  }
+
+  const isFocusName = ref(false)
+  const isShowRecommendNames = computed(() => {
+    if (!isFocusName.value) return false
+    if (!recommendNames.value.length) return false
+    return true
+  })
+  const nameBlurHandle = () => {
+    setTimeout(() => {
+      isFocusName.value = false 
+    }, 0);
+  }
+  const productCountInfo = ref({})
+  const recommendNames = computed(() => {
+    let ret = []
+    for (const {value, text} of productTypes.value) {
+      let count = productCountInfo.value[value]
+      if (!count) count = 0
+      if (count > 0) count += 1
+      ret.push(`${text}${count > 0 ? count : ''}`)
+    }
+    const {recommendNames: names} = busiCfg.value
+    if (!names?.length) return ret
+    let count = productCountInfo.value[0]
+    if (!count) count = 0
+    if (count > 0) count += 1
+    for (const item of names) {
+      ret.push(`${item}${count > 0 ? count : ''}`)
+    }
+
+    return ret
+  })
+
+  const getCount = async () => {
+    const res = await commonFetch(countProduct, {shopId})
+    let ret = {}
+    for (const item of res) {
+      let key = item.productType
+      if (key === '') key = '0'
+      ret[key] = + item.total
+    }
+    productCountInfo.value = ret
+  }
+
+  const init = () => {
+    getProductInfo()
+    getShopInfo()
+    // getCount()
   }
 
   return {
@@ -148,6 +229,11 @@ export const useProductEdit = () => {
     productTypeDialogRef,
     qrcodeScannerRef,
     scanClickHandle,
-    scanHandle
+    scanHandle,
+    type3DOpts,
+    recommendNames,
+    isFocusName,
+    isShowRecommendNames,
+    nameBlurHandle
   }
 }
