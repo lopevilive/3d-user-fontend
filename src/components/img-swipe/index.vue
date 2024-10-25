@@ -1,7 +1,7 @@
 <template>
-  <VanSwipe class="com-img-swipe">
-    <VanSwipeItem v-for="(item, idx) in list">
-      <VanImage fit="contain" :src="getImageUrl(item)" @click="clickHandle(idx)"/>
+  <VanSwipe class="com-img-swipe" :class="{mode2: mode === 2}">
+    <VanSwipeItem v-for="(item, idx) in list" >
+      <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getImageUrl(item)" @click="clickHandle(idx)"/>
     </VanSwipeItem>
   </VanSwipe>
 </template>
@@ -11,7 +11,8 @@ import { getImageUrl } from '@/util'
 import { showImagePreview } from 'vant';
 
 const props = defineProps({
-  list: {type: Array, default: () => []}
+  list: {type: Array, default: () => []},
+  mode: {type: Number, default: 1} // 1 | 2
 })
 
 const clickHandle = (idx) => {
@@ -24,6 +25,9 @@ const clickHandle = (idx) => {
 .com-img-swipe {
   width: 375px;
   height: 375px;
+  &.mode2 {
+    height: 200px;
+  }
   :deep(.van-image) {
     width: 100%;
     height: 100%;

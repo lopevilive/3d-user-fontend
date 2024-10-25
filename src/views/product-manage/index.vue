@@ -98,6 +98,7 @@ export default {
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
+    margin-bottom: $footerBarH;
     .wrap {
       width: 100%;
       height: 100%;
@@ -132,6 +133,7 @@ export default {
         justify-content: center;
         align-items: center;
         color: $greyPlaceholder;
+        line-height: 50px;
       }
     }
   }

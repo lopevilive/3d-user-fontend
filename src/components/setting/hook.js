@@ -54,7 +54,7 @@ export const useSetting = (props) => {
       {name: '分类管理', icon:'bars', action: acTypesMod, includes: ['product-manage', 'product-detial']}
     ],
     [
-      {name: '图册管理', icon: 'column', action: acToAlbum, includes: ['product-manage', 'product-detial']},
+      {name: '图册管理', icon: 'column', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
     ],
   ]
 

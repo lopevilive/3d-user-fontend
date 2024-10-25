@@ -25,10 +25,7 @@
           label="产品价格"
           placeholder="请输入价格"
         />
-        <VanField
-          label="产品分类"
-          readonly
-        >
+        <VanField label="产品分类" readonly>
           <template #input>
             <div class="type-select">
               <div class="text" @click="showTypePicker = true">
@@ -119,7 +116,7 @@ const {
   scanClickHandle,
   qrcodeScannerRef,
   scanHandle
-}  = useProductEdit()
+} = useProductEdit()
 
 init()
 

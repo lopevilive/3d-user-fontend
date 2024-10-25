@@ -11,6 +11,7 @@
   "dependencies": {
     "@vant/area-data": "^2.0.0",
     "axios": "^1.7.7",
+    "copy-to-clipboard": "^3.3.3",
     "cos-js-sdk-v5": "^1.8.4",
     "crypto-js": "^4.2.0",
     "html5-qrcode": "^2.3.8",

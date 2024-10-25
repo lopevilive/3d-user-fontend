@@ -69,3 +69,18 @@ export const  getImageUrl = (url, quality = 40) => {
   // return url
   return `${url}?imageMogr2/quality/${quality}`
 }
+
+export const keyReplace = (list, rules) => {
+  // {key: 'value', val: 'text'}
+  const ret = []
+  for (const item of list) {
+    const tmpItem = {...item}
+    for (const source of Object.keys(rules)) {
+      const target = rules[source]
+      tmpItem[target] = tmpItem[source]
+      delete tmpItem[source]
+    }
+    ret.push(tmpItem)
+  }
+  return ret
+}

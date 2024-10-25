@@ -17,7 +17,7 @@ const router = createRouter({
     },
     {
       path: '/product-manage/:shopId',
-      component:  () => import('@/components/routerView.vue'),
+      component:  () => import('@/components/ComRouterView.vue'),
       children: [
         {
           path: '',
@@ -38,8 +38,12 @@ const router = createRouter({
           path: 'type-manage',
           name: 'type-manage',
           component: () => import('@/views/type-manage/index.vue')
+        },
+        {
+          path: 'contact',
+          name: 'contact',
+          component: () => import('@/views/contact/index.vue')
         }
-        
       ]
     },
     {

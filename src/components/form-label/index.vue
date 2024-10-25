@@ -1,8 +1,8 @@
 <template>
   <div class="com-form-label">
     <div class="content">
-      <div>{{ label }}</div>
-      <VanIcon name="info-o" v-if="tips" @click="tipsHandle"/>
+      <div>{{ label }}<VanIcon name="info-o" v-if="tips" @click="tipsHandle"/></div>
+      
     </div>
   </div>
 </template>
@@ -27,13 +27,12 @@ const tipsHandle = () => {
 .com-form-label {
   display: inline-block;
   .content {
-    display: flex;
-    width: 100%;
-    align-items: center;
     :deep(.van-icon) {
       color: #68b5eb;
       font-size: 16px;
       margin-left: 2px;
+      position: relative;
+      top: 2px;
     }
 
   }
