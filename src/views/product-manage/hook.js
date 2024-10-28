@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, getShop, moveTopProduct, productMod } from '@/http'
-import { commonFetch, EE } from '@/util'
+import { commonFetch, EE, globalLoading } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -13,42 +13,51 @@ export const useProductItem = (props, emits) => {
   const isShow = ref(false)
   const shopId = + route.params.shopId
 
-  const actions = [
-    {
-      name: '修改产品',
+  const actions = computed(() => {
+    const {status} = props.data
+    let ret = [
+      {
+        name: '修改产品',
+        // icon: 'edit',
+        color: '#52b4f8',
+        action: () => {
+          const {id} = props.data
+          router.push({name: 'product-edit', params: {id}})
+        }
+      },
+    ];
+
+    if (status === 0) {
+      ret.push({
+        name: '移到最前',
+        // icon: 'back-top',
+        action: async () => {
+          const {id} = props.data
+          await commonFetch(moveTopProduct, {id, shopId})
+          globalData.value.productManageNeedUpdate = true
+          emits('update')
+        }
+      })
+    }
+
+    const act = status === 0 ? '下架' : '上架'
+    const color = status === 0 ? '#f29b73' : '#58bd6b'
+    ret.push({
+      name: `${act}产品`,
       // icon: 'edit',
-      color: '#52b4f8',
-      action: () => {
-        const {id} = props.data
-        router.push({name: 'product-edit', params: {id}})
-      }
-    },
-    {
-      name: '移到最前',
-      // icon: 'back-top',
-      action: async () => {
-        const {id} = props.data
-        await commonFetch(moveTopProduct, {id, shopId})
-        globalData.value.productManageNeedUpdate = true
-        emits('update')
-      }
-    },
-    {
-      name: '下架产品',
-      // icon: 'edit',
-      color: '#f29b73',
+      color,
       action: async () => {
         const {id, name} = props.data
         await showConfirmDialog({
-          title: '下架产品',
-          message: `确定下架【${name}】?`
+          title: `${act}产品`,
+          message: `确定${act}【${name}】?`
         })
-        await commonFetch(productMod, {id, status: 1})
+        await commonFetch(productMod, {id, status: status === 0 ? 1 : 0})
         globalData.value.productManageNeedUpdate = true
         emits('update')
       }
-    },
-    {
+    })
+    ret.push({
       name: '删除产品',
       // icon: 'delete-o',
       color: '#ee0a24',
@@ -62,9 +71,11 @@ export const useProductItem = (props, emits) => {
         globalData.value.productManageNeedUpdate = true
         emits('update')
       }
-    },
-    
-  ]
+    })
+
+
+    return ret
+  })
 
   const selectHandle = (item) => {
     isShow.value = false
@@ -126,9 +137,14 @@ export const useProductManage = () => {
   const route = useRoute()
   const shopId = +route.params.shopId
   let source = axios.CancelToken.source()
+  const globalLoadingRef = globalLoading.getRef()
 
   const finished = ref(false)
-  const fetchLoading = ref(false)
+  const fetchLoadingRaw = ref(false)
+  const fetchLoading = computed(() => {
+    if (globalLoadingRef.value) return false
+    return fetchLoadingRaw.value
+  })
   const pageSize = 10
   const currPage = ref(0)
 
@@ -146,8 +162,10 @@ export const useProductManage = () => {
   const productTypesRaw = globalData.value.getProductTypes(shopId)
   const productTypes = computed(() => {
     let ret = [...productTypesRaw.value]
-    ret.splice(1,0, {name:'未分类', id: -1})
-    ret.splice(2,0, {name:'已下架', id: -2})
+    if (globalData.value.editStatus === 1) {
+      ret.splice(1,0, {name:'未分类', id: -1})
+      ret.splice(2,0, {name:'已下架', id: -2})
+    }
     return ret
   })
 
@@ -197,16 +215,16 @@ export const useProductManage = () => {
     console.log('load')
     const payload = getPayload()
     try {
-      fetchLoading.value = true
+      fetchLoadingRaw.value = true
       const {data} = await getProduct(payload, {cancelToken: source.token})
       if (data.finished) finished.value = data.finished
       currPage.value += 1
       handleRes(data.list)
       setTimeout(() => {
-        fetchLoading.value = false
+        fetchLoadingRaw.value = false
       }, 0);
     }catch(e) {
-      fetchLoading.value = false
+      fetchLoadingRaw.value = false
       console.error(e)
     }
   }
@@ -237,7 +255,7 @@ export const useProductManage = () => {
     const b = scrollHeight
     if (Math.abs(b - a) < 10){
       if (finished.value) return
-      if (fetchLoading.value) return
+      if (fetchLoadingRaw.value) return
       loadHandle()
     }
   }
@@ -260,6 +278,11 @@ export const useProductManage = () => {
     removeAllSelected()
     await nextTick()
     globalData.value.editStatus = 0
+    // if (activeTab.value < 0) {
+    activeTab.value = 0
+    globalData.value.productManageNeedUpdate = true
+    activedHandle()
+    // }
   }
 
   const addProdHandle = async () => {

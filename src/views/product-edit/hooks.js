@@ -31,7 +31,8 @@ export const useProductEdit = () => {
       desc: '',
       type3D: 0,
       model3D: 1,
-      modelUrl: ''
+      modelUrl: '',
+      status: 0
     }
   }
 

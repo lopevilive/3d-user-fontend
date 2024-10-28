@@ -50,6 +50,8 @@
           placeholder="请输入价格"
         />
         <ProdTypeSelect v-model="data.productType" />
+        <StatusSelect v-model="data.status"/>
+        
       </VanCellGroup>
 
       <VanCellGroup v-if="type3DOpts.length">
@@ -125,6 +127,7 @@ import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
 import FormLabel from '@/components/form-label/index.vue'
 import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/components/prod-type-select/index.vue'
+import StatusSelect from './StatusSelect.vue'
 
 const {
   formRef,

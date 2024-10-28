@@ -25,6 +25,9 @@ class LoadingManage {
   setRef (ref) {
     this.loadingRef = ref
   }
+  getRef() {
+    return this.loadingRef
+  }
 }
 
 export const globalLoading = new LoadingManage()
