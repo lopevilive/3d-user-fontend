@@ -2,6 +2,7 @@ import { showNotify, showSuccessToast } from 'vant';
 import md5 from 'crypto-js/md5'
 import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
+import {EventEmitter} from 'eventemitter3'
 
 
 class LoadingManage {
@@ -84,3 +85,5 @@ export const keyReplace = (list, rules) => {
   }
   return ret
 }
+
+export const EE = new EventEmitter()

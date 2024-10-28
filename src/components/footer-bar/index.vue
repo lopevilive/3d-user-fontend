@@ -55,6 +55,7 @@ const toContact = () => {
   border-top: 1px solid #e3e3e3;
   box-sizing: border-box;
   display: flex;
+  z-index: 0;
   .item {
     width: 50%;
     flex-shrink: 0;

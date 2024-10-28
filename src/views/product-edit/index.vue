@@ -49,18 +49,7 @@
           label="产品价格"
           placeholder="请输入价格"
         />
-        <VanField label="产品分类" readonly>
-          <template #input>
-            <div class="type-select">
-              <div class="text" @click="showTypePicker = true">
-                <div :class="{'none': !data.productType}">{{ productTypeDisplay }}</div>
-                <div class="line">|</div>
-              </div>
-              <VanButton size="mini" type="primary" icon="plus" @click="showProductTypeDialog">新增</VanButton>
-            </div>
-          </template>
-        </VanField>
-        <Select v-model="data.productType" :columns="productTypes" v-model:show="showTypePicker" />
+        <ProdTypeSelect v-model="data.productType" />
       </VanCellGroup>
 
       <VanCellGroup v-if="type3DOpts.length">
@@ -135,13 +124,11 @@ import {useProductEdit} from './hooks'
 import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
 import FormLabel from '@/components/form-label/index.vue'
+import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/components/prod-type-select/index.vue'
 
 const {
-  showTypePicker,
   formRef,
-  productTypes,
   data,
-  productTypeDisplay,
   saveHandle,
   init,
   model3DDisplay,
@@ -149,7 +136,6 @@ const {
   showModel3d,
   validUrl,
   productTypeDialogRef,
-  showProductTypeDialog,
   scanClickHandle,
   qrcodeScannerRef,
   scanHandle,
@@ -209,24 +195,6 @@ init()
         border-radius: 20px;
         font-size: 14px;
         flex-shrink: 0;
-      }
-    }
-  }
-  .type-select {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    .text {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-right: 10px;
-      .none {
-        color: $greyPlaceholder;
-      }
-      .line {
-        color: $greyPlaceholder;
       }
     }
   }

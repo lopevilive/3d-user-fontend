@@ -20,7 +20,6 @@
       close-on-click-action
       cancel-text="取消"
     />
-    <div class="done" v-if="isShowDone" @click="handleDone">完成</div>
   </div>
 </template>
 
@@ -35,8 +34,6 @@ const props = defineProps({
 const {
   actionDisplay,
   isShow,
-  isShowDone,
-  handleDone,
   actionsSheetRef,
   offset,
   bubbleClickHandle,
@@ -46,18 +43,6 @@ const {
 </script>
 
 <style lang="scss" scoped>
-.com-setting {
-  .done{
-    position: fixed;
-    right: 10px;
-    top: 10px;
-    background: #7e7e80;
-    border-radius: 40px;
-    padding: 5px 20px;
-    font-weight: bold;
-    font-size: 12px;
-  }
-}
 
 </style>
 

@@ -17,41 +17,31 @@
       teleport="body"
       @select="selectHandle"
     />
+    <VanCheckbox v-model=checked shape="square" v-if="globalData.editStatus === 1" @change="changeHandle"/>
   </div>
 </template>
 
 <script setup>
-import {computed} from 'vue'
-import { useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { useProductItem } from './hook'
 import { getImageUrl } from '@/util'
-
-const router = useRouter()
 
 const props = defineProps({
   data: {type: Object, default: () => {}}
 })
 
-const emits = defineEmits(['update'])
+const emits = defineEmits(['update','selected'])
 
-const {actions, isShow, settingClickHandle, selectHandle} = useProductItem(props,emits)
-
-const handleClick = () => {
-  const {id} = props.data
-  if (globalData.value.editStatus === 1) {
-    router.push({name: 'product-edit', params: {id}})
-  } else {
-    router.push({name: 'product-detial', params: {id}})
-  }
-}
-
-const urlDisplay = computed(() => {
-  const {url} = props.data
-  if (!url) return ''
-  return url.split(',')[0]
-})
-
+const {
+  actions,
+  isShow,
+  settingClickHandle,
+  selectHandle,
+  handleClick,
+  urlDisplay,
+  checked,
+  changeHandle,
+} = useProductItem(props,emits)
 
 </script>
 
@@ -63,6 +53,18 @@ const urlDisplay = computed(() => {
   margin-bottom: $mrM;
   box-sizing: border-box;
   position: relative;
+  :deep(.van-checkbox) {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    .van-checkbox__icon {
+      height: auto;
+      .van-icon {
+        font-size: 20px;
+        border-width: 2px;
+      }
+    }
+  }
   .content {
     display: flex;
     flex-direction: column;
@@ -93,8 +95,8 @@ const urlDisplay = computed(() => {
   }
   .setting {
     position: absolute;
-    top: -12px;
-    left: -12px;
+    top: -10px;
+    left: 0px;
     font-size: 16px;
     z-index: 100;
     padding: 10px;
@@ -113,9 +115,9 @@ const urlDisplay = computed(() => {
   animation: shake 180ms infinite linear;
 }
 @keyframes shake {
-  10%, 25% { transform: rotate(1deg); }
+  10%, 25% { transform: rotate(0.3deg); }
   25%, 50% { transform: rotate(0deg); }
-  50%, 75% { transform: rotate(-1deg); }
+  50%, 75% { transform: rotate(-0.3deg); }
   75%, 100% { transform: rotate(0deg); }
 }
 

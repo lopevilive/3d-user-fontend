@@ -37,7 +37,6 @@ export const useProductEdit = () => {
 
   const data = ref(getDefaultData())
 
-  const showTypePicker = ref(false)
   const showModel3d = ref(false)
   const formRef = ref()
 
@@ -51,18 +50,8 @@ export const useProductEdit = () => {
     })
   })
 
-  const productTypeDisplay = computed(() => {
-    let {productType} = data.value
-    if (!productType) return '点击选择分类'
-    productType = +productType
-    for (const item of productTypes.value) {
-      if (item.value === productType) return item.text
-    }
-    return ''
-  })
-
   const getContinue = async () => {
-    if (id) return false // 编辑商品直接返回
+    if (id) return false // 编辑产品直接返回
     let ret = false
     try {
       await showConfirmDialog({
@@ -125,9 +114,6 @@ export const useProductEdit = () => {
   }
 
   const productTypeDialogRef = ref()
-  const showProductTypeDialog = async () => {
-    productTypeDialogRef.value.show({id: 0, name: ''})
-  }
 
   const qrcodeScannerRef = ref()
   const scanClickHandle = () => {
@@ -166,8 +152,9 @@ export const useProductEdit = () => {
 
   const isFocusName = ref(false)
   const isShowRecommendNames = computed(() => {
+    if (data.value.name) return false
     if (!isFocusName.value) return false
-    if (!recommendNames.value.length) return false
+    if (!recommendNames.value?.length) return false
     return true
   })
   const nameBlurHandle = () => {
@@ -215,17 +202,13 @@ export const useProductEdit = () => {
 
   return {
     data,
-    showTypePicker,
     formRef,
-    productTypes,
-    productTypeDisplay,
     saveHandle,
     init,
     model3DDisplay,
     showModel3d,
     model3dOpts,
     validUrl,
-    showProductTypeDialog,
     productTypeDialogRef,
     qrcodeScannerRef,
     scanClickHandle,

@@ -1,5 +1,5 @@
 <template>
-  <VanPopup v-model:show="showDisplay" position="bottom">
+  <VanPopup v-model:show="showDisplay" position="bottom" teleport="body">
     <VanPicker
       :columns="columns"
       @cancel="showDisplay = false"

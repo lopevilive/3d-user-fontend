@@ -1,9 +1,30 @@
 <template>
   <div class="com-product-manage">
     <div>
-      <div class="header">
-        <div class="name">{{ shopInfo.name }}</div>
-        <!-- <div class="search"></div> -->
+      <div class="mode__edit"  v-if="globalData.editStatus === 1">
+        <div class="edit-left">
+          <VanButton text="新增产品" size="small" type="primary" :round="true" icon="plus" @click="addProdHandle"/>
+          <!-- <VanButton text="全选" size="small" :round="true" type="primary" plain/> -->
+          <VanButton
+            text="取消选择"
+            size="small"
+            :round="true"
+            type="primary"
+            plain
+            :disabled="selectedList.length === 0"
+            @click="removeAllSelected"
+          />
+        </div>
+        <div class="edit-right">
+          <div class=main-btn @click="handleEditDone">完成</div>
+        </div>
+        <div class="edit__bottom">
+          <VanButton text="批量上架" size="small" type="success" :disabled="selectedList.length === 0" @click="handleMulOnOff('on')" v-if="activeTab === -2" />
+          <VanButton text="批量下架" size="small" type="warning" :disabled="selectedList.length === 0" @click="handleMulOnOff('off')" v-else/>
+          <VanButton text="批量删除" size="small" type="danger" :disabled="selectedList.length === 0" @click="handleMulDel" />
+          <VanButton text="批量改价" size="small" type="primary" :disabled="selectedList.length === 0" @click="handleMulPrice" />
+          <VanButton text="批量分类" size="small" type="primary" :disabled="selectedList.length === 0" @click="handleMulChangeType" />
+        </div>
       </div>
       <div class="tabs">
         <VanTabs v-model:active="activeTab" @change="tabChangeHandle">
@@ -13,12 +34,12 @@
     </div>
     <div class="product-content">
       <div class="wrap">
-        <div class="list" ref="listRef" @scroll="scrollHandle">
+        <div class="list" @scroll="scrollHandle">
             <div ref="leftListRef" class="left-list list-item">
-              <productItem v-for="item in leftList" :data="item" :key="item.id" @update="activedHandle"/>
+              <productItem v-for="item in leftList" :data="item" :key="item.id" @update="activedHandle" @selected="selectedHandle" />
             </div>
             <div ref="rightListRef" class="right-list list-item">
-              <productItem v-for="item in rightList" :data="item" :key="item.id" @update="activedHandle"/>
+              <productItem v-for="item in rightList" :data="item" :key="item.id" @update="activedHandle" @selected="selectedHandle" />
             </div>
             <div v-if="fetchLoading" class="loading"><VanLoading /></div>
             <div v-if="finished" class="done">到底啦～</div>
@@ -26,6 +47,8 @@
       </div>
     </div>
     <Setting />
+    <MulPrice ref="mulPriceRef"/>
+    <MulProductType ref="mulProductTypeRef" />
   </div>
 </template>
 
@@ -34,10 +57,12 @@ import { onActivated } from 'vue'
 import Setting from '@/components/setting/index.vue'
 import productItem from './ProductItem.vue'
 import {useProductManage} from './hook'
+import { globalData } from '@/store'
+import MulPrice from './MulPrice.vue'
+import MulProductType from './MulProductType.vue'
 
 const {
   init,
-  shopInfo,
   activeTab,
   productTypes,
   activedHandle,
@@ -46,10 +71,20 @@ const {
   rightList,
   leftListRef,
   rightListRef,
-  listRef,
   scrollHandle,
   finished,
-  fetchLoading
+  fetchLoading,
+  selectedList,
+  selectedHandle,
+  removeAllSelected,
+  handleEditDone,
+  addProdHandle,
+  handleMulOnOff,
+  handleMulDel,
+  handleMulPrice,
+  handleMulChangeType,
+  mulPriceRef,
+  mulProductTypeRef
 } = useProductManage()
 
 onActivated(activedHandle)
@@ -70,21 +105,51 @@ export default {
   background: $bgGrey;
   display: flex;
   flex-direction: column;
-  .header {
+  .mode__edit {
     background: $bgWhite;
-    height: 60px;
-    .name {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 $pdM;
+    border-bottom: 1px solid #e3e3e3;
+    .main-btn {
+      background: #7e7e80;
+      border-radius: 40px;
+      padding: 5px 20px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .edit-left,.edit-right {
       display: flex;
-      justify-content: center;
-      font-size: $fsB;
-      padding: $pdH;
-      position: relative;
+      align-items: center;
+      
+    }
+    :deep(.van-button) {
+      margin-right: $mrL;
+    }
+    .edit__bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: $footerBarH;
+      background: $bgWhite;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 $pdH;
+      box-sizing: border-box;
+      align-items: center;
+      border-top: 1px solid #e3e3e3;
+      :deep(.van-button) {
+        margin-right: 0;
+      }
     }
   }
   .tabs{
-    padding: 0 $pdM $pdL 0;
+    padding: 0 $pdM $pdL $pdM;
     background: $bgWhite;
-    margin-top: $mrL;
+    // margin-top: $mrL;
     :deep(.van-tabs__nav) {
       .van-tabs__line {
         background: #ec6443;

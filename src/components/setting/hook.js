@@ -37,7 +37,7 @@ export const useSetting = (props) => {
   const acProdDel = async () => {
     const {runtimeData} = props
     await showConfirmDialog({
-      title: '删除商品',
+      title: '删除产品',
       message: `确定删除【${runtimeData.name}】?`
     })
     await commonFetch(productDel, {id: productId})
@@ -47,14 +47,14 @@ export const useSetting = (props) => {
   
   const actions = [
     [
-      {name: '商品管理', icon: 'apps-o', color: '#52b4f8', action: acProdMod, includes: ['product-manage']},
-      {name: '新增商品', icon: 'add-o', color: '#64b486', action: acAddProd, includes: ['product-manage']},
-      {name: '编辑商品', icon: 'edit', color: '#52b4f8', action: acProdEdit, includes: ['product-detial']},
-      {name: '删除商品', icon: 'delete-o', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
-      {name: '分类管理', icon:'bars', action: acTypesMod, includes: ['product-manage', 'product-detial']}
+      {name: '产品管理', icon: 'apps-o', color: '#52b4f8', action: acProdMod, includes: ['product-manage']},
+      {name: '新增产品', icon: 'add-o', color: '#64b486', action: acAddProd, includes: ['product-manage']},
+      {name: '编辑产品', icon: 'edit', color: '#52b4f8', action: acProdEdit, includes: ['product-detial']},
+      {name: '删除产品', icon: 'delete-o', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
     ],
     [
       {name: '图册管理', icon: 'column', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '分类管理', icon:'bars', action: acTypesMod, includes: ['product-manage', 'product-detial']}
     ],
   ]
 
@@ -80,17 +80,6 @@ export const useSetting = (props) => {
     return false
   })
 
-  const isShowDone = computed(() => {
-    const {editStatus} = globalData.value
-    if (isShow.value) return false
-    if (editStatus === 1) return true
-    return false
-  })
-  
-  const handleDone = () => {
-    globalData.value.editStatus = 0
-  }
-
   const bubbleClickHandle = () => {
     actionsSheetRef.value.show()
   }
@@ -102,8 +91,6 @@ export const useSetting = (props) => {
 
   return {
     isShow,
-    isShowDone,
-    handleDone,
     actionDisplay,
     actionsSheetRef,
     offset,

@@ -9,7 +9,7 @@ export const globalData = ref({
   ownerList: [5], // 我创建的图册 todo
   adminList: [6], // 我管理的图册 todo
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
-  productManageNeedUpdate:  false, // 商品列表是否需要更新，比如修改商品后此属性应为 true
+  productManageNeedUpdate:  false, // 产品列表是否需要更新，比如修改产品后此属性应为 true
   getProductTypes: (shopId, all = true) => {
     shopId = +shopId
     return computed(() => {
