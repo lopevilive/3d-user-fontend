@@ -36,6 +36,7 @@ export const useAlbumMod = () => {
     const { userId } = globalData.value
     const payload = {...data.value, userId}
     const res =  await commonFetch(shopMod, payload, '保存成功')
+    globalData.value.done = false
     router.replace({name: 'contact', params: {shopId: res}})
     setTimeout(() => {
       console.log('8888888')

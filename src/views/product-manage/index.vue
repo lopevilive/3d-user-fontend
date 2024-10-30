@@ -16,7 +16,7 @@
           />
         </div>
         <div class="edit-right">
-          <div class=main-btn @click="handleEditDone">完成</div>
+          <div class=main-btn @click="handleEditDone">退出管理</div>
         </div>
         <div class="edit__bottom">
           <VanButton text="批量上架" size="small" type="success" :disabled="selectedList.length === 0" @click="handleMulOnOff('on')" v-if="activeTab === -2" />

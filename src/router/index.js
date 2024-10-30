@@ -59,6 +59,9 @@ const router = createRouter({
 })
 
 const init = async () => {
+  // todo
+  globalData.value.done = true
+  console.log('init')
 }
 
 router.beforeEach(async (to, from) => {
