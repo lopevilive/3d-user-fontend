@@ -2,7 +2,7 @@
   <div class="view-product-detial">
     <div class="swipe-wrap">
       <ImgSwipe :list="imgList" />
-      <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="查看720°全景" size="mini" @click="handleView3D"/>
+      <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/>
     </div>
     <div class="name-share">
       <div class="left">

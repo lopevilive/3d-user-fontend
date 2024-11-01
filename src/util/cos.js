@@ -7,12 +7,14 @@ import { md5File } from './util'
 let keyData = null
 const getKey = async () => {
   if (keyData) return keyData
+  keyData = await getCosTempKeys()
+  return keyData
 }
 
 
 export const cos = new COS({
   getAuthorization: async function (options, callback) {
-    const {data} = await getCosTempKeys() // todo 登录改造完成后这里可以改为全局调用一次
+    const {data} = await getKey()
     callback({
       TmpSecretId: data.credentials.tmpSecretId,
       TmpSecretKey: data.credentials.tmpSecretKey,

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import { globalData } from '@/store'
+import { login, getUserInfo } from '@/http'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -58,16 +59,23 @@ const router = createRouter({
   ]
 })
 
-const init = async () => {
-  // todo
-  globalData.value.done = true
-  console.log('init')
+const init = async (to, from) => {
+  const {query: token} = to
+  if (!token) { // 无token 信息, todo
+    globalData.value.done = true
+    return
+  }
+  const userInfo = await getUserInfo()
+
+  const res = await login()
+  console.log(res)
+  console.log(to)
 }
 
 router.beforeEach(async (to, from) => {
   const {done} = globalData.value
   if (done) return // 初始化完成
-  await init()
+  await init(to, from)
 })
 
 export default router

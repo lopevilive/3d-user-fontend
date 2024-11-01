@@ -4,8 +4,8 @@ import { showNotify } from 'vant';
 const http = axios.create({
   timeout: 1000 * 10,
   withCredentials: true,
-  baseURL: 'https://www.album.com/api'
-  // baseURL: 'https://1259129443-5jp7l471i1.ap-guangzhou.tencentscf.com/api'
+  baseURL: 'https://www.album.com'
+  // baseURL: '1259129443-5jp7l471i1.ap-guangzhou.tencentscf.com'
 });
 
 // 请求拦截器
