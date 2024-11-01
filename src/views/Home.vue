@@ -31,7 +31,7 @@ const toAlbum = () => {
 const userAlbum = ref(null)
 // 用户的图册
 const getUserAlbum = async () => {
-  const {userId} = globalData.value
+  const {userInfo: {userId} } = globalData.value
   if (!userId) return
   const data = await commonFetch(getShop, {userId})
   if (data?.length) {

@@ -11,8 +11,8 @@ const http = axios.create({
 // 请求拦截器
 const beforeRequest = (config) => {
   // 设置 token
-  // const token = localStorage.getItem('token');
-  // token && (config.headers.Authorization = token);
+  const token = localStorage.getItem('token');
+  token && (config.headers.Authorization = token);
   return config;
 };
 

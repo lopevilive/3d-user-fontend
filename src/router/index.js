@@ -14,7 +14,8 @@ const router = createRouter({
     {
       path: '/album-mod/:shopId?',
       name: 'album-mod',
-      component: () => import('@/views/album-mod/index.vue')
+      component: () => import('@/views/album-mod/index.vue'),
+      meta: {needLogin: true}
     },
     {
       path: '/product-manage/:shopId',
@@ -34,11 +35,13 @@ const router = createRouter({
           path: 'product-edit/:id?',
           name: 'product-edit',
           component: () => import('@/views/product-edit/index.vue'),
+          meta: {needLogin: true}
         },
         {
           path: 'type-manage',
           name: 'type-manage',
-          component: () => import('@/views/type-manage/index.vue')
+          component: () => import('@/views/type-manage/index.vue'),
+          meta: {needLogin: true}
         },
         {
           path: 'contact',
@@ -59,23 +62,55 @@ const router = createRouter({
   ]
 })
 
+const getToken = (query) => {
+  const {token: queryToken} = query
+  const storageToken = localStorage.getItem('token')
+  if (queryToken) {
+    if (storageToken !== queryToken) {
+      localStorage.setItem('token', queryToken)
+    }
+  }
+  return queryToken || storageToken || '' // 优先从 url 取
+}
+
 const init = async (to, from) => {
-  const {query: token} = to
-  if (!token) { // 无token 信息, todo
-    globalData.value.done = true
+  const token = getToken(to.query)
+  const { needLogin } = to.meta
+  if (!token) { // 无token 信息
+    if (needLogin) {
+      // todo ，此处应前往登录
+      return false
+    }
     return
   }
-  const userInfo = await getUserInfo()
+  if (globalData.value?.userInfo?.userId) { // 已经登录
+    return true
+  }
 
-  const res = await login()
-  console.log(res)
-  console.log(to)
+  try {
+    const {data} = await getUserInfo({token})
+    console.log(data, 'userInfo')
+    if (!data.userId && needLogin) {
+      // 获取用户信息失败，说明 token 失效了，此处应前往登录 todo
+      return false
+    }
+    globalData.value.userInfo = data
+  } catch(e) {
+    if (needLogin) {
+      // todo ，此处应前往登录
+      return false
+    }
+  }
+
+  
+
+  // const res = await login()
+  // console.log(res)
+  
 }
 
 router.beforeEach(async (to, from) => {
-  const {done} = globalData.value
-  if (done) return // 初始化完成
-  await init(to, from)
+  return await init(to, from)
 })
 
 export default router

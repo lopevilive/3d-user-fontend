@@ -33,8 +33,7 @@ export const useAlbumMod = () => {
 
   const saveHandle = async () => {
     await formRef.value.validate()
-    const { userId } = globalData.value
-    const payload = {...data.value, userId}
+    const payload = {...data.value}
     const res =  await commonFetch(shopMod, payload, '保存成功')
     globalData.value.done = false
     router.replace({name: 'contact', params: {shopId: res}})
