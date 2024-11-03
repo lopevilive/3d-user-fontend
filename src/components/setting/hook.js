@@ -14,11 +14,16 @@ export const useSetting = (props) => {
   const actionsSheetRef = ref()
   const offset = ref({ x: document.body.clientWidth * 0.872, y: document.body.clientHeight * 0.7});
 
+  const rid = globalData.value.getUserRid(shopId)
+
   const acToAlbum = () => {
     router.push({name: 'album-mod', params: {shopId}})
   }
 
   const acProdMod = () => {
+    if (route.name === 'contact') {
+      router.push({name: 'product-manage'})
+    }
     globalData.value.editStatus = 1;
   }
 
@@ -44,17 +49,22 @@ export const useSetting = (props) => {
     globalData.value.productManageNeedUpdate = true
     router.replace({name: 'product-manage'})
   }
+
+  const acStaff = async () => {
+
+  }
   
   const actions = [
     [
-      {name: '产品管理', icon: 'apps-o', color: '#52b4f8', action: acProdMod, includes: ['product-manage']},
-      {name: '新增产品', icon: 'add-o', color: '#64b486', action: acAddProd, includes: ['product-manage']},
-      {name: '编辑产品', icon: 'edit', color: '#52b4f8', action: acProdEdit, includes: ['product-detial']},
-      {name: '删除产品', icon: 'delete-o', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
+      {name: '产品管理', color: '#52b4f8', action: acProdMod, includes: ['product-manage', 'contact']},
+      {name: '新增产品', color: '#64b486', action: acAddProd, includes: ['product-manage', 'contact']},
+      {name: '编辑产品', color: '#52b4f8', action: acProdEdit, includes: ['product-detial']},
+      {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
     ],
     [
-      {name: '图册管理', icon: 'column', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
-      {name: '分类管理', icon:'bars', action: acTypesMod, includes: ['product-manage', 'product-detial']}
+      {name: '图册管理', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '分类管理', action: acTypesMod, includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '人员管理', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
     ],
   ]
 
@@ -63,6 +73,9 @@ export const useSetting = (props) => {
     for (const list of actions) {
       const tmpRet = []
       for (const item of list) {
+        if (item?.rids?.length) {
+          if (!item.rids.includes(rid.value)) continue
+        }
         if (item.includes.includes(route.name)) {
           tmpRet.push(item)
         }
@@ -73,10 +86,8 @@ export const useSetting = (props) => {
   })
 
   const isShow = computed(() => {
-    const {userInfo: {ownerList, adminList}, editStatus} = globalData.value
-    if (editStatus === 1) return false // 编辑中，不显示
-    if (ownerList?.includes(shopId)) return true
-    if (adminList?.includes(shopId)) return true
+    const rid = globalData.value.getUserRid(shopId)
+    if ([2,3,99].includes(rid.value)) return true
     return false
   })
 

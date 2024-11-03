@@ -32,12 +32,14 @@ export const useDialogEdit = (emits) => {
   const getData = () => {
     return {
       data: [{...data.value, shopId: + shopId}],
+      shopId
     }
   }
 
   const getMulData = () => {
     return {
       data: dataList.value.filter((item) => item.name).map((item) => ({...item, shopId: +shopId})),
+      shopId
     }
   }
 
