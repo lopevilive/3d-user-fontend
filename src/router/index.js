@@ -88,7 +88,7 @@ const init = async (to, from) => {
   }
 
   try {
-    const {data} = await getUserInfo({token})
+    const {data} = await getUserInfo()
     console.log(data, 'userInfo')
     if (!data.userId && needLogin) {
       // 获取用户信息失败，说明 token 失效了，此处应前往登录 todo

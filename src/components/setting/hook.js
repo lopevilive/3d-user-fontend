@@ -73,10 +73,10 @@ export const useSetting = (props) => {
   })
 
   const isShow = computed(() => {
-    const {ownerList, adminList, editStatus} = globalData.value
+    const {userInfo: {ownerList, adminList}, editStatus} = globalData.value
     if (editStatus === 1) return false // 编辑中，不显示
-    if (ownerList.includes(shopId)) return true
-    if (adminList.includes(shopId)) return true
+    if (ownerList?.includes(shopId)) return true
+    if (adminList?.includes(shopId)) return true
     return false
   })
 

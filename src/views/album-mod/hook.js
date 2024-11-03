@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { shopMod, getShop } from '@/http'
+import { shopCreate, shopMod, getShop } from '@/http'
 import { commonFetch, keyReplace, E_business } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
@@ -34,8 +34,8 @@ export const useAlbumMod = () => {
   const saveHandle = async () => {
     await formRef.value.validate()
     const payload = {...data.value}
-    const res =  await commonFetch(shopMod, payload, '保存成功')
-    globalData.value.done = false
+    const api = isEdit ? shopMod : shopCreate
+    const res =  await commonFetch(api, payload, '保存成功')
     router.replace({name: 'contact', params: {shopId: res}})
     setTimeout(() => {
       console.log('8888888')

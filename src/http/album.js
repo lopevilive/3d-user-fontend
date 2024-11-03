@@ -6,6 +6,10 @@ export const getShop = (payload) => {
   return post(`${album}GetShop`, payload);
 };
 
+export const shopCreate = (payload) => {
+  return post(`${album}ShopCreate`, payload);
+};
+
 export const shopMod = (payload) => {
   return post(`${album}ShopMod`, payload);
 };

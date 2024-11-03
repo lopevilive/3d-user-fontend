@@ -7,6 +7,6 @@ export const login = (payload) => {
   return post(`${user}Login`, payload);
 }
 
-export const getUserInfo = (payload) => {
-  return post(`${user}GetUserInfo`, payload);
+export const getUserInfo = () => {
+  return post(`${user}GetUserInfo`);
 }
