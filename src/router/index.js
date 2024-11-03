@@ -47,6 +47,12 @@ const router = createRouter({
           path: 'contact',
           name: 'contact',
           component: () => import('@/views/contact/index.vue')
+        },
+        {
+          path: 'staff-manage',
+          name: 'staff-manage',
+          component: () => import('@/views/staff-manage/index.vue'),
+          meta: {needLogin: true}
         }
       ]
     },

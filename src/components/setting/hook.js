@@ -21,7 +21,7 @@ export const useSetting = (props) => {
   }
 
   const acProdMod = () => {
-    if (route.name === 'contact') {
+    if (route.name !== 'product-manage') {
       router.push({name: 'product-manage'})
     }
     globalData.value.editStatus = 1;
@@ -51,20 +51,20 @@ export const useSetting = (props) => {
   }
 
   const acStaff = async () => {
-
+    router.push({name: 'staff-manage'})
   }
   
   const actions = [
     [
-      {name: '产品管理', color: '#52b4f8', action: acProdMod, includes: ['product-manage', 'contact']},
+      {name: '产品管理', color: '#5794f7', action: acProdMod, includes: ['product-manage', 'contact']},
       {name: '新增产品', color: '#64b486', action: acAddProd, includes: ['product-manage', 'contact']},
-      {name: '编辑产品', color: '#52b4f8', action: acProdEdit, includes: ['product-detial']},
+      {name: '编辑产品', color: '#5794f7', action: acProdEdit, includes: ['product-detial']},
       {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
+      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'product-detial', 'contact']},
     ],
     [
-      {name: '图册管理', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
-      {name: '分类管理', action: acTypesMod, includes: ['product-manage', 'product-detial', 'contact']},
-      {name: '人员管理', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
+      {name: '图册管理', color: '#5794f7', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '人员管理', color: '#5794f7', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
     ],
   ]
 

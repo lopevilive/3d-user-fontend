@@ -18,8 +18,7 @@ export const useProductItem = (props, emits) => {
     let ret = [
       {
         name: '修改产品',
-        // icon: 'edit',
-        color: '#52b4f8',
+        color: '#5794f7',
         action: () => {
           const {id} = props.data
           router.push({name: 'product-edit', params: {id}})
@@ -30,7 +29,7 @@ export const useProductItem = (props, emits) => {
     if (status === 0) {
       ret.push({
         name: '移到最前',
-        // icon: 'back-top',
+        color: '#5794f7',
         action: async () => {
           const {id} = props.data
           await commonFetch(moveTopProduct, {id, shopId})
@@ -44,7 +43,6 @@ export const useProductItem = (props, emits) => {
     const color = status === 0 ? '#f29b73' : '#58bd6b'
     ret.push({
       name: `${act}产品`,
-      // icon: 'edit',
       color,
       action: async () => {
         const {id, name} = props.data
@@ -52,7 +50,7 @@ export const useProductItem = (props, emits) => {
           title: `${act}产品`,
           message: `确定${act}【${name}】?`
         })
-        await commonFetch(productMod, {id, status: status === 0 ? 1 : 0})
+        await commonFetch(productMod, {id, status: status === 0 ? 1 : 0, shopId})
         globalData.value.productManageNeedUpdate = true
         emits('update')
       }
@@ -175,11 +173,13 @@ export const useProductManage = () => {
   }
 
   const handleRes = (list) => {
-    const itemH = window.innerWidth
-    const lH = parseInt(window.getComputedStyle(leftListRef.value).height)
-    const rH =  parseInt(window.getComputedStyle(rightListRef.value).height)
-    const gap = Math.abs(rH - lH)
-    const num =  Math.floor(gap / itemH)
+    const lH = parseInt(window.getComputedStyle(leftListRef.value).height) // 左列表高度
+    const rH =  parseInt(window.getComputedStyle(rightListRef.value).height) // 右列表高度
+    const total = leftList.value.length + rightList.value.length
+    const aver = (lH + rH) / total // 平均每个商品的高度
+    const gap = Math.abs(rH - lH) // 左右高度差
+    let num =  Math.floor(gap / aver)
+    if (!num) num = 0
     if (lH > rH) {
       rightIdx += (num + 1)
     } else {
@@ -296,7 +296,7 @@ export const useProductManage = () => {
       title: `批量${act}`,
       message: `确定${act}所选产品吗？当前选中 ${selectedList.value.length} 个产品。`
     })
-    await commonFetch(productMod, {id: selectedList.value, status: mod === 'on' ? 0 : 1})
+    await commonFetch(productMod, {id: selectedList.value, status: mod === 'on' ? 0 : 1, shopId})
     globalData.value.productManageNeedUpdate = true
     activedHandle()
   }
@@ -314,7 +314,7 @@ export const useProductManage = () => {
   const mulPriceRef = ref()
   const handleMulPrice = async () => {
     const price = await mulPriceRef.value.getPrice()
-    await commonFetch(productMod, {price, id: selectedList.value})
+    await commonFetch(productMod, {price, id: selectedList.value, shopId})
     globalData.value.productManageNeedUpdate = true
     activedHandle()
   }
@@ -322,7 +322,7 @@ export const useProductManage = () => {
   const mulProductTypeRef = ref()
   const handleMulChangeType = async () => {
     const productType = await mulProductTypeRef.value.getType()
-    await commonFetch(productMod, {productType, id: selectedList.value})
+    await commonFetch(productMod, {productType, id: selectedList.value, shopId})
     globalData.value.productManageNeedUpdate = true
     activedHandle()
   }

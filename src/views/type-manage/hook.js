@@ -41,7 +41,7 @@ export const useTypeManage = () => {
 
   const actions = [
     {name: '移到最前', icon: 'back-top',exec: moveTop},
-    {name: '修改分类', icon: 'edit', color: '#52b4f8', exec: editHandle},
+    {name: '修改分类', icon: 'edit', color: '#5794f7', exec: editHandle},
     {name: '删除分类', icon: 'delete-o', color: '#ee0a24', exec: delHandle}
   ]
 
