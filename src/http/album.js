@@ -53,3 +53,11 @@ export const productTypesDel = (payload) => {
 export const getCosTempKeys = () => {
   return post(`${album}GetCosTempKeys`)
 }
+
+export const getStaff = (payload) => {
+  return post(`${album}GetStaff`, payload)
+}
+
+export const delStaff = (payload) => {
+  return post(`${album}DelStaff`, payload)
+}

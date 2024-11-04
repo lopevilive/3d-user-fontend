@@ -9,7 +9,7 @@
         v-model="item.name"
         :key="index + 1"
       />
-      <div class="type-mod-dialog__tips">注：单次可新增 5 个分类</div>
+      <div class="type-mod-dialog__tips">注：单次可新增 {{ MaxNums }} 个分类</div>
     </template>
     <VanField v-else placeholder="请输入分类名称" v-model="data.name" :maxlength="6" input-align="center"/>
   </VanDialog>
@@ -27,7 +27,8 @@ const {
   data,
   beforeClose,
   isMul,
-  dataList
+  dataList,
+  MaxNums
 } = useDialogEdit(emits)
 
 defineExpose({show})

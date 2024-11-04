@@ -8,6 +8,7 @@ import {showSuccessToast, showFailToast} from 'vant'
 export const useDialogEdit = (emits) => {
   const route = useRoute()
   const {shopId} = route.params
+  const MaxNums = 5
   
   const isShow = ref(false)
   const data = ref({})
@@ -19,7 +20,7 @@ export const useDialogEdit = (emits) => {
     isShow.value = true
     data.value = item
     isMul.value = mul
-    dataList.value = new Array(5).fill(null).map(() => ({id: 0, name: ''}))
+    dataList.value = new Array(MaxNums).fill(null).map(() => ({id: 0, name: ''}))
   }
 
   const tit = computed(() => {
@@ -89,6 +90,7 @@ export const useDialogEdit = (emits) => {
     tit,
     beforeClose,
     isMul,
-    dataList
+    dataList,
+    MaxNums
   }
 }

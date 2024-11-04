@@ -46,6 +46,8 @@ init()
 .view-type-manage {
   background: $bgWhite;
   min-height: 100%;
+  padding-bottom: $footerBarH;
+  box-sizing: border-box;
   .tit {
     padding:$pdH $pdM 0 $pdM;
     color: #528cb1;
@@ -60,9 +62,12 @@ init()
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding: $pdH;
+    padding: 0 $pdH;
     box-sizing: border-box;
     background: $bgWhite;
+    height: $footerBarH;
+    display: flex;
+    align-items: center;
   }
 }
 
