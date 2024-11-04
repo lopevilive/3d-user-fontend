@@ -24,13 +24,22 @@ const clickHandle = (idx) => {
 <style lang="scss" scoped>
 .com-img-swipe {
   width: 375px;
-  height: 375px;
+  min-height: 200px;
   &.mode2 {
     height: 200px;
+    :deep(.van-image) {
+      height: 200px;
+    }
+  }
+  :deep(.van-swipe__track) {
+    background: #000;
+  }
+  :deep(.van-swipe-item) {
+    max-height: 480px;
+    margin: auto 0;
   }
   :deep(.van-image) {
     width: 100%;
-    height: 100%;
   }
   :deep(.van-swipe__indicator) {
     opacity: 1;
