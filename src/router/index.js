@@ -101,6 +101,7 @@ const init = async (to, from) => {
     }
     globalData.value.userInfo = data
   } catch(e) {
+    localStorage.setItem('token', '') // 登录失效清空本地缓存
     if (needLogin) {
       // todo ，此处应前往登录
       return false

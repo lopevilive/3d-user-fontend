@@ -22,7 +22,9 @@ http.interceptors.request.use(beforeRequest);
 const responseSuccess = (response) => {
   const {data} = response;
   if (data.code !== 0) {
-    showNotify({message: data.msg || '未知出错，请联系管理员～', type: 'danger'});
+    if (data.code !== -2) {
+      showNotify({message: data.msg || '未知出错，请联系管理员～', type: 'danger'});
+    } 
     return Promise.reject(data);
   }
   return Promise.resolve(response.data);
