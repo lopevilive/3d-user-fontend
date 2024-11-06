@@ -80,6 +80,7 @@ const getToken = (query) => {
 }
 
 const init = async (to, from) => {
+  // const res = await login()
   const token = getToken(to.query)
   const { needLogin } = to.meta
   if (!token) { // 无token 信息

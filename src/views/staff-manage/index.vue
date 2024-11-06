@@ -27,11 +27,13 @@
       close-on-click-action
       cancel-text="取消"
     />
+    <DialogStaff ref="dialogStaffRef"/>
   </div>
 </template>
 
 <script setup>
 import { useStaffManage } from './hook'
+import DialogStaff from './DialogStaff.vue'
 
 const {
   activeTab,
@@ -43,7 +45,8 @@ const {
   showAction,
   selectHandle,
   typeName,
-  addHandle
+  addHandle,
+  dialogStaffRef
 } = useStaffManage()
 
 init()

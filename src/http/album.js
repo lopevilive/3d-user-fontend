@@ -58,6 +58,10 @@ export const getStaff = (payload) => {
   return post(`${album}GetStaff`, payload)
 }
 
+export const createStaff = (payload) => {
+  return post(`${album}CreateStaff`, payload)
+}
+
 export const delStaff = (payload) => {
   return post(`${album}DelStaff`, payload)
 }
