@@ -53,6 +53,12 @@ const router = createRouter({
           name: 'staff-manage',
           component: () => import('@/views/staff-manage/index.vue'),
           meta: {needLogin: true}
+        },
+        {
+          path: 'staff-verify/:id',
+          name: 'staff-verify',
+          component: () => import('@/views/staff-verify/index.vue'),
+          meta: {needLogin: true}
         }
       ]
     },
@@ -79,36 +85,47 @@ const getToken = (query) => {
   return queryToken || storageToken || '' // 优先从 url 取
 }
 
-const init = async (to, from) => {
-  // const res = await login()
+// 必须登录
+const handleHeedLogin = async (to) => {
+  if (globalData.value?.userInfo?.userId) return
   const token = getToken(to.query)
-  const { needLogin } = to.meta
-  if (!token) { // 无token 信息
-    if (needLogin) {
-      // todo ，此处应前往登录
-      return false
-    }
-    return
-  }
-  if (globalData.value?.userInfo?.userId) { // 已经登录
-    return true
-  }
-
+  if (!token) return false
   try {
     const {data} = await getUserInfo()
-    if (!data.userId && needLogin) {
-      // 获取用户信息失败，说明 token 失效了，此处应前往登录 todo
-      return false
-    }
+    if (!data?.userId) return false
     globalData.value.userInfo = data
   } catch(e) {
-    localStorage.setItem('token', '') // 登录失效清空本地缓存
-    if (needLogin) {
-      // todo ，此处应前往登录
-      return false
-    }
+    localStorage.setItem('token', '')
+    console.error(e)
+    return false
   }
-  
+}
+
+// 尝试登录
+const handleTryLogin = async (to) => {
+  if (globalData.value?.userInfo?.userId) return
+  const token = getToken(to.query)
+  if (!token) return
+  try {
+    const {data} = await getUserInfo()
+    globalData.value.userInfo = data
+  } catch(e) {
+    localStorage.setItem('token', '')
+    console.error(e)
+  }
+}
+
+const init = async (to, from) => {
+  // const res = await login()
+  const { needLogin } = to.meta
+  if (needLogin) {
+    const res = await handleHeedLogin(to)
+    if (res === false) {
+      // todo 此处应前往登录
+    }
+  } else {
+    await handleTryLogin(to)
+  }
 }
 
 router.beforeEach(async (to, from) => {

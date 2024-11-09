@@ -32,7 +32,7 @@ const clickHandle = (idx) => {
     }
   }
   :deep(.van-swipe__track) {
-    background: #000;
+    // background: #000;
   }
   :deep(.van-swipe-item) {
     max-height: 480px;

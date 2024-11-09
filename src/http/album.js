@@ -65,3 +65,11 @@ export const createStaff = (payload) => {
 export const delStaff = (payload) => {
   return post(`${album}DelStaff`, payload)
 }
+
+export const verfiyStaff = (payload) => {
+  return post(`${album}VerfiyStaff`, payload)
+}
+
+export const acceptStaff = (payload) => {
+  return post(`${album}AcceptStaff`, payload)
+}
