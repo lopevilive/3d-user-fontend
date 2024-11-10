@@ -21,6 +21,7 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 import Select from '@/components/select/index.vue'
+import {globalData} from '@/store'
 
 const props = defineProps({
   modelValue: {type: [Number, String]}
@@ -56,7 +57,7 @@ const productTypeDisplay = computed(() => {
 })
 
 const productTypes = computed(() => {
-  let ret = globalData.value.getProductTypes(shopId, false).value.map((item) => ({text: item.name, value: item.id}))
+  const ret = globalData.value.productTypes.map((item) => ({text: item.name, value: item.id}))
   ret.splice(0,0, {text: '未分类', value: ''})
   return ret
 })

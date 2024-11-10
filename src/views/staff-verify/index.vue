@@ -10,7 +10,7 @@
     >
       <template #title>
         <div class="tit">
-          <VanImage :src="urlDisplay" round/>
+          <VanImage :src="getImageUrl(urlDisplay)" round/>
           <div>成为管理员</div>
         </div>
       </template>
@@ -24,6 +24,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useStaffVerify } from './hook'
+import { getImageUrl } from '@/util'
 
 const {
   init,

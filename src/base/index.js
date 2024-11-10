@@ -21,7 +21,7 @@ export class ModelManage {
     this.assistance = null
     this.light = new Light(this)
     this.width = window.innerWidth * 0.94
-    this.height = window.innerHeight * 0.75
+    this.height = window.innerHeight * 0.8
     this.timer = null
 
     this.init()

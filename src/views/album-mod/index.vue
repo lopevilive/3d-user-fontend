@@ -24,8 +24,8 @@
             <FormLabel label="所属行业" :tips="businessTips"/>
           </template>
           <template #input>
-            <div class="field-no-padding" >
-              <VanField readonly placeholder="请选择所属行业" v-model="businessDisplay" @click="businessClick" />
+            <div class="flex1" >
+              <VanField class="pd0" readonly placeholder="请选择所属行业" v-model="businessDisplay" @click="businessClick" />
             </div>
           </template>
         </VanField>
@@ -36,8 +36,8 @@
             <FormLabel label="所在地区" tips="选择所在地区，以便客户了解贵司位置和服务范围。"/>
           </template>
           <template #input>
-            <div class="field-no-padding" >
-              <VanField readonly placeholder="请选择所在地域" v-model="data.area" @click="areaClick"/>
+            <div class="flex1" >
+              <VanField class="pd0" readonly placeholder="请选择所在地域" v-model="data.area" @click="areaClick"/>
             </div>
           </template>
         </VanField>
@@ -125,7 +125,7 @@ init()
       width: 84px;
     }
     .van-field--disabled {
-      .field-no-padding {
+      .flex1 {
         .van-field__control {
           color: #c8c9cc
         }

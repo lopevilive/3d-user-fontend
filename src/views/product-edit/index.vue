@@ -24,9 +24,10 @@
           readonly
         >
           <template #input>
-            <div class="field-no-padding" >
+            <div class="flex1" >
               <VanField
                 v-model="data.name"
+                class="pd0"
                 placeholder="请输入名称"
                 :border="false"
                 @focus="isFocusName = true"
@@ -60,7 +61,7 @@
             <FormLabel label="720°全景" tips="tmp">
               <template #default>
                 <div class="tips-content">
-                  <div><span class="item">默认</span> - 系统将自动选择第一张作为封面图，并动态生成720°全景图。</div>
+                  <div><span class="item">默认</span> - 系统将自动选择第一张图片，动态生成720°全景图像。</div><br/>
                   <div><span class="item">扫二维码</span> - 如果您已经在酷家乐等软件中完成了720°全景图，可以通过扫描分享二维码在小程序内轻松打开。</div>
                 </div>
               </template>
@@ -77,22 +78,36 @@
           <VanField
             v-model="model3DDisplay"
             label="场景类型"
-            placeholder="点击选择场景"
-            @click="showModel3d = true"
-            is-link
             readonly
             :required="true"
-            :rules="[{required: true, message: '地址不能为空'}]"
-          />
+            :rules="[{required: true, message: '不能为空'}]"
+          >
+            <template #input>
+              <div class="model-default">
+                <VanField
+                  class="pd0 flex1"
+                  placeholder="点击选择场景"
+                  @click="showModel3d = true"
+                  readonly
+                  v-model="model3DDisplay"
+                  :border="false"
+                />
+                <div class="line">|</div>
+                <VanButton v-if="model3DDisplay" @click="preview3D" text="预览" icon="eye-o" size="mini" type="primary"/>
+              </div>
+            </template>
+          </VanField>
           <Select v-model="data.model3D" :columns="model3dOpts" v-model:show="showModel3d"  />
         </template>
         <template v-if="data.type3D === 2 && type3DOpts.length">
           <VanField label="场景地址" :required="true" :rules="[{required: true, message: '地址不能为空'}]" v-model="data.modelUrl" readonly>
             <template #input>
               <div class="model-url">
-                <VanField placeholder="请扫描二维码或输入地址" v-model="data.modelUrl"/>
-                <VanButton icon="scan" size="small" @click="scanClickHandle" />
-                <VanButton icon="delete-o" size="small" @click="data.modelUrl = ''"/>
+                <VanField class="pd0 flex1" placeholder="请扫描二维码或输入地址" v-model="data.modelUrl" :border="false"/>
+                <div class="line">|</div>
+                <VanIcon name="scan" class="iconBtn" @click="scanClickHandle" />
+                <VanIcon name="delete-o" class="iconBtn" @click="data.modelUrl = ''" />
+                <VanButton v-if="data.modelUrl" @click="preview3D" class="preview" text="预览" icon="eye-o" size="mini" type="primary"/>
               </div>
             </template>
           </VanField>
@@ -116,6 +131,7 @@
     </VanForm>
     <ProductTypeDialog ref="productTypeDialogRef"/>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
+    <ModelDisplay ref="modelDisplayRef" :productInfo="data" />
   </div>
 </template>
 
@@ -128,6 +144,7 @@ import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
 import FormLabel from '@/components/form-label/index.vue'
 import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/components/prod-type-select/index.vue'
 import StatusSelect from './StatusSelect.vue'
+import ModelDisplay from '@/components/model-display/index.vue'
 
 const {
   formRef,
@@ -146,7 +163,9 @@ const {
   recommendNames,
   isFocusName,
   isShowRecommendNames,
-  nameBlurHandle
+  nameBlurHandle,
+  modelDisplayRef,
+  preview3D
 } = useProductEdit()
 
 init()
@@ -160,16 +179,27 @@ init()
   background: $bgGrey;
   :deep(.van-cell-group) {
     margin-bottom: $mrL;
+    .model-default {
+      display: flex;
+      width: 100%;
+      .line {
+        color: $greyPlaceholder;
+        margin:0 10px;
+      }
+    }
     .model-url {
       display: flex;
-      justify-content: space-between;
       flex: 1;
-      .van-cell {
-        padding: 0;
+      .line {
+        color: $greyPlaceholder;
+        margin:0 10px;
       }
-      .van-button {
-        border: none;
-        font-size: 18px;
+      .preview {
+        margin-left:5px;
+      }
+      .iconBtn {
+        font-size: 20px;
+        padding: 2px 3px;
       }
     }
     .van-field__label {

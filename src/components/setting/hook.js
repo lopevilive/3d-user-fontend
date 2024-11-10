@@ -14,7 +14,7 @@ export const useSetting = (props) => {
   const actionsSheetRef = ref()
   const offset = ref({ x: document.body.clientWidth * 0.872, y: document.body.clientHeight * 0.7});
 
-  const rid = globalData.value.getUserRid(shopId)
+  const {rid} = globalData.value
 
   const acToAlbum = () => {
     router.push({name: 'album-mod', params: {shopId}})
@@ -74,7 +74,7 @@ export const useSetting = (props) => {
       const tmpRet = []
       for (const item of list) {
         if (item?.rids?.length) {
-          if (!item.rids.includes(rid.value)) continue
+          if (!item.rids.includes(rid)) continue
         }
         if (item.includes.includes(route.name)) {
           tmpRet.push(item)
@@ -86,8 +86,7 @@ export const useSetting = (props) => {
   })
 
   const isShow = computed(() => {
-    const rid = globalData.value.getUserRid(shopId)
-    if ([2,3,99].includes(rid.value)) return true
+    if ([2,3,99].includes(rid)) return true
     return false
   })
 

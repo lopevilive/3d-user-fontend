@@ -12,7 +12,6 @@
 
 <script setup>
 import { computed } from 'vue'
-import { Image as VanImage } from 'vant';
 import { getImageUrl } from '@/util'
 
 const props = defineProps({

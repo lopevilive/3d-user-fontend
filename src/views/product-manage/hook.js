@@ -157,9 +157,9 @@ export const useProductManage = () => {
   let leftIdx = 0
   let rightIdx = 0
 
-  const productTypesRaw = globalData.value.getProductTypes(shopId)
   const productTypes = computed(() => {
-    let ret = [...productTypesRaw.value]
+    let ret = [...globalData.value.productTypes]
+    ret.splice(0,0, {name: '全部', id: 0})
     if (globalData.value.editStatus === 1) {
       ret.splice(1,0, {name:'未分类', id: -1})
       ret.splice(2,0, {name:'已下架', id: -2})

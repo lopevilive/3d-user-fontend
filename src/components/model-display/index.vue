@@ -50,12 +50,13 @@ defineExpose({
 <style lang="scss">
 .com-model-display {
   width: 94vw;
-  height: 75vh;
-  top: 50% !important;
+  height: 80vh;
   overflow: hidden;
   max-width: none !important;
   border-radius: $bdrM !important;
   box-shadow: $shadowBlack;
+  top: 45% !important;
+  overflow: visible;
   .van-dialog__content {
     height: 100%;
     width: 100%;
@@ -76,14 +77,17 @@ defineExpose({
     }
     .close {
       position: absolute;
-      top: 0;
-      right: 0;
+      bottom: -60px;
+      right: 50%;
+      transform: translateX(50%);
       padding: 5px;
-      font-size: 16px;
+      font-size: 24px;
       .van-icon {
-        background: #dde6eb;
+        background: rgba(0,0,0,.3);
+        color: #bebcbb;
+        border: 1px solid #bebcbb;
         border-radius: 50%;
-        padding: 4px
+        padding: 4px;
       }
     }
   }

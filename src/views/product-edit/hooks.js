@@ -42,13 +42,7 @@ export const useProductEdit = () => {
   const formRef = ref()
 
   const productTypes = computed(() => {
-    const ret = globalData.value.getProductTypes(shopId, false).value
-    return ret.map((item) => {
-      return {
-        text: item.name,
-        value: item.id
-      }
-    })
+    return globalData.value.productTypes.map((item) => ({text: item.name, value: item.id}))
   })
 
   const getContinue = async () => {
@@ -195,6 +189,11 @@ export const useProductEdit = () => {
     productCountInfo.value = ret
   }
 
+  const modelDisplayRef = ref()
+  const preview3D = async () => {
+    modelDisplayRef.value.showModelDisplay()
+  }
+
   const init = () => {
     getProductInfo()
     getShopInfo()
@@ -218,6 +217,8 @@ export const useProductEdit = () => {
     recommendNames,
     isFocusName,
     isShowRecommendNames,
-    nameBlurHandle
+    nameBlurHandle,
+    preview3D,
+    modelDisplayRef
   }
 }

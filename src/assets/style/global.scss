@@ -48,11 +48,12 @@ $footerBarH: 60px;
   white-space:nowrap; //溢出不换行
 }
 
-.field-no-padding {
-  width: 100%;
-  .van-field {
-    padding: 0;
-  }
+.pd0 {
+  padding: 0;
+}
+
+.flex1 {
+  flex: 1;
 }
 
 

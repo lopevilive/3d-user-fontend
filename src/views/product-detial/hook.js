@@ -10,7 +10,6 @@ export const useProductDetial = () => {
   const {id: productId, shopId} = route.params
 
   const info = ref({})
-  const productTypes = globalData.value.getProductTypes(shopId)
   const modelDisplayRef = ref()
 
   const imgList = computed(() => {
@@ -20,6 +19,7 @@ export const useProductDetial = () => {
   })
 
   const descDisplay = computed(() => {
+    const {productTypes} = globalData.value
     let ret = []
     for (const key of Object.keys(info.value)) {
       let val = info.value[key]
@@ -29,7 +29,7 @@ export const useProductDetial = () => {
       }
       if (key === 'productType') {
         val = +val
-        for (const item of productTypes.value) {
+        for (const item of productTypes) {
           if (item.id === val) {
             ret.push({label: '产品类别', val: item.name})
           }
@@ -41,6 +41,8 @@ export const useProductDetial = () => {
 
   const insideDesc = computed(() => {
     let ret = []
+    const {rid} = globalData.value
+    if (![2, 3, 99].includes(rid)) return ret
     for (const key of Object.keys(info.value)) {
       let val = info.value[key]
       if (!val) continue;

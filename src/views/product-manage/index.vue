@@ -4,7 +4,6 @@
       <div class="mode__edit"  v-if="globalData.editStatus === 1">
         <div class="edit-left">
           <VanButton text="新增产品" size="small" type="primary" :round="true" icon="plus" @click="addProdHandle"/>
-          <!-- <VanButton text="全选" size="small" :round="true" type="primary" plain/> -->
           <VanButton
             text="取消选择"
             size="small"
