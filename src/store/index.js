@@ -47,4 +47,4 @@ export const initProductTypes = () => {
 }
 
 // todo
-// window.globalData = globalData
+window.globalData = globalData

@@ -65,6 +65,12 @@ export const useProductDetial = () => {
   const handleView3D = () => {
     modelDisplayRef.value.showModelDisplay()
   }
+
+  const shareGuideRef = ref()
+  const shareHandle = () => {
+    shareGuideRef.value.showGuide()
+  }
+
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
@@ -80,6 +86,8 @@ export const useProductDetial = () => {
     handleView3D,
     init,
     modelDisplayRef,
-    insideDesc
+    insideDesc,
+    shareGuideRef,
+    shareHandle
   }
 }

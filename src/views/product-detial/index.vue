@@ -9,7 +9,7 @@
         <div class="name">{{ info.name }}</div>
         <div class="price" v-if="info.price">¥ {{ info.price }}</div>
       </div>
-      <VanButton size="small" icon="share-o" icon-position="right">分享</VanButton>
+      <VanButton @click="shareHandle" size="small" icon="share-o" icon-position="right">分享</VanButton>
     </div>
     <div class="desc-content">
       <div class="desc-list">
@@ -30,6 +30,7 @@
     </div>
     <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
     <Setting :runtimeData="info" />
+    <ShareGuide ref="shareGuideRef" />
   </div>
 </template>
 
@@ -39,6 +40,7 @@ import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
+import ShareGuide from '@/components/share-guide/index.vue'
 
 const {
   info,
@@ -47,7 +49,9 @@ const {
   handleView3D,
   init,
   modelDisplayRef,
-  insideDesc
+  insideDesc,
+  shareGuideRef,
+  shareHandle
 } = useProductDetial()
 
 onMounted(init)
