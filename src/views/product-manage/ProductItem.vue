@@ -79,6 +79,9 @@ const {
     align-items: center;
     justify-content: center;
     min-height: 100px;
+    :deep(.van-image__img){
+      max-height: 240px;
+    }
   }
   .desc {
     line-height: 20px;

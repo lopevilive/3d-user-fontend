@@ -35,8 +35,10 @@ const clickHandle = (idx) => {
     // background: #000;
   }
   :deep(.van-swipe-item) {
-    max-height: 480px;
     margin: auto 0;
+    .van-image__img {
+      max-height: 480px;
+    }
   }
   :deep(.van-image) {
     width: 100%;
