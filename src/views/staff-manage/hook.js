@@ -9,11 +9,16 @@ export const useStaffManage = () => {
   const shopId = +route.params.shopId
   const activeTab = ref(1) // 1管理员-2分销员
 
-  const dataList = ref([])
+  const dataList = ref([]) // 正常或者待接受人员
+  const invalidList = ref([]) // 失效人员
   let currItem = null
+
+  const formatList = () => {
+    dataList.value = []
+    invalidList.value = []
+  }
   
   const tabChangeHandle = () => {
-    dataList.value = []
     init()
   }
 
@@ -33,7 +38,7 @@ export const useStaffManage = () => {
         title: `删除${typeName.value}`,
         message: `确定删除${typeName.value}【${currItem.nickName}】?`
       })
-      await commonFetch(delStaff, {id: currItem.id})
+      await commonFetch(delStaff, {id: currItem.id, shopId})
       init()
     } catch(e) {}
   }
@@ -52,11 +57,36 @@ export const useStaffManage = () => {
     dialogStaffRef.value.open()
   }
 
+  const activeNames = ref([])
+
+  const delAllHandle = async () => {
+    setTimeout(() => {
+      activeNames.value = [1] // 防止折叠起来
+    }, 0);
+    try {
+      await showConfirmDialog({title:'全部删除', message: '确定删除全部失效人员？'})
+      const ids = invalidList.value.map((item) => item.id)
+      await commonFetch(delStaff, {id: ids, shopId})
+      init()
+    } catch(e) {
+      init()
+    }
+  }
+
   const init = async () => {
     try {
-      dataList.value = await commonFetch(getStaff, {shopId, type: activeTab.value})
+      formatList()
+      const list = await commonFetch(getStaff, {shopId, type: activeTab.value})
+      for (const item of list) {
+        if ([1,4].includes(item.status)) {
+          dataList.value.push(item)
+        } else {
+          invalidList.value.push(item)
+        }
+      }
+
     } catch(e) {
-      dataList.value = []
+      formatList()
     }
   }
 
@@ -65,13 +95,16 @@ export const useStaffManage = () => {
     init,
     tabChangeHandle,
     dataList,
+    invalidList,
     settingClickHandle,
     showAction,
     actions,
     selectHandle,
     typeName,
     addHandle,
-    dialogStaffRef
+    dialogStaffRef,
+    activeNames,
+    delAllHandle
   }
 }
 
