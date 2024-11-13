@@ -6,7 +6,7 @@
           <ImgItem :data="item" @delete="deleteHandle" @view="viewHandle(idx)"/>
         </Draggable>
       </Container>
-      <ImgItem v-else v-for="item in fileList" :data="item" />
+      <ImgItem v-else v-for="item in fileList" :data="item" @delete="deleteUploading" />
       <VanUploader
         :after-read="afterRead"
         :multiple="true"
@@ -40,7 +40,8 @@ const {
   isShowUpload,
   oversizeHandle,
   maxSize,
-  viewHandle
+  viewHandle,
+  deleteUploading
 } = useUploadImages(props, emits)
 
 </script>

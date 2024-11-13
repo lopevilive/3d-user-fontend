@@ -11,20 +11,24 @@ export const useUploadImages = (props, emits) => {
   const maxSize = 10 // M
   
   const handleUpload = async (file) => {
-    uploadings.value.push(file)
-    file.status = 'uploading'
-    const {Location: url} = await uploadFile(file.file, shopId)
-    if (!url) return
-    uploadings.value = uploadings.value.filter((item) => {
-      if (item === file) return false
-      return true
-    })
-    const uri = `//${url}`
-    let list = props.modelValue.split(',')
-    list.push(uri)
-    list = [...new Set(list)]
-    list = list.filter((item) => Boolean(item))
-    emits('update:modelValue', list.join(','))
+    try {
+      uploadings.value.push(file)
+      file.status = 'uploading'
+      const {Location: url} = await uploadFile(file.file, shopId)
+      if (!url) return
+      uploadings.value = uploadings.value.filter((item) => {
+        if (item === file) return false
+        return true
+      })
+      const uri = `//${url}`
+      let list = props.modelValue.split(',')
+      list.push(uri)
+      list = [...new Set(list)]
+      list = list.filter((item) => Boolean(item))
+      emits('update:modelValue', list.join(','))
+    } catch(e) {
+      file.status = 'fail'
+    }
   }
   
   const afterRead = (files) => {
@@ -44,6 +48,13 @@ export const useUploadImages = (props, emits) => {
       newVal += item
     }
     emits('update:modelValue', newVal)
+  }
+
+  const deleteUploading = (file) => {
+    uploadings.value = uploadings.value.filter((item) => {
+      if (item === file) return false
+      return true
+    })
   }
 
   const fileList = computed(() => {
@@ -95,6 +106,7 @@ export const useUploadImages = (props, emits) => {
     isShowUpload,
     oversizeHandle,
     maxSize,
-    viewHandle
+    viewHandle,
+    deleteUploading
   }
 }

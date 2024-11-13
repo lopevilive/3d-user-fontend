@@ -36,6 +36,7 @@ export const uploadFile = async (file, shopId) => {
     fileName = `${shopId}_${fileName}`
   }
   try {
+    await getKey()
     const data = await cos.uploadFile({
       Bucket: 'upload-1259129443', // 填写自己的 bucket，必须字段
       Region: 'ap-guangzhou',     // 存储桶所在地域，必须字段

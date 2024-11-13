@@ -4,7 +4,7 @@ import { globalData } from '@/store'
 import { login, getUserInfo } from '@/http'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/dist/'),
   routes: [
     {
       path: '/',

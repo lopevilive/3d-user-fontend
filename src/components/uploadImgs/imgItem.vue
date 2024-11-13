@@ -7,6 +7,9 @@
     <div class="mask" v-if="isLoading">
       <VanLoading />
     </div>
+    <div class="mask fail" v-if="isFaild">
+      <div>上传失败~</div>
+    </div>
   </div>
 </template>
 
@@ -32,6 +35,11 @@ const isLoading = computed(() => {
   return false
 })
 
+const isFaild = computed(() => {
+  if (props.data?.status === 'fail') return true
+  return false
+})
+
 const clickHandle = () => {
   emits('delete', props.data)
 }
@@ -44,6 +52,7 @@ const imgClick = () => {
 </script>
 
 <style lang="scss" scoped>
+$imgW: 60px;
 .com-img-item {
   margin-right: 5px;
   position: relative;
@@ -60,12 +69,12 @@ const imgClick = () => {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 11;
   }
   .mask {
-    width: 100%;
-    height: 100%;
-    background: black;
-    opacity: 0.7;
+    width: $imgW;
+    height: $imgW;
+    background: rgba(0,0,0,.7);
     position: absolute;
     left: 0;
     top: 0;
@@ -74,10 +83,14 @@ const imgClick = () => {
     justify-content: center;
     z-index: 10;
   }
+  .fail {
+    font-size: 10px;
+    color: $fontWhite;
+  }
 }
 .van-image {
-  width: 60px;
-  height: 60px;
+  width: $imgW;
+  height: $imgW;
 }
 
 </style>

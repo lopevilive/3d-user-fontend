@@ -4,7 +4,7 @@ import { showNotify } from 'vant';
 const http = axios.create({
   timeout: 1000 * 10,
   withCredentials: true,
-  baseURL: 'https://www.album.com'
+  baseURL: 'https://xiaoguoyun.top'
   // baseURL: '1259129443-5jp7l471i1.ap-guangzhou.tencentscf.com'
 });
 
