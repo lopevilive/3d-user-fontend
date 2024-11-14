@@ -4,8 +4,7 @@ import { showNotify } from 'vant';
 const http = axios.create({
   timeout: 1000 * 10,
   withCredentials: true,
-  baseURL: 'https://xiaoguoyun.top'
-  // baseURL: '1259129443-5jp7l471i1.ap-guangzhou.tencentscf.com'
+  baseURL: '//xiaoguo.afxa.cn'
 });
 
 // 请求拦截器

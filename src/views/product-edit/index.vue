@@ -113,6 +113,12 @@
           </VanField>
         </template>
       </VanCellGroup>
+
+      <VanCellGroup v-if="fieldList.length">
+        <VanCell v-for="field in fieldList" :title="field.name" :key="field.name">
+          123
+        </VanCell>
+      </VanCellGroup>
       
       <VanCellGroup>
         <VanField
@@ -125,13 +131,13 @@
           placeholder="请输入说明"
         />
       </VanCellGroup>
-      <div class="bottom">
-        <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
-      </div>
     </VanForm>
     <ProductTypeDialog ref="productTypeDialogRef"/>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
     <ModelDisplay ref="modelDisplayRef" :productInfo="data" />
+    <div class="bottom">
+      <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
+    </div>
   </div>
 </template>
 
@@ -165,7 +171,8 @@ const {
   isShowRecommendNames,
   nameBlurHandle,
   modelDisplayRef,
-  preview3D
+  preview3D,
+  fieldList
 } = useProductEdit()
 
 init()
@@ -177,6 +184,7 @@ init()
 <style scoped lang="scss">
 .product-edit {
   background: $bgGrey;
+  padding-bottom: $footerBarH;
   :deep(.van-cell-group) {
     margin-bottom: $mrL;
     .model-default {
@@ -225,14 +233,28 @@ init()
         display: flex;
         align-items: center;
         margin-right: 10px;
-        border-radius: 20px;
+        border-radius: 3px;
         font-size: 14px;
         flex-shrink: 0;
       }
     }
   }
   .bottom {
-    margin: 16px;
+    height: $footerBarH;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 $pdH;
+    box-sizing: border-box;
+    :deep(.van-button) {
+      // position: fixed;
+      // left: 0;
+      // bottom: 0;
+      // width: 100%;
+    }
   }
 }
 
