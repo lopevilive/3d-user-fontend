@@ -1,5 +1,6 @@
 <template>
   <div class="view-home">
+    <div style="height: 1px;"></div>
     <div class="header mrM" v-if="!userAlbum">
       <span class="text">我也想做一本云画册？</span>
       <VanButton class="btn" size="small" @click="toAlbum">立即创建</VanButton>

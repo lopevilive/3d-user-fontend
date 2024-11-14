@@ -8,7 +8,7 @@ export const init = () => {
   // const geometry = new THREE.SphereGeometry(100)
   // const geometry = new THREE.CircleGeometry(50)
   const loader = new THREE.TextureLoader()
-  const texture = loader.load('/src/assets/img/55555555.jpg')
+  const texture = loader.load('/img/55555555.jpg')
   texture.repeat = new THREE.Vector2(2,2)
   texture.wrapS = THREE.RepeatWrapping
   texture.wrapT = THREE.RepeatWrapping

@@ -8,7 +8,7 @@
 import {onMounted} from 'vue'
 // import {init} from '@/example/wardrobe'
 import {init} from '@/example/test'
-// import {init} from '/src/example/tmp'
+// import {init} from '@/example/tmp'
 
 onMounted(init)
 
