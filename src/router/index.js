@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import { globalData } from '@/store'
-import { login, getUserInfo } from '@/http'
+import { getUserInfo } from '@/http'
+import { isInApp } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -15,7 +16,7 @@ const router = createRouter({
       path: '/album-mod/:shopId?',
       name: 'album-mod',
       component: () => import('@/views/album-mod/index.vue'),
-      meta: {needLogin: true}
+      meta: {needPhone: true} // 需要手机认证
     },
     {
       path: '/product-manage/:shopId',
@@ -35,13 +36,13 @@ const router = createRouter({
           path: 'product-edit/:id?',
           name: 'product-edit',
           component: () => import('@/views/product-edit/index.vue'),
-          meta: {needLogin: true}
+          meta: {needPhone: true}
         },
         {
           path: 'type-manage',
           name: 'type-manage',
           component: () => import('@/views/type-manage/index.vue'),
-          meta: {needLogin: true}
+          meta: {needPhone: true}
         },
         {
           path: 'contact',
@@ -52,13 +53,13 @@ const router = createRouter({
           path: 'staff-manage',
           name: 'staff-manage',
           component: () => import('@/views/staff-manage/index.vue'),
-          meta: {needLogin: true}
+          meta: {needPhone: true}
         },
         {
           path: 'staff-verify/:id',
           name: 'staff-verify',
           component: () => import('@/views/staff-verify/index.vue'),
-          meta: {needLogin: true}
+          meta: {needPhone: true}
         }
       ]
     },
@@ -85,47 +86,34 @@ const getToken = (query) => {
   return queryToken || storageToken || '' // 优先从 url 取
 }
 
-// 必须登录
-const handleHeedLogin = async (to) => {
-  if (globalData.value?.userInfo?.userId) return
-  const token = getToken(to.query)
-  if (!token) return false
-  try {
-    const {data} = await getUserInfo()
-    if (!data?.userId) return false
-    globalData.value.userInfo = data
-  } catch(e) {
-    localStorage.setItem('token', '')
-    console.error(e)
-    return false
-  }
+
+const tologin = async (to) => {
+  const bool = await isInApp()
+  if (!bool) return
+  wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(to.path)}`})
 }
 
-// 尝试登录
-const handleTryLogin = async (to) => {
-  if (globalData.value?.userInfo?.userId) return
+const handleLogin = async (to) => {
+  const { userId } = globalData.value.userInfo
+  if (userId) return
   const token = getToken(to.query)
-  if (!token) return
-  try {
-    const {data} = await getUserInfo()
-    globalData.value.userInfo = data
-  } catch(e) {
-    localStorage.setItem('token', '')
-    console.error(e)
+  if (token) {
+    try {
+      const {data} = await getUserInfo()
+      globalData.value.userInfo = data
+    } catch(e) {
+      localStorage.setItem('token', '')
+      await tologin(to)
+    }
+  } else {
+    await tologin(to)
   }
 }
 
 const init = async (to, from) => {
-  // const res = await login()
-  const { needLogin } = to.meta
-  if (needLogin) {
-    const res = await handleHeedLogin(to)
-    if (res === false) {
-      // todo 此处应前往登录
-    }
-  } else {
-    await handleTryLogin(to)
-  }
+  const { needPhone } = to.meta
+  await handleLogin(to)
+  // tologin(to)
 }
 
 router.beforeEach(async (to, from) => {

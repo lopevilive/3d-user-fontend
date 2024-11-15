@@ -90,3 +90,18 @@ export const keyReplace = (list, rules) => {
 }
 
 export const EE = new EventEmitter()
+
+
+export const isInApp = async () => {
+  let miniProgram
+  try {
+    miniProgram = wx.miniProgram
+  } catch(e){}
+  if (!miniProgram) return false
+  const ret = await new Promise((resolve) => {
+    miniProgram.getEnv(({miniprogram}) => {
+      resolve(miniprogram)
+    })
+  })
+  return ret
+}

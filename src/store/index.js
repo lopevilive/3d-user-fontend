@@ -8,6 +8,7 @@ export const globalData = ref({
     // ownerList: [5,1], // 我创建的图册
     // adminList: [6], // 我管理的图册
     // isSup: false, // 是否超级管理员
+    // hasPhone: false, // 是否认证手机号
   },
   productTypes: {},
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
