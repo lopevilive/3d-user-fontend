@@ -87,17 +87,16 @@ const getToken = (query) => {
 }
 
 
-const tologin = async (to) => {
-  const inApp = await isInApp()
-  if (!inApp) return
+const tologin = (to) => {
   wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(to.path)}`})
 }
 
-const toPhone = async (to) => {
+const toPhone = (to) => {
   wx.miniProgram.navigateTo({url: `../phone/phone?src_path=${encodeURIComponent(to.path)}`})
 }
 
 const handleLogin = async (to) => {
+  const inApp = await isInApp()
   const { userId } = globalData.value.userInfo
   if (userId) return true
   const token = getToken(to.query)
@@ -107,12 +106,20 @@ const handleLogin = async (to) => {
       globalData.value.userInfo = data
     } catch(e) {
       localStorage.setItem('token', '')
-      await tologin(to)
-      return false
+      if (inApp) {
+        await tologin(to)
+        return false
+      } else {
+        return true
+      }
     }
   } else {
-    await tologin(to)
-    return false
+    if (inApp) {
+      await tologin(to)
+      return false
+    } else {
+      return true
+    }
   }
 }
 
