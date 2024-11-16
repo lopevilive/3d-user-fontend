@@ -36,6 +36,7 @@ export const useAlbumMod = () => {
     const payload = {...data.value}
     const api = isEdit ? shopMod : shopCreate
     const res =  await commonFetch(api, payload, '保存成功')
+    globalData.value.userInfo = {} // 需要重新获取登录信息
     router.replace({name: 'contact', params: {shopId: res}})
     setTimeout(() => {
       console.log('8888888')
