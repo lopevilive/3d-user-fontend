@@ -99,9 +99,17 @@ export const isInApp = async () => {
   } catch(e){}
   if (!miniProgram) return false
   const ret = await new Promise((resolve) => {
-    miniProgram.getEnv(({miniprogram}) => {
-      resolve(miniprogram)
+    let done = false
+    miniProgram.getEnv(function(res) {
+      done = true
+      resolve(res.miniprogram)
     })
+    // 这里 官方 api 有bug，部分设备会不执行回调，此处做超时处理
+    setTimeout(() => {
+      if (done === false) {
+        resolve(false)
+      }
+    }, 500);
   })
   return ret
 }

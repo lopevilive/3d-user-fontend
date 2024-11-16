@@ -88,14 +88,18 @@ const getToken = (query) => {
 
 
 const tologin = async (to) => {
-  const bool = await isInApp()
-  if (!bool) return
+  const inApp = await isInApp()
+  if (!inApp) return
   wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(to.path)}`})
+}
+
+const toPhone = async (to) => {
+  wx.miniProgram.navigateTo({url: `../phone/phone?src_path=${encodeURIComponent(to.path)}`})
 }
 
 const handleLogin = async (to) => {
   const { userId } = globalData.value.userInfo
-  if (userId) return
+  if (userId) return true
   const token = getToken(to.query)
   if (token) {
     try {
@@ -104,16 +108,26 @@ const handleLogin = async (to) => {
     } catch(e) {
       localStorage.setItem('token', '')
       await tologin(to)
+      return false
     }
   } else {
     await tologin(to)
+    return false
   }
 }
 
 const init = async (to, from) => {
   const { needPhone } = to.meta
-  await handleLogin(to)
-  // tologin(to)
+  let pass = await handleLogin(to)
+  if (pass === false) return false
+  if (needPhone) {
+    const {hasPhone} = globalData.value.userInfo
+    if (hasPhone) return true
+    const inApp = await isInApp()
+    if (!inApp) return false // 这种情况不许打开页面
+    toPhone(to)
+    return false
+  }
 }
 
 router.beforeEach(async (to, from) => {

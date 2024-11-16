@@ -30,9 +30,10 @@ export const globalData = ref({
     const shopId = +route.params.shopId
     const {userInfo} = globalData.value
     if (userInfo.isSup) return 99 // 超级管理员
-    const {ownerList, adminList, userId} = userInfo
+    const {ownerList, adminList, userId, hasPhone} = userInfo
     if (ownerList?.includes(shopId)) return 3 // 图册创建者
     if (adminList?.includes(shopId)) return 2 // 图册管理员
+    if (hasPhone) return 10 // 实名手机
     if (userId) return 1 // 登录状态
     return 0 // 游客
   }),
