@@ -120,7 +120,8 @@ init()
         box-sizing: border-box;
         background: $bgWhite;
         display: flex;
-        align-items: center;
+        // align-items: center;
+        padding-top: 8px;
       }
       .invalid-wrap {
         color: $greyPlaceholder;

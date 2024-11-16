@@ -138,7 +138,7 @@ export default {
       justify-content: space-between;
       padding: 0 $pdH;
       box-sizing: border-box;
-      align-items: center;
+      padding-top: 8px;
       border-top: 1px solid #e3e3e3;
       :deep(.van-button) {
         margin-right: 0;

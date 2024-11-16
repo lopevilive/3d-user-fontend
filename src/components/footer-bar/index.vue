@@ -56,12 +56,16 @@ const toContact = () => {
   box-sizing: border-box;
   display: flex;
   z-index: 0;
+  // padding-top: 8px;
   .item {
     width: 50%;
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 10px;
+    // justify-content: center;
     font-size: $fsL;
     color: $grey;
     display: flex;

@@ -42,7 +42,10 @@ const {
 
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss" >
+.setting-floating {
+  width: 30px;
+  height: 30px;
+}
 </style>
 
