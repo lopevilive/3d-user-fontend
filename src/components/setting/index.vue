@@ -4,7 +4,7 @@
       class="setting-floating"
       axis="xy"
       magnetic="x"
-      :gap="0"
+      :gap="24"
       v-model:offset="offset"
       @click="bubbleClickHandle"
       v-if="isShow"

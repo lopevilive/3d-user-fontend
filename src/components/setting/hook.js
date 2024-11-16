@@ -12,7 +12,7 @@ export const useSetting = (props) => {
   const shopId = + route.params.shopId
   const productId = + route.params.id
   const actionsSheetRef = ref()
-  const offset = ref({ x: document.body.clientWidth * 0.872, y: document.body.clientHeight * 0.7});
+  const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.7});
 
   const {rid} = globalData.value
 
@@ -86,6 +86,7 @@ export const useSetting = (props) => {
   })
 
   const isShow = computed(() => {
+    if (globalData.value.editStatus === 1) return false
     if ([2,3,99].includes(rid)) return true
     return false
   })
