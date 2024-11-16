@@ -69,6 +69,11 @@ const router = createRouter({
       component:  () => import('@/views/test/index.vue'),
     },
     {
+      path: '/user-protocol',
+      name: 'user-protocol',
+      component:  () => import('@/views/user-protocol/index.vue'),
+    },
+    {
       path: '/:catchAll(.*)',
       redirect: '/'
     }

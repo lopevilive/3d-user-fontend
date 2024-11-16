@@ -29,5 +29,18 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: resolve(__dirname, 'src') }],
   },
-  base: '/dist/'
+  base: '/dist/',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          console.log(id, 'dddd')
+          if (/node_modules\/html5-qrcode/.test(id)) return 'html5-qrcode'
+          // if (/node_modules/.test(id)) return 'node_module'
+          // if (/src\/views/.test(id)) return 'views'
+          return 'index' // 目前代码量少，直接打包到一起
+        }
+      }
+    }
+  }
 })
