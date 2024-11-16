@@ -2,6 +2,7 @@ import COS from 'cos-js-sdk-v5';
 import { getCosTempKeys } from '@/http'
 import { showNotify } from 'vant';
 import { md5File } from './util'
+import { globalData } from '@/store'
 
 
 let keyData = null
@@ -28,14 +29,19 @@ export const cos = new COS({
 });
 
 export const uploadFile = async (file, shopId) => {
-  if (!shopId) {
-    shopId = 'none'
-  }
-  let fileName = await md5File(file)
-  if (shopId) {
-    fileName = `${shopId}_${fileName}`
-  }
   try {
+    const {userId} = globalData.value.userInfo
+    if (!userId) throw new Error('缺失用户信息')
+    let fileName = await md5File(file)
+    let pre = ''
+    if (shopId) pre = String(shopId)
+    if (pre) {
+      pre = `${pre}_${userId}`
+    } else {
+      pre = `uid${userId}`
+    }
+    fileName = `${pre}_${fileName}`
+
     await getKey()
     const data = await cos.uploadFile({
       Bucket: 'upload-1259129443', // 填写自己的 bucket，必须字段
