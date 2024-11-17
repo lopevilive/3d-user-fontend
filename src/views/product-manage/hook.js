@@ -328,6 +328,10 @@ export const useProductManage = () => {
   }
 
   const init = async () => {
+    const {toDetial} = route.query
+    if (toDetial) {
+      router.push({name: 'product-detial', params: {id: toDetial}})
+    }
     loadHandle()
     fetchShop()
   }

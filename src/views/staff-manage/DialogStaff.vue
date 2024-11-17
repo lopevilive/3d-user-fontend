@@ -23,6 +23,8 @@ const props = defineProps({
   type: {type: Number, default: 1} // 1管理员、2分销员
 })
 
+const emits = defineEmits(['update'])
+
 const {
   show,
   beforeClose,
@@ -30,7 +32,7 @@ const {
   nickName,
   validNickName,
   formRef
-} = useDialogStaff(props)
+} = useDialogStaff(props, emits)
 
 defineExpose({open})
 

@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="tabs">
-        <VanTabs v-model:active="activeTab" @change="tabChangeHandle">
+        <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true">
           <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
         </VanTabs>
       </div>

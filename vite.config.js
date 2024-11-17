@@ -34,7 +34,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          console.log(id, 'dddd')
+          // console.log(id, 'dddd')
           if (/node_modules\/html5-qrcode/.test(id)) return 'html5-qrcode'
           // if (/node_modules/.test(id)) return 'node_module'
           // if (/src\/views/.test(id)) return 'views'

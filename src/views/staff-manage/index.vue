@@ -19,7 +19,7 @@
             </template>
             <template #value>
               <div class="opt">
-                <VanButton v-if="item.status === 1" text="去邀请" size="small" type="primary"/>
+                <VanButton v-if="item.status === 1" @click="toInvite(item)" text="去邀请" size="small" type="primary"/>
                 <VanIcon name="setting-o" @click="settingClickHandle(item)"/>
               </div>
             </template>
@@ -61,7 +61,7 @@
       close-on-click-action
       cancel-text="取消"
     />
-    <DialogStaff ref="dialogStaffRef"/>
+    <DialogStaff ref="dialogStaffRef" @update="handleUpdate"/>
   </div>
 </template>
 
@@ -83,7 +83,9 @@ const {
   dialogStaffRef,
   activeNames,
   invalidList,
-  delAllHandle
+  delAllHandle,
+  handleUpdate,
+  toInvite
 } = useStaffManage()
 
 init()

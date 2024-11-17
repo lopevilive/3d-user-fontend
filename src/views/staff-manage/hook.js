@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
-import { commonFetch } from '@/util'
-import { getStaff, delStaff, createStaff } from '@/http'
-import { showConfirmDialog } from 'vant';
-import { useRoute, useRouter } from 'vue-router'
+import { commonFetch, isInApp, getImageUrl } from '@/util'
+import { getStaff, delStaff, createStaff, getShop} from '@/http'
+import { showConfirmDialog, showToast } from 'vant';
+import { useRoute } from 'vue-router'
 
 export const useStaffManage = () => {
   const route = useRoute()
@@ -12,6 +12,7 @@ export const useStaffManage = () => {
   const dataList = ref([]) // 正常或者待接受人员
   const invalidList = ref([]) // 失效人员
   let currItem = null
+  const shopInfo = ref()
 
   const formatList = () => {
     dataList.value = []
@@ -73,6 +74,30 @@ export const useStaffManage = () => {
     }
   }
 
+  const toInvite = async (data) => {
+    const inApp = await isInApp()
+    if (!inApp) {
+      showToast('请在小程序内邀请~')
+      return
+    }
+    if (!shopInfo.value) {
+      const ret = await commonFetch(getShop, {shopId})
+      shopInfo.value = ret[0]
+    }
+    const {id: inviteId, nickName} = data
+    let {name: shopName, url} = shopInfo.value
+    url = url.split(',')[0]
+    url = getImageUrl(url)
+    const obj = {shopName, url, inviteId, nickName, shopId}
+    const payload = encodeURIComponent(JSON.stringify(obj))
+    wx.miniProgram.navigateTo({url: `../invite/invite?payload=${payload}`})
+  }
+
+  const handleUpdate = async (data) => {
+    init()
+    toInvite(data)
+  }
+
   const init = async () => {
     try {
       formatList()
@@ -104,12 +129,21 @@ export const useStaffManage = () => {
     addHandle,
     dialogStaffRef,
     activeNames,
-    delAllHandle
+    delAllHandle,
+    handleUpdate,
+    toInvite
   }
 }
 
 
-export const useDialogStaff = (props) => {
+
+
+
+
+
+
+
+export const useDialogStaff = (props, emits) => {
   const route = useRoute()
   const shopId = +route.params.shopId
   
@@ -119,8 +153,7 @@ export const useDialogStaff = (props) => {
 
   const handleCreate = async () => {
     const data = await commonFetch(createStaff, {nickName: nickName.value, type: props.type, shopId})
-    // todo 此处提示去分享
-    console.log(data)
+    emits('update', {id: data.id, nickName: nickName.value})
   }
 
   const beforeClose = async (action) => {
@@ -151,6 +184,6 @@ export const useDialogStaff = (props) => {
     open,
     nickName,
     validNickName,
-    formRef
+    formRef,
   }
 }

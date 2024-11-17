@@ -14,8 +14,6 @@ export const useStaffVerify = () => {
   const show = ref(false)
 
   const gohome = () => {
-    console.log('gohome')
-    return
     router.replace({name: 'product-manage', params: {shopId}})
   }
 
