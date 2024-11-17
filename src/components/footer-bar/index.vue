@@ -34,12 +34,12 @@ const status = computed(() => {
 
 const toProd = () => {
   if (status.value === 1) return
-  router.replace({name: 'product-manage',params:{shopId}})
+  router.replace({name: 'product-manage',params:{shopId}, query: route.query})
 }
 
 const toContact = () => {
   if (status.value === 2) return
-  router.replace({name: 'contact', params: {shopId}})
+  router.replace({name: 'contact', params: {shopId}, query: route.query})
 }
 
 </script>

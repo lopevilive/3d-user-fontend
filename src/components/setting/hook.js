@@ -22,7 +22,7 @@ export const useSetting = (props) => {
 
   const acProdMod = () => {
     if (route.name !== 'product-manage') {
-      router.push({name: 'product-manage'})
+      router.push({name: 'product-manage', params: {shopId}, query: route.query})
     }
     globalData.value.editStatus = 1;
   }

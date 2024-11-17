@@ -86,11 +86,11 @@ export const useProductItem = (props, emits) => {
   }
 
   const handleClick = () => {
-    const {id} = props.data
+    const {id, name} = props.data
     if (globalData.value.editStatus === 1) {
       router.push({name: 'product-edit', params: {id}})
     } else {
-      router.push({name: 'product-detial', params: {id}})
+      router.push({name: 'product-detial', params: {id}, query: {title: name}})
     }
   }
 

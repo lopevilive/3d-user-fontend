@@ -78,7 +78,7 @@ export const useProductEdit = () => {
       router.replace({name: 'product-manage', params: {shopId}})
       return
     }
-    router.replace({name: 'product-detial', params: {id: id ? id : res?.id}})
+    router.replace({name: 'product-detial', params: {id: id ? id : res?.id}, query: {title: data.value.name}})
     setTimeout(() => {
       console.log('99999')
       if (window.history.state.back === window.history.state.current) router.go(-1)

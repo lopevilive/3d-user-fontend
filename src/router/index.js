@@ -144,12 +144,6 @@ const init = async (to, from) => {
     }
   }
   document.title = title || '小果图册'
-  // if (title) {
-  //   to.query.title = title
-  //   // // return {}
-  //   return {name: to.name, params: to.params, query:to.query}
-  //   // console.log(to)
-  // }
 }
 
 router.beforeEach(async (to, from) => {

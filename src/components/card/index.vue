@@ -27,7 +27,8 @@ const logo = computed(() => {
 
 
 const handleClick = () => {
-  router.push({name: 'product-manage', params: {shopId: props.data.id}})
+  const {id, name} = props.data
+  router.push({name: 'product-manage', params: {shopId: id}, query: {title: name}})
 }
 
 </script>
