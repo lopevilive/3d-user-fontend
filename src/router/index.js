@@ -26,23 +26,25 @@ const router = createRouter({
           path: '',
           name: 'product-manage',
           component:  () => import('@/views/product-manage/index.vue'),
+          meta: {title: '商品列表'}
         },
         {
           path: 'product-detial/:id',
           name: 'product-detial',
           component: () => import('@/views/product-detial/index.vue'),
+          meta: {title: '商品详情'}
         },
         {
           path: 'product-edit/:id?',
           name: 'product-edit',
           component: () => import('@/views/product-edit/index.vue'),
-          meta: {needPhone: true}
+          meta: {needPhone: true, title: '编辑商品'}
         },
         {
           path: 'type-manage',
           name: 'type-manage',
           component: () => import('@/views/type-manage/index.vue'),
-          meta: {needPhone: true}
+          meta: {needPhone: true, title: '分类管理'}
         },
         {
           path: 'contact',
@@ -53,7 +55,7 @@ const router = createRouter({
           path: 'staff-manage',
           name: 'staff-manage',
           component: () => import('@/views/staff-manage/index.vue'),
-          meta: {needPhone: true}
+          meta: {needPhone: true, title: '人员管理'}
         },
         {
           path: 'staff-verify/:id',
@@ -129,17 +131,25 @@ const handleLogin = async (to) => {
 }
 
 const init = async (to, from) => {
-  const { needPhone } = to.meta
+  const { needPhone, title } = to.meta
   let pass = await handleLogin(to)
   if (pass === false) return false
   if (needPhone) {
     const {hasPhone} = globalData.value.userInfo
-    if (hasPhone) return true
-    const inApp = await isInApp()
-    if (!inApp) return false // 这种情况不许打开页面
-    toPhone(to)
-    return false
+    if (!hasPhone) {
+      const inApp = await isInApp()
+      if (!inApp) return false // 这种情况不许打开页面
+      toPhone(to)
+      return false
+    }
   }
+  document.title = title || '小果图册'
+  // if (title) {
+  //   to.query.title = title
+  //   // // return {}
+  //   return {name: to.name, params: to.params, query:to.query}
+  //   // console.log(to)
+  // }
 }
 
 router.beforeEach(async (to, from) => {

@@ -1,4 +1,4 @@
-import {ref} from 'vue'
+import {ref, nextTick} from 'vue'
 
 export const useActionsSheet = (emits) => {
   const isShow = ref(false)
@@ -7,9 +7,10 @@ export const useActionsSheet = (emits) => {
     isShow.value = true
   }
 
-  const selectHandle = (item) => {
-    emits('select', item)
+  const selectHandle = async (item) => {
     isShow.value = false
+    await nextTick()
+    emits('select', item)
   }
 
   return {

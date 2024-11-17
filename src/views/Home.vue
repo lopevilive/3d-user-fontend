@@ -1,5 +1,5 @@
 <template>
-  <div class="view-home">
+  <div class="view-home" v-if="!loading">
     <div style="height: 1px;"></div>
     <div class="header mrM" v-if="!userAlbum">
       <span class="text">我也想做一本云画册？</span>
@@ -20,10 +20,12 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Card from '@/components/card/index.vue'
 import {getShop} from '@/http'
-import { commonFetch } from '@/util'
+import { commonFetch, globalLoading } from '@/util'
 import { globalData } from '@/store'
 
 const router = useRouter()
+
+const loading = globalLoading.getRef()
 
 const toAlbum = () => {
   router.push({name: 'album-mod'})

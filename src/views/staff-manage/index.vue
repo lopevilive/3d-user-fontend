@@ -1,14 +1,14 @@
 <template>
   <div class="view-staff-manage">
     <div class="header">
-      <van-tabs v-model:active="activeTab" @change="tabChangeHandle">
-        <van-tab title="管理员" :name="1" />
+      <van-tabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true">
+        <van-tab title="管理员列表" :name="1" />
         <!-- <van-tab title="分销员" :name="2" /> -->
       </van-tabs>
     </div>
     <div class="content-wrap">
       <div class="content">
-        <VanEmpty v-if="dataList.length == 0" description="暂无数据~"/>
+        <VanEmpty v-if="dataList.length == 0 && invalidList.length === 0" description="暂无数据~"/>
         <VanList :finished="true" class="content-list">
           <VanCell v-for="item in dataList" :key="item.id">
             <template #title>
@@ -30,7 +30,7 @@
           <VanCollapseItem :name="1">
             <template #title>
               <div class="invalid-wrap">
-                <div>失效人员</div>
+                <div>失效人员列表</div>
                 <VanButton v-if="activeNames.length" text="全部删除" size="mini" type="danger" @click="delAllHandle" />
               </div>
             </template>
