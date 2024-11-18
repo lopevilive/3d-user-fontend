@@ -26,19 +26,19 @@ const router = createRouter({
           path: '',
           name: 'product-manage',
           component:  () => import('@/views/product-manage/index.vue'),
-          meta: {title: '商品列表'}
+          meta: {title: '产品列表'}
         },
         {
           path: 'product-detial/:id',
           name: 'product-detial',
           component: () => import('@/views/product-detial/index.vue'),
-          meta: {title: '商品详情'}
+          meta: {title: '产品详情'}
         },
         {
           path: 'product-edit/:id?',
           name: 'product-edit',
           component: () => import('@/views/product-edit/index.vue'),
-          meta: {needPhone: true, title: '编辑商品'}
+          meta: {needPhone: true, title: '编辑产品'}
         },
         {
           path: 'type-manage',

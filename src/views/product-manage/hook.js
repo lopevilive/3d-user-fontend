@@ -176,7 +176,7 @@ export const useProductManage = () => {
     const lH = parseInt(window.getComputedStyle(leftListRef.value).height) // 左列表高度
     const rH =  parseInt(window.getComputedStyle(rightListRef.value).height) // 右列表高度
     const total = leftList.value.length + rightList.value.length
-    const aver = (lH + rH) / total // 平均每个商品的高度
+    const aver = (lH + rH) / total // 平均每个产品的高度
     const gap = Math.abs(rH - lH) // 左右高度差
     let num =  Math.floor(gap / aver)
     if (!num) num = 0

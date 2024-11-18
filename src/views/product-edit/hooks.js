@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct, getShop, countProduct } from '@/http'
 import { commonFetch, E_model3D, getBusinessCfg, E_type3D } from '@/util'
-import { showConfirmDialog, showToast } from 'vant';
+import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
   const route = useRoute()
@@ -61,6 +61,26 @@ export const useProductEdit = () => {
     return ret
   }
 
+
+  const handleOverCount = async (obj) => {
+    const {limit, curr} = obj
+    try {
+      await showConfirmDialog({
+        message: `最多上传 ${limit} 个产品，当前已上传 ${curr} 个。如需上传更多请联系管理员`,
+        confirmButtonText: '去联系管理员',
+        cancelButtonText: '好的'
+      })
+      const payload = {
+        qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/WechatIMG619.jpg',
+        message: `长按保存图片，然后扫码添加微信~`
+      }
+      let payloadStr = encodeURIComponent(JSON.stringify(payload))
+      wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
+    } catch(e){}
+    console.log(obj)
+  }
+
+
   const uploadImgsRef = ref()
   const saveHandle = async () => {
     if (uploadImgsRef.value.isLoading) {
@@ -68,7 +88,13 @@ export const useProductEdit = () => {
       return
     }
     await formRef.value.validate()
-    const res = await commonFetch(productMod, data.value, '保存成功')
+    const res = await commonFetch(productMod, data.value)
+    if (res && Object.prototype.toString.call(res) === '[object Object]') {
+      handleOverCount(res)
+      return
+    }
+    showSuccessToast('保存成功～')
+
     const {editStatus} = globalData.value
     globalData.value.productManageNeedUpdate = true
     const keepAdding = await getContinue()
@@ -83,7 +109,7 @@ export const useProductEdit = () => {
       router.replace({name: 'product-manage', params: {shopId}})
       return
     }
-    router.replace({name: 'product-detial', params: {id: id ? id : res?.id}, query: {title: data.value.name}})
+    router.replace({name: 'product-detial', params: {id: id ? id : res}, query: {title: data.value.name}})
     setTimeout(() => {
       console.log('99999')
       if (window.history.state.back === window.history.state.current) router.go(-1)

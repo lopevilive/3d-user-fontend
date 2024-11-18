@@ -3,7 +3,7 @@ import { getShop } from '@/http'
 import { commonFetch } from '@/util'
 import { useRoute } from 'vue-router'
 import copy from 'copy-to-clipboard';
-import { showSuccessToast, showFailToast } from 'vant';
+import { showSuccessToast } from 'vant';
 
 export const useContact = () => {
   const route = useRoute()
@@ -39,7 +39,7 @@ export const useContact = () => {
     const {qrcodeUrl, name} = shopInfo.value
     const payload = {
       qrcodeUrl,
-      message: `长按添加${name}微信~`
+      message: `长按保存图片，然后扫码添加微信~`
     }
     let payloadStr = encodeURIComponent(JSON.stringify(payload))
     wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
