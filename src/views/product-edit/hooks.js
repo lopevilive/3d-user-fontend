@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct, getShop, countProduct } from '@/http'
 import { commonFetch, E_model3D, getBusinessCfg, E_type3D } from '@/util'
-import { showConfirmDialog } from 'vant';
+import { showConfirmDialog, showToast } from 'vant';
 
 export const useProductEdit = () => {
   const route = useRoute()
@@ -61,7 +61,12 @@ export const useProductEdit = () => {
     return ret
   }
 
+  const uploadImgsRef = ref()
   const saveHandle = async () => {
+    if (uploadImgsRef.value.isLoading) {
+      showToast('请等待图片上传完成再保存～')
+      return
+    }
     await formRef.value.validate()
     const res = await commonFetch(productMod, data.value, '保存成功')
     const {editStatus} = globalData.value
@@ -227,6 +232,7 @@ export const useProductEdit = () => {
     nameBlurHandle,
     preview3D,
     modelDisplayRef,
-    fieldList
+    fieldList,
+    uploadImgsRef
   }
 }

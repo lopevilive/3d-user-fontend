@@ -12,7 +12,7 @@
             <FormLabel label="产品图片" tips="首张图片作为产品封面，支持拖动调整图片顺序。"/>
           </template>
           <template #input>
-            <UploadImgs v-model="data.url" :maxCount="6"/>
+            <UploadImgs v-model="data.url" :maxCount="6" ref="uploadImgsRef"/>
           </template>
         </VanField>
         <VanField
@@ -114,11 +114,11 @@
         </template>
       </VanCellGroup>
 
-      <VanCellGroup v-if="fieldList.length">
+      <!-- <VanCellGroup v-if="fieldList.length">
         <VanCell v-for="field in fieldList" :title="field.name" :key="field.name">
           123
         </VanCell>
-      </VanCellGroup>
+      </VanCellGroup> -->
       
       <VanCellGroup>
         <VanField
@@ -172,7 +172,8 @@ const {
   nameBlurHandle,
   modelDisplayRef,
   preview3D,
-  fieldList
+  fieldList,
+  uploadImgsRef
 } = useProductEdit()
 
 init()

@@ -20,7 +20,7 @@ export const E_model3D = [
 export const business_cfgs = [
   {
     businessId: 1, // 行业id
-    type3D: [1], // 720 模式
+    type3D: [], // 720 模式
     model3D: [1], // 720 场景
     fields: [
       {

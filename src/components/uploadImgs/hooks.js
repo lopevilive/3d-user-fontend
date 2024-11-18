@@ -95,6 +95,13 @@ export const useUploadImages = (props, emits) => {
     showImagePreview(list, idx)
   }
 
+  const isLoading = computed(() => {
+    for(const file of uploadings.value) {
+      if (file.status === 'uploading') return true
+    }
+    return false
+  })
+
 
   
   return {
@@ -107,6 +114,7 @@ export const useUploadImages = (props, emits) => {
     oversizeHandle,
     maxSize,
     viewHandle,
-    deleteUploading
+    deleteUploading,
+    isLoading
   }
 }

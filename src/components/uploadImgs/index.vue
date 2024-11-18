@@ -41,8 +41,11 @@ const {
   oversizeHandle,
   maxSize,
   viewHandle,
-  deleteUploading
+  deleteUploading,
+  isLoading
 } = useUploadImages(props, emits)
+
+defineExpose({isLoading})
 
 </script>
 
