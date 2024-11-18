@@ -65,3 +65,10 @@ const {
 }
 
 </style>
+
+<style lang="scss">
+.smooth-dnd-disable-touch-action * {
+  touch-action: auto !important;
+}
+
+</style>

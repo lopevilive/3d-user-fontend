@@ -57,7 +57,7 @@ export const uploadFile = async (file, shopId) => {
           "is_pic_info": 1,
           "rules": [{
               "fileid": fileName,
-              "rule": "imageMogr2/quality/100/format/jpg"
+              "rule": "imageMogr2/quality/90/format/jpg"
           }]
         })
       }

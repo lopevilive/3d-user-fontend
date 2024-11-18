@@ -35,11 +35,22 @@ export const useContact = () => {
     shopInfo.value = res[0]
   }
 
+  const toViewQr = () => {
+    const {qrcodeUrl, name} = shopInfo.value
+    const payload = {
+      qrcodeUrl,
+      message: `长按添加${name}微信~`
+    }
+    let payloadStr = encodeURIComponent(JSON.stringify(payload))
+    wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
+  }
+
   return {
     shopInfo,
     init,
     imgList,
     addressDisplay,
-    copyStr
+    copyStr,
+    toViewQr
   }
 }

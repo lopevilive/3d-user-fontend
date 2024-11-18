@@ -13,7 +13,7 @@
           <a v-if="shopInfo.phone" :href="`tel:${shopInfo.phone}`"><VanButton size="small" text="拨打" /></a>
           <VanButton v-if="shopInfo.phone" class="mr-l" size="small" text="复制号码" @click="copyStr(shopInfo.phone)"/>
           <!-- todo -->
-          <VanButton v-if="shopInfo.qrcodeUrl" class="mr-l" size="small" text="添加微信" />
+          <VanButton v-if="shopInfo.qrcodeUrl" class="mr-l" size="small" text="添加微信" @click="toViewQr" />
         </template>
       </VanCell>
     </VanCellGroup>
@@ -31,7 +31,8 @@ const {
   init,
   imgList,
   addressDisplay,
-  copyStr
+  copyStr,
+  toViewQr
 } = useContact()
 
 init()
