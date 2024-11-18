@@ -1,4 +1,4 @@
-import {ref, nextTick} from 'vue'
+import {ref} from 'vue'
 
 export const useActionsSheet = (emits) => {
   const isShow = ref(false)
@@ -9,7 +9,11 @@ export const useActionsSheet = (emits) => {
 
   const selectHandle = async (item) => {
     isShow.value = false
-    await nextTick()
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, 100);
+    })
     emits('select', item)
   }
 

@@ -7,7 +7,7 @@
             <FormLabel label="公司图册" tips="首张图片作为图册 logo，支持拖动调整图片顺序。"/>
           </template>
           <template #input>
-            <UploadImgs v-model="data.url" :maxCount="6"/>
+            <UploadImgs ref="uploadImgsRef" v-model="data.url" :maxCount="5"/>
           </template>
         </VanField>
 
@@ -107,7 +107,8 @@ const {
   businessDisplay,
   isEdit,
   businessTips,
-  businessClick
+  businessClick,
+  uploadImgsRef
 } = useAlbumMod()
 
 

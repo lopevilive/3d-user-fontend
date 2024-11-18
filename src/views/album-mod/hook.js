@@ -3,6 +3,7 @@ import { shopCreate, shopMod, getShop } from '@/http'
 import { commonFetch, keyReplace, E_business } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
+import { showToast } from 'vant';
 
 
 export const useAlbumMod = () => {
@@ -31,7 +32,13 @@ export const useAlbumMod = () => {
     areaSelectRef.value.show()
   }
 
+
+  const uploadImgsRef = ref()
   const saveHandle = async () => {
+    if (uploadImgsRef.value.isLoading) {
+      showToast('请等待图片上传完成再保存～')
+      return
+    }
     await formRef.value.validate()
     const payload = {...data.value}
     const api = isEdit ? shopMod : shopCreate
@@ -84,6 +91,7 @@ export const useAlbumMod = () => {
     businessDisplay,
     isEdit,
     businessTips,
-    businessClick
+    businessClick,
+    uploadImgsRef
   }
 }

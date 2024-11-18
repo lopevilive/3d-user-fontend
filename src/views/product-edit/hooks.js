@@ -72,7 +72,7 @@ export const useProductEdit = () => {
       })
       const payload = {
         qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/WechatIMG619.jpg',
-        message: `长按保存图片，然后扫码添加微信~`
+        message: `长按识别二维码～`
       }
       let payloadStr = encodeURIComponent(JSON.stringify(payload))
       wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
