@@ -14,7 +14,7 @@ export const useProductItem = (props, emits) => {
   const shopId = + route.params.shopId
 
   const actions = computed(() => {
-    const {status} = props.data
+    const {status, sort} = props.data
     let ret = [
       {
         name: '修改产品',
@@ -27,16 +27,30 @@ export const useProductItem = (props, emits) => {
     ];
 
     if (status === 0) {
-      ret.push({
-        name: '移到最前',
-        color: '#5794f7',
-        action: async () => {
-          const {id} = props.data
-          await commonFetch(moveTopProduct, {id, shopId})
-          globalData.value.productManageNeedUpdate = true
-          emits('update')
-        }
-      })
+      if (sort !== 0) {
+        ret.push({
+          name: '取消置顶',
+          color: '#f29b73',
+          action: async () => {
+            const {id} = props.data
+            await commonFetch(productMod, {id, shopId, sort: 0})
+            globalData.value.productManageNeedUpdate = true
+            emits('update')
+          }
+        })
+      } else {
+        ret.push({
+          name: '置顶产品',
+          color: '#5794f7',
+          action: async () => {
+            const {id} = props.data
+            await commonFetch(moveTopProduct, {id, shopId})
+            globalData.value.productManageNeedUpdate = true
+            emits('update')
+          }
+        })
+      }
+      
     }
 
     const act = status === 0 ? '下架' : '上架'

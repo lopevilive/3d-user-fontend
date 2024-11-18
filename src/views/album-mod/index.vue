@@ -19,7 +19,7 @@
           :rules="[{required: true, message: '名称不能为空'}]"
         />
 
-        <VanField :required="true" is-link :disabled="isEdit">
+        <VanField :required="true" is-link >
           <template #label>
             <FormLabel label="所属行业" :tips="businessTips"/>
           </template>
@@ -75,7 +75,7 @@
             <FormLabel label="微信二维码" tips="上传微信二维码，方便客户通过微信与您联系。"/>
           </template>
           <template #input>
-            <UploadImgs v-model="data.qrcodeUrl" :maxCount="1"/>
+            <UploadImgs ref="uploadImgsRef2" v-model="data.qrcodeUrl" :maxCount="1"/>
           </template>
         </VanField>
 
@@ -108,7 +108,8 @@ const {
   isEdit,
   businessTips,
   businessClick,
-  uploadImgsRef
+  uploadImgsRef,
+  uploadImgsRef2
 } = useAlbumMod()
 
 

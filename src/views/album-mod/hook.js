@@ -34,8 +34,9 @@ export const useAlbumMod = () => {
 
 
   const uploadImgsRef = ref()
+  const uploadImgsRef2 = ref()
   const saveHandle = async () => {
-    if (uploadImgsRef.value.isLoading) {
+    if (uploadImgsRef.value.isLoading || uploadImgsRef2.value.isLoading) {
       showToast('请等待图片上传完成再保存～')
       return
     }
@@ -63,12 +64,13 @@ export const useAlbumMod = () => {
   })
 
   const businessTips = computed(() => {
-    if (!isEdit) return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案。'
-    return '所属行业暂时无法手动修改，如需更改，请联系开发员。(15697537900)'
+    return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案。'
+    // if (!isEdit) return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案。'
+    // return '所属行业暂时无法手动修改，如需更改，请联系开发员。(15697537900)'
   })
 
   const businessClick = () => {
-    if (isEdit) return
+    // if (isEdit) return
     showBusinessPicker.value = true
   }
 
@@ -92,6 +94,7 @@ export const useAlbumMod = () => {
     isEdit,
     businessTips,
     businessClick,
-    uploadImgsRef
+    uploadImgsRef,
+    uploadImgsRef2
   }
 }
