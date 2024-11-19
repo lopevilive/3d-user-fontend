@@ -74,10 +74,9 @@ export const useProductItem = (props, emits) => {
       // icon: 'delete-o',
       color: '#ee0a24',
       action: async () => {
-        const {id, name} = props.data
+        const {id} = props.data
         await showConfirmDialog({
-          title: '删除产品',
-          message: `确定删除【${name}】?`
+          message: `确定要删除这个产品吗?`
         })
         await commonFetch(productDel, {id})
         globalData.value.productManageNeedUpdate = true
@@ -100,11 +99,11 @@ export const useProductItem = (props, emits) => {
   }
 
   const handleClick = () => {
-    const {id, name} = props.data
+    const {id, desc} = props.data
     if (globalData.value.editStatus === 1) {
       router.push({name: 'product-edit', params: {id}})
     } else {
-      router.push({name: 'product-detial', params: {id}, query: {title: name}})
+      router.push({name: 'product-detial', params: {id}, query: {title: desc}})
     }
   }
 

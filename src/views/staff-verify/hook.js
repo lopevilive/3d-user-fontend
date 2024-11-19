@@ -3,6 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { commonFetch } from '@/util'
 import { verfiyStaff,getShop, acceptStaff } from '@/http'
 import { showDialog } from 'vant';
+import { globalData } from '@/store'
 
 
 export const useStaffVerify = () => {
@@ -66,6 +67,7 @@ export const useStaffVerify = () => {
           message: `恭喜！您已成功成为【${shopInfo.value.name}】管理员。`,
           confirmButtonText: '返回首页',
           beforeClose: () => {
+            globalData.value.userInfo = {}
             gohome()
             return true
           }

@@ -4,7 +4,7 @@
       <div class="img">
         <VanImage fit="contain" :src="getImageUrl(urlDisplay)" />
       </div>
-      <div class="desc">{{ data.name }}</div>
+      <div class="desc">{{ data.desc }}</div>
       <div class="price" v-if="data.price">¥ {{ data.price }}</div>
     </div>
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">

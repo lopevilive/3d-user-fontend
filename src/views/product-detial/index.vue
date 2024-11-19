@@ -6,10 +6,10 @@
     </div>
     <div class="name-share">
       <div class="left">
-        <div class="name">{{ info.name }}</div>
+        <div class="name">{{ info.desc }}</div>
         <div class="price" v-if="info.price">¥ {{ info.price }}</div>
       </div>
-      <VanButton @click="shareHandle" size="small" icon="share-o" icon-position="right">分享</VanButton>
+      <!-- <VanButton @click="shareHandle" size="small" icon="share-o" icon-position="right">分享</VanButton> -->
     </div>
     <div class="desc-content">
       <div class="desc-list">
@@ -83,13 +83,15 @@ export default {
     background: $bgWhite;
     margin-top: 1px;
     .left {
-      margin-right: $mrL;
+      // margin-right: $mrL;
       flex: 1;
     }
     .name {
       line-height: 20px;
-      font-weight: bold;
-      font-size: $fsH;
+      // font-weight: bold;
+      font-size: 14px;
+      color: $grey7;
+
     }
     .price {
       color: $red;

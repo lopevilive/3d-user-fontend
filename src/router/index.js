@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp } from '@/util'
+import { isInApp, viewLog } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -132,6 +132,10 @@ const handleLogin = async (to) => {
 
 const init = async (to, from) => {
   const { needPhone, title } = to.meta
+  const {shopId} = to.params
+  if (shopId) {
+    viewLog.setlog(shopId)
+  }
   let pass = await handleLogin(to)
   if (pass === false) return false
   if (needPhone) {

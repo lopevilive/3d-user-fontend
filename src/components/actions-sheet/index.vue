@@ -1,5 +1,5 @@
 <template>
-  <VanActionSheet class="com-actions-sheet" v-model:show="isShow">
+  <VanActionSheet class="com-actions-sheet" v-model:show="isShow" :duration="0">
     <div v-for="group in actions" class="group">
       <VanButton
         v-for="actionItem in group"

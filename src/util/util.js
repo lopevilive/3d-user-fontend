@@ -12,13 +12,17 @@ class LoadingManage {
   }
   start() {
     this.count ++
-    this.loadingRef.value = true
+    try {
+      this.loadingRef.value = true
+    } catch(e) {}
   }
   stop() {
     this.count --
     setTimeout(() => {
       if (this.count === 0) {
-        this.loadingRef.value = false
+        try {
+          this.loadingRef.value = false
+        } catch(e) {}
       }
     }, 0);
   }
@@ -96,3 +100,27 @@ export const isInApp = async () => {
   if (window.__wxjs_environment === 'miniprogram') return true
   return false
 }
+
+class ViewLog {
+  constructor() {
+    this.maxLen = 5 // 保留多少条记录
+  }
+  setlog (shopId) {
+    shopId = Number(shopId)
+    if (!shopId) return
+    let viewStore = this.getlog()
+    if (!viewStore.includes(shopId)) {
+      viewStore.push(shopId)
+    }
+    viewStore = viewStore.slice(-this.maxLen)
+    localStorage.setItem('viewItem', JSON.stringify(viewStore))
+  }
+  getlog () {
+    let viewStore = localStorage.getItem('viewItem')
+    if (!viewStore) viewStore = '[]'
+    viewStore = JSON.parse(viewStore)
+    return viewStore
+  }
+}
+
+export const viewLog = new ViewLog()

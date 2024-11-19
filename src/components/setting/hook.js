@@ -40,10 +40,8 @@ export const useSetting = (props) => {
   }
 
   const acProdDel = async () => {
-    const {runtimeData} = props
     await showConfirmDialog({
-      title: '删除产品',
-      message: `确定删除【${runtimeData.name}】?`
+      message: `确定要删除这个产品吗?`
     })
     await commonFetch(productDel, {id: productId, shopId})
     globalData.value.productManageNeedUpdate = true

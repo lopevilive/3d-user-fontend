@@ -24,9 +24,9 @@ export const useProductDetial = () => {
     for (const key of Object.keys(info.value)) {
       let val = info.value[key]
       if (!val) continue;
-      if (key === 'desc') {
-        ret.push({label: '产品描述', val})
-      }
+      // if (key === 'desc') {
+      //   ret.push({label: '产品描述', val})
+      // }
       if (key === 'productType') {
         val = +val
         for (const item of productTypes) {

@@ -15,7 +15,10 @@
             <UploadImgs v-model="data.url" :maxCount="6" ref="uploadImgsRef"/>
           </template>
         </VanField>
-        <VanField
+        <Desc 
+          v-model="data.desc"
+        />
+        <!-- <VanField
           v-model="data.name"
           label="产品名称"
           :required="true"
@@ -44,11 +47,12 @@
               </div>
             </div>
           </template>
-        </VanField>
+        </VanField> -->
         <VanField
           v-model="data.price"
           label="产品价格"
           placeholder="请输入价格"
+          type="digit"
         />
         <ProdTypeSelect v-model="data.productType" />
         <StatusSelect v-model="data.status"/>
@@ -120,17 +124,6 @@
         </VanCell>
       </VanCellGroup> -->
       
-      <VanCellGroup>
-        <VanField
-          v-model="data.desc"
-          label="产品介绍"
-          rows="2"
-          show-word-limit
-          maxlength="100"
-          type="textarea"
-          placeholder="请输入说明"
-        />
-      </VanCellGroup>
     </VanForm>
     <ProductTypeDialog ref="productTypeDialogRef"/>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
@@ -151,6 +144,7 @@ import FormLabel from '@/components/form-label/index.vue'
 import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/components/prod-type-select/index.vue'
 import StatusSelect from './StatusSelect.vue'
 import ModelDisplay from '@/components/model-display/index.vue'
+import Desc from './Desc.vue'
 
 const {
   formRef,

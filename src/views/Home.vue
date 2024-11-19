@@ -9,6 +9,10 @@
       <h3 class="mrM">我的图册</h3>
       <Card class="mrM" v-for="item in userAlbum" :data="item" />
     </div>
+    <template v-if="viewLogList.length">
+      <h3 class="mrM">最近浏览</h3>
+      <Card class="mrM" v-for="item in viewLogList" :data="item" />
+    </template>
     <!-- <h3 class="mrM">推荐图册</h3>
     <Card class="mrM" v-for="item in recommendList" :data="item" /> -->
   </div>
@@ -20,7 +24,7 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Card from '@/components/card/index.vue'
 import {getShop} from '@/http'
-import { commonFetch, globalLoading } from '@/util'
+import { commonFetch, globalLoading, viewLog} from '@/util'
 import { globalData } from '@/store'
 
 const router = useRouter()
@@ -42,6 +46,14 @@ const getUserAlbum = async () => {
   }
 }
 
+// 获取最近浏览
+const viewLogList = ref([])
+const getViewLog = async () => {
+  const idList = viewLog.getlog()
+  if (!idList.length) return
+  viewLogList.value = await commonFetch(getShop, {shopId: idList})
+}
+
 // 推荐图册列表
 const recommendList = ref([])
 const getRecommendList = async () => {
@@ -51,6 +63,7 @@ const getRecommendList = async () => {
 
 const init = () => {
   getUserAlbum()
+  getViewLog()
   // getRecommendList()
 }
 

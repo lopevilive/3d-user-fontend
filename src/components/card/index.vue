@@ -1,9 +1,11 @@
 <template>
   <div class="com-card" @click="handleClick">
-    <div class="company-name">{{ data.name }}</div>
     <div class="content">
-      <VanImage fit="contain" :src="getImageUrl(logo)" />
-      <div class="desc">{{ data.desc }}</div>
+      <VanImage fit="cover" :src="getImageUrl(logo)" />
+      <div class="txt-content">
+        <div class="tit">{{ data.name }}</div>
+        <div class="desc">{{ data.desc }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,11 +39,7 @@ const handleClick = () => {
 .com-card {
   background: $bgWhite;
   border-radius: $bdrM;
-  padding: $pdH $pdM;
-  .company-name {
-    font-weight: bold;
-    font-size: $fsM;
-  }
+  padding: $pdM;
   .content {
     display: flex;
     margin-top: $mrL;
@@ -53,9 +51,23 @@ const handleClick = () => {
       overflow: hidden;
       margin-right: $mrL;
     }
+    .txt-content {
+      flex: 1;
+      .tit {
+        font-weight: bold;
+        font-size: $fsM;
+      }
+    }
     .desc {
-      color: $grey;
+      color: $grey8;
       font-size: $fsL;
+      margin-top: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 3;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      line-clamp: 3;
     }
   }
 }
