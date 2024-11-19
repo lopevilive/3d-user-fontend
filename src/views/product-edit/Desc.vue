@@ -16,7 +16,7 @@
     show-cancel-button
     :beforeClose="beforeCloseHandle"
   >
-    <div class="content" @click="contentClickHandle">
+    <div class="content">
       <VanField
         ref="fieldRef"
         v-model="tmpVal"
@@ -53,11 +53,7 @@ const clickHandle = () => {
   tmpVal.value = props.modelValue
   setTimeout(() => {
     fieldRef.value.focus()
-  }, 100);
-}
-
-const contentClickHandle = () => {
-  fieldRef.value.focus()
+  }, 300);
 }
 
 const beforeCloseHandle = (action) => {
@@ -80,7 +76,11 @@ const beforeCloseHandle = (action) => {
 <style lang="scss" scoped>
 .com-product-edit__desc {
   .content {
-    height: 55vh;
+    height: 50vh;
+    overflow: auto;
+    :deep(textarea) {
+      min-height: 50vh;
+    }
   }
 }
 
