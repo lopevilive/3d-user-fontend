@@ -96,7 +96,7 @@ export const useProductEdit = () => {
     showSuccessToast('保存成功～')
 
     const {editStatus} = globalData.value
-    globalData.value.productManageNeedUpdate = true
+    globalData.value.productNeedExec.push({type: 'edit', data: data.value})
     const keepAdding = await getContinue()
 
     if (keepAdding) {
@@ -111,8 +111,9 @@ export const useProductEdit = () => {
     }
     router.replace({name: 'product-detial', params: {id: id ? id : res}, query: {title: data.value.desc}})
     setTimeout(() => {
-      console.log('99999')
-      if (window.history.state.back === window.history.state.current) router.go(-1)
+      if (/product-detial/.test(window.history.state.back)) {
+        router.go(-1)
+      }
     }, 0);
   }
 

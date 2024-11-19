@@ -26,19 +26,19 @@
         </div>
       </div>
       <div class="tabs">
-        <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true">
+        <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
           <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
         </VanTabs>
       </div>
     </div>
     <div class="product-content">
       <div class="wrap">
-        <div class="list" @scroll="scrollHandle">
+        <div class="list" @scroll="scrollHandle" ref="listRef">
             <div ref="leftListRef" class="left-list list-item">
-              <productItem v-for="item in leftList" :data="item" :key="item.id" @update="activedHandle" @selected="selectedHandle" />
+              <productItem v-for="item in leftList" :data="item" :key="item.id" @update="handleUpdate" @selected="selectedHandle" />
             </div>
             <div ref="rightListRef" class="right-list list-item">
-              <productItem v-for="item in rightList" :data="item" :key="item.id" @update="activedHandle" @selected="selectedHandle" />
+              <productItem v-for="item in rightList" :data="item" :key="item.id" @update="handleUpdate" @selected="selectedHandle" />
             </div>
             <div v-if="fetchLoading" class="loading"><VanLoading /></div>
             <div v-if="finished" class="done">到底啦～</div>
@@ -64,7 +64,6 @@ const {
   init,
   activeTab,
   productTypes,
-  activedHandle,
   tabChangeHandle,
   leftList,
   rightList,
@@ -83,10 +82,17 @@ const {
   handleMulPrice,
   handleMulChangeType,
   mulPriceRef,
-  mulProductTypeRef
+  mulProductTypeRef,
+  listRef,
+  scrollT,
+  handleUpdate,
+  tabKey,
+  activeHandle
 } = useProductManage()
 
-onActivated(activedHandle)
+onActivated(() => {
+  activeHandle()
+})
 
 init()
 

@@ -44,7 +44,7 @@ export const useSetting = (props) => {
       message: `确定要删除这个产品吗?`
     })
     await commonFetch(productDel, {id: productId, shopId})
-    globalData.value.productManageNeedUpdate = true
+    globalData.value.productNeedExec.push({type: 'del', data: {id: productId}})
     router.replace({name: 'product-manage'})
   }
 

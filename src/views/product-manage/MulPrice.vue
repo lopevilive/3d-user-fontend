@@ -1,6 +1,6 @@
 <template>
   <VanDialog title="批量改价" v-model:show="show" show-cancel-button @confirm="confirmHandle" @cancel="cancelHandle">
-    <VanField required label="价格" v-model="price" placeholder="请输入价格"/>
+    <VanField required label="价格" type="digit" v-model="price" placeholder="请输入价格"/>
   </VanDialog>
 </template>
 

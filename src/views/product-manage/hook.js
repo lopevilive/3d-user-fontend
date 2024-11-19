@@ -34,8 +34,7 @@ export const useProductItem = (props, emits) => {
           action: async () => {
             const {id} = props.data
             await commonFetch(productMod, {id, shopId, sort: 0})
-            globalData.value.productManageNeedUpdate = true
-            emits('update')
+            emits('update', {type: 'sort', data: props.data})
           }
         })
       } else {
@@ -45,8 +44,7 @@ export const useProductItem = (props, emits) => {
           action: async () => {
             const {id} = props.data
             await commonFetch(moveTopProduct, {id, shopId})
-            globalData.value.productManageNeedUpdate = true
-            emits('update')
+            emits('update', {type: 'sort', data: props.data})
           }
         })
       }
@@ -65,8 +63,7 @@ export const useProductItem = (props, emits) => {
           message: `确定${act}【${name}】?`
         })
         await commonFetch(productMod, {id, status: status === 0 ? 1 : 0, shopId})
-        globalData.value.productManageNeedUpdate = true
-        emits('update')
+        emits('update', {type: 'status', data: props.data})
       }
     })
     ret.push({
@@ -78,9 +75,8 @@ export const useProductItem = (props, emits) => {
         await showConfirmDialog({
           message: `确定要删除这个产品吗?`
         })
-        await commonFetch(productDel, {id})
-        globalData.value.productManageNeedUpdate = true
-        emits('update')
+        await commonFetch(productDel, {id, shopId})
+        emits('update', {type: 'del', data: props.data})
       }
     })
 
@@ -149,7 +145,8 @@ export const useProductManage = () => {
   const shopId = +route.params.shopId
   let source = axios.CancelToken.source()
   const globalLoadingRef = globalLoading.getRef()
-
+  const scrollT = ref(0)
+  const listRef = ref()
   const finished = ref(false)
   const fetchLoadingRaw = ref(false)
   const fetchLoading = computed(() => {
@@ -243,13 +240,10 @@ export const useProductManage = () => {
   }
 
   const tabChangeHandle = () => {
-    globalData.value.productManageNeedUpdate = true
-    activedHandle()
+    refresh()
   }
 
-  const activedHandle = () => {
-    if (globalData.value.productManageNeedUpdate === false) return
-    globalData.value.productManageNeedUpdate = false
+  const refresh = () => {
     currPage.value = 0
     finished.value = false
     leftList.value = []
@@ -264,6 +258,7 @@ export const useProductManage = () => {
 
   const scrollHandle = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
+    scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
     if (Math.abs(b - a) < 10){
@@ -287,20 +282,33 @@ export const useProductManage = () => {
     EE.emit('removeAllSelected')
   }
 
+  const tabKey = ref(Math.floor(Math.random() * 100))
   const handleEditDone = async () => {
     removeAllSelected()
     await nextTick()
     globalData.value.editStatus = 0
-    // if (activeTab.value < 0) {
-    activeTab.value = 0
-    globalData.value.productManageNeedUpdate = true
-    activedHandle()
-    // }
+    tabKey.value = Math.floor(Math.random() * 100)
+    if (activeTab.value < 0) {
+      activeTab.value = 0
+      refresh()
+    }
   }
 
   const addProdHandle = async () => {
     await handleEditDone()
     router.push({name: 'product-edit' })
+  }
+
+  const removeList = () => {
+    leftList.value = leftList.value.filter((item) => {
+      if (selectedList.value.includes(item.id)) return false
+      return true
+    })
+    rightList.value = rightList.value.filter((item) => {
+      if (selectedList.value.includes(item.id)) return false
+      return true
+    })
+    removeAllSelected()
   }
 
   const handleMulOnOff = async (mod) => {
@@ -310,8 +318,7 @@ export const useProductManage = () => {
       message: `确定${act}所选产品吗？当前选中 ${selectedList.value.length} 个产品。`
     })
     await commonFetch(productMod, {id: selectedList.value, status: mod === 'on' ? 0 : 1, shopId})
-    globalData.value.productManageNeedUpdate = true
-    activedHandle()
+    removeList()
   }
 
   const handleMulDel = async () => {
@@ -319,28 +326,94 @@ export const useProductManage = () => {
       title: '批量删除',
       message: `确定删除所选产品吗？当前选中 ${selectedList.value.length} 个产品。`
     })
-    await commonFetch(productDel, {id: selectedList.value})
-    globalData.value.productManageNeedUpdate = true
-    activedHandle()
+    await commonFetch(productDel, {id: selectedList.value, shopId})
+    removeList()
+  }
+
+  const updateProd = async (list) => {
+    const idList = [...list]
+    const res = await commonFetch(getProduct, {shopId, productId: idList})
+    if (!res?.list?.length) return
+    for (const newItem of res.list) {
+      let idx = leftList.value.findIndex((item) => item.id === newItem.id)
+      if (idx !== -1) {
+        if (newItem.status === 1) {
+          // 下架
+          leftList.value.splice(idx, 1)
+          continue
+        }
+        leftList.value[idx] = newItem
+        continue
+      }
+      idx = rightList.value.findIndex((item) => item.id === newItem.id)
+      if (idx !== -1) {
+        if (newItem.status === 1) {
+          // 下架
+          rightList.value.splice(idx, 1)
+          continue
+        }
+        rightList.value[idx] = newItem
+      }
+    }
   }
 
   const mulPriceRef = ref()
   const handleMulPrice = async () => {
     const price = await mulPriceRef.value.getPrice()
     await commonFetch(productMod, {price, id: selectedList.value, shopId})
-    globalData.value.productManageNeedUpdate = true
-    activedHandle()
+    updateProd(selectedList.value)
+    removeAllSelected()
   }
 
   const mulProductTypeRef = ref()
   const handleMulChangeType = async () => {
     const productType = await mulProductTypeRef.value.getType()
     await commonFetch(productMod, {productType, id: selectedList.value, shopId})
-    globalData.value.productManageNeedUpdate = true
-    activedHandle()
+    if ([0,-2].includes(activeTab.value)) {
+      return removeAllSelected()
+    }
+    if (productType !== activeTab.value) {
+      return removeList()
+    }
+    removeAllSelected()
+  }
+
+  const handleUpdate = async ({type, data}) => {
+    if (type === 'sort') { // 置顶/取消置顶
+      refresh()
+    }
+    if (['status', 'del'].includes(type)) { // 上架/下架/删除
+      leftList.value = leftList.value.filter((item) => {
+        if (item.id === data.id) return false
+        return true
+      })
+      rightList.value = rightList.value.filter((item) => {
+        if (item.id === data.id) return false
+        return true
+      })
+    }
+    if (type === 'edit') {
+      if (data.id === 0) {
+        refresh()
+        return
+      }
+      updateProd([data.id])
+    }
+  }
+
+  const activeHandle = () => {
+    if (scrollT.value) {
+      listRef.value.scrollTop = scrollT.value
+    }
+    if (globalData.value?.productNeedExec?.length) {
+      const execPayload = globalData.value.productNeedExec.pop()
+      globalData.value.productNeedExec = []
+      handleUpdate(execPayload)
+    }
   }
 
   const init = async () => {
+    globalData.value.productNeedExec = []
     const {toDetial} = route.query
     if (toDetial) {
       router.push({name: 'product-detial', params: {id: toDetial}})
@@ -356,7 +429,7 @@ export const useProductManage = () => {
     loadHandle,
     finished,
     fetchLoading,
-    activedHandle,
+    refresh,
     tabChangeHandle,
     leftList,
     rightList,
@@ -373,6 +446,11 @@ export const useProductManage = () => {
     handleMulPrice,
     handleMulChangeType,
     mulPriceRef,
-    mulProductTypeRef
+    mulProductTypeRef,
+    listRef,
+    scrollT,
+    handleUpdate,
+    tabKey,
+    activeHandle
   }
 }

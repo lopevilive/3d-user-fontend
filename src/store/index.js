@@ -12,7 +12,7 @@ export const globalData = ref({
   },
   productTypes: {},
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
-  productManageNeedUpdate:  false, // 产品列表是否需要更新，比如修改产品后此属性应为 trueå
+  productNeedExec: [], // 需要更新的产品
   _productTypes: {},
   productTypes: computed(() => {
     const route = router.currentRoute.value
