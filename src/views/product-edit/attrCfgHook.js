@@ -105,24 +105,29 @@ export const useAttrCfgHook = (props, emits) => {
     emits('update:modelValue', JSON.stringify(list))
   }
 
+  const customHandle = () => {
+
+  }
+
 
   return {
     optClickHandle,
-    renderList
+    renderList,
+    customHandle
   }
 }
 
 
-let tmp = {
-  name: '风格',
-  type: 'single',
-  opts: ['现代简约','北欧风格','新中式','轻奢','复古风','意式极简','原木风','奶油风','地中海'],
-  customOpts: ['好看的'], // 自定义的选项
-  isCustom: false // 是否自定义的属性
-}
+// let tmp = {
+//   name: '风格',
+//   type: 'single',
+//   opts: ['现代简约','北欧风格','新中式','轻奢','复古风','意式极简','原木风','奶油风','地中海'],
+//   customOpts: ['好看的'], // 自定义的选项
+//   isCustom: false // 是否自定义的属性
+// }
 
-let dbTmp = {
-  name: '风格',
-  val: '现代简约', // 选中的值
-  customOpts: ['好看的'],
-}
+// let dbTmp = {
+//   name: '风格',
+//   val: '现代简约', // 选中的值
+//   customOpts: ['好看的'],
+// }

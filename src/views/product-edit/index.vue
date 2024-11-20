@@ -2,7 +2,6 @@
   <div class="product-edit">
     <VanForm label-align="left" ref="formRef">
       <VanCellGroup>
-        <Desc  v-model="data.desc"/>
         <VanField
           v-model="data.url"
           :required="true"
@@ -16,6 +15,7 @@
             <UploadImgs v-model="data.url" :maxCount="6" ref="uploadImgsRef"/>
           </template>
         </VanField>
+        <Desc  v-model="data.desc"/>
         <!-- <VanField
           v-model="data.name"
           label="产品名称"
@@ -46,13 +46,14 @@
             </div>
           </template>
         </VanField> -->
+        <ProdTypeSelect v-model="data.productType" />
         <VanField
           v-model="data.price"
           label="产品价格"
           placeholder="请输入价格"
           type="digit"
+          :maxlength="10"
         />
-        <ProdTypeSelect v-model="data.productType" />
         <StatusSelect v-model="data.status"/>
         
       </VanCellGroup>

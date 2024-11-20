@@ -59,8 +59,9 @@ const {
   position: relative;
   :deep(.van-checkbox) {
     position: absolute;
-    right: 3px;
+    left: 3px;
     top: 3px;
+    background: $bgWhite;
     .van-checkbox__icon {
       height: auto;
       .van-icon {
@@ -114,18 +115,20 @@ const {
   .setting {
     position: absolute;
     top: -10px;
-    left: 0px;
+    right : 0px;
     font-size: 16px;
     z-index: 100;
     padding: 10px;
     :deep(.van-icon) {
       width: 28px;
       height: 28px;
-      background: #929ca7;
+      background: $bgWhite;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #000;
+      border: 1px solid #c8c9cc;
     }
   }
 }

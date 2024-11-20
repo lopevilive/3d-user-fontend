@@ -57,10 +57,10 @@ export const useProductItem = (props, emits) => {
       name: `${act}产品`,
       color,
       action: async () => {
-        const {id, name} = props.data
+        const {id} = props.data
         await showConfirmDialog({
           title: `${act}产品`,
-          message: `确定${act}【${name}】?`
+          message: `确定要${act}该产品吗?`
         })
         await commonFetch(productMod, {id, status: status === 0 ? 1 : 0, shopId})
         emits('update', {type: 'status', data: props.data})
@@ -179,9 +179,10 @@ export const useProductManage = () => {
   let rightIdx = 0
 
   const productTypes = computed(() => {
+    const {rid} = globalData.value
     let ret = [...globalData.value.productTypes]
     ret.splice(0,0, {name: '全部', id: 0})
-    if (globalData.value.editStatus === 1) {
+    if ([2,3,99].includes(rid)) {
       ret.splice(1,0, {name:'未分类', id: -1})
       ret.splice(2,0, {name:'已下架', id: -2})
     }
@@ -298,11 +299,11 @@ export const useProductManage = () => {
     removeAllSelected()
     await nextTick()
     globalData.value.editStatus = 0
-    tabKey.value = Math.floor(Math.random() * 100)
-    if (activeTab.value < 0) {
-      activeTab.value = 0
-      refresh()
-    }
+    // tabKey.value = Math.floor(Math.random() * 100)
+    // if (activeTab.value < 0) {
+    //   activeTab.value = 0
+    //   refresh()
+    // }
   }
 
   const addProdHandle = async () => {

@@ -11,11 +11,12 @@
               v-for="opt in item.displayOpts"
               @click="optClickHandle(item, opt)"
             >{{ opt }}</div>
+            <VanButton class="custom" size="mini" type="primary" icon="edit" @click="customHandle">自定义</VanButton>
           </div>
         </div>
       </div>
+      <VanButton size="mini" type="primary" icon="plus" >自定义属性</VanButton>
     </div>
-    
   </div>
 
 </template>
@@ -32,7 +33,8 @@ const emits = defineEmits(['update:modelValue'])
 
 const {
   renderList,
-  optClickHandle
+  optClickHandle,
+  customHandle
 } = useAttrCfgHook(props,emits)
 
 </script>
@@ -79,6 +81,9 @@ const {
       .item__active {
         background: #f8e66e;
         font-weight: bold;
+      }
+      .custom {
+        flex-shrink: 0;
       }
     }
   }

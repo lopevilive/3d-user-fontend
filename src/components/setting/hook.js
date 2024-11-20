@@ -14,8 +14,6 @@ export const useSetting = (props) => {
   const actionsSheetRef = ref()
   const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.7});
 
-  const {rid} = globalData.value
-
   const acToAlbum = () => {
     router.push({name: 'album-mod', params: {shopId}})
   }
@@ -67,6 +65,7 @@ export const useSetting = (props) => {
   ]
 
   const actionDisplay = computed(() => {
+    const {rid} = globalData.value
     const ret = []
     for (const list of actions) {
       const tmpRet = []
@@ -84,6 +83,7 @@ export const useSetting = (props) => {
   })
 
   const isShow = computed(() => {
+    const {rid} = globalData.value
     if (globalData.value.editStatus === 1) return false
     if ([2,3,99].includes(rid)) return true
     return false

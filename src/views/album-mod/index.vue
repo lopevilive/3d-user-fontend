@@ -16,6 +16,7 @@
           label="图册名称"
           :required="true"
           placeholder="请输入名称"
+          :maxlength="20"
           :rules="[{required: true, message: '名称不能为空'}]"
         />
 
@@ -48,7 +49,7 @@
           placeholder="请输入介绍"
           type="textarea"
           show-word-limit
-          maxlength="200"
+          :maxlength="300"
           rows="2"
         >
           <template #label>
@@ -58,13 +59,13 @@
       </VanCellGroup>
 
       <VanCellGroup>
-        <VanField v-model="data.address" placeholder="请输入详细地址">
+        <VanField v-model="data.address" placeholder="请输入详细地址" :maxlength="200">
           <template #label>
             <FormLabel label="详细地址" tips="填写详细地址，以便客户能够方便地上门联系您。"/>
           </template>
         </VanField>
 
-        <VanField v-model="data.phone" placeholder="请输入详细地址">
+        <VanField v-model="data.phone" placeholder="请输入联系电话" :maxlength="20">
           <template #label>
             <FormLabel label="联系电话" tips="填写联系电话，以便客户与您顺利联系。"/>
           </template>
