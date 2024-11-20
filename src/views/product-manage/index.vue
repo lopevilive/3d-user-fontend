@@ -157,7 +157,7 @@ export default {
     // margin-top: $mrL;
     :deep(.van-tabs__nav) {
       .van-tabs__line {
-        background: #ec6443;
+        background: $themeColor;
         width: 20px;
         height: 4px;
       }

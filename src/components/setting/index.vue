@@ -10,7 +10,7 @@
       v-if="isShow"
     >
       <div class="content">
-        <VanIcon name="setting-o"/>
+        <VanIcon name="edit"/>
       </div>
     </VanFloatingBubble>
     <ActionsSheet

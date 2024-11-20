@@ -19,20 +19,33 @@ export const E_model3D = [
 // 行业个性化配置
 export const business_cfgs = [
   {
+    businessId: 999,
+    attrCfg: [
+      {
+        name: '邮寄方式',
+        type: 'single',
+        opts: ['包邮','邮费自理','买家自提']
+      },
+    ]
+  },
+  {
     businessId: 1, // 行业id
     type3D: [], // 720 模式
     model3D: [1], // 720 场景
-    fields: [
+    attrCfg: [
       {
         name: '板材等级',
+        type: 'single',
         opts: ['ENF','E0','E1']
       },
       {
         name: '板材品牌',
+        type: 'single',
         opts: ['东奥','兔宝宝','林氏木业']
       },
       {
         name: '风格',
+        type: 'single',
         opts: ['现代简约','北欧风格','新中式','轻奢','复古风','意式极简','原木风','奶油风','地中海'],
       }
     ],

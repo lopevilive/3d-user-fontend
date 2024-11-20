@@ -118,12 +118,9 @@
         </template>
       </VanCellGroup>
 
-      <!-- <VanCellGroup v-if="fieldList.length">
-        <VanCell v-for="field in fieldList" :title="field.name" :key="field.name">
-          123
-        </VanCell>
-      </VanCellGroup> -->
-      
+      <VanCellGroup>
+        <AttrCfg v-model="data.attr" :attr-cfg="busiCfg.attrCfg"/>
+      </VanCellGroup>
     </VanForm>
     <ProductTypeDialog ref="productTypeDialogRef"/>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
@@ -145,6 +142,7 @@ import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/compo
 import StatusSelect from './StatusSelect.vue'
 import ModelDisplay from '@/components/model-display/index.vue'
 import Desc from './Desc.vue'
+import AttrCfg from './AttrCfg.vue'
 
 const {
   formRef,
@@ -166,8 +164,8 @@ const {
   nameBlurHandle,
   modelDisplayRef,
   preview3D,
-  fieldList,
-  uploadImgsRef
+  uploadImgsRef,
+  busiCfg
 } = useProductEdit()
 
 init()

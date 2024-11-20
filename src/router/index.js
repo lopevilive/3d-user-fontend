@@ -112,9 +112,9 @@ const handleLogin = async (to) => {
       const {data} = await getUserInfo()
       globalData.value.userInfo = data
     } catch(e) {
-      localStorage.setItem('token', '')
+      // localStorage.setItem('token', '')
       if (inApp) {
-        await tologin(to)
+        tologin(to)
         return false
       } else {
         return true
@@ -122,7 +122,7 @@ const handleLogin = async (to) => {
     }
   } else {
     if (inApp) {
-      await tologin(to)
+      tologin(to)
       return false
     } else {
       return true

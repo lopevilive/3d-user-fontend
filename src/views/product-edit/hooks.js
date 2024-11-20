@@ -226,13 +226,6 @@ export const useProductEdit = () => {
     modelDisplayRef.value.showModelDisplay()
   }
 
-  // 行业个性字段
-  const fieldList = computed(() => {
-    const {fields} = busiCfg.value
-    if (!fields?.length) return []
-    return fields;
-  })
-
   const init = () => {
     getProductInfo()
     getShopInfo()
@@ -259,7 +252,7 @@ export const useProductEdit = () => {
     nameBlurHandle,
     preview3D,
     modelDisplayRef,
-    fieldList,
-    uploadImgsRef
+    uploadImgsRef,
+    busiCfg
   }
 }

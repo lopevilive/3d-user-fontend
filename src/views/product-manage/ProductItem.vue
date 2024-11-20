@@ -8,7 +8,7 @@
       <div class="price" v-if="data.price">¥ {{ data.price }}</div>
     </div>
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">
-      <VanIcon name="setting-o" />
+      <VanIcon name="edit" />
     </div>
     <VanActionSheet
       :actions="actions"
