@@ -69,18 +69,14 @@ export const useDialogEdit = (emits) => {
   
 
   const beforeClose = async (action) => {
-    if (action === 'cancel') {
-      return true
+    if (action === 'cancel') return true
+    const errmsg = valid()
+    if (errmsg) {
+      showFailToast(errmsg)
+      return false
     }
-    if (action === 'confirm') {
-      const errmsg = valid()
-      if (errmsg) {
-        showFailToast(errmsg)
-        return false
-      }
-      handleConfirm()
-      return true
-    }
+    handleConfirm()
+    return true
   }
 
   return {

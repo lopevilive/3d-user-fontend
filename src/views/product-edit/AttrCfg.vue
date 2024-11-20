@@ -1,28 +1,38 @@
 <template>
   <div class="viewcom-attrcfg">
     <div class="list">
-      <div class="list-item" v-for="item in renderList" :key="item.name">
+      <div class="list-item" v-for="(item, index) in renderList" :key="item.name">
         <div class="name">{{ item.name }}</div>
         <div class="otps">
-          <div class="opt-content">
+          <div class="opt-content" :ref="(ret) => {optContentRefs[index] = ret}">
             <div
               class="opt-item"
               :class="{'item__active': item.val === opt}"
               v-for="opt in item.displayOpts"
               @click="optClickHandle(item, opt)"
             >{{ opt }}</div>
-            <VanButton class="custom" size="mini" type="primary" icon="edit" @click="customHandle">自定义</VanButton>
+            <VanButton
+              class="custom"
+              size="mini"
+              type="primary"
+              icon="edit"
+              @click="customOptHandle(item)"
+            >自定义</VanButton>
           </div>
         </div>
       </div>
-      <VanButton size="mini" type="primary" icon="plus" >自定义属性</VanButton>
+      <VanButton size="mini" type="primary" icon="plus" @click="customKeyHandle" >自定义属性</VanButton>
     </div>
   </div>
+  <CustomKey ref="customKeyRef" :attrList="renderList" @update="customUpdate" @del="customDelHandle"/>
+  <CustomOpts ref="customOptsRef" @update="customOptsUpdate"/>
 
 </template>
 
 <script setup>
 import {useAttrCfgHook} from './attrCfgHook'
+import CustomKey from './CustomKey.vue'
+import CustomOpts from './CustomOpts.vue'
 
 const props = defineProps({
   modelValue: {type: String},
@@ -34,7 +44,14 @@ const emits = defineEmits(['update:modelValue'])
 const {
   renderList,
   optClickHandle,
-  customHandle
+  customKeyHandle,
+  customOptHandle,
+  customKeyRef,
+  customUpdate,
+  customDelHandle,
+  customOptsRef,
+  customOptsUpdate,
+  optContentRefs
 } = useAttrCfgHook(props,emits)
 
 </script>

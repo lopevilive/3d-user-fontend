@@ -21,7 +21,9 @@ export const useAttrCfgHook = (props, emits) => {
     return localData
   }
 
+  const needUpdate = ref(false)
   const renderList = computed(() => {
+    if (needUpdate.value) {} // 用于主动更新
     let ret = []
      // 从配置里面组装数据
     for (const attrItem of props.attrCfg) {
@@ -86,8 +88,6 @@ export const useAttrCfgHook = (props, emits) => {
     editList.value.push(data.name)
     const list = [...dataList.value]
     const idx = list.findIndex((item) => item.name === data.name)
-
-    
     const localItem = getLocalItem(data.name)
     const customOpts = localItem?.customOpts || []
     if (idx !== -1) { // 修改
@@ -105,15 +105,66 @@ export const useAttrCfgHook = (props, emits) => {
     emits('update:modelValue', JSON.stringify(list))
   }
 
-  const customHandle = () => {
+  const customKeyRef = ref()
+  // 自定义属性
+  const customKeyHandle = () => {
+    customKeyRef.value.show()
+  }
+  const customUpdate = () => {
+    needUpdate.value = !needUpdate.value
+  }
 
+  const customDelHandle = (data) => {
+    const list = [...dataList.value]
+    const idx = list.findIndex((item) => item.name === data.name)
+    if (idx !== -1) {
+      list.splice(idx, 1)
+      emits('update:modelValue', JSON.stringify(list))
+    }
+    const localList = getLocalItem()
+    const localIdx = localList.findIndex((item) => item.name === data.name)
+    if (localIdx !== -1) {
+      localList.splice(localIdx, 1)
+      localStorage.setItem('attrCfg', JSON.stringify(localList))
+      needUpdate.value = !needUpdate.value
+    }
+  }
+
+  const optContentRefs = ref([])
+  const customOptsRef = ref()
+  // 自定义选项
+  const customOptHandle = (data) => {
+    customOptsRef.value.show(data)
+  }
+  const customOptsUpdate= ({data, list}) => {
+    const localData = getLocalItem()
+    const matched = localData.find((item) => item.name === data.name)
+    if (matched) {
+      matched.customOpts = list
+    } else {
+      localData.push({name: data.name, customOpts: list})
+    }
+    localStorage.setItem('attrCfg', JSON.stringify(localData))
+    needUpdate.value = !needUpdate.value
+    for (const dom of optContentRefs.value) {
+      try {
+        dom.scrollLeft = 0;
+      } catch(e){}
+    }
   }
 
 
   return {
     optClickHandle,
     renderList,
-    customHandle
+    customKeyHandle,
+    customOptHandle,
+    customKeyRef,
+    customUpdate,
+    customDelHandle,
+    customOptsRef,
+    customOptsUpdate,
+    optContentRefs
   }
 }
 
