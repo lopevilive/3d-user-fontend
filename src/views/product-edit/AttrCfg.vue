@@ -49,7 +49,7 @@ const {
     box-sizing: border-box;
     .name {
       width: 80px;
-      text-align: right;
+      // text-align: right;
       flex-shrink: 0;
     }
     .otps {

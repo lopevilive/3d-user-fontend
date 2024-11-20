@@ -2,6 +2,7 @@
   <div class="product-edit">
     <VanForm label-align="left" ref="formRef">
       <VanCellGroup>
+        <Desc  v-model="data.desc"/>
         <VanField
           v-model="data.url"
           :required="true"
@@ -15,9 +16,6 @@
             <UploadImgs v-model="data.url" :maxCount="6" ref="uploadImgsRef"/>
           </template>
         </VanField>
-        <Desc 
-          v-model="data.desc"
-        />
         <!-- <VanField
           v-model="data.name"
           label="产品名称"

@@ -1,6 +1,6 @@
 export const E_business = [
-  {key: 1, val: '全屋定制/衣柜定制'},
   {key: 999, val: '其他'},
+  {key: 1, val: '全屋定制/衣柜定制'},
 ]
 
 export const E_type3D = [

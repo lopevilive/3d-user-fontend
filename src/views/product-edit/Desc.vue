@@ -6,6 +6,7 @@
     placeholder="描述一下产品的信息～"
     type="textarea"
     :maxlength="300"
+    :rows="4"
     :rules="[{required: true, message: '产品描述不能为空'}]"
   />
 </template>
@@ -24,6 +25,8 @@ const valDisplay = computed({
     return props.modelValue
   },
   set(val) {
+    if (!val) val = ''
+    val = val.trim()
     emits('update:modelValue', val)
   }
 })

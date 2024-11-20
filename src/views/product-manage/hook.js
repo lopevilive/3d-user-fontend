@@ -79,8 +79,6 @@ export const useProductItem = (props, emits) => {
         emits('update', {type: 'del', data: props.data})
       }
     })
-
-
     return ret
   })
 
@@ -127,6 +125,18 @@ export const useProductItem = (props, emits) => {
     EE.removeListener('removeAllSelected', removeChecked)
   })
 
+  const displayAttrs = computed(() => {
+    let attr = props.data.attr || '[]'
+    attr = JSON.parse(attr)
+    let str = ''
+    for(const item of attr) {
+      if (!item.val) continue
+      if (str) str += ' | '
+      str += item.val
+    }
+    return str
+  })
+
   return {
     actions,
     isShow,
@@ -136,6 +146,7 @@ export const useProductItem = (props, emits) => {
     urlDisplay,
     checked,
     changeHandle,
+    displayAttrs
   }
 }
 

@@ -18,48 +18,10 @@ export const useProductDetial = () => {
     return url.split(',')
   })
 
-  const descDisplay = computed(() => {
-    const {productTypes} = globalData.value
-    let ret = []
-    for (const key of Object.keys(info.value)) {
-      let val = info.value[key]
-      if (!val) continue;
-      // if (key === 'desc') {
-      //   ret.push({label: '产品描述', val})
-      // }
-      if (key === 'productType') {
-        val = +val
-        for (const item of productTypes) {
-          if (item.id === val) {
-            ret.push({label: '产品类别', val: item.name})
-          }
-        }
-      }
-    }
-    return ret
-  })
-
-  const insideDesc = computed(() => {
-    let ret = []
-    const {rid} = globalData.value
-    if (![2, 3, 99].includes(rid)) return ret
-    for (const key of Object.keys(info.value)) {
-      let val = info.value[key]
-      if (!val) continue;
-      if (key === 'type3D') {
-        if (val === 1) {
-          for (const item of E_model3D) {
-            if (item.key === info.value.model3D) {
-              ret.push({label: '720°全景', val: `自动生成-${item.val}`})
-            }
-          }
-        }
-        if (val === 2) {
-          ret.push({label: '720°全景', val: '二维码链接'})
-        }
-      }
-    }
-    return ret
+  const displayAttrs = computed(() => {
+    let attr = info.value?.attr || '[]'
+    attr = JSON.parse(attr)
+    return attr
   })
 
   const handleView3D = () => {
@@ -82,12 +44,11 @@ export const useProductDetial = () => {
   return {
     info,
     imgList,
-    descDisplay,
     handleView3D,
     init,
     modelDisplayRef,
-    insideDesc,
     shareGuideRef,
-    shareHandle
+    shareHandle,
+    displayAttrs
   }
 }

@@ -69,7 +69,7 @@ $imgW: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 11;
+    z-index: 2;
   }
   .mask {
     width: $imgW;
@@ -81,7 +81,7 @@ $imgW: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 1;
   }
   .fail {
     font-size: 10px;

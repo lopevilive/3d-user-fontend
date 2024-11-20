@@ -5,6 +5,9 @@
         <VanImage fit="contain" :src="getImageUrl(urlDisplay)" />
       </div>
       <div class="desc">{{ data.desc }}</div>
+      <div class="attr" v-if="displayAttrs">
+         {{ displayAttrs }}
+      </div>
       <div class="price" v-if="data.price">¥ {{ data.price }}</div>
     </div>
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">
@@ -41,6 +44,7 @@ const {
   urlDisplay,
   checked,
   changeHandle,
+  displayAttrs
 } = useProductItem(props,emits)
 
 </script>
@@ -95,6 +99,11 @@ const {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     line-clamp: 2;
+  }
+  .attr {
+    font-size: 12px;
+    width: 100%;
+    color: $grey8;
   }
   .price {
     font-weight: bold;
