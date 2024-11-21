@@ -95,10 +95,10 @@ defineExpose({show})
 <style lang="scss">
 $bgCol: #ddeff5;
 .viewcom-custom-opts {
-  height: 200px;
+  height: 120px;
   overflow: auto;
   box-sizing: border-box;
-  padding: $pdH;
+  padding: $pdM $pdH;
   .list {
     display: flex;
     flex-wrap: wrap;

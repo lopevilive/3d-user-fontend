@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct, getShop, countProduct } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D } from '@/util'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, priceReg } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -226,6 +226,12 @@ export const useProductEdit = () => {
     modelDisplayRef.value.showModelDisplay()
   }
 
+  const valiPrice = () => {
+    const price = data.value?.price || ''
+    if (!price) return true
+    if (!priceReg.test(price)) return '请输入正确价格'
+  }
+
   const init = () => {
     getProductInfo()
     getShopInfo()
@@ -253,6 +259,7 @@ export const useProductEdit = () => {
     preview3D,
     modelDisplayRef,
     uploadImgsRef,
-    busiCfg
+    busiCfg,
+    valiPrice
   }
 }

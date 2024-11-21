@@ -124,3 +124,5 @@ class ViewLog {
 }
 
 export const viewLog = new ViewLog()
+
+export const priceReg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/

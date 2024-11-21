@@ -22,9 +22,9 @@ export const business_cfgs = [
     businessId: 999,
     attrCfg: [
       {
-        name: '邮寄方式',
+        name: '发货方式',
         type: 'single',
-        opts: ['包邮','邮费自理','买家自提']
+        opts: ['包邮','买家支付','自提']
       },
     ]
   },

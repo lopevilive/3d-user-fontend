@@ -51,7 +51,7 @@
           v-model="data.price"
           label="产品价格"
           placeholder="请输入价格"
-          type="digit"
+          :rules="[{validator: valiPrice}]"
           :maxlength="10"
         />
         <StatusSelect v-model="data.status"/>
@@ -164,7 +164,8 @@ const {
   modelDisplayRef,
   preview3D,
   uploadImgsRef,
-  busiCfg
+  busiCfg,
+  valiPrice
 } = useProductEdit()
 
 init()
