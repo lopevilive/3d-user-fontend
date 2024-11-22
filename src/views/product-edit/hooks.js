@@ -11,6 +11,7 @@ export const useProductEdit = () => {
 
   const id = +route.params.id
   const shopId = +route.params.shopId
+  const maxCount = 6;
 
   const shopInfo = ref({})
 
@@ -243,6 +244,11 @@ export const useProductEdit = () => {
     if (!priceReg.test(price)) return '请输入正确价格'
   }
 
+  const imgCount = computed(() => {
+    if (!data.value.url) return 0
+    return data.value.url?.split?.(',')?.length || 0
+  })
+
   const init = () => {
     getProductInfo()
     getShopInfo()
@@ -271,6 +277,8 @@ export const useProductEdit = () => {
     modelDisplayRef,
     uploadImgsRef,
     busiCfg,
-    valiPrice
+    valiPrice,
+    maxCount,
+    imgCount
   }
 }

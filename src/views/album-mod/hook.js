@@ -64,9 +64,9 @@ export const useAlbumMod = () => {
   })
 
   const businessTips = computed(() => {
-    return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案。'
-    // if (!isEdit) return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案。'
-    // return '所属行业暂时无法手动修改，如需更改，请联系开发员。(15697537900)'
+    return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案'
+    // if (!isEdit) return '请选择您的所属行业，以便我们为您提供针对性的定制化展示方案'
+    // return '所属行业暂时无法手动修改，如需更改，请联系开发员 (15697537900)'
   })
 
   const businessClick = () => {

@@ -4,7 +4,7 @@
       <VanCellGroup>
         <VanField :required="true" :rules="[{validator: () => !!data.url, message: '图册不能为空'}]">
           <template #label>
-            <FormLabel label="图册封面" tips="首张图片作为图册 logo，支持拖动调整图片顺序。"/>
+            <FormLabel label="图册封面" tips="首张图片作为图册 logo，支持拖动调整图片顺序"/>
           </template>
           <template #input>
             <UploadImgs ref="uploadImgsRef" v-model="data.url" :maxCount="5"/>
@@ -34,7 +34,7 @@
 
         <VanField :required="true" is-link>
           <template #label>
-            <FormLabel label="所在地区" tips="选择所在地区，以便客户了解贵司位置和服务范围。"/>
+            <FormLabel label="所在地区" tips="选择所在地区，以便客户了解贵司位置和服务范围"/>
           </template>
           <template #input>
             <div class="flex1" >
@@ -53,7 +53,7 @@
           rows="2"
         >
           <template #label>
-            <FormLabel label="业务介绍" tips="填写业务介绍以便更好地展示贵司的服务和产品，帮助客户快速了解您的专业领域。"/>
+            <FormLabel label="业务介绍" tips="填写业务介绍以便更好地展示贵司的服务和产品，帮助客户快速了解您的专业领域"/>
           </template>
         </VanField>
       </VanCellGroup>
@@ -61,19 +61,19 @@
       <VanCellGroup v-if="isEdit">
         <VanField v-model="data.address" placeholder="请输入详细地址" :maxlength="200">
           <template #label>
-            <FormLabel label="详细地址" tips="填写详细地址，以便客户能够方便地上门联系您。"/>
+            <FormLabel label="详细地址" tips="填写详细地址，以便客户能够方便地上门联系您"/>
           </template>
         </VanField>
 
         <VanField v-model="data.phone" placeholder="请输入联系电话" :maxlength="20">
           <template #label>
-            <FormLabel label="联系电话" tips="填写联系电话，以便客户与您顺利联系。"/>
+            <FormLabel label="联系电话" tips="填写联系电话，以便客户与您顺利联系"/>
           </template>
         </VanField>
 
         <VanField >
           <template #label>
-            <FormLabel label="微信二维码" tips="上传微信二维码，方便客户通过微信与您联系。"/>
+            <FormLabel label="微信二维码" tips="上传微信二维码，方便客户通过微信与您联系"/>
           </template>
           <template #input>
             <UploadImgs ref="uploadImgsRef2" v-model="data.qrcodeUrl" :maxCount="1"/>

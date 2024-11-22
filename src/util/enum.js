@@ -26,11 +26,11 @@ export const business_cfgs = [
         type: 'single',
         opts: ['包邮','邮费自理','仅自提']
       },
-      {
-        name: '保质期',
-        type: 'single',
-        opts: ['6个月','9个月','12个月','3年']
-      }
+      // {
+      //   name: '保质期',
+      //   type: 'single',
+      //   opts: ['6个月','9个月','12个月','3年']
+      // }
     ]
   },
   {

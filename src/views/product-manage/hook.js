@@ -327,7 +327,7 @@ export const useProductManage = () => {
     const act = mod === 'on' ? '上架' : '下架'
     await showConfirmDialog({
       title: `批量${act}`,
-      message: `确定${act}所选产品吗？当前选中 ${selectedList.value.length} 个产品。`
+      message: `确定${act}所选产品吗？当前选中 ${selectedList.value.length} 个产品`
     })
     await commonFetch(productMod, {id: selectedList.value, status: mod === 'on' ? 0 : 1, shopId})
     removeList()
@@ -336,7 +336,7 @@ export const useProductManage = () => {
   const handleMulDel = async () => {
     await showConfirmDialog({
       title: '批量删除',
-      message: `确定删除所选产品吗？当前选中 ${selectedList.value.length} 个产品。`
+      message: `确定删除所选产品吗？当前选中 ${selectedList.value.length} 个产品`
     })
     await commonFetch(productDel, {id: selectedList.value, shopId})
     removeList()

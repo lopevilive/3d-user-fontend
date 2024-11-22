@@ -9,10 +9,11 @@
           readonly
         >
           <template #label>
-            <FormLabel label="产品图片" tips="首张图片作为产品封面，支持拖动调整图片顺序。"/>
+            <FormLabel label="产品图片" tips="首张图片作为产品封面，支持拖动调整图片顺序"/>
+            ({{imgCount}}/{{ maxCount }})
           </template>
           <template #input>
-            <UploadImgs v-model="data.url" :maxCount="6" ref="uploadImgsRef"/>
+            <UploadImgs v-model="data.url" :maxCount="maxCount" ref="uploadImgsRef"/>
           </template>
         </VanField>
         <Desc  v-model="data.desc"/>
@@ -64,8 +65,8 @@
             <FormLabel label="720°全景" tips="tmp">
               <template #default>
                 <div class="tips-content">
-                  <div><span class="item">默认</span> - 系统将自动选择第一张图片，动态生成720°全景图像。</div><br/>
-                  <div><span class="item">扫二维码</span> - 如果您已经在酷家乐等软件中完成了720°全景图，可以通过扫描分享二维码在小程序内轻松打开。</div>
+                  <div><span class="item">默认</span> - 系统将自动选择第一张图片，动态生成720°全景图像</div><br/>
+                  <div><span class="item">扫二维码</span> - 如果您已经在酷家乐等软件中完成了720°全景图，可以通过扫描分享二维码在小程序内轻松打开</div>
                 </div>
               </template>
             </FormLabel>
@@ -165,7 +166,9 @@ const {
   preview3D,
   uploadImgsRef,
   busiCfg,
-  valiPrice
+  valiPrice,
+  maxCount,
+  imgCount
 } = useProductEdit()
 
 init()
