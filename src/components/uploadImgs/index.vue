@@ -11,7 +11,7 @@
         :after-read="afterRead"
         :multiple="true"
         preview-size="16vw"
-        :max-count="maxCount"
+        :max-count="maxC"
         :max-size="1024 * 1024 * maxSize"
         @oversize="oversizeHandle"
         v-if="isShowUpload"
@@ -42,7 +42,8 @@ const {
   maxSize,
   viewHandle,
   deleteUploading,
-  isLoading
+  isLoading,
+  maxC
 } = useUploadImages(props, emits)
 
 defineExpose({isLoading})

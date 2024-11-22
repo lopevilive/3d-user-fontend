@@ -8,12 +8,20 @@
           <VanButton size="small" text="复制地址" @click="copyStr(addressDisplay)" />
         </template>
       </VanCell>
-      <VanCell v-if="shopInfo.phone || shopInfo.qrcodeUrl" title="联系方式" :label="shopInfo.phone">
+      <VanCell v-if="isShowConcat" title="联系方式" :label="shopInfo.phone">
         <template #value>
           <a v-if="shopInfo.phone" :href="`tel:${shopInfo.phone}`"><VanButton size="small" text="拨打" /></a>
           <VanButton v-if="shopInfo.phone" class="mr-l" size="small" text="复制号码" @click="copyStr(shopInfo.phone)"/>
           <!-- todo -->
           <VanButton v-if="shopInfo.qrcodeUrl" class="mr-l" size="small" text="添加微信" @click="toViewQr" />
+        </template>
+      </VanCell>
+      <VanCell v-if="isShowToEdit" title="联系方式">
+        <template #value>
+          <div class="to-edit">
+            <div>暂未填写联系方式</div>
+            <VanButton class="mr-l" size="small" text="去填写" @click="toEdit" />
+          </div>
         </template>
       </VanCell>
     </VanCellGroup>
@@ -32,7 +40,10 @@ const {
   imgList,
   addressDisplay,
   copyStr,
-  toViewQr
+  toViewQr,
+  isShowConcat,
+  isShowToEdit,
+  toEdit
 } = useContact()
 
 init()
@@ -51,6 +62,10 @@ init()
     }
     .mr-l {
       margin-left: $mrL;
+    }
+    .to-edit {
+      display: flex;
+      align-items: center;
     }
   }
 }

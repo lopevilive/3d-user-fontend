@@ -24,8 +24,13 @@ export const business_cfgs = [
       {
         name: '发货方式',
         type: 'single',
-        opts: ['包邮','买家支付','自提']
+        opts: ['包邮','邮费自理','仅自提']
       },
+      {
+        name: '保质期',
+        type: 'single',
+        opts: ['6个月','9个月','12个月','3年']
+      }
     ]
   },
   {
@@ -36,7 +41,7 @@ export const business_cfgs = [
       {
         name: '板材等级',
         type: 'single',
-        opts: ['ENF','E0','E1']
+        opts: ['ENF级','E0级','E1级']
       },
       {
         name: '板材品牌',

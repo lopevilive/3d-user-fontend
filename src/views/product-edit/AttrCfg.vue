@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <VanButton size="mini" type="primary" icon="plus" @click="customKeyHandle" >自定义属性</VanButton>
+      <VanButton size="mini" type="primary" icon="plus" @click="customKeyHandle" >新增一行</VanButton>
     </div>
   </div>
   <CustomKey ref="customKeyRef" :attrList="renderList" @update="customUpdate" @del="customDelHandle"/>
@@ -70,6 +70,7 @@ const {
       width: 80px;
       // text-align: right;
       flex-shrink: 0;
+      border-right: 1px solid $greyPlaceholder;
     }
     .otps {
       display: flex;

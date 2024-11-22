@@ -1,6 +1,11 @@
 import { computed, ref } from 'vue'
+import { getAttrs, shopMod } from '@/http'
+import { commonFetch } from '@/util'
+import { useRoute } from 'vue-router'
 
 export const useAttrCfgHook = (props, emits) => {
+  const route = useRoute()
+  const shopId = +route.params.shopId
 
   const editList = ref([])
   
@@ -9,21 +14,15 @@ export const useAttrCfgHook = (props, emits) => {
     return JSON.parse(props.modelValue)
   })
 
-  const getLocalItem = (name) => {
-    let localData = localStorage.getItem('attrCfg') || '[]'
-    localData = JSON.parse(localData)
-    if (name) {
-      for (const item of localData) {
-        if (item.name === name) return item
-      }
-      return null
-    }
-    return localData
+  const dbAttrs = ref([])
+  const getDbAttrs = async () => {
+    let str = await commonFetch(getAttrs, {shopId})
+    if (!str) str = '[]'
+    dbAttrs.value = JSON.parse(str)
   }
+  getDbAttrs()
 
-  const needUpdate = ref(false)
   const renderList = computed(() => {
-    if (needUpdate.value) {} // 用于主动更新
     let ret = []
      // 从配置里面组装数据
     for (const attrItem of props.attrCfg) {
@@ -33,10 +32,14 @@ export const useAttrCfgHook = (props, emits) => {
         obj.val = match.val || ''
         obj.customOpts = match.customOpts || []
       }
-      const localItem = getLocalItem(obj.name)
-      if (localItem) {
-        obj.customOpts = [...new Set([...obj.customOpts, ...localItem.customOpts])]
+      const dbItem = dbAttrs.value.find((item) => item.name === obj.name)
+      if (dbItem) {
+        obj.customOpts = [...new Set([...obj.customOpts, ...dbItem.customOpts])]
       }
+      obj.customOpts = obj.customOpts.filter((item) => {
+        if (attrItem.opts.includes(item)) return false
+        return true
+      })
       let s = new Set()
       if (!editList.value.includes(obj.name) && obj.val)  s.add(obj.val)
       for (const str of obj.customOpts) {
@@ -54,9 +57,9 @@ export const useAttrCfgHook = (props, emits) => {
       const isMatched = ret.find((item) => item.name === dataItem.name)
       if (isMatched) continue
       let obj = {name: dataItem.name, isCustom: true, val: dataItem.val || '', customOpts: dataItem.customOpts || [], type: 'single'}
-      const localItem = getLocalItem(obj.name)
-      if (localItem) {
-        obj.customOpts = [...new Set([...obj.customOpts, ...localItem.customOpts])]
+      const dbItem = dbAttrs.value.find((item) => item.name === obj.name)
+      if (dbItem) {
+        obj.customOpts = [...new Set([...obj.customOpts, ...dbItem.customOpts])]
       }
       let s = new Set()
       if (!editList.value.includes(obj.name) && obj.val)  s.add(obj.val)
@@ -67,12 +70,11 @@ export const useAttrCfgHook = (props, emits) => {
       ret.push(obj)
     }
 
-    // 从本地缓存里面组装数据
-    const localData = getLocalItem()
-    for (const localItem of localData) {
-      const isMatched = ret.find((item) => item.name === localItem.name)
+    // db 里面的数据
+    for (const dbItem of dbAttrs.value) {
+      const isMatched = ret.find((item) => item.name === dbItem.name)
       if (isMatched) continue
-      let obj = {...localItem, val: '', type: 'single', opts: [], isCustom: true}
+      let obj = {...dbItem, val: '', type: 'single', opts: [], isCustom: true}
       let s = new Set()
       for (const str of obj.customOpts) {
         s.add(str)
@@ -88,15 +90,16 @@ export const useAttrCfgHook = (props, emits) => {
     editList.value.push(data.name)
     const list = [...dataList.value]
     const idx = list.findIndex((item) => item.name === data.name)
-    const localItem = getLocalItem(data.name)
-    const customOpts = localItem?.customOpts || []
+    const dbItem = dbAttrs.value.find((item) => item.name === data.name)
+    const customOpts = dbItem?.customOpts || []
     if (idx !== -1) { // 修改
       const matchItem = list[idx]
       if (matchItem.val === opt) { // 取消选择
-        list.splice(idx,1)
+        matchItem.val = ''
+        matchItem.customOpts = [...new Set([...matchItem.customOpts,...customOpts])]
       } else{
         matchItem.val = opt
-        matchItem.customOpts = customOpts
+        matchItem.customOpts = [...new Set([...matchItem.customOpts,...customOpts])]
       }
     } else { // 新增
       const newItem = { name: data.name, val: opt, customOpts}
@@ -110,23 +113,22 @@ export const useAttrCfgHook = (props, emits) => {
   const customKeyHandle = () => {
     customKeyRef.value.show()
   }
-  const customUpdate = () => {
-    needUpdate.value = !needUpdate.value
+  const customUpdate = async ({name}) => {
+    dbAttrs.value.push({name, customOpts: []})
+    await commonFetch(shopMod, {id: shopId, attrs: JSON.stringify(dbAttrs.value)})
   }
 
-  const customDelHandle = (data) => {
+  const customDelHandle = async (data) => {
     const list = [...dataList.value]
     const idx = list.findIndex((item) => item.name === data.name)
     if (idx !== -1) {
       list.splice(idx, 1)
       emits('update:modelValue', JSON.stringify(list))
     }
-    const localList = getLocalItem()
-    const localIdx = localList.findIndex((item) => item.name === data.name)
-    if (localIdx !== -1) {
-      localList.splice(localIdx, 1)
-      localStorage.setItem('attrCfg', JSON.stringify(localList))
-      needUpdate.value = !needUpdate.value
+    const dbIdx = dbAttrs.value.findIndex((item) => item.name === data.name)
+    if (dbIdx !== -1) {
+      dbAttrs.value.splice(dbIdx, 1)
+      await commonFetch(shopMod, {id: shopId, attrs: JSON.stringify(dbAttrs.value)})
     }
   }
 
@@ -136,16 +138,14 @@ export const useAttrCfgHook = (props, emits) => {
   const customOptHandle = (data) => {
     customOptsRef.value.show(data)
   }
-  const customOptsUpdate= ({data, list}) => {
-    const localData = getLocalItem()
-    const matched = localData.find((item) => item.name === data.name)
+  const customOptsUpdate= async ({data, list}) => {
+    const matched = dbAttrs.value.find((item) => item.name === data.name)
     if (matched) {
       matched.customOpts = list
     } else {
-      localData.push({name: data.name, customOpts: list})
+      dbAttrs.value.push({name: data.name, customOpts: list})
     }
-    localStorage.setItem('attrCfg', JSON.stringify(localData))
-    needUpdate.value = !needUpdate.value
+    await commonFetch(shopMod, {id: shopId, attrs: JSON.stringify(dbAttrs.value)})
     for (const dom of optContentRefs.value) {
       try {
         dom.scrollLeft = 0;

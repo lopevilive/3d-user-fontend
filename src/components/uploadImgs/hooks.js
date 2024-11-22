@@ -102,6 +102,13 @@ export const useUploadImages = (props, emits) => {
     return false
   })
 
+  const maxC = computed(() => {
+    let len = fileList?.value?.length || 0
+    let count = (props.maxCount - len) || 0
+    return count
+
+  })
+
 
   
   return {
@@ -115,6 +122,7 @@ export const useUploadImages = (props, emits) => {
     maxSize,
     viewHandle,
     deleteUploading,
-    isLoading
+    isLoading,
+    maxC
   }
 }

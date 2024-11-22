@@ -4,7 +4,7 @@
       <VanCellGroup>
         <VanField :required="true" :rules="[{validator: () => !!data.url, message: '图册不能为空'}]">
           <template #label>
-            <FormLabel label="公司图册" tips="首张图片作为图册 logo，支持拖动调整图片顺序。"/>
+            <FormLabel label="图册封面" tips="首张图片作为图册 logo，支持拖动调整图片顺序。"/>
           </template>
           <template #input>
             <UploadImgs ref="uploadImgsRef" v-model="data.url" :maxCount="5"/>
@@ -15,7 +15,7 @@
           v-model="data.name"
           label="图册名称"
           :required="true"
-          placeholder="请输入名称"
+          placeholder="请输入图册名称"
           :maxlength="20"
           :rules="[{required: true, message: '名称不能为空'}]"
         />
@@ -38,7 +38,7 @@
           </template>
           <template #input>
             <div class="flex1" >
-              <VanField class="pd0" readonly placeholder="请选择所在地域" v-model="data.area" @click="areaClick"/>
+              <VanField class="pd0" readonly placeholder="请选择业务所在地域" v-model="data.area" @click="areaClick"/>
             </div>
           </template>
         </VanField>
@@ -58,7 +58,7 @@
         </VanField>
       </VanCellGroup>
 
-      <VanCellGroup>
+      <VanCellGroup v-if="isEdit">
         <VanField v-model="data.address" placeholder="请输入详细地址" :maxlength="200">
           <template #label>
             <FormLabel label="详细地址" tips="填写详细地址，以便客户能够方便地上门联系您。"/>

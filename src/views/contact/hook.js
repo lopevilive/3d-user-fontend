@@ -1,13 +1,15 @@
 import { ref, computed } from 'vue'
 import { getShop } from '@/http'
 import { commonFetch } from '@/util'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard';
 import { showSuccessToast } from 'vant';
+import {globalData} from '@/store'
 
 export const useContact = () => {
   const route = useRoute()
   const shopId = +route.params.shopId
+  const router = useRouter()
   
   const shopInfo = ref({})
 
@@ -45,12 +47,32 @@ export const useContact = () => {
     wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
   }
 
+  const isShowConcat = computed(() => {
+    if (shopInfo.value.phone) return true
+    if (shopInfo.value.qrcodeUrl) return true
+    return false
+  })
+
+  const isShowToEdit = computed(() => {
+    if (isShowConcat.value) return false
+    const {rid} = globalData.value
+    if ([2,3,99].includes(rid)) return true
+    return false
+  })
+
+  const toEdit = () => {
+    router.push({name: 'album-mod', params: {shopId}})
+  }
+
   return {
     shopInfo,
     init,
     imgList,
     addressDisplay,
     copyStr,
-    toViewQr
+    toViewQr,
+    isShowConcat,
+    isShowToEdit,
+    toEdit
   }
 }

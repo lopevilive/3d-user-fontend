@@ -15,7 +15,7 @@
           />
         </div>
         <div class="edit-right">
-          <div class=main-btn @click="handleEditDone">退出管理</div>
+          <div class="main-btn" @click="handleEditDone">退出管理</div>
         </div>
         <div class="edit__bottom">
           <VanButton text="批量上架" size="small" type="success" :disabled="selectedList.length === 0" @click="handleMulOnOff('on')" v-if="activeTab === -2" />
@@ -120,7 +120,7 @@ export default {
     .main-btn {
       background: #7e7e80;
       border-radius: 40px;
-      padding: 5px 20px;
+      padding: 8px 20px;
       font-weight: bold;
       font-size: 12px;
     }

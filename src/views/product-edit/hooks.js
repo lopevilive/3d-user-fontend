@@ -80,6 +80,16 @@ export const useProductEdit = () => {
     console.log(obj)
   }
 
+  const formatAttrs = () => {
+    let attr = data.value.attr || '[]'
+    attr = JSON.parse(attr)
+    attr = attr.filter((item) => {
+      if (!item.val) return false
+      return true
+    })
+    data.value.attr = JSON.stringify(attr)
+  }
+
 
   const uploadImgsRef = ref()
   const saveHandle = async () => {
@@ -88,6 +98,7 @@ export const useProductEdit = () => {
       return
     }
     await formRef.value.validate()
+    formatAttrs() // 去除空的属性
     const res = await commonFetch(productMod, data.value)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)

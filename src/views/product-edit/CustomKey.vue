@@ -52,13 +52,6 @@ const displayList = computed(() => {
   return ret
 })
 
-const getLocalAttr = () => {
-  let localData = localStorage.getItem('attrCfg') || '[]'
-    localData = JSON.parse(localData)
-    return localData
-}
-
-
 const beforeClose = async (action) => {
   if (action === 'cancel') return true
   let value = val.value?.trim?.() || ''
@@ -72,11 +65,7 @@ const beforeClose = async (action) => {
       return false
     }
   }
-
-  const localList = getLocalAttr()
-  localList.push({name: value, customOpts: []})
-  localStorage.setItem('attrCfg', JSON.stringify(localList))
-  emits('update')
+  emits('update', {name: value})
   return true
 }
 

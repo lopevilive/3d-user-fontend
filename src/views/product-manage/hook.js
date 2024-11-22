@@ -183,8 +183,8 @@ export const useProductManage = () => {
     let ret = [...globalData.value.productTypes]
     ret.splice(0,0, {name: '全部', id: 0})
     if ([2,3,99].includes(rid)) {
-      ret.splice(1,0, {name:'未分类', id: -1})
-      ret.splice(2,0, {name:'已下架', id: -2})
+      ret.push({name:'未分类', id: -1})
+      ret.push({name:'已下架', id: -2})
     }
     return ret
   })
