@@ -36,7 +36,7 @@ export const useAlbumMod = () => {
   const uploadImgsRef = ref()
   const uploadImgsRef2 = ref()
   const saveHandle = async () => {
-    if (uploadImgsRef.value.isLoading || uploadImgsRef2.value.isLoading) {
+    if (uploadImgsRef?.value?.isLoading || uploadImgsRef2?.value?.isLoading) {
       showToast('请等待图片上传完成再保存～')
       return
     }
