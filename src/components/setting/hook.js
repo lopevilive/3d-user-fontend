@@ -12,7 +12,7 @@ export const useSetting = (props) => {
   const shopId = + route.params.shopId
   const productId = + route.params.id
   const actionsSheetRef = ref()
-  const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.7});
+  const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.8});
 
   const acToAlbum = () => {
     router.push({name: 'album-mod', params: {shopId}})

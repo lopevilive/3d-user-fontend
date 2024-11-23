@@ -3,7 +3,11 @@
     <div class="content">
       <VanImage fit="cover" :src="getImageUrl(logo)" />
       <div class="txt-content">
-        <div class="tit">{{ data.name }}</div>
+        <div class="tit">
+          <span class="text">{{ data.name }}</span>
+          <VanTag v-if="isOwner" type="primary">我的图册</VanTag>
+          <VanTag v-if="isAdmin" type="success">管理员</VanTag>
+        </div>
         <div class="desc">{{ data.desc }}</div>
       </div>
     </div>
@@ -14,6 +18,7 @@
 import {computed} from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/util'
+import { globalData } from '@/store'
 
 const props = defineProps({
   data: {type: Object, default: () => {}}
@@ -27,11 +32,22 @@ const logo = computed(() => {
   return props.data.url.split(',')[0]
 })
 
-
 const handleClick = () => {
   const {id, name} = props.data
   router.push({name: 'product-manage', params: {shopId: id}, query: {title: name}})
 }
+
+const isOwner = computed(() => {
+  const {ownerList = []} = globalData.value?.userInfo
+  if (ownerList.includes(props.data.id)) return true
+  return false
+})
+
+const isAdmin = computed(() => {
+  const {adminList = []} = globalData.value?.userInfo
+  if (adminList.includes(props.data.id)) return true
+  return false
+})
 
 </script>
 
@@ -54,8 +70,11 @@ const handleClick = () => {
     .txt-content {
       flex: 1;
       .tit {
-        font-weight: bold;
-        font-size: $fsM;
+        .text {
+          font-weight: bold;
+          font-size: $fsM;
+          margin-right: 5px;
+        }
       }
     }
     .desc {

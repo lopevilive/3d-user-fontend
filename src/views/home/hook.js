@@ -1,0 +1,87 @@
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { commonFetch, globalLoading, viewLog} from '@/util'
+import {getShop} from '@/http'
+import { globalData } from '@/store'
+
+
+
+export const useHome = () => {
+  const router = useRouter()
+  const loading = globalLoading.getRef()
+
+  const toAlbum = () => {
+    router.push({name: 'album-mod'})
+  }
+
+  const mineList = ref([])
+  // 获取我创建/管理的图册
+  const getMineList = async () => {
+    const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
+    let list = [...ownerList, ...adminList]
+    list = list.filter((item) => {
+      if (demoShops.includes(item)) return false
+      return true
+    })
+    if (list.length) {
+      const data = await commonFetch(getShop, {shopId: list})
+      mineList.value = data
+    }
+  }
+  
+  
+  const demoList = ref([])
+  // 获取案例图册
+  const getDemoList = async () => {
+    const {demoShops = []} = globalData.value?.userInfo
+    if (demoShops.length) {
+      const data = await commonFetch(getShop, {shopId: demoShops})
+      demoList.value = data
+    }
+  }
+  
+
+  const logList = ref([])
+  // 获取最近浏览的图册
+  const getLogList = async () => {
+    const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
+    let logIds = viewLog.getlog()
+    let tmp = [...ownerList, ...adminList, ...demoShops]
+    logIds = logIds.filter((item) => {
+      if (tmp.includes(item)) return false
+      return true
+    })
+    if (logIds.length) {
+      const data = await commonFetch(getShop, {shopId: logIds})
+      logList.value = data
+    }
+  }
+  
+
+  const preHandle = async () => {
+    const {ownerList = []} = globalData.value?.userInfo
+    if (ownerList.length !== 1) return true
+    const pageCount = +sessionStorage.getItem('pageCount')
+    if (pageCount !== 1) return true
+    router.push({name: 'product-manage', params: {shopId: ownerList[0]}})
+    return false
+  }
+  
+  const init = async () => {
+    const pass = await preHandle()
+    if (!pass) return
+    getMineList()
+    getLogList()
+    getDemoList()
+  }
+
+  
+  return {
+    loading,
+    toAlbum,
+    init,
+    mineList,
+    demoList,
+    logList
+  }
+}

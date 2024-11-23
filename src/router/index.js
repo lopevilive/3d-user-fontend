@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home.vue'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
 import { isInApp, viewLog } from '@/util'
@@ -10,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: () => import('@/views/home/index.vue')
     },
     {
       path: '/album-mod/:shopId?',
@@ -152,6 +151,14 @@ const init = async (to, from) => {
 
 router.beforeEach(async (to, from) => {
   return await init(to, from)
+})
+
+router.afterEach((to, from) => {
+  let pageCount = sessionStorage.getItem('pageCount')
+  if (!pageCount) pageCount = 0
+  pageCount =  Number(pageCount)
+  pageCount += 1
+  sessionStorage.setItem('pageCount', pageCount)
 })
 
 export default router
