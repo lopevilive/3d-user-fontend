@@ -1,5 +1,5 @@
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { commonFetch, globalLoading, viewLog} from '@/util'
 import {getShop} from '@/http'
 import { globalData } from '@/store'
@@ -66,6 +66,11 @@ export const useHome = () => {
     router.push({name: 'product-manage', params: {shopId: ownerList[0]}})
     return false
   }
+
+  const isShowCreate = computed(() => {
+    if (globalData.value?.userInfo?.ownerList?.length) return false
+    return true
+  })
   
   const init = async () => {
     const pass = await preHandle()
@@ -82,6 +87,7 @@ export const useHome = () => {
     init,
     mineList,
     demoList,
-    logList
+    logList,
+    isShowCreate
   }
 }
