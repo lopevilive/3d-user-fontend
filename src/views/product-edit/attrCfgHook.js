@@ -52,14 +52,15 @@ export const useAttrCfgHook = (props, emits) => {
       ret.push(obj)
     }
 
-    // 从产品信息里面配置数据
-    for (const dataItem of dataList.value) {
-      const isMatched = ret.find((item) => item.name === dataItem.name)
+    // db 里面的数据
+    for (const dbItem of dbAttrs.value) {
+      const isMatched = ret.find((item) => item.name === dbItem.name)
       if (isMatched) continue
-      let obj = {name: dataItem.name, isCustom: true, val: dataItem.val || '', customOpts: dataItem.customOpts || [], type: 'single'}
-      const dbItem = dbAttrs.value.find((item) => item.name === obj.name)
-      if (dbItem) {
-        obj.customOpts = [...new Set([...obj.customOpts, ...dbItem.customOpts])]
+      let obj = {...dbItem, val: '', isCustom: true, type: 'single'}
+      const dataItem = dataList.value.find((item) => item.name === dbItem.name)
+      if (dataItem) {
+        obj.val = dataItem.val || ''
+        obj.customOpts = [...new Set([...dataItem.customOpts, ...dbItem.customOpts])]
       }
       let s = new Set()
       if (!editList.value.includes(obj.name) && obj.val)  s.add(obj.val)
@@ -70,12 +71,12 @@ export const useAttrCfgHook = (props, emits) => {
       ret.push(obj)
     }
 
-    // db 里面的数据
-    for (const dbItem of dbAttrs.value) {
-      const isMatched = ret.find((item) => item.name === dbItem.name)
+    for (const dataItem of dataList.value) {
+      const isMatched = ret.find((item) => item.name === dataItem.name)
       if (isMatched) continue
-      let obj = {...dbItem, val: '', type: 'single', opts: [], isCustom: true}
+      let obj = {...dataItem, isCustom: true, type: 'single'}
       let s = new Set()
+      if (!editList.value.includes(obj.name) && obj.val)  s.add(obj.val)
       for (const str of obj.customOpts) {
         s.add(str)
       }

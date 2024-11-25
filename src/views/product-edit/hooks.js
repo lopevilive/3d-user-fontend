@@ -189,50 +189,6 @@ export const useProductEdit = () => {
     shopInfo.value = res[0]
   }
 
-  const isFocusName = ref(false)
-  const isShowRecommendNames = computed(() => {
-    if (data.value.name) return false
-    if (!isFocusName.value) return false
-    if (!recommendNames.value?.length) return false
-    return true
-  })
-  const nameBlurHandle = () => {
-    setTimeout(() => {
-      isFocusName.value = false 
-    }, 0);
-  }
-  const productCountInfo = ref({})
-  const recommendNames = computed(() => {
-    let ret = []
-    for (const {value, text} of productTypes.value) {
-      let count = productCountInfo.value[value]
-      if (!count) count = 0
-      if (count > 0) count += 1
-      ret.push(`${text}${count > 0 ? count : ''}`)
-    }
-    const {recommendNames: names} = busiCfg.value
-    if (!names?.length) return ret
-    let count = productCountInfo.value[0]
-    if (!count) count = 0
-    if (count > 0) count += 1
-    for (const item of names) {
-      ret.push(`${item}${count > 0 ? count : ''}`)
-    }
-
-    return ret
-  })
-
-  const getCount = async () => {
-    const res = await commonFetch(countProduct, {shopId})
-    let ret = {}
-    for (const item of res) {
-      let key = item.productType
-      if (key === '') key = '0'
-      ret[key] = + item.total
-    }
-    productCountInfo.value = ret
-  }
-
   const modelDisplayRef = ref()
   const preview3D = async () => {
     modelDisplayRef.value.showModelDisplay()
@@ -252,7 +208,6 @@ export const useProductEdit = () => {
   const init = () => {
     getProductInfo()
     getShopInfo()
-    // getCount()
   }
 
   return {
@@ -269,10 +224,6 @@ export const useProductEdit = () => {
     scanClickHandle,
     scanHandle,
     type3DOpts,
-    recommendNames,
-    isFocusName,
-    isShowRecommendNames,
-    nameBlurHandle,
     preview3D,
     modelDisplayRef,
     uploadImgsRef,

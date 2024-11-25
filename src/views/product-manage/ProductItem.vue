@@ -65,7 +65,7 @@ const {
     .van-checkbox__icon {
       height: auto;
       .van-icon {
-        font-size: 20px;
+        font-size: 24px;
         border-width: 2px;
       }
     }

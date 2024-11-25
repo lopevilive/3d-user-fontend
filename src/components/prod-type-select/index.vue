@@ -1,19 +1,17 @@
 <template>
-  <div class="com-prod-type-select">
-    <VanField label="产品分类" readonly>
-      <template #input>
-        <div class="type-select">
-          <div class="text" @click="showTypePicker = true">
-            <div :class="{'none': !modelValue}">{{ productTypeDisplay }}</div>
-            <div class="line">|</div>
-          </div>
-          <VanButton size="mini" type="primary" icon="plus" @click="showProductTypeDialog">新增</VanButton>
+  <VanField label="产品分类" readonly>
+    <template #input>
+      <div class="type-select">
+        <div class="text" @click="showTypePicker = true">
+          <div :class="{'none': !modelValue}">{{ productTypeDisplay }}</div>
+          <div class="line">|</div>
         </div>
-      </template>
-    </VanField>
-    <Select v-model="val" :columns="productTypes" v-model:show="showTypePicker" />
-    <ProductTypeDialog ref="productTypeDialogRef" />
-  </div>
+        <VanButton size="mini" type="primary" icon="plus" @click="showProductTypeDialog">新增</VanButton>
+      </div>
+    </template>
+  </VanField>
+  <Select v-model="val" :columns="productTypes" v-model:show="showTypePicker" />
+  <ProductTypeDialog ref="productTypeDialogRef" />
 </template>
 
 <script setup>
@@ -71,8 +69,7 @@ const showProductTypeDialog = () => {
 </script>
 
 <style lang="scss" scoped>
-.com-prod-type-select {
-  .type-select {
+.type-select {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -90,6 +87,5 @@ const showProductTypeDialog = () => {
       }
     }
   }
-}
 
 </style>

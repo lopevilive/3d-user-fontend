@@ -4,7 +4,7 @@
     v-model:show="isShow"
     show-cancel-button
     confirmButtonText="新增属性"
-    cancelButtonText="完成"
+    cancelButtonText="取消"
     :beforeClose="beforeClose"
   >
     <div class="viewcom-custom-key">

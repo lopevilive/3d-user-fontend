@@ -460,7 +460,6 @@ export const useProductManage = () => {
     mulPriceRef,
     mulProductTypeRef,
     listRef,
-    scrollT,
     handleUpdate,
     tabKey,
     activeHandle

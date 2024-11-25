@@ -84,7 +84,6 @@ const {
   mulPriceRef,
   mulProductTypeRef,
   listRef,
-  scrollT,
   handleUpdate,
   tabKey,
   activeHandle
