@@ -27,8 +27,8 @@ export const useHome = () => {
       let data = await commonFetch(getShop, {shopId: list})
       data = data || []
       mineList.value = data.sort((a) => {
-        if (ownerList.includes(a.id)) return 1
-        return -1
+        if (ownerList.includes(a.id)) return -1
+        return 1
       })
     }
   }
