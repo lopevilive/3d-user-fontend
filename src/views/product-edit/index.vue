@@ -17,36 +17,6 @@
           </template>
         </VanField>
         <Desc  v-model="data.desc"/>
-        <!-- <VanField
-          v-model="data.name"
-          label="产品名称"
-          :required="true"
-          placeholder="请输入名称"
-          :rules="[{required: true, message: '名称不能为空'}]"
-          readonly
-        >
-          <template #input>
-            <div class="flex1" >
-              <VanField
-                v-model="data.name"
-                class="pd0"
-                placeholder="请输入名称"
-                :border="false"
-                @focus="isFocusName = true"
-                @blur="nameBlurHandle"
-              />
-              <div class="recommend-names" v-if="isShowRecommendNames">
-                <div class="recommend-content">
-                  <div
-                    v-for="item in recommendNames"
-                    class="item"
-                    @click="data.name = item"
-                  >{{ item }}</div>
-                </div>
-              </div>
-            </div>
-          </template>
-        </VanField> -->
         <ProdTypeSelect v-model="data.productType" />
         <VanField
           v-model="data.price"
@@ -204,31 +174,6 @@ init()
     }
     .van-field__label {
       width: 84px;
-    }
-    .recommend-names {
-      width: 100%;
-      margin-top: 10px;
-      height: 40px;
-      position: relative;
-      .recommend-content {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        display: flex;
-      }
-      .item {
-        background: $bgGrey2;
-        color: $grey7;
-        height: 24px;
-        padding: 0 12px;
-        display: flex;
-        align-items: center;
-        margin-right: 10px;
-        border-radius: 3px;
-        font-size: 14px;
-        flex-shrink: 0;
-      }
     }
   }
   .bottom {

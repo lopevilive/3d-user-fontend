@@ -1,5 +1,5 @@
 <template>
-  <div class="view-contact">
+  <div class="view-contact" v-if="!loading">
     <ImgSwipe :list="imgList" :mode="2"/>
     <VanCellGroup>
       <VanCell v-if="shopInfo.desc" title="公司简介" :label="shopInfo.desc"></VanCell>
@@ -33,6 +33,7 @@
 import {useContact} from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import Setting from '@/components/setting/index.vue'
+import {globalLoading} from '@/util'
 
 const {
   shopInfo,
@@ -45,6 +46,8 @@ const {
   isShowToEdit,
   toEdit
 } = useContact()
+
+const loading = globalLoading.getRef()
 
 init()
 

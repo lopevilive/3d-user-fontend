@@ -53,14 +53,12 @@ export const useSetting = (props) => {
     [
       {name: '产品管理', color: '#5794f7', action: acProdMod, includes: ['product-manage', 'contact']},
       {name: '编辑产品', color: '#5794f7', action: acProdEdit, includes: ['product-detial']},
+      {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
       {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'product-detial', 'contact']},
     ],
     [
       // {name: '编辑图册', color: '#5794f7', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
       // {name: '人员管理', color: '#5794f7', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
-    ],
-    [
-      {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
     ],
     [
       {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']}

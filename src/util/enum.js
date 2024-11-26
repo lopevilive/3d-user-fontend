@@ -1,6 +1,7 @@
 export const E_business = [
   {key: 999, val: '其他'},
   {key: 1, val: '全屋定制/衣柜定制'},
+  {key: 2, val: '玉石翡翠'}
 ]
 
 export const E_type3D = [
@@ -26,11 +27,6 @@ export const business_cfgs = [
         type: 'single',
         opts: ['包邮','邮费自理','仅自提']
       },
-      // {
-      //   name: '保质期',
-      //   type: 'single',
-      //   opts: ['6个月','9个月','12个月','3年']
-      // }
     ]
   },
   {
@@ -54,8 +50,27 @@ export const business_cfgs = [
         opts: ['现代简约','北欧风格','新中式','轻奢','复古风','意式极简','原木风','奶油风','地中海'],
       }
     ],
-    recommendNames: ['衣柜','鞋柜','酒柜','电视柜']
-  }
+  },
+  {
+    businessId: 2,
+    attrCfg: [
+      {
+        name: '材质',
+        type: 'single',
+        opts: ['和田玉','翡翠','独山玉','青玉','天然水晶','半宝石']
+      },
+      {
+        name: '主题',
+        type: 'single',
+        opts: ['山水','花鸟','人物','神话','文字']
+      },
+      {
+        name: '种类',
+        type: 'single',
+        opts: ['手镯','吊坠','手把件','耳饰','戒指','项链','手链']
+      }
+    ]
+  },
 ]
 
 export const getBusinessCfg = (businessId) => {
