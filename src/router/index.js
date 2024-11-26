@@ -110,7 +110,7 @@ const toPhone = (to) => {
 const handleLogin = async (to) => {
   const inApp = await isInApp()
   const { userId } = globalData.value.userInfo
-  if (userId) return true
+  if (userId) return 
   const token = getToken(to.query)
   if (token) {
     try {
@@ -121,22 +121,18 @@ const handleLogin = async (to) => {
       if (inApp) {
         tologin(to)
         return false
-      } else {
-        return true
       }
     }
   } else {
     if (inApp) {
       tologin(to)
       return false
-    } else {
-      return true
     }
   }
 }
 
 const init = async (to, from) => {
-  const { needPhone, title } = to.meta
+  const { needPhone } = to.meta
   const {shopId} = to.params
   if (shopId) {
     viewLog.setlog(shopId)
@@ -152,7 +148,7 @@ const init = async (to, from) => {
       return false
     }
   }
-  document.title = title || '小果图册'
+  document.title = to?.query?.title || to?.meta?.title || '小果图册'
 }
 
 router.beforeEach(async (to, from) => {

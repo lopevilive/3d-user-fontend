@@ -98,7 +98,11 @@ export const useProductItem = (props, emits) => {
     if (globalData.value.editStatus === 1) {
       router.push({name: 'product-edit', params: {id}})
     } else {
-      router.push({name: 'product-detial', params: {id}, query: {title: desc, imageUrl: urlDisplay.value}})
+      router.push({
+        name: 'product-detial',
+        params: {id},
+        query: {title: desc, imageUrl: urlDisplay.value},
+      })
     }
   }
 
