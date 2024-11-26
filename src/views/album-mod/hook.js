@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { shopCreate, shopMod, getShop } from '@/http'
-import { commonFetch, keyReplace, E_business } from '@/util'
+import { commonFetch, keyReplace, E_business, globalLoading } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast } from 'vant';
@@ -11,6 +11,7 @@ export const useAlbumMod = () => {
   const route = useRoute()
   const {shopId} = route.params
 
+  const loading = globalLoading.getRef()
   const isEdit = !!shopId
 
   const data = ref({
@@ -95,6 +96,7 @@ export const useAlbumMod = () => {
     businessTips,
     businessClick,
     uploadImgsRef,
-    uploadImgsRef2
+    uploadImgsRef2,
+    loading
   }
 }

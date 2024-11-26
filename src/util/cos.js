@@ -65,7 +65,7 @@ export const uploadFile = async (file, shopId) => {
     return data
   } catch (e) {
     console.error('上传失败', e.message);
-    showNotify({message: e?.message || e?.msg || '未知出错，请联系管理员～', type: 'danger'});
+    showNotify({message: e?.message || e?.msg || '未知出错，请联系开发员～', type: 'danger'});
     throw(e)
   }
 

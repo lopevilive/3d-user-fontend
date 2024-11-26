@@ -61,6 +61,12 @@ const router = createRouter({
           name: 'staff-verify',
           component: () => import('@/views/staff-verify/index.vue'),
           meta: {needPhone: true}
+        },
+        {
+          path: 'sys-setting',
+          name: 'sys-setting',
+          component: () => import('@/views/sys-setting/index.vue'),
+          meta: {title: '图册设置'}
         }
       ]
     },

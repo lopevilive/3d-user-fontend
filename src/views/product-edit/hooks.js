@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productMod, getProduct, getShop, countProduct } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, priceReg } from '@/util'
+import { productMod, getProduct, getShop } from '@/http'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, priceReg, toContactSys } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -67,16 +67,11 @@ export const useProductEdit = () => {
     const {limit, curr} = obj
     try {
       await showConfirmDialog({
-        message: `最多上传 ${limit} 个产品，当前已上传 ${curr} 个。如需上传更多请联系管理员`,
-        confirmButtonText: '去联系管理员',
+        message: `最多上传 ${limit} 个产品，当前已上传 ${curr} 个。如需上传更多请联系客服`,
+        confirmButtonText: '去联系客服',
         cancelButtonText: '好的'
       })
-      const payload = {
-        qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/WechatIMG619.jpg',
-        message: `长按识别二维码～`
-      }
-      let payloadStr = encodeURIComponent(JSON.stringify(payload))
-      wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
+      toContactSys()
     } catch(e){}
     console.log(obj)
   }

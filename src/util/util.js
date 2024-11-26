@@ -45,7 +45,7 @@ export const commonFetch = async (method, paylaod, msg) => {
     if (msg) showSuccessToast(msg)
     return ret
   } catch(e) {
-    showNotify({message: e?.msg || '系统出错，请联系管理员'})
+    showNotify({message: e?.msg || e?.message || '系统出错，请联系开发员'})
     throw(e)
   } finally {
     globalLoading.stop()
@@ -126,3 +126,14 @@ class ViewLog {
 export const viewLog = new ViewLog()
 
 export const priceReg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/
+
+export const toContactSys = async () => {
+  const inApp = await isInApp()
+  if (!inApp) return
+  const payload = {
+    qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/WechatIMG619.jpg',
+    message: `长按识别二维码～`
+  }
+  let payloadStr = encodeURIComponent(JSON.stringify(payload))
+  wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
+}

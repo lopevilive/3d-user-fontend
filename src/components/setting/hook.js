@@ -14,10 +14,6 @@ export const useSetting = (props) => {
   const actionsSheetRef = ref()
   const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.8});
 
-  const acToAlbum = () => {
-    router.push({name: 'album-mod', params: {shopId}})
-  }
-
   const acProdMod = () => {
     if (route.name !== 'product-manage') {
       router.push({name: 'product-manage', params: {shopId}, query: route.query})
@@ -46,8 +42,8 @@ export const useSetting = (props) => {
     router.replace({name: 'product-manage'})
   }
 
-  const acStaff = async () => {
-    router.push({name: 'staff-manage'})
+  const acToSetSys = async () => {
+    router.push({name: 'sys-setting'})
   }
   
   const actions = [
@@ -60,11 +56,14 @@ export const useSetting = (props) => {
       {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'product-detial', 'contact']},
     ],
     [
-      {name: '图册管理', color: '#5794f7', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
-      {name: '人员管理', color: '#5794f7', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
+      // {name: '编辑图册', color: '#5794f7', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
+      // {name: '人员管理', color: '#5794f7', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
     ],
     [
       {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
+    ],
+    [
+      {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']}
     ]
   ]
 

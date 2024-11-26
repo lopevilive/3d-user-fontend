@@ -1,6 +1,6 @@
 <template>
   <div class="view-album-mod">
-    <VanForm label-align="left" ref="formRef">
+    <VanForm label-align="left" ref="formRef" v-if="!loading">
       <VanCellGroup>
         <VanField :required="true" :rules="[{validator: () => !!data.url, message: '图册不能为空'}]">
           <template #label>
@@ -110,7 +110,8 @@ const {
   businessTips,
   businessClick,
   uploadImgsRef,
-  uploadImgsRef2
+  uploadImgsRef2,
+  loading
 } = useAlbumMod()
 
 
