@@ -26,7 +26,6 @@
     </div>
     <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
     <Setting :runtimeData="info" />
-    <ShareGuide ref="shareGuideRef" />
   </div>
 </template>
 
@@ -36,7 +35,6 @@ import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
-import ShareGuide from '@/components/share-guide/index.vue'
 import {globalLoading} from '@/util'
 
 const loading = globalLoading.getRef()
@@ -47,7 +45,6 @@ const {
   handleView3D,
   init,
   modelDisplayRef,
-  shareGuideRef,
   shareHandle,
   displayAttrs
 } = useProductDetial()

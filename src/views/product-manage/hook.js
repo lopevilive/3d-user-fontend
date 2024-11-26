@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, getShop, moveTopProduct, productMod } from '@/http'
-import { commonFetch, EE, globalLoading } from '@/util'
+import { commonFetch, EE, globalLoading, getImageUrl } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -94,17 +94,18 @@ export const useProductItem = (props, emits) => {
 
   const handleClick = () => {
     const {id, desc} = props.data
+
     if (globalData.value.editStatus === 1) {
       router.push({name: 'product-edit', params: {id}})
     } else {
-      router.push({name: 'product-detial', params: {id}, query: {title: desc}})
+      router.push({name: 'product-detial', params: {id}, query: {title: desc, imageUrl: urlDisplay.value}})
     }
   }
 
   const urlDisplay = computed(() => {
     const {url} = props.data
     if (!url) return ''
-    return url.split(',')[0]
+    return getImageUrl(url.split(',')[0])
   })
 
   const checked = ref(false)

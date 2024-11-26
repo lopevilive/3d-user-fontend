@@ -2,7 +2,7 @@
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content" @click="handleClick">
       <div class="img">
-        <VanImage fit="contain" :src="getImageUrl(urlDisplay)" />
+        <VanImage fit="contain" :src="urlDisplay" />
       </div>
       <div class="desc">{{ data.desc }}</div>
       <div class="attr" v-if="displayAttrs">
@@ -27,7 +27,6 @@
 <script setup>
 import { globalData } from '@/store'
 import { useProductItem } from './hook'
-import { getImageUrl } from '@/util'
 
 const props = defineProps({
   data: {type: Object, default: () => {}}

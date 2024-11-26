@@ -1,13 +1,13 @@
 import {ref, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import { getProduct } from '@/http'
-import { commonFetch, E_model3D } from '@/util'
-import {globalData} from '@/store'
+import { commonFetch, isInApp, getImageUrl } from '@/util'
 
 
 export const useProductDetial = () => {
   const route = useRoute()
-  const {id: productId, shopId} = route.params
+  const productId = +route.params.id
+  const shopId = +route.params.shopId
 
   const info = ref({})
   const modelDisplayRef = ref()
@@ -28,9 +28,17 @@ export const useProductDetial = () => {
     modelDisplayRef.value.showModelDisplay()
   }
 
-  const shareGuideRef = ref()
-  const shareHandle = () => {
-    shareGuideRef.value.showGuide()
+  const shareHandle = async () => {
+    const inApp = await isInApp()
+    const payload = {
+      url: getImageUrl(info.value.url.split(',')[0]),
+      title: info.value.desc,
+      productId,
+      shopId
+    }
+    if (inApp) {
+      wx.miniProgram.navigateTo({url: `../share/share?payload=${encodeURIComponent(JSON.stringify(payload))}`})
+    }
   }
 
   const init = async () => {
@@ -47,7 +55,6 @@ export const useProductDetial = () => {
     handleView3D,
     init,
     modelDisplayRef,
-    shareGuideRef,
     shareHandle,
     displayAttrs
   }
