@@ -1,16 +1,14 @@
 <template>
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content" @click="handleClick">
-      <div class="img">
-        <VanImage fit="contain" :src="urlDisplay" />
-      </div>
-      <div class="desc">{{ data.desc }}</div>
-      <div class="attr" v-if="displayAttrs">
-         {{ displayAttrs }}
-      </div>
-      <div class="price" v-if="data.price">
-        <span class="unit">¥</span>
-        <span class="num">{{ data.price }}</span>
+      <div class="img"><VanImage fit="contain" :src="urlDisplay" /></div>
+      <div class="info-content">
+        <div class="desc">{{ data.desc }}</div>
+        <div class="attr" v-if="displayAttrs"> {{ displayAttrs }}</div>
+        <div class="price" v-if="data.price">
+          <span class="unit">¥</span>
+          <span class="num">{{ data.price }}</span>
+        </div>
       </div>
     </div>
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">
@@ -53,12 +51,14 @@ const {
 
 <style lang="scss" scoped>
 .com-product-item {
-  width: 94%;
+  width: 96%;
   flex-shrink: 0;
   background-color: $bgWhite;
   margin-bottom: $mrM;
   box-sizing: border-box;
   position: relative;
+  border-radius: 5px;
+  overflow: hidden;
   :deep(.van-checkbox) {
     position: absolute;
     left: 3px;
@@ -76,8 +76,15 @@ const {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: $pdM;
+    // padding: $pdM;
     box-sizing: border-box;
+    padding-bottom: $pdM;
+    .info-content {
+      width: 100%;
+      padding: 0 $pdL;
+      box-sizing: border-box;
+      margin-top: $mrL;
+    }
   }
   .img {
     overflow: hidden;
@@ -87,14 +94,14 @@ const {
     justify-content: center;
     min-height: 100px;
     :deep(.van-image__img){
-      max-height: 240px;
+      max-height: 250px;
     }
   }
   .desc {
     line-height: 20px;
     color: $grey;
     width: 100%;
-    padding-top: $pdM;
+    // padding-top: $pdM;
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -107,10 +114,11 @@ const {
     font-size: 12px;
     width: 100%;
     color: $grey8;
+    margin-top: 4px;
   }
   .price {
     width: 100%;
-    margin-top: $mrL;
+    margin-top: 4px;
     color: $red;
     .unit {
       font-size: 12px;

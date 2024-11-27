@@ -179,7 +179,7 @@ export default {
       width: 100%;
       max-height: 100%;
       overflow: auto;
-      padding: $pdL;
+      padding: 4px;
       display: flex;
       flex-wrap: wrap;
       justify-content:space-between;
