@@ -8,7 +8,10 @@
       <div class="attr" v-if="displayAttrs">
          {{ displayAttrs }}
       </div>
-      <div class="price" v-if="data.price">¥ {{ data.price }}</div>
+      <div class="price" v-if="data.price">
+        <span class="unit">¥</span>
+        <span class="num">{{ data.price }}</span>
+      </div>
     </div>
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">
       <VanIcon name="edit" />
@@ -106,10 +109,16 @@ const {
     color: $grey8;
   }
   .price {
-    font-weight: bold;
     width: 100%;
     margin-top: $mrL;
-    color: $grey;
+    color: $red;
+    .unit {
+      font-size: 12px;
+    }
+    .num {
+      font-weight: bold;
+      font-size: 16px;
+    }
   }
   .setting {
     position: absolute;
