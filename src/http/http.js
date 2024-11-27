@@ -21,7 +21,7 @@ http.interceptors.request.use(beforeRequest);
 const responseSuccess = (response) => {
   const {data} = response;
   if (data.code !== 0) {
-    if (data.code !== -2) {
+    if (data.code !== undefined && data.code !== -2) {
       showNotify({message: data.msg || '未知出错，请联系开发员～', type: 'danger'});
     } 
     return Promise.reject(data);
@@ -31,7 +31,8 @@ const responseSuccess = (response) => {
 
 const responseFailed = (error) => {
   if (error.code === 'ERR_CANCELED') return Promise.reject(error);
-  showNotify({message: error?.message || error?.msg || '借口请求报错，请联系开发员~', type: 'danger'});
+  console.error(error)
+  // showNotify({message: error?.message || error?.msg || '借口请求报错，请联系开发员~', type: 'danger'});
   return Promise.reject(error);
 };
 http.interceptors.response.use(responseSuccess, responseFailed);

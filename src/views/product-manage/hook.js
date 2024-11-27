@@ -348,37 +348,78 @@ export const useProductManage = () => {
     removeList()
   }
 
+  const execList = (refList, newItem) => {
+    let matched = false
+    let idx = refList.value.findIndex((item) => item.id === newItem.id)
+    if (idx !== -1) {
+      matched = true
+      const oldItem = refList.value[idx]
+      if (newItem.status !== oldItem.status) { // 上/下架
+        refList.value.splice(idx, 1)
+        return matched
+      }
+      if (activeTab.value === -1) {
+        if (newItem.productType) {
+          refList.value.splice(idx, 1)
+          return matched
+        }
+      }
+      if (activeTab.value > 0) {
+        if (+newItem.productType !== activeTab.value) {
+          refList.value.splice(idx, 1)
+          return matched
+        }
+      }
+      refList.value[idx] = newItem
+    }
+    return matched
+
+  }
+
   const updateProd = async (list) => {
     const idList = [...list]
     const res = await commonFetch(getProduct, {shopId, productId: idList})
     if (!res?.list?.length) return
+
     for (const newItem of res.list) {
-      let matched = false
-      let idx = leftList.value.findIndex((item) => item.id === newItem.id)
-      if (idx !== -1) {
-        matched = true
-        if (newItem.status === 1) {
-          // 下架
-          leftList.value.splice(idx, 1)
-          continue
-        }
-        leftList.value[idx] = newItem
-        continue
-      }
-      idx = rightList.value.findIndex((item) => item.id === newItem.id)
-      if (idx !== -1) {
-        matched = true
-        if (newItem.status === 1) {
-          // 下架
-          rightList.value.splice(idx, 1)
-          continue
-        }
-        rightList.value[idx] = newItem
-      }
+      let matched = execList(leftList, newItem)
+      if (matched) continue
+      matched = execList(rightList, newItem)
+      if (matched) continue
       if (matched === false) {
         refresh()
         return
       }
+
+
+      // let matched = false
+      // let idx = leftList.value.findIndex((item) => item.id === newItem.id)
+      // if (idx !== -1) {
+      //   matched = true
+      //   const oldItem = leftList.value[idx]
+      //   if (newItem.status !== oldItem.status) {
+      //     // 上/下架
+      //     leftList.value.splice(idx, 1)
+      //     continue
+      //   }
+      //   leftList.value[idx] = newItem
+      //   continue
+      // }
+      // idx = rightList.value.findIndex((item) => item.id === newItem.id)
+      // if (idx !== -1) {
+      //   matched = true
+      //   const oldItem = rightList.value[idx]
+      //   if (newItem.status !== oldItem.status) {
+      //     // 上/下架
+      //     rightList.value.splice(idx, 1)
+      //     continue
+      //   }
+      //   rightList.value[idx] = newItem
+      // }
+      // if (matched === false) {
+      //   refresh()
+      //   return
+      // }
     }
   }
 
