@@ -353,8 +353,10 @@ export const useProductManage = () => {
     const res = await commonFetch(getProduct, {shopId, productId: idList})
     if (!res?.list?.length) return
     for (const newItem of res.list) {
+      let matched = false
       let idx = leftList.value.findIndex((item) => item.id === newItem.id)
       if (idx !== -1) {
+        matched = true
         if (newItem.status === 1) {
           // 下架
           leftList.value.splice(idx, 1)
@@ -365,12 +367,17 @@ export const useProductManage = () => {
       }
       idx = rightList.value.findIndex((item) => item.id === newItem.id)
       if (idx !== -1) {
+        matched = true
         if (newItem.status === 1) {
           // 下架
           rightList.value.splice(idx, 1)
           continue
         }
         rightList.value[idx] = newItem
+      }
+      if (matched === false) {
+        refresh()
+        return
       }
     }
   }
