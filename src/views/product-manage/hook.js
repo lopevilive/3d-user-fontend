@@ -385,41 +385,10 @@ export const useProductManage = () => {
       let matched = execList(leftList, newItem)
       if (matched) continue
       matched = execList(rightList, newItem)
-      if (matched) continue
       if (matched === false) {
         refresh()
         return
       }
-
-
-      // let matched = false
-      // let idx = leftList.value.findIndex((item) => item.id === newItem.id)
-      // if (idx !== -1) {
-      //   matched = true
-      //   const oldItem = leftList.value[idx]
-      //   if (newItem.status !== oldItem.status) {
-      //     // 上/下架
-      //     leftList.value.splice(idx, 1)
-      //     continue
-      //   }
-      //   leftList.value[idx] = newItem
-      //   continue
-      // }
-      // idx = rightList.value.findIndex((item) => item.id === newItem.id)
-      // if (idx !== -1) {
-      //   matched = true
-      //   const oldItem = rightList.value[idx]
-      //   if (newItem.status !== oldItem.status) {
-      //     // 上/下架
-      //     rightList.value.splice(idx, 1)
-      //     continue
-      //   }
-      //   rightList.value[idx] = newItem
-      // }
-      // if (matched === false) {
-      //   refresh()
-      //   return
-      // }
     }
   }
 
