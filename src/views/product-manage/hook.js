@@ -136,6 +136,7 @@ export const useProductItem = (props, emits) => {
     let str = ''
     for(const item of attr) {
       if (!item.val) continue
+      if (['其他'].includes(item.val)) continue
       if (str) str += ' | '
       str += item.val
     }

@@ -62,7 +62,7 @@ export const useStaffVerify = () => {
     try {
       let pass = await handleDialog()
       if (pass) {
-        await commonFetch(acceptStaff, {id})
+        await commonFetch(acceptStaff, {id, shopId})
         showDialog({
           message: `恭喜！您已成功成为【${shopInfo.value.name}】管理员`,
           confirmButtonText: '返回首页',

@@ -18,7 +18,7 @@ export const useTypeManage = () => {
         title: '删除分类',
         message: `确定删除【${currmodItem.name}】?`
       })
-      await commonFetch(productTypesDel, {id: currmodItem.id})
+      await commonFetch(productTypesDel, {id: currmodItem.id, shopId})
       initProductTypes()
       init()
     } catch (error) {}
