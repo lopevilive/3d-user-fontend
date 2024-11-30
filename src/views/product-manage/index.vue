@@ -28,14 +28,15 @@
       <div class="flexible-wrap" :style="`height: ${flexibleH}px;`">
       <!-- <div class="flexible-wrap"> -->
         <div class="flexible__content">
-          <VanSearch
-            show-action
-            placeholder="请输入搜索关键词"
-            v-model="searchStr"
-            @cancel="cancelSearchHandle"
-            @clear="cancelSearchHandle"
-            @search="searchHandle"
-          />
+          <form action="none">
+            <VanSearch
+              show-action
+              placeholder="请输入搜索关键词"
+              v-model="searchStr"
+              @blur="searchBlurHadle"
+              @cancel="searchBlurHadle"
+            />
+          </form>
         </div>
       </div>
       <div class="tabs">
@@ -102,8 +103,7 @@ const {
   activeHandle,
   flexibleH,
   searchStr,
-  cancelSearchHandle,
-  searchHandle
+  searchBlurHadle
 } = useProductManage()
 
 onActivated(() => {

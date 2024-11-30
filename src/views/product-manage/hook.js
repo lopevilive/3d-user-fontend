@@ -225,7 +225,9 @@ export const useProductManage = () => {
     }
   }
 
+  let preSearchStr = ''
   const getPayload = () => {
+    preSearchStr = searchStr.value
     let ret = {
       shopId,
       pageSize,
@@ -241,6 +243,7 @@ export const useProductManage = () => {
     return ret
   }
 
+  
   const loadHandle = async () => {
     console.log('load')
     const payload = getPayload()
@@ -276,19 +279,17 @@ export const useProductManage = () => {
     loadHandle()
   }
 
-  const cancelSearchHandle = () => {
+  const searchBlurHadle = () => {
+    if (preSearchStr === searchStr.value) return
     refresh()
   }
 
-  const searchHandle= () => {
-    refresh()
-  }
 
   const flexibleHRaw = (window.innerWidth * 42) / 375
   const flexibleH = ref(flexibleHRaw)
   const preScrollTop = ref(0)
   const handleFlexible = (scrollTop) => {
-    if (scrollTop === 0) {
+    if (scrollTop <= 0) {
       preScrollTop.value = 0
       flexibleH.value = flexibleHRaw
       return
@@ -517,7 +518,6 @@ export const useProductManage = () => {
     activeHandle,
     flexibleH,
     searchStr,
-    cancelSearchHandle,
-    searchHandle
+    searchBlurHadle
   }
 }
