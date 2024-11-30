@@ -71,6 +71,12 @@ const router = createRouter({
       ]
     },
     {
+      path: '/album-list',
+      name: 'album-list',
+      component: () => import('@/views/album-list/index.vue'),
+      meta: {needPhone: true}
+    },
+    {
       path: '/test',
       name: 'test',
       component:  () => import('@/views/test/index.vue'),

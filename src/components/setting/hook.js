@@ -45,6 +45,10 @@ export const useSetting = (props) => {
   const acToSetSys = async () => {
     router.push({name: 'sys-setting'})
   }
+
+  const acToAlbumList = () => {
+    router.push({name: 'album-list'})
+  }
   
   const actions = [
     [
@@ -61,7 +65,8 @@ export const useSetting = (props) => {
       // {name: '人员管理', color: '#5794f7', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
     ],
     [
-      {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']}
+      {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '图册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]}
     ]
   ]
 
@@ -73,6 +78,10 @@ export const useSetting = (props) => {
       for (const item of list) {
         if (item?.rids?.length) {
           if (!item.rids.includes(rid)) continue
+        }
+        if (item.includes.includes('all')) {
+          tmpRet.push(item)
+          continue
         }
         if (item.includes.includes(route.name)) {
           tmpRet.push(item)

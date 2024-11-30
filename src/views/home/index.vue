@@ -18,12 +18,14 @@
       <Card class="mrM" v-for="item in demoList" :data="item" />
     </template>
   </div>
+  <Setting />
 </template>
 
 
 <script setup>
 import Card from '@/components/card/index.vue'
 import { useHome } from './hook'
+import Setting from '@/components/setting/index.vue'
 
 const {
   loading,
