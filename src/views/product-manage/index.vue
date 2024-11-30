@@ -25,6 +25,19 @@
           <VanButton text="批量分类" size="small" type="primary" :disabled="selectedList.length === 0" @click="handleMulChangeType" />
         </div>
       </div>
+      <div class="flexible-wrap" :style="`height: ${flexibleH}px;`">
+      <!-- <div class="flexible-wrap"> -->
+        <div class="flexible__content">
+          <VanSearch
+            show-action
+            placeholder="请输入搜索关键词"
+            v-model="searchStr"
+            @cancel="cancelSearchHandle"
+            @clear="cancelSearchHandle"
+            @search="searchHandle"
+          />
+        </div>
+      </div>
       <div class="tabs">
         <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
           <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
@@ -86,7 +99,11 @@ const {
   listRef,
   handleUpdate,
   tabKey,
-  activeHandle
+  activeHandle,
+  flexibleH,
+  searchStr,
+  cancelSearchHandle,
+  searchHandle
 } = useProductManage()
 
 onActivated(() => {
@@ -150,15 +167,34 @@ export default {
       }
     }
   }
+  .flexible-wrap {
+    width: 100%;
+    box-sizing: border-box;
+    background: $bgWhite;
+    padding: 0 $pdH;
+    overflow: hidden;
+    .flexible__content {
+      padding-top: $pdL;
+    }
+    :deep(.van-search) {
+      padding: 0;
+    }
+  }
   .tabs{
     padding: 0 $pdM $pdL $pdM;
     background: $bgWhite;
     // margin-top: $mrL;
-    :deep(.van-tabs__nav) {
-      .van-tabs__line {
-        background: $themeColor;
-        width: 20px;
-        height: 4px;
+    :deep(.van-tabs__wrap) {
+      height: 36px;
+      .van-tabs__nav {
+        // padding-bottom: 10px;
+        padding-bottom: 0;
+        .van-tabs__line {
+          background: $themeColor;
+          width: 20px;
+          height: 4px;
+          bottom: 0;
+        }
       }
     }
   }

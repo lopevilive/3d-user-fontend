@@ -4,7 +4,7 @@
       class="setting-floating"
       axis="xy"
       magnetic="x"
-      :gap="24"
+      :gap="gap"
       v-model:offset="offset"
       @click="bubbleClickHandle"
       v-if="isShow"
@@ -37,7 +37,8 @@ const {
   actionsSheetRef,
   offset,
   bubbleClickHandle,
-  actionHandle
+  actionHandle,
+  gap
 } = useSetting(props)
 
 </script>

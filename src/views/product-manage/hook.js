@@ -172,6 +172,7 @@ export const useProductManage = () => {
   })
   const pageSize = 10
   const currPage = ref(0)
+  const searchStr = ref('')
 
   const shopInfo = ref({})
   const activeTab = ref(0)
@@ -231,6 +232,7 @@ export const useProductManage = () => {
       currPage: currPage.value,
       productType: activeTab.value,
       status: 0,
+      searchStr: searchStr.value || ''
     }
     if (activeTab.value === -2) { // 已下架
       ret.productType = 0
@@ -274,8 +276,35 @@ export const useProductManage = () => {
     loadHandle()
   }
 
+  const cancelSearchHandle = () => {
+    refresh()
+  }
+
+  const searchHandle= () => {
+    refresh()
+  }
+
+  const flexibleHRaw = (window.innerWidth * 42) / 375
+  const flexibleH = ref(flexibleHRaw)
+  const preScrollTop = ref(0)
+  const handleFlexible = (scrollTop) => {
+    if (scrollTop === 0) {
+      preScrollTop.value = 0
+      flexibleH.value = flexibleHRaw
+      return
+    }
+    const range = scrollTop - preScrollTop.value
+    preScrollTop.value = scrollTop
+    let h = flexibleH.value - range
+    if (h <= 0) h = 0
+    if (h > flexibleHRaw) h = flexibleHRaw
+    if (h === flexibleH.value) return
+    flexibleH.value = h
+  }
+
   const scrollHandle = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
+    handleFlexible(scrollTop)
     scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
@@ -485,6 +514,10 @@ export const useProductManage = () => {
     listRef,
     handleUpdate,
     tabKey,
-    activeHandle
+    activeHandle,
+    flexibleH,
+    searchStr,
+    cancelSearchHandle,
+    searchHandle
   }
 }

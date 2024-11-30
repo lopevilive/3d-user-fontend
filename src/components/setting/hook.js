@@ -12,6 +12,7 @@ export const useSetting = (props) => {
   const shopId = + route.params.shopId
   const productId = + route.params.id
   const actionsSheetRef = ref()
+  const gap = (window.innerWidth * 24) / 375
   const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.8});
 
   const acProdMod = () => {
@@ -114,6 +115,7 @@ export const useSetting = (props) => {
     actionsSheetRef,
     offset,
     bubbleClickHandle,
-    actionHandle
+    actionHandle,
+    gap
   }
 }
