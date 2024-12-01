@@ -288,14 +288,24 @@ export const useProductManage = () => {
   const flexibleHRaw = (window.innerWidth * 42) / 375
   const flexibleH = ref(flexibleHRaw)
   const preScrollTop = ref(0)
-  const handleFlexible = (scrollTop) => {
+
+  const handleFlexible = (scrollTop, clientHeight, scrollHeight) => {
     if (scrollTop <= 0) {
       preScrollTop.value = 0
       flexibleH.value = flexibleHRaw
       return
     }
+
     const range = scrollTop - preScrollTop.value
     preScrollTop.value = scrollTop
+
+    const a = scrollTop + clientHeight
+    const b = scrollHeight
+    if (Math.abs(b - a) < 10){
+      flexibleH.value = 0
+      return
+    }
+
     let h = flexibleH.value - range
     if (h <= 0) h = 0
     if (h > flexibleHRaw) h = flexibleHRaw
@@ -305,7 +315,7 @@ export const useProductManage = () => {
 
   const scrollHandle = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
-    handleFlexible(scrollTop)
+    handleFlexible(scrollTop, clientHeight, scrollHeight)
     scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight

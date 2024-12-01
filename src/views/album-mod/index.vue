@@ -20,7 +20,7 @@
           :rules="[{required: true, message: '名称不能为空'}]"
         />
 
-        <VanField :required="true" is-link >
+        <VanField is-link >
           <template #label>
             <FormLabel label="所属行业" :tips="businessTips"/>
           </template>
@@ -32,7 +32,7 @@
         </VanField>
         <Select v-model="data.business" :columns="businessOpts" v-model:show="showBusinessPicker" />
 
-        <VanField :required="true" is-link>
+        <VanField is-link>
           <template #label>
             <FormLabel label="所在地区" tips="选择所在地区，以便客户了解贵司位置和服务范围"/>
           </template>

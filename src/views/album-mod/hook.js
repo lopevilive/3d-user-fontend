@@ -43,6 +43,7 @@ export const useAlbumMod = () => {
     }
     await formRef.value.validate()
     const payload = {...data.value}
+    if (!payload.business) payload.business = 999 // 默认其他行业
     const api = isEdit ? shopMod : shopCreate
     const res =  await commonFetch(api, payload, '保存成功')
     globalData.value.userInfo = {} // 需要重新获取登录信息
