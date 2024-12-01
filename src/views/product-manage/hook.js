@@ -301,10 +301,14 @@ export const useProductManage = () => {
 
     const a = scrollTop + clientHeight
     const b = scrollHeight
-    if (Math.abs(b - a) < 10){
+    if (a >= b) {
       flexibleH.value = 0
       return
     }
+    // if (Math.abs(b - a) < 10){
+    //   flexibleH.value = 0
+    //   return
+    // }
 
     let h = flexibleH.value - range
     if (h <= 0) h = 0
