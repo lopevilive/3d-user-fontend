@@ -1,5 +1,6 @@
 export const E_business = [
   {key: 999, val: '其他'},
+  {key: 3, val: '烘焙/蛋糕'},
   {key: 1, val: '全屋定制/衣柜定制'},
   {key: 2, val: '玉石翡翠'}
 ]
@@ -71,6 +72,26 @@ export const business_cfgs = [
       }
     ]
   },
+  {
+    businessId: 3,
+    attrCfg: [
+      {
+        name: '奶油',
+        type: 'single',
+        opts: ['动物奶油','植物奶油'],
+      },
+      {
+        name: '口味',
+        type: 'single',
+        opts: ['水果','巧克力','奶油','香草','抹茶','咖啡']
+      },
+      {
+        name: '适用场合',
+        type: 'single',
+        opts: ['生日','婚礼','母亲节','纪念日']
+      }
+    ]
+  }
 ]
 
 export const getBusinessCfg = (businessId) => {
