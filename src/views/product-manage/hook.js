@@ -481,6 +481,7 @@ export const useProductManage = () => {
   }
 
   const activeHandle = () => {
+    tabKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) {
       listRef.value.scrollTop = scrollT.value
     }
