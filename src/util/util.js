@@ -45,7 +45,7 @@ export const commonFetch = async (method, paylaod, msg) => {
     if (msg) showSuccessToast(msg)
     return ret
   } catch(e) {
-    // showNotify({message: e?.msg || e?.message || '系统出错，请联系开发员'})
+    showNotify({message: e?.msg || e?.message || '系统出错，请联系开发员'})
     console.error(e)
     throw(e)
   } finally {
