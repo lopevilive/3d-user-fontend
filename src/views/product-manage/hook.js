@@ -143,6 +143,13 @@ export const useProductItem = (props, emits) => {
     return str
   })
 
+  const isShowSticky = computed(() => {
+    const {rid} = globalData.value
+    if (![2,3,99].includes(rid)) return false
+    if (props.data?.sort > 0) return true
+    return false
+  })
+
   return {
     actions,
     isShow,
@@ -152,7 +159,8 @@ export const useProductItem = (props, emits) => {
     urlDisplay,
     checked,
     changeHandle,
-    displayAttrs
+    displayAttrs,
+    isShowSticky
   }
 }
 
@@ -486,8 +494,15 @@ export const useProductManage = () => {
       listRef.value.scrollTop = scrollT.value
     }
     if (globalData.value?.productNeedExec?.length) {
-      const execPayload = globalData.value.productNeedExec.pop()
+      let tmpList = globalData.value.productNeedExec
       globalData.value.productNeedExec = []
+      for (const item of tmpList) {
+        if (['sort'].includes(item.type)) {
+          handleUpdate(item)
+          return
+        }
+      }
+      const execPayload = tmpList.pop()
       handleUpdate(execPayload)
     }
   }

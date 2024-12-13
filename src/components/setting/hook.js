@@ -1,11 +1,11 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productDel } from '@/http'
+import { productDel, productMod, moveTopProduct } from '@/http'
 import { commonFetch } from '@/util'
 import { showConfirmDialog } from 'vant';
 
-export const useSetting = (props) => {
+export const useSetting = (props, emits) => {
   const route = useRoute()
   const router = useRouter()
 
@@ -50,6 +50,24 @@ export const useSetting = (props) => {
   const acToAlbumList = () => {
     router.push({name: 'album-list'})
   }
+
+  const acProdMove = async () => {
+    const {runtimeData} = props
+    if (!runtimeData) return
+    const {id, shopId} = props.runtimeData
+    await commonFetch(moveTopProduct, {id, shopId})
+    emits('update')
+    globalData.value.productNeedExec.push({type: 'sort'})
+  }
+
+  const acProdReMove = async () => {
+    const {runtimeData} = props
+    if (!runtimeData) return
+    const {id, shopId} = runtimeData
+    await commonFetch(productMod, {id, shopId, sort: 0})
+    emits('update')
+    globalData.value.productNeedExec.push({type: 'sort'})
+  }
   
   const actions = [
     [
@@ -57,13 +75,19 @@ export const useSetting = (props) => {
     ],
     [
       {name: '产品管理', color: '#5794f7', action: acProdMod, includes: ['product-manage', 'contact']},
+      {name: '置顶', color: '#5794f7', action: acProdMove, includes: ['product-detial'], rule: (runtimeData) => {
+        if (!runtimeData) return false
+        if (runtimeData?.sort === 0) return true
+        return false
+      }},
+      {name: '取消置顶', color: '#f29b73', action: acProdReMove, includes:['product-detial'],  rule: (runtimeData) => {
+        if (!runtimeData) return false
+        if (runtimeData?.sort > 0) return true
+        return false
+      }},
       {name: '编辑产品', color: '#5794f7', action: acProdEdit, includes: ['product-detial']},
       {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
-      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'product-detial', 'contact']},
-    ],
-    [
-      // {name: '编辑图册', color: '#5794f7', action: acToAlbum, includes: ['product-manage', 'product-detial', 'contact']},
-      // {name: '人员管理', color: '#5794f7', action: acStaff, includes: ['product-manage', 'product-detial', 'contact'], rids: [3,99]}
+      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact']},
     ],
     [
       {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
@@ -80,12 +104,14 @@ export const useSetting = (props) => {
         if (item?.rids?.length) {
           if (!item.rids.includes(rid)) continue
         }
-        if (item.includes.includes('all')) {
-          tmpRet.push(item)
+        if (item.includes.includes('all') || item.includes.includes(route.name)) {
+          if (item.rule) {
+            const ret = item.rule(props.runtimeData)
+            if (ret) tmpRet.push(item)
+          } else {
+            tmpRet.push(item)
+          }
           continue
-        }
-        if (item.includes.includes(route.name)) {
-          tmpRet.push(item)
         }
       }
       if (tmpRet.length) ret.push(tmpRet)

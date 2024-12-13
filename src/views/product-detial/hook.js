@@ -2,6 +2,7 @@ import {ref, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import { getProduct } from '@/http'
 import { commonFetch, isInApp, getImageUrl } from '@/util'
+import { globalData } from '@/store'
 
 
 export const useProductDetial = () => {
@@ -21,6 +22,13 @@ export const useProductDetial = () => {
   const displayAttrs = computed(() => {
     let attr = info.value?.attr || '[]'
     attr = JSON.parse(attr)
+    if (info.value.productType) {
+      for (const item of globalData.value.productTypes) {
+        if (item.id === +info.value.productType) {
+          attr.splice(0,0 , {name: '分类', val: item.name})
+        }
+      }
+    }
     return attr
   })
 
@@ -41,6 +49,13 @@ export const useProductDetial = () => {
     }
   }
 
+  const isShowSticky = computed(() => {
+    const {rid} = globalData.value
+    if (![2,3,99].includes(rid)) return false
+    if (info.value?.sort > 0) return true
+    return false
+  })
+
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
@@ -56,6 +71,7 @@ export const useProductDetial = () => {
     init,
     modelDisplayRef,
     shareHandle,
-    displayAttrs
+    displayAttrs,
+    isShowSticky
   }
 }

@@ -3,7 +3,10 @@
     <div class="content" @click="handleClick">
       <div class="img"><VanImage fit="contain" :src="urlDisplay" /></div>
       <div class="info-content">
-        <div class="desc">{{ data.desc }}</div>
+        <div class="desc">
+          <span v-if="isShowSticky"><VanTag plain type="primary">置顶</VanTag></span>
+          {{ data.desc }}
+        </div>
         <div class="attr" v-if="displayAttrs"> {{ displayAttrs }}</div>
         <div class="price" v-if="data.price">
           <span class="unit">¥</span>
@@ -44,7 +47,8 @@ const {
   urlDisplay,
   checked,
   changeHandle,
-  displayAttrs
+  displayAttrs,
+  isShowSticky
 } = useProductItem(props,emits)
 
 </script>

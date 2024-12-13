@@ -1,5 +1,5 @@
 <template>
-  <div class="view-product-detial" v-if="!loading">
+  <div class="view-product-detial" v-if="info.id">
     <div class="swipe-wrap">
       <ImgSwipe :list="imgList" />
       <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/>
@@ -16,7 +16,10 @@
           <VanButton @click="shareHandle" size="small" icon="share-o" icon-position="right">分享</VanButton>
         </div>
       </div>
-      <div class="content__desc">{{ info.desc }}</div>
+      <div class="content__desc">
+        <span v-if="isShowSticky"><VanTag plain type="primary">置顶</VanTag></span>
+        {{ info.desc }}
+      </div>
       <div class="content_attr" v-if="displayAttrs.length">
         <div class="attr-item" v-for="item in displayAttrs">
           <div class="name" >{{ item.name }}</div>
@@ -25,7 +28,7 @@
       </div>
     </div>
     <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
-    <Setting :runtimeData="info" />
+    <Setting :runtimeData="info" @update="init" />
   </div>
 </template>
 
@@ -35,9 +38,6 @@ import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
-import {globalLoading} from '@/util'
-
-const loading = globalLoading.getRef()
 
 const {
   info,
@@ -46,7 +46,8 @@ const {
   init,
   modelDisplayRef,
   shareHandle,
-  displayAttrs
+  displayAttrs,
+  isShowSticky
 } = useProductDetial()
 
 onMounted(init)

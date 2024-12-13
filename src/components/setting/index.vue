@@ -31,6 +31,8 @@ const props = defineProps({
   runtimeData: {type: Object}
 })
 
+const emits = defineEmits(['update'])
+
 const {
   actionDisplay,
   isShow,
@@ -39,7 +41,7 @@ const {
   bubbleClickHandle,
   actionHandle,
   gap
-} = useSetting(props)
+} = useSetting(props, emits)
 
 </script>
 

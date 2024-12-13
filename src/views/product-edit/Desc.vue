@@ -5,7 +5,7 @@
     label="产品描述"
     placeholder="描述一下产品的信息～"
     type="textarea"
-    :maxlength="300"
+    :maxlength="250"
     :rows="4"
     :rules="[{required: true, message: '产品描述不能为空'}]"
   />
