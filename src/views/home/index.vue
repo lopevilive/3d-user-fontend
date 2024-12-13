@@ -2,7 +2,7 @@
   <div class="view-home" v-if="!loading">
     <div style="height: 1px;"></div>
     <div class="header mrM" v-if="isShowCreate">
-      <span class="text">我也想做一本云画册？</span>
+      <span class="text">我也想做一本产品图册!</span>
       <VanButton class="btn" size="small" @click="toAlbum">立即创建</VanButton>
     </div>
     <div v-if="mineList?.length">

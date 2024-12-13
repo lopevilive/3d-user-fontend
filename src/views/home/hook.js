@@ -77,6 +77,8 @@ export const useHome = () => {
   })
   
   const init = async () => {
+    globalData.value.editStatus = 0;
+    globalData.value.productNeedExec = []
     const pass = await preHandle()
     if (!pass) return
     getMineList()

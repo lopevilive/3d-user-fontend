@@ -73,10 +73,17 @@ export const useUploadImages = (props, emits) => {
   const onDrop = (params) => {
     const {removedIndex, addedIndex} = params
     if (removedIndex === undefined || addedIndex === undefined) return
+    if (removedIndex === addedIndex) return
     const list = props.modelValue.split(',')
-    const removeItem = list[removedIndex]
-    list[removedIndex] = list[addedIndex]
-    list[addedIndex] = removeItem
+    if (removedIndex > addedIndex) {
+      const removeItem = list[removedIndex]
+      list.splice(addedIndex, 0, removeItem)
+      list.splice(removedIndex + 1, 1)
+    } else {
+      const removeItem = list[removedIndex]
+      list.splice(addedIndex + 1, 0, removeItem)
+      list.splice(removedIndex, 1)
+    }
     emits('update:modelValue', list.join(','))
   }
 
