@@ -120,6 +120,7 @@ const handleLogin = async (to) => {
   const token = getToken(to.query)
   if (token) {
     try {
+      globalData.value.isShowSke = true
       const {data} = await getUserInfo()
       globalData.value.userInfo = data
     } catch(e) {
@@ -128,6 +129,8 @@ const handleLogin = async (to) => {
         tologin(to)
         return false
       }
+    } finally {
+      globalData.value.isShowSke = false
     }
   } else {
     if (inApp) {

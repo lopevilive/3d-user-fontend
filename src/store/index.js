@@ -14,6 +14,7 @@ export const globalData = ref({
   productTypes: {},
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
   productNeedExec: [], // 需要更新的产品
+  isShowSke: false, // 是否展示骨架屏
   _productTypes: {},
   productTypes: computed(() => {
     const route = router.currentRoute.value
