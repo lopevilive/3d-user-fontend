@@ -104,15 +104,17 @@ export const isInApp = async () => {
 
 class ViewLog {
   constructor() {
-    this.maxLen = 5 // 保留多少条记录
+    this.maxLen = 10 // 保留多少条记录
   }
   setlog (shopId) {
     shopId = Number(shopId)
     if (!shopId) return
     let viewStore = this.getlog()
-    if (!viewStore.includes(shopId)) {
-      viewStore.push(shopId)
+    let idx = viewStore.findIndex((item) => item === shopId)
+    if (idx !== -1) {
+      viewStore.splice(idx, 1)
     }
+    viewStore.push(shopId)
     viewStore = viewStore.slice(-this.maxLen)
     localStorage.setItem('viewItem', JSON.stringify(viewStore))
   }
@@ -120,7 +122,7 @@ class ViewLog {
     let viewStore = localStorage.getItem('viewItem')
     if (!viewStore) viewStore = '[]'
     viewStore = JSON.parse(viewStore)
-    return viewStore
+    return viewStore.reverse()
   }
 }
 
