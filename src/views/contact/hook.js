@@ -1,6 +1,5 @@
 import { ref, computed } from 'vue'
-import { getShop } from '@/http'
-import { commonFetch } from '@/util'
+import { shopInfoManage } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard';
 import { showSuccessToast } from 'vant';
@@ -33,7 +32,7 @@ export const useContact = () => {
   }
 
   const init = async () => {
-    const res = await commonFetch(getShop, {shopId})
+    const res = await shopInfoManage.getShopInfo(shopId)
     shopInfo.value = res[0]
   }
 

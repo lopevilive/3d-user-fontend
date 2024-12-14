@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { commonFetch } from '@/util'
-import { verfiyStaff,getShop, acceptStaff } from '@/http'
+import { commonFetch, shopInfoManage } from '@/util'
+import { verfiyStaff, acceptStaff } from '@/http'
 import { showDialog } from 'vant';
 import { globalData } from '@/store'
 
@@ -57,7 +57,7 @@ export const useStaffVerify = () => {
   }
   
   const handleCreate = async () => {
-    const data = await commonFetch(getShop, {shopId})
+    const data = await shopInfoManage.getShopInfo(shopId)
     shopInfo.value = data?.[0] || {}
     try {
       let pass = await handleDialog()

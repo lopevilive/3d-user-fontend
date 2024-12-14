@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
-import { shopCreate, shopMod, getShop } from '@/http'
-import { commonFetch, keyReplace, E_business, globalLoading } from '@/util'
+import { shopCreate, shopMod } from '@/http'
+import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast } from 'vant';
@@ -46,6 +46,7 @@ export const useAlbumMod = () => {
     if (!payload.business) payload.business = 999 // 默认其他行业
     const api = isEdit ? shopMod : shopCreate
     const res =  await commonFetch(api, payload, '保存成功')
+    shopInfoManage.dirty(data.value.id)
     globalData.value.userInfo = {} // 需要重新获取登录信息
     router.replace({name: 'contact', params: {shopId: res}})
     setTimeout(() => {
@@ -78,7 +79,7 @@ export const useAlbumMod = () => {
 
   const init = async () => {
     if (!isEdit) return
-    const res = await commonFetch(getShop, {shopId})
+    const res = await shopInfoManage.getShopInfo(shopId)
     if (res?.length) data.value = res[0]
   }
 

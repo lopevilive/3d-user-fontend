@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productMod, getProduct, getShop } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, priceReg, toContactSys } from '@/util'
+import { productMod, getProduct } from '@/http'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, priceReg, toContactSys, shopInfoManage } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -28,6 +28,8 @@ export const useProductEdit = () => {
       url: '',
       name: '',
       price: '',
+      isSpec: 0,
+      specs: '',
       productType: '',
       desc: '',
       type3D: 0,
@@ -180,7 +182,7 @@ export const useProductEdit = () => {
   }
 
   const getShopInfo = async () => {
-    const res = await commonFetch(getShop, {shopId})
+    const res = await shopInfoManage.getShopInfo(shopId)
     shopInfo.value = res[0]
   }
 

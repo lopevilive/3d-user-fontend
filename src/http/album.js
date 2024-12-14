@@ -74,10 +74,6 @@ export const acceptStaff = (payload) => {
   return post(`${album}AcceptStaff`, payload)
 }
 
-export const getAttrs = (payload) => {
-  return post(`${album}GetAttrs`, payload)
-}
-
 export const getAllShop = (payload) => {
   return post(`${album}GetAllShop`, payload)
 }

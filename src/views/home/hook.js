@@ -1,7 +1,6 @@
 import { useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
-import { commonFetch, globalLoading, viewLog} from '@/util'
-import {getShop} from '@/http'
+import { globalLoading, viewLog, shopInfoManage} from '@/util'
 import { globalData } from '@/store'
 
 
@@ -24,7 +23,7 @@ export const useHome = () => {
       return true
     })
     if (list.length) {
-      let data = await commonFetch(getShop, {shopId: list})
+      let data = await shopInfoManage.getShopInfo(list)
       data = data || []
       mineList.value = data.sort((a) => {
         if (ownerList.includes(a.id)) return -1
@@ -39,7 +38,7 @@ export const useHome = () => {
   const getDemoList = async () => {
     const {demoShops = []} = globalData.value?.userInfo
     if (demoShops.length) {
-      const data = await commonFetch(getShop, {shopId: demoShops})
+      const data = await shopInfoManage.getShopInfo(demoShops)
       demoList.value = data
     }
   }
@@ -56,7 +55,7 @@ export const useHome = () => {
       return true
     })
     if (logIds.length) {
-      const data = await commonFetch(getShop, {shopId: logIds})
+      const data = await shopInfoManage.getShopInfo(logIds)
       logList.value = data
     }
   }

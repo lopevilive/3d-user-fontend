@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { productDel, getProduct, getShop, moveTopProduct, productMod } from '@/http'
-import { commonFetch, EE, globalLoading, getImageUrl } from '@/util'
+import { productDel, getProduct, moveTopProduct, productMod } from '@/http'
+import { commonFetch, EE, globalLoading, getImageUrl, shopInfoManage } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -205,7 +205,7 @@ export const useProductManage = () => {
   })
 
   const fetchShop = async () => {
-    const res = await commonFetch(getShop, {shopId})
+    const res = await shopInfoManage.getShopInfo(shopId)
     if (res?.[0])shopInfo.value = res[0]
   }
 

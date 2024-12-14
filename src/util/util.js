@@ -3,6 +3,7 @@ import md5 from 'crypto-js/md5'
 import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
 import {EventEmitter} from 'eventemitter3'
+import { getShop } from '@/http'
 
 
 class LoadingManage {
@@ -140,3 +141,123 @@ export const toContactSys = async () => {
   let payloadStr = encodeURIComponent(JSON.stringify(payload))
   wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
 }
+
+class ShopInfoManage {
+  constructor () {
+    this.fetchIngList = [] // 正在请求的shopid
+    this.execTasks = [] // 待执行的回调任务
+    this.shopData = [] // 保存shop的信息
+  }
+
+  toExec () {
+    let list = this.execTasks
+    this.execTasks = []
+    for (const task of list) {
+      const {idList, resolve, reject } = task
+      let ret = []
+      let pass = true
+
+      for (const id of idList) {
+        const matchItem = this.shopData.find((item) => item.shopId === id)
+        if (!matchItem) {
+          pass = false
+          break
+        }
+        if (matchItem.dirty === true && !matchItem.err) {
+          pass = false
+          break
+        }
+        if (!matchItem.err) ret.push({...matchItem.data})
+      }
+      if (!pass) {
+        this.execTasks.push(task)
+        continue
+      }
+      resolve(ret)
+    }
+  }
+
+  async toFetch (idList) {
+    const realList = []
+    for (const id of idList) {
+      if (this.fetchIngList.includes(id)) continue
+      const idx = this.shopData.findIndex((item) => {
+        if (item.shopId === id && item.dirty === false) return true
+      })
+      if (idx !== -1) continue
+      realList.push(id)
+      this.fetchIngList.push(id)
+    }
+    if (realList.length === 0) {
+      this.toExec()
+      return
+    }
+
+    try {
+      const dataList = await commonFetch(getShop, {shopId: realList})
+      for (const id of realList) {
+        const resItem = dataList.find((item) => item.id === id)
+        const matchItem = this.shopData.find((item) => item.shopId === id)
+        if (!resItem) {
+          if (matchItem) {
+            matchItem.dirty = true
+            matchItem.err = new Error('图册不存在')
+          } else {
+            this.shopData.push({shopId: id, dirty: true, err: new Error('图册不存在')})
+          }
+        } else {
+          if (matchItem) {
+            matchItem.dirty = false
+            matchItem.data = resItem
+            matchItem.err = null
+          } else {
+            this.shopData.push({shopId: id, dirty: false, data: resItem})
+          }
+        }
+      }
+    } catch(e) {
+      for (const id of realList) {
+        const matchItem = this.shopData.find((item) => item.shopId === id)
+        if (matchItem) {
+          matchItem.dirty = true
+          matchItem.err = e
+        } else {
+          this.shopData.push({shopId: id, dirty: true, err: e})
+        }
+      }
+    } finally {
+      for (const id of realList) {
+        const idx = this.fetchIngList.findIndex((item) => item === id)
+        if (idx !== -1) this.fetchIngList.splice(idx, 1)
+      }
+    }
+    this.toExec()
+  }
+
+  async getShopInfo (shopId) {
+    let idList = shopId
+    if (!Array.isArray(shopId)) idList = [shopId]
+    idList = idList.map((item) => Number(item))
+    const ret = []
+    for (const id of idList) {
+      for (const item of this.shopData) {
+        if (item.shopId === id && item.dirty === false) ret.push({...item.data})
+      }
+    }
+    if (ret.length === idList.length) return ret
+    const p = new Promise((resolve, reject) => {
+      this.execTasks.push({ idList, resolve, reject })
+    })
+    this.toFetch(idList)
+    return p
+  }
+
+  dirty (shopId) {
+    for (const item of this.shopData) {
+      if (item.shopId === +shopId) item.dirty = true
+    }
+  }
+}
+
+export const shopInfoManage = new ShopInfoManage()
+window.shopInfoManage = shopInfoManage

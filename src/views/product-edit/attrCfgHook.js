@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
-import { getAttrs, shopMod } from '@/http'
-import { commonFetch } from '@/util'
+import { shopMod } from '@/http'
+import { commonFetch, shopInfoManage } from '@/util'
 import { useRoute } from 'vue-router'
 
 export const useAttrCfgHook = (props, emits) => {
@@ -16,7 +16,8 @@ export const useAttrCfgHook = (props, emits) => {
 
   const dbAttrs = ref([])
   const getDbAttrs = async () => {
-    let str = await commonFetch(getAttrs, {shopId})
+    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    let str = shopInfo?.[0]?.attrs || ''
     if (!str) str = '[]'
     dbAttrs.value = JSON.parse(str)
   }
@@ -117,6 +118,7 @@ export const useAttrCfgHook = (props, emits) => {
   const customUpdate = async ({name}) => {
     dbAttrs.value.push({name, customOpts: []})
     await commonFetch(shopMod, {id: shopId, attrs: JSON.stringify(dbAttrs.value)})
+    shopInfoManage.dirty(shopId)
   }
 
   const customDelHandle = async (data) => {
@@ -130,6 +132,7 @@ export const useAttrCfgHook = (props, emits) => {
     if (dbIdx !== -1) {
       dbAttrs.value.splice(dbIdx, 1)
       await commonFetch(shopMod, {id: shopId, attrs: JSON.stringify(dbAttrs.value)})
+      shopInfoManage.dirty(shopId)
     }
   }
 
@@ -147,6 +150,7 @@ export const useAttrCfgHook = (props, emits) => {
       dbAttrs.value.push({name: data.name, customOpts: list})
     }
     await commonFetch(shopMod, {id: shopId, attrs: JSON.stringify(dbAttrs.value)})
+    shopInfoManage.dirty(shopId)
     for (const dom of optContentRefs.value) {
       try {
         dom.scrollLeft = 0;

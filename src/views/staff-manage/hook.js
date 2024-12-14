@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
-import { commonFetch, isInApp, getImageUrl } from '@/util'
-import { getStaff, delStaff, createStaff, getShop} from '@/http'
+import { commonFetch, isInApp, getImageUrl, shopInfoManage } from '@/util'
+import { getStaff, delStaff, createStaff } from '@/http'
 import { showConfirmDialog, showToast } from 'vant';
 import { useRoute } from 'vue-router'
 
@@ -81,7 +81,7 @@ export const useStaffManage = () => {
       return
     }
     if (!shopInfo.value) {
-      const ret = await commonFetch(getShop, {shopId})
+      const ret = await shopInfoManage.getShopInfo(shopId)
       shopInfo.value = ret[0]
     }
     const {id: inviteId, nickName} = data

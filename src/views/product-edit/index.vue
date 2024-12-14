@@ -24,7 +24,11 @@
           placeholder="请输入价格"
           :rules="[{validator: valiPrice}]"
           :maxlength="10"
-        />
+        >
+          <template>
+            
+          </template>
+        </VanField>
         <StatusSelect v-model="data.status"/>
         
       </VanCellGroup>
