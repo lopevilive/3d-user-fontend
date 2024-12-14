@@ -123,7 +123,7 @@ class ViewLog {
     let viewStore = localStorage.getItem('viewItem')
     if (!viewStore) viewStore = '[]'
     viewStore = JSON.parse(viewStore)
-    return viewStore.reverse()
+    return viewStore
   }
 }
 

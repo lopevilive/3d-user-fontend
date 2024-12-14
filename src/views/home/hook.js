@@ -49,6 +49,7 @@ export const useHome = () => {
   const getLogList = async () => {
     const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
     let logIds = viewLog.getlog()
+    logIds = logIds.reverse()
     let tmp = [...ownerList, ...adminList, ...demoShops]
     logIds = logIds.filter((item) => {
       if (tmp.includes(item)) return false
