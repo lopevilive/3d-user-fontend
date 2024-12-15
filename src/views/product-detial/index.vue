@@ -55,7 +55,7 @@
         class="van-action-sheet__item"
         @click="selectHandle(actionItem, index)"
       >
-        {{ actionItem.name }} - <span class="action-price">¥{{ actionItem.price }}</span>
+        {{ actionItem.name }} &nbsp;&nbsp;<span class="action-price">¥{{ actionItem.price }}</span>
       </VanButton>
     </VanActionSheet>
   </div>
