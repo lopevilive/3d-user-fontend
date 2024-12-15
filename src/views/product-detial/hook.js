@@ -56,6 +56,27 @@ export const useProductDetial = () => {
     return false
   })
 
+  const selectedSpecIdx = ref(0)
+
+  const specsDisplay = computed(() => {
+    const {isSpec, specs} = info.value
+    if (isSpec !== 1) return []
+    return JSON.parse(specs)
+  })
+
+  const displayPrice = computed(() => {
+    const { isSpec, price } = info.value
+    if (isSpec !== 1) return price
+    return specsDisplay.value[selectedSpecIdx.value]?.price || ''
+  })
+
+  const isShowAction = ref(false)
+
+  const selectHandle = (_, index) => {
+    isShowAction.value = false
+    selectedSpecIdx.value = index
+  }
+
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
@@ -72,6 +93,11 @@ export const useProductDetial = () => {
     modelDisplayRef,
     shareHandle,
     displayAttrs,
-    isShowSticky
+    isShowSticky,
+    specsDisplay,
+    selectedSpecIdx,
+    displayPrice,
+    isShowAction,
+    selectHandle
   }
 }

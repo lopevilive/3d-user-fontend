@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, priceReg, toContactSys, shopInfoManage } from '@/util'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, toContactSys, shopInfoManage } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -44,10 +44,6 @@ export const useProductEdit = () => {
   const showModel3d = ref(false)
   const formRef = ref()
 
-  const productTypes = computed(() => {
-    return globalData.value.productTypes.map((item) => ({text: item.name, value: item.id}))
-  })
-
   const getContinue = async () => {
     if (id) return false // 编辑产品直接返回
     let ret = false
@@ -78,16 +74,30 @@ export const useProductEdit = () => {
     console.log(obj)
   }
 
-  const formatAttrs = () => {
-    let attr = data.value.attr || '[]'
+  const getPayload = () => {
+    const payload = {...data.value}
+    let attr = payload.attr || '[]'
     attr = JSON.parse(attr)
     attr = attr.filter((item) => {
       if (!item.val) return false
       return true
     })
-    data.value.attr = JSON.stringify(attr)
+    payload.attr = JSON.stringify(attr)
+    if (payload.isSpec === 1) {
+      payload.price = ''
+    } else {
+      payload.specs = ''
+    }
+    if (payload.specs) {
+      let tmp = JSON.parse(payload.specs)
+      payload.specs = []
+      for (const item of tmp) {
+        if (item.name && item.price) payload.specs.push(item)
+      }
+      payload.specs = JSON.stringify(payload.specs)
+    }
+    return payload
   }
-
 
   const uploadImgsRef = ref()
   const saveHandle = async () => {
@@ -96,8 +106,8 @@ export const useProductEdit = () => {
       return
     }
     await formRef.value.validate()
-    formatAttrs() // 去除空的属性
-    const res = await commonFetch(productMod, data.value)
+    const payload = getPayload()
+    const res = await commonFetch(productMod, payload)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)
       return
@@ -191,12 +201,6 @@ export const useProductEdit = () => {
     modelDisplayRef.value.showModelDisplay()
   }
 
-  const valiPrice = () => {
-    const price = data.value?.price || ''
-    if (!price) return true
-    if (!priceReg.test(price)) return '请输入正确价格'
-  }
-
   const imgCount = computed(() => {
     if (!data.value.url) return 0
     return data.value.url?.split?.(',')?.length || 0
@@ -225,7 +229,6 @@ export const useProductEdit = () => {
     modelDisplayRef,
     uploadImgsRef,
     busiCfg,
-    valiPrice,
     maxCount,
     imgCount
   }

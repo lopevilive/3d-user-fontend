@@ -8,9 +8,9 @@
           {{ data.desc }}
         </div>
         <div class="attr" v-if="displayAttrs"> {{ displayAttrs }}</div>
-        <div class="price" v-if="data.price">
+        <div class="price" v-if="priceDisplay">
           <span class="unit">¥</span>
-          <span class="num">{{ data.price }}</span>
+          <span class="num">{{ priceDisplay }}</span>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
       teleport="body"
       @select="selectHandle"
     />
-    <VanCheckbox v-model=checked shape="square" v-if="globalData.editStatus === 1" @change="changeHandle"/>
+    <VanCheckbox v-model="checked" shape="square" v-if="globalData.editStatus === 1" @change="changeHandle"/>
   </div>
 </template>
 
@@ -48,7 +48,8 @@ const {
   checked,
   changeHandle,
   displayAttrs,
-  isShowSticky
+  isShowSticky,
+  priceDisplay
 } = useProductItem(props,emits)
 
 </script>

@@ -143,6 +143,29 @@ export const useProductItem = (props, emits) => {
     return str
   })
 
+  const priceDisplay = computed(() => {
+    const { price, isSpec, specs } = props.data
+    if (isSpec === 0) return price
+    let list = JSON.parse(specs)
+    // return list?.[0]?.price || ''
+    let min = 0
+    let max = 0
+    let idx = 0
+    for (const item of list) {
+      let specPrice = +item.price
+      idx += 1
+      if (idx === 1) {
+        min = specPrice
+        max = specPrice
+        continue
+      }
+      if (specPrice < min) min = specPrice
+      if (specPrice > max) max = specPrice
+    }
+    if (max === min) return `${max}`
+    return `${min} ~ ${max}`
+  })
+
   const isShowSticky = computed(() => {
     const {rid} = globalData.value
     if (![2,3,99].includes(rid)) return false
@@ -160,7 +183,8 @@ export const useProductItem = (props, emits) => {
     checked,
     changeHandle,
     displayAttrs,
-    isShowSticky
+    isShowSticky,
+    priceDisplay
   }
 }
 

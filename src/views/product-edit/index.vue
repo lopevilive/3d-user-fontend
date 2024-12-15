@@ -18,17 +18,22 @@
         </VanField>
         <Desc  v-model="data.desc"/>
         <ProdTypeSelect v-model="data.productType" />
-        <VanField
+        <PriceMod
+          v-model:price="data.price"
+          v-model:isSpec="data.isSpec"
+          v-model:specs="data.specs"
+        />
+        <!-- <VanField
           v-model="data.price"
           label="产品价格"
           placeholder="请输入价格"
           :rules="[{validator: valiPrice}]"
-          :maxlength="10"
+          :maxlength="8"
         >
           <template>
             
           </template>
-        </VanField>
+        </VanField> -->
         <StatusSelect v-model="data.status"/>
         
       </VanCellGroup>
@@ -117,6 +122,7 @@ import StatusSelect from './StatusSelect.vue'
 import ModelDisplay from '@/components/model-display/index.vue'
 import Desc from './Desc.vue'
 import AttrCfg from './AttrCfg.vue'
+import PriceMod from './PriceMod.vue'
 
 const {
   formRef,
@@ -136,7 +142,6 @@ const {
   preview3D,
   uploadImgsRef,
   busiCfg,
-  valiPrice,
   maxCount,
   imgCount
 } = useProductEdit()
@@ -190,6 +195,7 @@ init()
     padding: 0 $pdH;
     padding-top: 8px;
     box-sizing: border-box;
+    background: $bgWhite;
   }
 }
 
