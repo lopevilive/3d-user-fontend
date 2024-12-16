@@ -43,7 +43,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { priceReg } from '@/util'
+import { useRoute } from 'vue-router'
+import { priceReg, shopInfoManage } from '@/util'
 
 const props = defineProps({
   price: {type: String},
@@ -53,6 +54,11 @@ const props = defineProps({
 
 const emits = defineEmits(['update:price', 'update:isSpec', 'update:specs'])
 
+const route = useRoute()
+const shopId = +route.params.shopId
+
+const shopInfo = ref({})
+
 const checked = computed({
   get() {
     return props.isSpec === 1
@@ -61,7 +67,6 @@ const checked = computed({
     emits('update:isSpec', val ? 1 : 0)
   }
 })
-
 
 const priceDisplay = computed({
   get() {
@@ -77,12 +82,21 @@ const specsDisplay = computed({
     let list = props?.specs || '[]'
     list = JSON.parse(list)
     if (list.length === 0) {
-      if (props.price) {
-        list.push({name: '默认', price: props.price})
+      let specCfg = shopInfo.value?.specCfg || '[]'
+      specCfg = JSON.parse(specCfg)
+      if (specCfg?.length) {
+        for (const item of specCfg.reverse()) {
+          list.push({name: item, price: ''})
+        }
       } else {
+        // if (props.price) {
+        //   list.push({name: '默认', price: props.price})
+        // } else {
+        //   list.push({name: '', price: ''})
+        // }
+        list.push({name: '', price: ''})
         list.push({name: '', price: ''})
       }
-      list.push({name: '', price: ''})
     }
     return list
   }
@@ -154,6 +168,13 @@ const delHandle = (index) => {
   list.splice(index, 1)
   emits('update:specs', JSON.stringify(list))
 }
+
+const init = async () => {
+  const res = await shopInfoManage.getShopInfo(shopId)
+  if (res?.length === 1) shopInfo.value = res[0]
+}
+
+init()
 
 </script>
 

@@ -2,7 +2,7 @@
   <div class="view-contact" v-if="!loading">
     <ImgSwipe :list="imgList" :mode="2"/>
     <VanCellGroup>
-      <VanCell v-if="shopInfo.desc" title="公司简介" :label="shopInfo.desc"></VanCell>
+      <VanCell :title="shopInfo.name" :label="shopInfo.desc"></VanCell>
       <VanCell v-if="addressDisplay" title="联系地址" :label="addressDisplay">
         <template #value>
           <VanButton size="small" text="复制地址" @click="copyStr(addressDisplay)" />
@@ -12,7 +12,6 @@
         <template #value>
           <a v-if="shopInfo.phone" :href="`tel:${shopInfo.phone}`"><VanButton size="small" text="拨打" /></a>
           <VanButton v-if="shopInfo.phone" class="mr-l" size="small" text="复制号码" @click="copyStr(shopInfo.phone)"/>
-          <!-- todo -->
           <VanButton v-if="shopInfo.qrcodeUrl" class="mr-l" size="small" text="添加微信" @click="toViewQr" />
         </template>
       </VanCell>

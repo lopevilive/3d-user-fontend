@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productMod, getProduct } from '@/http'
+import { productMod, getProduct,shopMod } from '@/http'
 import { commonFetch, E_model3D, getBusinessCfg, E_type3D, toContactSys, shopInfoManage } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
@@ -99,6 +99,28 @@ export const useProductEdit = () => {
     return payload
   }
 
+  const handleSpecCfg = async (payload) => {
+    try {
+      if (payload.isSpec !== 1) return
+      let specCfg = shopInfo.value?.specCfg || '[]'
+      specCfg = JSON.parse(specCfg)
+      let specList = JSON.parse(payload.specs)
+      let pass = false
+      for (const specItem of specList) {
+        if (specCfg.includes(specItem.name)) continue
+        pass = true
+        specCfg.push(specItem.name)
+      }
+      if (!pass) return
+      specCfg = specCfg.slice(-3)
+      if (!specCfg.length) return
+      shopMod({ ...shopInfo.value, specCfg: JSON.stringify(specCfg)})
+      shopInfoManage.dirty(shopInfo.value.id)
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
   const uploadImgsRef = ref()
   const saveHandle = async () => {
     if (uploadImgsRef.value.isLoading) {
@@ -107,6 +129,7 @@ export const useProductEdit = () => {
     }
     await formRef.value.validate()
     const payload = getPayload()
+    handleSpecCfg(payload) // 更新多规格的配置
     const res = await commonFetch(productMod, payload)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)
