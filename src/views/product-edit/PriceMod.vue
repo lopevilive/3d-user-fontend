@@ -85,7 +85,7 @@ const specsDisplay = computed({
       let specCfg = shopInfo.value?.specCfg || '[]'
       specCfg = JSON.parse(specCfg)
       if (specCfg?.length) {
-        for (const item of specCfg.reverse()) {
+        for (const item of specCfg) {
           list.push({name: item, price: ''})
         }
       } else {
