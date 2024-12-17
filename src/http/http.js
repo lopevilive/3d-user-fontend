@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { showNotify } from 'vant';
+import router from '@/router'
+import { toLogin } from '@/util'
 
 const http = axios.create({
   timeout: 1000 * 10,
@@ -19,14 +21,19 @@ http.interceptors.request.use(beforeRequest);
 
 // 响应拦截器
 const responseSuccess = (response) => {
-  const {data} = response;
-  if (data.code !== 0) {
-    if (data.code !== undefined && data.code !== -2) {
-      showNotify({message: data.msg || '未知出错，请联系开发员～', type: 'danger'});
-    } 
+  const {data, config: {url}} = response;
+  if (data.code === 0) {
+    return Promise.resolve(data);
+  }
+  if (data.code === -2) { // 登录有误
+    const fullPath = router?.currentRoute?.value?.fullPath || '/'
+    if (!/GetUserInfo/.test(url)) {
+      toLogin(fullPath)
+    }
     return Promise.reject(data);
   }
-  return Promise.resolve(response.data);
+  showNotify({message: data.msg || '未知出错，请联系开发员～', type: 'danger'});
+  return Promise.reject(data);
 };
 
 const responseFailed = (error) => {

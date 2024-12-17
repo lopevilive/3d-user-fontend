@@ -98,7 +98,7 @@ export const keyReplace = (list, rules) => {
 export const EE = new EventEmitter()
 
 
-export const isInApp = async () => {
+export const isInApp = () => {
   if (window.__wxjs_environment === 'miniprogram') return true
   return false
 }
@@ -132,7 +132,7 @@ export const viewLog = new ViewLog()
 export const priceReg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/
 
 export const toContactSys = async () => {
-  const inApp = await isInApp()
+  const inApp = isInApp()
   if (!inApp) return
   const payload = {
     qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/WechatIMG619.jpg',
@@ -260,4 +260,14 @@ class ShopInfoManage {
 }
 
 export const shopInfoManage = new ShopInfoManage()
-window.shopInfoManage = shopInfoManage
+window.shopInfoManage = shopInfoManage // todo
+
+
+export const toLogin = (fullPath)  => {
+  const inApp = isInApp()
+  if (!inApp) {
+    console.log('请在小程序内打开')
+    return
+  }
+  wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(fullPath)}`})
+}

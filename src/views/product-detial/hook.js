@@ -37,7 +37,7 @@ export const useProductDetial = () => {
   }
 
   const shareHandle = async () => {
-    const inApp = await isInApp()
+    const inApp = isInApp()
     const payload = {
       url: getImageUrl(info.value.url.split(',')[0]),
       title: info.value.desc,

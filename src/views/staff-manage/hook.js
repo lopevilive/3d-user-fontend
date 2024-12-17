@@ -75,7 +75,7 @@ export const useStaffManage = () => {
   }
 
   const toInvite = async (data) => {
-    const inApp = await isInApp()
+    const inApp = isInApp()
     if (!inApp) {
       showToast('请在小程序内邀请~')
       return

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog } from '@/util'
+import { isInApp, viewLog, toLogin } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -104,17 +104,12 @@ const getToken = (query) => {
   return queryToken || storageToken || '' // 优先从 url 取
 }
 
-
-const tologin = (to) => {
-  wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(to.path)}`})
-}
-
 const toPhone = (to) => {
-  wx.miniProgram.navigateTo({url: `../phone/phone?src_path=${encodeURIComponent(to.path)}`})
+  wx.miniProgram.navigateTo({url: `../phone/phone?src_path=${encodeURIComponent(to.fullPath)}`})
 }
 
 const handleLogin = async (to) => {
-  const inApp = await isInApp()
+  const inApp = isInApp()
   const { userId } = globalData.value.userInfo
   if (userId) return 
   const token = getToken(to.query)
@@ -126,7 +121,7 @@ const handleLogin = async (to) => {
     } catch(e) {
       // localStorage.setItem('token', '')
       if (inApp) {
-        tologin(to)
+        toLogin(to.fullPath)
         return false
       }
     } finally {
@@ -134,7 +129,7 @@ const handleLogin = async (to) => {
     }
   } else {
     if (inApp) {
-      tologin(to)
+      toLogin(to.fullPath)
       return false
     }
   }
@@ -151,7 +146,7 @@ const init = async (to, from) => {
   if (needPhone) {
     const {hasPhone} = globalData.value.userInfo
     if (!hasPhone) {
-      const inApp = await isInApp()
+      const inApp = isInApp()
       if (!inApp) return false // 这种情况不许打开页面
       toPhone(to)
       return false

@@ -533,9 +533,9 @@ export const useProductManage = () => {
 
   const init = async () => {
     globalData.value.productNeedExec = []
-    const {toDetial} = route.query
+    const {toDetial, title, imageUrl} = route.query
     if (toDetial) {
-      router.push({name: 'product-detial', params: {id: toDetial}})
+      router.push({name: 'product-detial', params: {id: toDetial, title, imageUrl}})
     }
     loadHandle()
     fetchShop()
