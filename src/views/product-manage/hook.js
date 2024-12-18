@@ -237,22 +237,21 @@ export const useProductManage = () => {
     return ret
   })
 
-  let needUpdateTit = true
+  let updateTitStatus = 1 //  0-完成设置title、大于0-未完成
+  const setTitle = () => {
+    if (updateTitStatus === 0) return
+    const {name, url} = shopInfo.value
+    if (!name) return
+    updateTitStatus -= 1
+    if (updateTitStatus > 0) return
+    if (route.query?.title) return
+    router.replace({name: 'product-manage', params: route.params, query: {title: name, imageUrl: url?.split(',')?.[0]}})
+  }
+
   const fetchShop = async () => {
     const res = await shopInfoManage.getShopInfo(shopId)
     if (res?.[0]) shopInfo.value = res[0]
-    if (needUpdateTit) {
-      const {title} = route.query
-      if (!title && shopInfo.value?.name) {
-        router.replace({
-          name: 'product-manage', 
-          params: route.params, 
-          query: {
-            title: shopInfo.value.name,
-            imageUrl: shopInfo.value.url.split(',')[0]
-          }})
-      }
-    }
+    setTitle()
   }
 
   const handleRes = (list) => {
@@ -535,6 +534,7 @@ export const useProductManage = () => {
   }
 
   const activeHandle = () => {
+    setTitle()
     tabKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) {
       listRef.value.scrollTop = scrollT.value
@@ -557,7 +557,7 @@ export const useProductManage = () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
     if (toDetial) {
-      needUpdateTit = false
+      updateTitStatus += 1
       router.replace({name: 'product-manage',  params: {shopId}})
       await new Promise(( resolve ) => {
         setTimeout(() => {
