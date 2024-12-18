@@ -15,7 +15,7 @@
           v-model="data.name"
           label="图册名称"
           :required="true"
-          placeholder="请输入图册名称"
+          placeholder="请输入公司名称/图册名称"
           :maxlength="20"
           :rules="[{required: true, message: '名称不能为空'}]"
         />

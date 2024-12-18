@@ -134,6 +134,15 @@ export const useProductItem = (props, emits) => {
     let attr = props.data.attr || '[]'
     attr = JSON.parse(attr)
     let str = ''
+    const { productType } = props.data
+    if (productType) {
+      for (const item of globalData.value.productTypes) {
+        if (item.id === +productType) {
+          str = item.name
+        }
+      }
+    }
+
     for(const item of attr) {
       if (!item.val) continue
       if (['其他'].includes(item.val)) continue
@@ -535,7 +544,13 @@ export const useProductManage = () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
     if (toDetial) {
-      router.push({name: 'product-detial', params: {id: toDetial, title, imageUrl}})
+      router.replace({name: 'product-manage',  params: {shopId}})
+      await new Promise(( resolve ) => {
+        setTimeout(() => {
+          resolve()
+        }, 50);
+      })
+      router.push({name: 'product-detial', params: {id: toDetial}, query: {title, imageUrl}})
     }
     loadHandle()
     fetchShop()

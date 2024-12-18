@@ -28,6 +28,11 @@ export const business_cfgs = [
         type: 'single',
         opts: ['包邮','邮费自理','仅自提']
       },
+      {
+        name: '品牌',
+        type: 'single',
+        opts: ['其他']
+      }
     ]
   },
   {

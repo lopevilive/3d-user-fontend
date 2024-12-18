@@ -65,7 +65,7 @@ export const useProductEdit = () => {
     const {limit, curr} = obj
     try {
       await showConfirmDialog({
-        message: `最多上传 ${limit} 个产品，当前已上传 ${curr} 个。如需上传更多请联系客服`,
+        message: `最多上传 ${limit} 个产品，当前已上传 ${curr} 个。\n如需上传更多请联系客服 \n(注：99/年-300个)`,
         confirmButtonText: '去联系客服',
         cancelButtonText: '好的'
       })
