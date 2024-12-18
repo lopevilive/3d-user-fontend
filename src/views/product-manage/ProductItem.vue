@@ -30,7 +30,7 @@
 
 <script setup>
 import { globalData } from '@/store'
-import { useProductItem } from './hook'
+import { useProductItem } from './product-item-hook'
 
 const props = defineProps({
   data: {type: Object, default: () => {}}
