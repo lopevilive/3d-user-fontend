@@ -237,9 +237,22 @@ export const useProductManage = () => {
     return ret
   })
 
+  let needUpdateTit = true
   const fetchShop = async () => {
     const res = await shopInfoManage.getShopInfo(shopId)
-    if (res?.[0])shopInfo.value = res[0]
+    if (res?.[0]) shopInfo.value = res[0]
+    if (needUpdateTit) {
+      const {title} = route.query
+      if (!title && shopInfo.value?.name) {
+        router.replace({
+          name: 'product-manage', 
+          params: route.params, 
+          query: {
+            title: shopInfo.value.name,
+            imageUrl: shopInfo.value.url.split(',')[0]
+          }})
+      }
+    }
   }
 
   const handleRes = (list) => {
@@ -544,6 +557,7 @@ export const useProductManage = () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
     if (toDetial) {
+      needUpdateTit = false
       router.replace({name: 'product-manage',  params: {shopId}})
       await new Promise(( resolve ) => {
         setTimeout(() => {
