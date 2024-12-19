@@ -17,7 +17,11 @@
       </template>
     </van-skeleton>
   </div>
-  <router-view></router-view>
+  <router-view v-slot="{Component}">
+    <keep-alive :include="['AlbumList']">
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
   <VanOverlay :show="loading">
     <VanLoading class="global-loading"  />
   </VanOverlay>

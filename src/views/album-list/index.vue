@@ -18,8 +18,12 @@ const {
 } = useAblumList()
 
 loadHandle()
+</script>
 
-
+<script>
+export default {
+  name: 'AlbumList'
+}
 </script>
 
 <style scoped lang="scss">
