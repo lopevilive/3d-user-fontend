@@ -12,7 +12,7 @@
     <div class="bottom-btn">
       <VanButton text="新增分类" block type="primary" native-type="submit" @click="addHandle"/>
     </div>
-    <ProductTypeDialog ref="dialogEditRef" @update="init"/>
+    <ProductTypeDialog ref="dialogEditRef"/>
     <VanActionSheet
       :actions="actions"
       v-model:show="showAction"
@@ -30,7 +30,6 @@ import { useTypeManage } from './hook'
 const {
   data,
   dialogEditRef,
-  init,
   addHandle,
   actions,
   showAction,
@@ -38,7 +37,6 @@ const {
   settingClickHandle
 } = useTypeManage()
 
-init()
 
 </script>
 

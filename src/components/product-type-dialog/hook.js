@@ -2,8 +2,8 @@ import { ref, computed} from 'vue'
 import { productTypesMod } from '@/http'
 import { commonFetch } from '@/util'
 import { useRoute } from 'vue-router'
-import {initProductTypes} from '@/store'
 import {showSuccessToast, showFailToast} from 'vant'
+import { globalData } from '@/store'
 
 export const useDialogEdit = (emits) => {
   const route = useRoute()
@@ -48,7 +48,7 @@ export const useDialogEdit = (emits) => {
     const payload = isMul.value ? getMulData() : getData()
     await commonFetch(productTypesMod, payload)
     showSuccessToast('保存成功～')
-    initProductTypes()
+    globalData.value._productTypes[shopId].done = false
     emits('update')
   }
 

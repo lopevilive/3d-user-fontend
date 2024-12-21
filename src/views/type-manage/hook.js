@@ -1,13 +1,15 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getProductTypes, productTypesDel, moveTopProductType } from '@/http'
 import { commonFetch } from '@/util'
 import { showConfirmDialog } from 'vant';
-import {initProductTypes} from '@/store'
+import { globalData} from '@/store'
 
 export const useTypeManage = () => {
   const route = useRoute()
-  const data = ref([])
+  const data = computed(() => {
+    return [...globalData.value.productTypes]
+  })
   const dialogEditRef = ref()
   const shopId= +route.params.shopId
   let currmodItem = null
@@ -19,8 +21,7 @@ export const useTypeManage = () => {
         message: `确定删除【${currmodItem.name}】?`
       })
       await commonFetch(productTypesDel, {id: currmodItem.id, shopId})
-      initProductTypes()
-      init()
+      globalData.value._productTypes[shopId].done = false
     } catch (error) {}
   }
 
@@ -35,8 +36,7 @@ export const useTypeManage = () => {
   const moveTop = async () => {
     const payload = {id: currmodItem.id, shopId}
     await commonFetch(moveTopProductType, payload)
-    initProductTypes()
-    init()
+    globalData.value._productTypes[shopId].done = false
   }
 
   const actions = [
@@ -56,17 +56,10 @@ export const useTypeManage = () => {
     currmodItem = item
     showAction.value = true
   }
-
-  const init = async () => {
-    const res = await commonFetch(getProductTypes, {shopId})
-    data.value = res
-  }
-  
   
   return {
     data,
     dialogEditRef,
-    init,
     addHandle,
     actions,
     showAction,

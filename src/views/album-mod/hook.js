@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { shopCreate, shopMod } from '@/http'
-import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage } from '@/util'
+import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast } from 'vant';
@@ -48,7 +48,11 @@ export const useAlbumMod = () => {
     const res =  await commonFetch(api, payload, '保存成功')
     shopInfoManage.dirty(data.value.id)
     globalData.value.userInfo = {} // 需要重新获取登录信息
-    router.replace({name: 'contact', params: {shopId: res}, query: {title: data.value?.name || '', imageUrl: data.value?.url?.split?.(',')?.[0]|| '' }})
+    router.replace({
+      name: 'contact', params: {shopId: res}, query: {
+        title: data.value?.name || '',
+        imageUrl: getImageUrl(data.value?.url?.split?.(',')?.[0]|| '' )
+      }})
     setTimeout(() => {
       console.log('8888888')
       if (window.history.state.back === window.history.state.current) router.go(-1)

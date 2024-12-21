@@ -1,16 +1,19 @@
 <template>
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
-    <div class="content" @click="handleClick">
-      <div class="img"><VanImage fit="contain" :src="urlDisplay" /></div>
+    <div class="content">
+      <div class="img" @click="handleClick"><VanImage fit="contain" :src="urlDisplay" /></div>
       <div class="info-content">
-        <div class="desc">
+        <div class="desc" @click="handleClick">
           <span v-if="isShowSticky"><VanTag plain type="primary">置顶</VanTag></span>
           {{ data.desc }}
         </div>
         <div class="attr" v-if="displayAttrs"> {{ displayAttrs }}</div>
-        <div class="price" v-if="priceDisplay">
-          <span class="unit">¥</span>
-          <span class="num">{{ priceDisplay }}</span>
+        <div class="price-content">
+          <div class="price" >
+            <span class="unit" v-if="priceDisplay">¥</span>
+            <span class="num">{{ priceDisplay || '' }}</span>
+          </div>
+          <AddControls :productInfo="data" />
         </div>
       </div>
     </div>
@@ -31,9 +34,10 @@
 <script setup>
 import { globalData } from '@/store'
 import { useProductItem } from './product-item-hook'
+import AddControls from '@/components/add-controls/index.vue'
 
 const props = defineProps({
-  data: {type: Object, default: () => {}}
+  data: {type: Object}
 })
 
 const emits = defineEmits(['update','selected'])
@@ -121,16 +125,25 @@ const {
     color: $grey8;
     margin-top: 4px;
   }
-  .price {
+  .price-content {
     width: 100%;
     margin-top: 4px;
-    color: $red;
-    .unit {
-      font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    .price {
+      color: $red;
+      flex: 1;
+      .unit {
+        font-size: 12px;
+      }
+      .num {
+        font-weight: bold;
+        font-size: 16px;
+        word-break: break-all;
+      }
     }
-    .num {
-      font-weight: bold;
-      font-size: 16px;
+    .com-add-controls {
+      flex-shrink: 0;
     }
   }
   .setting {

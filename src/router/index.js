@@ -67,6 +67,24 @@ const router = createRouter({
           name: 'sys-setting',
           component: () => import('@/views/sys-setting/index.vue'),
           meta: {title: '图册设置'}
+        },
+        {
+          path: 'inventory-list',
+          name: 'inventory-list',
+          component: () => import('@/views/inventory-list/index.vue'),
+          meta: {title: '商品清单'}
+        },
+        {
+          path: 'address-list',
+          name: 'address-list',
+          component: () => import('@/views/address-list/index.vue'),
+          meta: {title: '地址列表'}
+        },
+        {
+          path: 'address-edit/:id?',
+          name: 'address-edit',
+          component: () => import('@/views/address-list/AddressEdit.vue'),
+          meta: {title: '编辑地址'}
         }
       ]
     },

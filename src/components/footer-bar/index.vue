@@ -8,6 +8,10 @@
       <VanIcon name="user-o"/>
       <div>联系</div>
     </div>
+    <div class="item" v-if="totalCount > 0" @click="toInventoryList">
+      <VanIcon name="cart-o" :badge="totalCount" />
+      <div>清单</div>
+    </div>
   </div>
 </template>
 
@@ -15,6 +19,7 @@
 <script setup>
 import { computed } from 'vue'
 import {useRoute, useRouter} from 'vue-router'
+import { shopCarInstance } from '@/store'
 
 const route = useRoute()
 const router = useRouter()
@@ -42,6 +47,21 @@ const toContact = () => {
   router.replace({name: 'contact', params: {shopId}, query: route.query})
 }
 
+const toInventoryList = () => {
+  router.push({name: 'inventory-list'})
+}
+
+const shopCarList = shopCarInstance.getAllData()
+
+const totalCount = computed(() => {
+  let ret = 0
+  for (const item of shopCarList.value) {
+    ret += item.count
+  }
+  return ret
+})
+
+
 </script>
 
 <style lang="scss">
@@ -58,7 +78,7 @@ const toContact = () => {
   z-index: 0;
   // padding-top: 8px;
   .item {
-    width: 50%;
+    flex: 1;
     flex-shrink: 0;
     display: flex;
     align-items: center;

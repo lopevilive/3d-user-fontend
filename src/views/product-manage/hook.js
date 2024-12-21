@@ -1,7 +1,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod } from '@/http'
-import { commonFetch, EE, globalLoading, shopInfoManage } from '@/util'
+import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -54,7 +54,10 @@ export const useProductManage = () => {
     updateTitStatus -= 1
     if (updateTitStatus > 0) return
     if (route.query?.title) return
-    router.replace({name: 'product-manage', params: route.params, query: {title: name, imageUrl: url?.split(',')?.[0]}})
+    router.replace({name: 'product-manage', params: route.params, query: {
+      title: name,
+      imageUrl: getImageUrl(url?.split(',')?.[0] || '')
+    }})
   }
 
   const fetchShop = async () => {

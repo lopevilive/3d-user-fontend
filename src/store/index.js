@@ -11,7 +11,6 @@ export const globalData = ref({
     // hasPhone: false, // 是否认证手机号
     // demoShops: [], // 案例图册
   },
-  productTypes: {},
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
   productNeedExec: [], // 需要更新的产品
   isShowSke: false, // 是否展示骨架屏
@@ -20,12 +19,17 @@ export const globalData = ref({
     const route = router.currentRoute.value
     const shopId = +route.params.shopId
     if (!shopId) return []
-    let res = globalData.value._productTypes?.[shopId]
-    if (!res?.length) {
-      upDateProductTypes(shopId)
-      res = []
+    if (!globalData.value._productTypes?.[shopId]) {
+      globalData.value._productTypes[shopId] = {done: false, data: null}
     }
-    return res
+    const matched = globalData.value._productTypes?.[shopId]
+    if (!matched.done) {
+      matched.done = true
+      getProductTypes({shopId})
+        .then(({data}) => { matched.data = data })
+        .catch((err) => { matched.data = []})
+    }
+    return matched.data || []
   }),
   rid: computed(() => {
     const route = router.currentRoute.value
@@ -39,16 +43,13 @@ export const globalData = ref({
     if (userId) return 1 // 登录状态
     return 0 // 游客
   }),
+  _addressList: {},
+  // addressList: 
 })
 
-export const upDateProductTypes = async (shopId) => {
-  const {data} = await getProductTypes({shopId})
-  if (data?.length) globalData.value._productTypes[shopId] = data
-}
 
-export const initProductTypes = () => {
-  globalData.value._productTypes = {}
-}
+export * from './shopCarManage'
+
 
 // todo
 window.globalData = globalData
