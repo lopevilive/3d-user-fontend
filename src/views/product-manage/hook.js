@@ -117,6 +117,11 @@ export const useProductManage = () => {
       const {data} = await getProduct(payload, {cancelToken: source.token})
       if (data.finished) finished.value = data.finished
       currPage.value += 1
+      // let ret = []
+      // new Array(100).fill(0).map(() => {
+      //   ret = [...ret, ...data.list]
+      // })
+      // handleRes(ret)
       handleRes(data.list)
       setTimeout(() => {
         fetchLoadingRaw.value = false

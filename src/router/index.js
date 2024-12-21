@@ -80,12 +80,6 @@ const router = createRouter({
           component: () => import('@/views/address-list/index.vue'),
           meta: {title: '地址列表'}
         },
-        {
-          path: 'address-edit/:id?',
-          name: 'address-edit',
-          component: () => import('@/views/address-list/AddressEdit.vue'),
-          meta: {title: '编辑地址'}
-        }
       ]
     },
     {

@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
-import { getProductTypes } from '@/http'
+import { getProductTypes, getAddressList } from '@/http'
+import { commonFetch } from '@/util'
 import router from '@/router/index.js'
 
 export const globalData = ref({
@@ -25,9 +26,9 @@ export const globalData = ref({
     const matched = globalData.value._productTypes?.[shopId]
     if (!matched.done) {
       matched.done = true
-      getProductTypes({shopId})
-        .then(({data}) => { matched.data = data })
-        .catch((err) => { matched.data = []})
+      commonFetch(getProductTypes, {shopId})
+      .then((data) => { matched.data = data })
+      .catch((err) => { matched.data = []})
     }
     return matched.data || []
   }),
@@ -43,8 +44,27 @@ export const globalData = ref({
     if (userId) return 1 // 登录状态
     return 0 // 游客
   }),
-  _addressList: {},
-  // addressList: 
+  _addressList: {done: false, data: null},
+  addressList: computed(() => {
+    const {data, done} = globalData.value._addressList
+    if (!done) {
+      globalData.value._addressList.done = true
+      commonFetch(getAddressList)
+        .then((res) => {
+          globalData.value._addressList.data = res.map((item) => {
+            item.isDefault = !!item.isDefault
+            return item
+          })
+        })
+        .catch((err) => {
+          console.error(err)
+          globalData.value._addressList.data = null
+        })
+    }
+    return data || []
+  }),
+  selectedAddress: [],
+  invertoryRemark: ''
 })
 
 

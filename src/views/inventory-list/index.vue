@@ -6,6 +6,7 @@
       </div>
       <div class="remark">
         <VanField
+          v-model="remark"
           placeholder="请输入备注（选填）"
           type="textarea"
           :maxlength="250"
@@ -15,13 +16,22 @@
       </div>
       <VanSticky>
         <div class="top-bar">
-          <VanCheckbox>全选</VanCheckbox>
+          <VanCheckbox
+            :model-value="isCheckedAll"
+            @click="checkedAllHandle"
+          >全选</VanCheckbox>
           <VanButton @click="clearAllHandle" size="small" icon="delete-o" type="danger" plain>清空清单</VanButton>
         </div>
       </VanSticky>
       <div class="list-content">
         <div class="list-item" v-for="item in shopCarList">
-          <div class="select"><VanCheckbox shape="square" /></div>
+          <div class="select">
+            <VanCheckbox
+              :model-value="getIsCheck(item)"
+              shape="square"
+              @click="checkClickHandle(item)"
+              />
+          </div>
           <div class="img"><VanImage :src="item.url" fit="cover"/></div>
           <div class="main">
             <div class="tit-wrap ellipsis"> {{ item.desc }} </div>
@@ -46,6 +56,18 @@
           </div>
         </div>
       </div>
+      <div class="bottom-content">
+        <div class="left-content">
+          <div class="bottom-price">
+            <span>合计：</span>
+            <span class="price">¥{{ totalPrice }}</span>
+          </div>
+          <div class="bottom-count"> <span class="unit">数量：</span>{{ totalCount }}</div>
+        </div>
+        <div class="right-content">
+          <VanButton type="success" text="生成报价单"/>
+        </div>
+      </div>
     </div>
     <div v-else>
       <VanEmpty description="暂无清单" />
@@ -62,9 +84,18 @@ const {
   shopCarList,
   handleUpdateCount,
   deleteItem,
-  clearAllHandle
+  clearAllHandle,
+  remark,
+  getIsCheck,
+  checkClickHandle,
+  init,
+  isCheckedAll,
+  checkedAllHandle,
+  totalCount,
+  totalPrice
 } = useInventoryList()
 
+init()
 
 </script>
 
@@ -148,6 +179,31 @@ $imgSize: 60px;
           padding: 5px;
         }
       }
+    }
+  }
+}
+.bottom-content {
+  height: $footerBarH;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: $bgWhite;
+  box-sizing: border-box;
+  border-top: 1px solid $bgGrey;
+  padding: 10px $pdH;
+  display: flex;
+  justify-content: space-between;
+  .bottom-price {
+    font-size: 16px;
+    font-weight: bold;
+    .price {
+      color: $red;
+    }
+  }
+  .bottom-count {
+    .unit {
+      font-weight: bold;
     }
   }
 }

@@ -16,6 +16,7 @@
     "crypto-js": "^4.2.0",
     "eventemitter3": "^5.0.1",
     "html5-qrcode": "^2.3.8",
+    "mathjs": "^14.0.1",
     "three": "^0.167.1",
     "vant": "^4.9.4",
     "vue": "^3.4.31",
