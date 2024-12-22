@@ -104,7 +104,16 @@ export const useInventoryList = () => {
     } catch(e) {
       return '--'
     }
-  }) 
+  })
+
+  const disabled = computed(() => {
+    if (totalCount.value === 0) return true
+    return false
+  })
+
+  const toBuildInventory = () => {
+    router.replace({name: 'view-inventory'})
+  }
 
   const init = () => {
     selectedList.value = []
@@ -129,6 +138,8 @@ export const useInventoryList = () => {
     isCheckedAll,
     checkedAllHandle,
     totalCount,
-    totalPrice
+    totalPrice,
+    toBuildInventory,
+    disabled
   }
 }
