@@ -75,7 +75,7 @@ const router = createRouter({
           meta: {title: '商品清单'}
         },
         {
-          path: 'view-inventory',
+          path: 'view-inventory/:id',
           name: 'view-inventory',
           component: () => import('@/views/view-inventory/index.vue'),
           meta: {title: '报价单'}

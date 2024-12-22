@@ -1,11 +1,15 @@
 import { computed, ref } from 'vue'
 import { shopCarInstance, globalData } from '@/store'
 import { showConfirmDialog } from 'vant'
-import { useRouter } from 'vue-router'
-import {add, multiply, bignumber} from 'mathjs'
+import { useRouter, useRoute } from 'vue-router'
+import {add, multiply, bignumber, cos} from 'mathjs'
+import { createInventory } from '@/http'
+import { commonFetch } from '@/util'
 
 export const useInventoryList = () => {
+  const route = useRoute()
   const router = useRouter()
+  const shopId = +route.params.shopId
 
   const shopCarList = shopCarInstance.getAllData()
 
@@ -111,8 +115,28 @@ export const useInventoryList = () => {
     return false
   })
 
-  const toBuildInventory = () => {
-    router.replace({name: 'view-inventory'})
+  const toBuildInventory = async () => {
+    const {selectedAddress, addressList} = globalData.value
+    let address = ''
+    for (const item of addressList) {
+      if (selectedAddress.includes(item.id)) {
+        address = `${item.province}${item.city}${item.county}${item.addressDetail} ${item.name} ${item.tel}`
+      }
+    }
+
+    const payload = {
+      shopId,
+      data: {
+        list: shopCarList.value,
+        remark: globalData.value.invertoryRemark || '',
+        address,
+        totalCount: totalCount.value,
+        totalPrice: totalPrice.value
+      }
+    }
+    payload.data = JSON.stringify(payload.data)
+    const data = await commonFetch(createInventory, payload)
+    router.replace({name: 'view-inventory', params: {id: data}})
   }
 
   const init = () => {

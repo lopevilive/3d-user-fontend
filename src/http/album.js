@@ -89,3 +89,12 @@ export const addressMod = (payload) => {
 export const addressDel = (payload) => {
   return post(`${album}AddressDel`, payload)
 }
+
+export const getInventory = (payload) => {
+  return post(`${album}GetInventory`, payload)
+}
+
+export const createInventory = (payload) => {
+  return post(`${album}CreateInventory`, payload)
+}
+
