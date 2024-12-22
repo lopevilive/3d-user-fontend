@@ -1,9 +1,30 @@
 <template>
   <div class="com-add-controls" v-if="isShow">
-    <div class="single" v-if="productInfo.isSpec === 0">
-      <CountControls v-model:count="carInfo.count.value" />
-    </div>
-    <div v-if="productInfo.isSpec === 1" class="select-spec" @click="isShowSpecs = true">选规格</div>
+    <template v-if="mode === 0">
+      <div class="single" v-if="productInfo.isSpec === 0">
+        <CountControls v-model:count="carInfo.count.value" />
+      </div>
+      <div v-if="productInfo.isSpec === 1" class="select-spec" @click="isShowSpecs = true">选规格</div>
+    </template>
+
+    <template v-if="mode === 1">
+      <!-- 单规格 -->
+      <template v-if="productInfo.isSpec === 0">
+        <VanButton
+          v-if="carInfo.count.value === 0"
+          size="small" text="+加入清单" color="#f6d961" round
+          @click="carInfo.count.value = 1"
+        />
+        <CountControls v-if="carInfo.count.value > 0" v-model:count="carInfo.count.value" />
+      </template>
+       
+      <!-- 多规格 -->
+      <VanButton
+        v-if="productInfo.isSpec === 1"
+        size="small" text="+加入清单" color="#f6d961" round
+        @click="isShowSpecs = true"
+      />
+    </template>
     <VanActionSheet
       v-model:show="isShowSpecs"
       cancel-text="完成"
@@ -26,7 +47,8 @@ import { useAddControls } from './hook'
 import CountControls from './CountControls.vue'
 
 const props = defineProps({
-  productInfo: {type: Object, default: () => {}}
+  productInfo: {type: Object, default: () => {}},
+  mode: {type: Number, default: 0}
 })
 
 const {

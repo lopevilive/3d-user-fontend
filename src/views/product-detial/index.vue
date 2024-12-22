@@ -58,6 +58,7 @@
         {{ actionItem.name }} &nbsp;&nbsp;<span class="action-price">¥{{ actionItem.price }}</span>
       </VanButton>
     </VanActionSheet>
+    <DetialFooter :productInfo="info"/>
   </div>
 </template>
 
@@ -67,6 +68,7 @@ import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
+import DetialFooter from './DetialFooter.vue'
 
 const {
   info,

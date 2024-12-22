@@ -241,7 +241,7 @@ class ShopInfoManage {
     const ret = []
     for (const id of idList) {
       for (const item of this.shopData) {
-        if (item.shopId === id && item.dirty === false) ret.push({...item.data})
+        if (item.shopId === id && item.dirty === false && item.data) ret.push({...item.data})
       }
     }
     if (ret.length === idList.length) return ret
