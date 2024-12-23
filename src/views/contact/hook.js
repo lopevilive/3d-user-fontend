@@ -26,11 +26,6 @@ export const useContact = () => {
     return str
   })
 
-  const copyStr = (str) => {
-    const res = copy(str)
-    if (res) showSuccessToast('复制成功～')
-  }
-
   const init = async () => {
     const res = await shopInfoManage.getShopInfo(shopId)
     shopInfo.value = res[0]
@@ -68,7 +63,6 @@ export const useContact = () => {
     init,
     imgList,
     addressDisplay,
-    copyStr,
     toViewQr,
     isShowConcat,
     isShowToEdit,

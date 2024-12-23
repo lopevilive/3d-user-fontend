@@ -32,14 +32,13 @@
 import {useContact} from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import Setting from '@/components/setting/index.vue'
-import {globalLoading} from '@/util'
+import {globalLoading, copyStr} from '@/util'
 
 const {
   shopInfo,
   init,
   imgList,
   addressDisplay,
-  copyStr,
   toViewQr,
   isShowConcat,
   isShowToEdit,

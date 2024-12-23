@@ -1,13 +1,75 @@
 <template>
-  <div class="view-view-inventory">
-    报价单
-    <VanButton text="转发给朋友" @click="toShare"/>
+  <div class="view-view-inventory" v-if="info.add_time">
+    <VanCell class="desc-item" title="收货地址" :label="info.address || '无'" >
+      <template #value>
+        <VanButton @click="copyStr(info.address)" text="复制地址" size="small" :disabled="!info.address"/>
+      </template>
+    </VanCell>
+    <VanCell class="desc-item" title="备注" :label="info.remark" v-if="info.remark">
+      <template #value>
+        <VanButton @click="copyStr(info.remark)" text="复制备注" size="small" :disabled="!info.remark"/>
+      </template>
+    </VanCell>
+    <div class="content-list">
+      <div class="list-item" v-for="item in dataList">
+        <div class="img"><VanImage :src="item.url" fit="cover"/></div>
+        <div class="content">
+          <div class="ellipsis">{{ item.desc }}</div>
+          <div class="info-item" v-if="item.spec">
+            <span class="tit">规格：</span>
+            <VanTag type="primary" plain> {{ item.spec }}</VanTag>
+          </div>
+          <div class="price-content">
+            <div class="info-item">
+              <span class="tit">单价：</span>
+              <span class="price-num">¥{{ item.price || '-' }}</span>
+            </div>
+            <div>x {{ item.count }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="inventory-info">
+      <div>清单生成时间：{{ displayTime }}</div>
+      <div>(注：清单最长保留半年)</div>
+    </div>
+     <div class="bottom-footer">
+      <div class="left-content">
+        <div class="item">
+          <span class="tit">合计：</span>
+          <span class="price-unit">¥</span>
+          <span class="price">{{ info.totalPrice || '-' }}</span>
+        </div>
+        <div class="item">
+          <span class="tit">数量：</span>
+          <span>{{ info.totalCount }}</span>
+        </div>
+      </div>
+      <div class="right-content">
+        <VanButton text="转发清单"  type="primary" icon="share-o" @click="toShare"/>
+      </div>
+     </div>
   </div>
-
+  <div v-else>
+    <VanEmpty description="暂无数据" />
+  </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import {isInApp} from '@/util'
+import { getInventory } from '@/http'
+import { commonFetch, copyStr } from '@/util'
+import { useRoute } from 'vue-router'
+import dayjs from 'dayjs'
+
+const route = useRoute()
+
+const id = +route.params.id
+
+const info = ref({})
+const dataList = ref([])
+
 
 const toShare = () => {
   const inApp = isInApp()
@@ -15,11 +77,119 @@ const toShare = () => {
   wx.miniProgram.navigateTo({url: `../share-page/share-page`})
 }
 
+const init = async () => {
+  let ret = await commonFetch(getInventory, {id})
+  if (ret.length) {
+    ret = ret[0]
+    const tmp = JSON.parse(ret.data)
+    info.value = {
+      add_time: ret.add_time,
+      id: ret.id,
+      shopId: ret.shopId,
+      address: tmp.address,
+      remark: tmp.remark,
+      totalCount: tmp.totalCount,
+      totalPrice: tmp.totalPrice
+    }
+    dataList.value = tmp.list
+  }
+  console.log(info.value)
+  console.log(dataList.value)
+}
+
+const displayTime = computed(() => {
+  if (!info.value.add_time) return '-'
+  return dayjs(info.value.add_time * 1000).format('YYYY/MM/DD HH:mm')
+})
+
+init()
+
 
 </script>
 
 <style lang="scss" scoped>
 .view-view-inventory {
-
+  padding-bottom: $footerBarH;
+  .desc-item {
+    :deep(.van-cell__title) {
+      width: 70%;
+      flex-shrink: 0;
+      flex: 0  1 auto;
+    }
+  }
+  .list-item {
+    background: $bgWhite;
+    padding: 10px $pdH;
+    margin-top: 1px;
+    display: flex;
+    .img {
+      width: 60px;
+      height: 60px;
+      border-radius: 5px;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin-right: 10px;
+      :deep(.van-image) {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .content {
+      flex: 1;
+      min-width: 0;
+      .info-item {
+        display: flex;
+        margin-top: 5px;
+        align-items: center;
+        .tit {
+          color: $grey7;
+        }
+      }
+      .price-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .price-num {
+          color: $red;
+        }
+      }
+    }
+  }
+  .inventory-info {
+    background: $bgWhite;
+    margin-top: 2px;
+    padding: 10px $pdH;
+    font-size: 12px;
+    color: $grey9;
+  }
+  .bottom-footer {
+    height: $footerBarH;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid $bgGrey;
+    background: $bgWhite;
+    display: flex;
+    padding: 10px $pdH;
+    justify-content: space-between;
+    .left-content {
+      .item {
+        margin-bottom: 5px;
+        .price-unit {
+          color: $red;
+        }
+        .price {
+          color: $red;
+          font-size: 18px;
+          font-weight: bold;
+        }
+      }
+      .tit {
+        color: $grey7;
+      }
+    }
+  }
 }
 </style>

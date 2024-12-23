@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { shopCarInstance, globalData } from '@/store'
 import { showConfirmDialog } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
-import {add, multiply, bignumber, cos} from 'mathjs'
+import {add, multiply, bignumber} from 'mathjs'
 import { createInventory } from '@/http'
 import { commonFetch } from '@/util'
 
@@ -104,7 +104,7 @@ export const useInventoryList = () => {
         let tmp = multiply(bignumber(item.price), bignumber(item.count))
         ret = add(ret, tmp)
       }
-      return ret
+      return ret.toString()
     } catch(e) {
       return '--'
     }
@@ -136,7 +136,7 @@ export const useInventoryList = () => {
     }
     payload.data = JSON.stringify(payload.data)
     const data = await commonFetch(createInventory, payload)
-    router.replace({name: 'view-inventory', params: {id: data}})
+    router.replace({name: 'view-inventory', params: {id: data}, query: {title: '报价清单'}})
   }
 
   const init = () => {

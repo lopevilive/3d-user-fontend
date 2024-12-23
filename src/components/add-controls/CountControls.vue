@@ -5,7 +5,7 @@
     </div>
     <span class="count" v-if="count > 0 && mode === 0">{{ count }}</span>
     <div v-if="mode === 1">
-      <VanField v-model="countDisplay" type="number" class="pd0" placeholder="请输入" input-align="center" />
+      <VanField v-model="countDisplay" :maxlength="7" type="number" class="pd0" placeholder="请输入" input-align="center" />
     </div>
     <div class="tool" @click="addHandle">
       <span>+</span>

@@ -4,6 +4,7 @@ import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
 import {EventEmitter} from 'eventemitter3'
 import { getShop } from '@/http'
+import copy from 'copy-to-clipboard';
 
 
 class LoadingManage {
@@ -270,4 +271,9 @@ export const toLogin = (fullPath)  => {
     return
   }
   wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(fullPath)}`})
+}
+
+export const copyStr = (str) => {
+  const res = copy(str)
+  if (res) showSuccessToast('复制成功～')
 }
