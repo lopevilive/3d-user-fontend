@@ -265,11 +265,6 @@ window.shopInfoManage = shopInfoManage // todo
 
 
 export const toLogin = (fullPath)  => {
-  const inApp = isInApp()
-  if (!inApp) {
-    console.log('请在小程序内打开')
-    return
-  }
   wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(fullPath)}`})
 }
 
@@ -279,7 +274,7 @@ export const copyStr = (str) => {
 }
 
 const sceneMap = { name: 'a', shopId: 'b', id: 'c' }
-const sceneValMap = { a: {'view-inventory': 1} }
+const sceneValMap = { a: {'view-inventory': '1', 'product-detial': '2', 'product-manage': '3'} }
 
 const encodeScene = (scene) => {
   let ret = ''
@@ -295,12 +290,36 @@ const encodeScene = (scene) => {
   return ret
 }
 
+export const decodeScene = (str) => {
+  let ret = {}
+  const list = str.split('&')
+  for (const item of list) {
+    let [key, val] = item.split('=')
+    if (sceneValMap[key]) {
+      const tmp = sceneValMap[key]
+      for (const tmpKey of Object.keys(tmp)) {
+        if (tmp[tmpKey] === val) {
+          val = tmpKey
+        }
+      }
+    }
+
+    for (const sceneKey of Object.keys(sceneMap)) {
+      if (sceneMap[sceneKey] === key) {
+        key = sceneKey
+      }
+    }
+    ret[key] = val
+  }
+  return ret
+}
+
 export const toSharePage = (payload = {}) => {
   const inApp = isInApp()
-  // if (!inApp) {
-  //   showToast('请在小程序内打开')
-  //   return
-  // }
+  if (!inApp) {
+    showToast('请在小程序内打开')
+    return
+  }
   let query = ''
   for (const key of Object.keys(payload)) {
     let val = payload[key]
@@ -316,6 +335,5 @@ export const toSharePage = (payload = {}) => {
     query ? query += '&' : query += '?'
     query += `${key}=${encodeURIComponent(val)}`
   }
-  console.log(query)
   wx.miniProgram.navigateTo({url: `../share-page/share-page${query}`})
 }

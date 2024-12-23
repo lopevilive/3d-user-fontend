@@ -136,7 +136,7 @@ export const useInventoryList = () => {
     }
     payload.data = JSON.stringify(payload.data)
     const data = await commonFetch(createInventory, payload)
-    // shopCarInstance.clearAll() // todo
+    shopCarInstance.clearAll()
     router.replace({name: 'view-inventory', params: {id: data}, query: {title: '报价清单'}})
   }
 

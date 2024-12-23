@@ -57,9 +57,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { toSharePage, shopInfoManage } from '@/util'
+import { toSharePage, shopInfoManage, commonFetch, copyStr } from '@/util'
 import { getInventory } from '@/http'
-import { commonFetch, copyStr } from '@/util'
 import { useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 

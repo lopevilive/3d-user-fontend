@@ -105,6 +105,11 @@ const router = createRouter({
       component:  () => import('@/views/user-protocol/index.vue'),
     },
     {
+      path: '/view-share',
+      name: 'view-share',
+      component: () => import('@/views/view-share/index.vue')
+    },
+    {
       path: '/:catchAll(.*)',
       redirect: '/'
     }

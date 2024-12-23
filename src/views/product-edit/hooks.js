@@ -71,7 +71,6 @@ export const useProductEdit = () => {
       })
       toContactSys()
     } catch(e){}
-    console.log(obj)
   }
 
   const getPayload = () => {

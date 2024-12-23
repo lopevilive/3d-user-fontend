@@ -1,7 +1,7 @@
 import {ref, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import { getProduct } from '@/http'
-import { commonFetch, isInApp, getImageUrl } from '@/util'
+import { commonFetch,toSharePage, shopInfoManage, getImageUrl } from '@/util'
 import { globalData } from '@/store'
 
 
@@ -37,16 +37,17 @@ export const useProductDetial = () => {
   }
 
   const shareHandle = async () => {
-    const inApp = isInApp()
-    const payload = {
-      url: getImageUrl(info.value.url.split(',')[0]),
-      title: info.value.desc,
-      productId,
-      shopId
-    }
-    if (inApp) {
-      wx.miniProgram.navigateTo({url: `../share/share?payload=${encodeURIComponent(JSON.stringify(payload))}`})
-    }
+    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    shopInfo = shopInfo[0]
+    toSharePage({
+      src_path: `/product-manage/${shopId}?toDetial=${info.value.id}&title=${encodeURIComponent(info.value.desc)}&imageUrl=${encodeURIComponent(getImageUrl(info.value.url.split(',')[0]))}`,
+      url: shopInfo.url?.split(',')?.[0] || '',
+      title: shopInfo.name,
+      desc1: [info.value.desc],
+      desc2: ['长按识别小程序码~'],
+      scene: { name: 'product-detial', shopId, id: info.value.id }
+    })
+    
   }
 
   const isShowSticky = computed(() => {

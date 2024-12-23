@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productDel, productMod, moveTopProduct } from '@/http'
-import { commonFetch } from '@/util'
+import { commonFetch, toSharePage,  shopInfoManage, getImageUrl} from '@/util'
 import { showConfirmDialog } from 'vant';
 
 export const useSetting = (props, emits) => {
@@ -68,6 +68,19 @@ export const useSetting = (props, emits) => {
     emits('update')
     globalData.value.productNeedExec.push({type: 'sort'})
   }
+
+  const acShare = async () => {
+    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    shopInfo = shopInfo[0]
+    toSharePage({
+      src_path: `/product-manage/${shopId}?title=${encodeURIComponent(shopInfo.name)}&imageUrl=${encodeURIComponent(getImageUrl(shopInfo.url.split(',')[0]))}`,
+      url: shopInfo.url?.split(',')?.[0] || '',
+      title: shopInfo.name,
+      desc1: [shopInfo.desc || ''],
+      desc2: ['长按识别小程序码~'],
+      scene: {name: 'product-manage', shopId}
+    })
+  }
   
   const actions = [
     [
@@ -90,6 +103,7 @@ export const useSetting = (props, emits) => {
       {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact']},
     ],
     [
+      {name: '分享图册', color: '#64b486', action: acShare, includes: ['product-manage', 'contact']},
       {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
       {name: '图册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]}
     ]
