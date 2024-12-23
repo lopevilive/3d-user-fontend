@@ -1,4 +1,4 @@
-import { showNotify, showSuccessToast } from 'vant';
+import { showNotify, showSuccessToast, showToast } from 'vant';
 import md5 from 'crypto-js/md5'
 import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
@@ -76,7 +76,7 @@ export const getSuffix = (str) => {
   return ''
 }
 
-export const  getImageUrl = (url, quality = 40) => {
+export const getImageUrl = (url, quality = 40) => {
   if (!url) return url
   return `${url}?imageMogr2/quality/${quality}`
 }
@@ -276,4 +276,46 @@ export const toLogin = (fullPath)  => {
 export const copyStr = (str) => {
   const res = copy(str)
   if (res) showSuccessToast('复制成功～')
+}
+
+const sceneMap = { name: 'a', shopId: 'b', id: 'c' }
+const sceneValMap = { a: {'view-inventory': 1} }
+
+const encodeScene = (scene) => {
+  let ret = ''
+  for (const key of Object.keys(scene)) {
+    let val = scene[key]
+    const newKey = sceneMap[key]
+    if (sceneValMap[newKey]) {
+      val = sceneValMap[newKey][val]
+    }
+    if (ret) ret += '&'
+    ret += `${newKey}=${val}`
+  }
+  return ret
+}
+
+export const toSharePage = (payload = {}) => {
+  const inApp = isInApp()
+  // if (!inApp) {
+  //   showToast('请在小程序内打开')
+  //   return
+  // }
+  let query = ''
+  for (const key of Object.keys(payload)) {
+    let val = payload[key]
+    if (key === 'url') {
+      val = getImageUrl(val)
+    }
+    if (['desc1','desc2'].includes(key)) {
+      val = JSON.stringify(val)
+    }
+    if (key === 'scene') {
+      val = encodeScene(val)
+    }
+    query ? query += '&' : query += '?'
+    query += `${key}=${encodeURIComponent(val)}`
+  }
+  console.log(query)
+  wx.miniProgram.navigateTo({url: `../share-page/share-page${query}`})
 }

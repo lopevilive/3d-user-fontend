@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import {isInApp} from '@/util'
+import { toSharePage, shopInfoManage } from '@/util'
 import { getInventory } from '@/http'
 import { commonFetch, copyStr } from '@/util'
 import { useRoute } from 'vue-router'
@@ -66,18 +66,25 @@ import dayjs from 'dayjs'
 const route = useRoute()
 
 const id = +route.params.id
+const shopId = +route.params.shopId
 
 const info = ref({})
 const dataList = ref([])
+const shopInfo = ref({})
 
 
 const toShare = () => {
-  const inApp = isInApp()
-  if (!inApp) return
-  wx.miniProgram.navigateTo({url: `../share-page/share-page`})
+  toSharePage({
+    src_path: route.fullPath,
+    url: shopInfo.value?.url?.split(',')?.[0] || '',
+    title: shopInfo.value?.name,
+    desc1: ['报价清单'],
+    desc2: [displayTime?.value],
+    scene: { name: 'view-inventory', shopId, id}
+  })
 }
 
-const init = async () => {
+const getInventoryData = async () => {
   let ret = await commonFetch(getInventory, {id})
   if (ret.length) {
     ret = ret[0]
@@ -93,8 +100,16 @@ const init = async () => {
     }
     dataList.value = tmp.list
   }
-  console.log(info.value)
-  console.log(dataList.value)
+}
+
+const getShopInfo = async () => {
+  let data = await shopInfoManage.getShopInfo(shopId)
+  if (data.length) shopInfo.value = data[0]
+}
+
+const init = async () => {
+  getInventoryData()
+  getShopInfo()
 }
 
 const displayTime = computed(() => {
