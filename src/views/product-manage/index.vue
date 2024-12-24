@@ -62,6 +62,7 @@
     <Setting />
     <MulPrice ref="mulPriceRef"/>
     <MulProductType ref="mulProductTypeRef" />
+    <ShareFloat />
   </div>
 </template>
 
@@ -73,6 +74,7 @@ import {useProductManage} from './hook'
 import { globalData } from '@/store'
 import MulPrice from './MulPrice.vue'
 import MulProductType from './MulProductType.vue'
+import ShareFloat from './ShareFloat.vue'
 
 const {
   init,

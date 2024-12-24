@@ -41,7 +41,7 @@ export const useProductDetial = () => {
     shopInfo = shopInfo[0]
     toSharePage({
       src_path: `/product-manage/${shopId}?toDetial=${info.value.id}&title=${encodeURIComponent(info.value.desc)}&imageUrl=${encodeURIComponent(getImageUrl(info.value.url.split(',')[0]))}`,
-      url: shopInfo.url?.split(',')?.[0] || '',
+      url: info.value.url?.split(',')?.[0] || '',
       title: shopInfo.name,
       desc1: [info.value.desc],
       desc2: ['长按识别小程序码~'],
