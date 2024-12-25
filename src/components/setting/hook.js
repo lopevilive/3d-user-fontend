@@ -103,9 +103,9 @@ export const useSetting = (props, emits) => {
       {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact']},
     ],
     [
-      {name: '分享图册', color: '#64b486', action: acShare, includes: ['product-manage', 'contact']},
-      {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
-      {name: '图册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]}
+      {name: '分享画册', color: '#64b486', action: acShare, includes: ['product-manage', 'contact']},
+      {name: '画册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '画册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]}
     ]
   ]
 

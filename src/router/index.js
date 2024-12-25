@@ -66,7 +66,7 @@ const router = createRouter({
           path: 'sys-setting',
           name: 'sys-setting',
           component: () => import('@/views/sys-setting/index.vue'),
-          meta: {title: '图册设置'}
+          meta: {title: '画册设置'}
         },
         {
           path: 'inventory-list',
@@ -175,7 +175,7 @@ const init = async (to, from) => {
       return false
     }
   }
-  document.title = to?.query?.title || to?.meta?.title || '小果图册'
+  document.title = to?.query?.title || to?.meta?.title || '小果画册'
 }
 
 router.beforeEach(async (to, from) => {

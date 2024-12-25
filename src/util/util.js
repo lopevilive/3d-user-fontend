@@ -202,9 +202,9 @@ class ShopInfoManage {
         if (!resItem) {
           if (matchItem) {
             matchItem.dirty = true
-            matchItem.err = new Error('图册不存在')
+            matchItem.err = new Error('画册不存在')
           } else {
-            this.shopData.push({shopId: id, dirty: true, err: new Error('图册不存在')})
+            this.shopData.push({shopId: id, dirty: true, err: new Error('画册不存在')})
           }
         } else {
           if (matchItem) {

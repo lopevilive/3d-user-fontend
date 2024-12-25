@@ -5,7 +5,7 @@
       <div class="txt-content">
         <div class="tit">
           <span class="text">{{ data.name }}</span>
-          <VanTag v-if="isOwner" type="primary">我的图册</VanTag>
+          <VanTag v-if="isOwner" type="primary">我的画册</VanTag>
           <VanTag v-if="isAdmin" type="success">管理员</VanTag>
         </div>
         <div class="desc">{{ data.desc }}</div>

@@ -2,9 +2,9 @@
   <div class="view-album-mod">
     <VanForm label-align="left" ref="formRef" v-if="!loading">
       <VanCellGroup>
-        <VanField :required="true" :rules="[{validator: () => !!data.url, message: '图册不能为空'}]">
+        <VanField :required="true" :rules="[{validator: () => !!data.url, message: '画册不能为空'}]">
           <template #label>
-            <FormLabel label="图册封面" tips="首张图片作为图册 logo，支持拖动调整图片顺序"/>
+            <FormLabel label="画册封面" tips="首张图片作为画册 logo，支持拖动调整图片顺序"/>
           </template>
           <template #input>
             <UploadImgs ref="uploadImgsRef" v-model="data.url" :maxCount="5"/>
@@ -13,9 +13,9 @@
 
         <VanField
           v-model="data.name"
-          label="图册名称"
+          label="画册名称"
           :required="true"
-          placeholder="请输入公司名称/图册名称"
+          placeholder="请输入公司名称/画册名称"
           :maxlength="20"
           :rules="[{required: true, message: '名称不能为空'}]"
         />

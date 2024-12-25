@@ -6,11 +6,11 @@ import router from '@/router/index.js'
 export const globalData = ref({
   userInfo: {
     // userId: 123,
-    // ownerList: [5,1], // 我创建的图册
-    // adminList: [6], // 我管理的图册
+    // ownerList: [5,1], // 我创建的画册
+    // adminList: [6], // 我管理的画册
     // isSup: false, // 是否超级管理员
     // hasPhone: false, // 是否认证手机号
-    // demoShops: [], // 案例图册
+    // demoShops: [], // 案例画册
   },
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
   productNeedExec: [], // 需要更新的产品
@@ -38,8 +38,8 @@ export const globalData = ref({
     const {userInfo} = globalData.value
     if (userInfo.isSup) return 99 // 超级管理员
     const {ownerList, adminList, userId, hasPhone} = userInfo
-    if (ownerList?.includes(shopId)) return 3 // 图册创建者
-    if (adminList?.includes(shopId)) return 2 // 图册管理员
+    if (ownerList?.includes(shopId)) return 3 // 画册创建者
+    if (adminList?.includes(shopId)) return 2 // 画册管理员
     if (hasPhone) return 10 // 实名手机
     if (userId) return 1 // 登录状态
     return 0 // 游客
