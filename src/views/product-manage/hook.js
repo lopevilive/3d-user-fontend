@@ -66,7 +66,34 @@ export const useProductManage = () => {
     setTitle()
   }
 
-  const handleRes = (list) => {
+  class ListManage {
+    constructor() {
+      this.taskList = []
+      this.runing = false
+    }
+
+    async exe () {
+      this.runing = true
+      while(this.taskList.length) {
+        const list = this.taskList.splice(0, 3)
+        handleRes(list)
+        await sleep(500)
+      }
+      this.runing = false
+    }
+
+    add(list) {
+      this.taskList
+      for (const item of list) {
+        this.taskList.push(item)
+      }
+      if (!this.runing) this.exe()
+    }
+  }
+
+  const listManage = new ListManage()
+
+  const handleRes = async (list) => {
     const lH = parseInt(window.getComputedStyle(leftListRef.value).height) // 左列表高度
     const rH =  parseInt(window.getComputedStyle(rightListRef.value).height) // 右列表高度
     const total = leftList.value.length + rightList.value.length
@@ -121,8 +148,8 @@ export const useProductManage = () => {
       // new Array(100).fill(0).map(() => {
       //   ret = [...ret, ...data.list]
       // })
-      // handleRes(ret)
-      handleRes(data.list)
+      // listManage.add(ret)
+      listManage.add(data.list)
       setTimeout(() => {
         fetchLoadingRaw.value = false
       }, 0);
