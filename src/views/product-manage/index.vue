@@ -63,6 +63,7 @@
     <MulPrice ref="mulPriceRef"/>
     <MulProductType ref="mulProductTypeRef" />
     <ShareFloat />
+    <GoTop :listRef="listRef" :scrollT="scrollT"  />
   </div>
 </template>
 
@@ -75,6 +76,7 @@ import { globalData } from '@/store'
 import MulPrice from './MulPrice.vue'
 import MulProductType from './MulProductType.vue'
 import ShareFloat from './ShareFloat.vue'
+import GoTop from './GoTop.vue'
 
 const {
   init,
@@ -105,7 +107,8 @@ const {
   activeHandle,
   flexibleH,
   searchStr,
-  searchBlurHadle
+  searchBlurHadle,
+  scrollT
 } = useProductManage()
 
 onActivated(() => {

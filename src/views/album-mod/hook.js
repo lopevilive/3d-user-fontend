@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { shopCreate, shopMod } from '@/http'
-import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl } from '@/util'
+import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl, sleep } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast } from 'vant';
@@ -52,11 +52,11 @@ export const useAlbumMod = () => {
       name: 'contact', params: {shopId: res}, query: {
         title: data.value?.name || '',
         imageUrl: getImageUrl(data.value?.url?.split?.(',')?.[0]|| '' )
-      }})
-    setTimeout(() => {
-      console.log('8888888')
-      if (window.history.state.back === window.history.state.current) router.go(-1)
-    }, 0);
+      }
+    })
+    await sleep(1)
+    console.log('8888888')
+    if (window.history.state.back === window.history.state.current) router.go(-1)
   }
 
   const businessOpts = keyReplace(E_business,  {key: 'value', val: 'text'})

@@ -337,3 +337,11 @@ export const toSharePage = (payload = {}) => {
   }
   wx.miniProgram.navigateTo({url: `../share-page/share-page${query}`})
 }
+
+export const sleep = async (time = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(null)
+    }, time)
+  })
+}

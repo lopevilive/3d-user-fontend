@@ -1,7 +1,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod } from '@/http'
-import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl } from '@/util'
+import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -376,11 +376,7 @@ export const useProductManage = () => {
     if (toDetial) {
       updateTitStatus += 1
       router.replace({name: 'product-manage',  params: {shopId}})
-      await new Promise(( resolve ) => {
-        setTimeout(() => {
-          resolve()
-        }, 50);
-      })
+      await sleep(50)
       router.push({name: 'product-detial', params: {id: toDetial}, query: {title, imageUrl}})
     }
     loadHandle()
@@ -418,6 +414,7 @@ export const useProductManage = () => {
     activeHandle,
     flexibleH,
     searchStr,
-    searchBlurHadle
+    searchBlurHadle,
+    scrollT
   }
 }

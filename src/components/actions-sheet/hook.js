@@ -1,4 +1,5 @@
 import {ref} from 'vue'
+import { sleep } from '@/util'
 
 export const useActionsSheet = (emits) => {
   const isShow = ref(false)
@@ -9,11 +10,7 @@ export const useActionsSheet = (emits) => {
 
   const selectHandle = async (item) => {
     isShow.value = false
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve()
-      }, 100);
-    })
+    await sleep(100)
     emits('select', item)
   }
 
