@@ -32,8 +32,6 @@ export const useProductManage = () => {
   const rightList = ref([])
   const leftListRef = ref()
   const rightListRef = ref()
-  let leftIdx = 0
-  let rightIdx = 0
 
   const productTypes = computed(() => {
     const {rid} = globalData.value
@@ -75,7 +73,7 @@ export const useProductManage = () => {
     async exe () {
       this.runing = true
       while(this.taskList.length) {
-        const list = this.taskList.splice(0, 3)
+        const list = this.taskList.splice(0, 4)
         handleRes(list)
         await sleep(500)
       }
@@ -89,17 +87,26 @@ export const useProductManage = () => {
       }
       if (!this.runing) this.exe()
     }
+
+    clear() {
+      this.taskList = []
+    }
   }
 
   const listManage = new ListManage()
 
   const handleRes = async (list) => {
+    let leftIdx = 0
+    let rightIdx = 0
     const lH = parseInt(window.getComputedStyle(leftListRef.value).height) // 左列表高度
     const rH =  parseInt(window.getComputedStyle(rightListRef.value).height) // 右列表高度
     const total = leftList.value.length + rightList.value.length
     const aver = (lH + rH) / total // 平均每个产品的高度
     const gap = Math.abs(rH - lH) // 左右高度差
-    let num =  Math.floor(gap / aver)
+    let num =  gap / aver
+    if (isNaN(num)) num = 0
+    if (num === 1) num = 0
+    num = Math.floor(num)
     if (!num) num = 0
     if (lH > rH) {
       rightIdx += (num + 1)
@@ -169,8 +176,7 @@ export const useProductManage = () => {
     leftList.value = []
     rightList.value = []
     selectedList.value = []
-    leftIdx = 0
-    rightIdx = 0
+    listManage.clear()
     source.cancel()
     source = axios.CancelToken.source()
     loadHandle()

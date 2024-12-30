@@ -41,7 +41,6 @@ const clickHandle = async () => {
 }
 
 const isShow = computed(() => {
-  console.log(globalData.value.rid)
   if ([0,1,10].includes(globalData.value.rid)) return true
   return false
 })
