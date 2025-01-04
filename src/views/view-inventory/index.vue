@@ -69,17 +69,20 @@ const shopId = +route.params.shopId
 
 const info = ref({})
 const dataList = ref([])
-const shopInfo = ref({})
 
-
-const toShare = () => {
+const toShare = async () => {
+  let src_path = route.fullPath
+  src_path = src_path.replace(/(&)?toShare=1/, '')
+  let shopInfo = await shopInfoManage.getShopInfo(shopId)
+  shopInfo = shopInfo[0]
   toSharePage({
-    src_path: route.fullPath,
-    url: shopInfo.value?.url?.split(',')?.[0] || '',
-    title: shopInfo.value?.name,
-    desc1: ['报价清单'],
-    desc2: [displayTime?.value],
-    scene: { name: 'view-inventory', shopId, id}
+    src_path,
+    url: shopInfo?.url?.split(',')?.[0] || '',
+    title: '报价清单',
+    desc1: [shopInfo?.name || ''],
+    desc2: [displayTime.value],
+    scene: { name: 'view-inventory', shopId, id},
+    inventoryId: id
   })
 }
 
@@ -101,14 +104,11 @@ const getInventoryData = async () => {
   }
 }
 
-const getShopInfo = async () => {
-  let data = await shopInfoManage.getShopInfo(shopId)
-  if (data.length) shopInfo.value = data[0]
-}
-
 const init = async () => {
-  getInventoryData()
-  getShopInfo()
+  await getInventoryData()
+  if (route.query.toShare === '1') {
+    toShare()
+  }
 }
 
 const displayTime = computed(() => {
