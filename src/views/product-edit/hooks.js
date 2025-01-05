@@ -11,7 +11,6 @@ export const useProductEdit = () => {
 
   const id = +route.params.id
   const shopId = +route.params.shopId
-  const maxCount = 6;
 
   const shopInfo = ref({})
 
@@ -226,6 +225,11 @@ export const useProductEdit = () => {
   const imgCount = computed(() => {
     if (!data.value.url) return 0
     return data.value.url?.split?.(',')?.length || 0
+  })
+
+  const maxCount = computed(() => {
+    if ([1,2,3].includes(shopInfo.value.level)) return 12
+    return 6
   })
 
   const init = () => {

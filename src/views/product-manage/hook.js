@@ -75,7 +75,7 @@ export const useProductManage = () => {
       while(this.taskList.length) {
         const list = this.taskList.splice(0, 4)
         handleRes(list)
-        await sleep(500)
+        await sleep(300)
       }
       this.runing = false
     }
@@ -226,7 +226,7 @@ export const useProductManage = () => {
     scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
-    if (Math.abs(b - a) < 10){
+    if (Math.abs(b - a) < 50){
       if (finished.value) return
       if (fetchLoadingRaw.value) return
       loadHandle()
