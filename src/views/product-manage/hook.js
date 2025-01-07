@@ -74,7 +74,7 @@ export const useProductManage = () => {
       this.runing = true
       while(this.taskList.length) {
         let nums = 4
-        if (leftList.value.length === 0) nums = 9
+        if (leftList.value.length === 0) nums = 7
         const list = this.taskList.splice(0, nums)
         handleRes(list)
         await sleep(300)
