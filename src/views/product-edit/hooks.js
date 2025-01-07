@@ -232,6 +232,11 @@ export const useProductEdit = () => {
     return 6
   })
 
+  const maxSize = computed(() => {
+    if ([1,2,3].includes(shopInfo.value.level)) return 20
+    return 10
+  })
+
   const init = () => {
     getProductInfo()
     getShopInfo()
@@ -256,6 +261,7 @@ export const useProductEdit = () => {
     uploadImgsRef,
     busiCfg,
     maxCount,
-    imgCount
+    imgCount,
+    maxSize
   }
 }

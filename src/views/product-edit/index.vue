@@ -13,7 +13,7 @@
             ({{imgCount}}/{{ maxCount }})
           </template>
           <template #input>
-            <UploadImgs v-model="data.url" :maxCount="maxCount" ref="uploadImgsRef"/>
+            <UploadImgs v-model="data.url" :maxCount="maxCount" :maxSize="maxSize" ref="uploadImgsRef"/>
           </template>
         </VanField>
         <Desc  v-model="data.desc"/>
@@ -143,7 +143,8 @@ const {
   uploadImgsRef,
   busiCfg,
   maxCount,
-  imgCount
+  imgCount,
+  maxSize
 } = useProductEdit()
 
 init()

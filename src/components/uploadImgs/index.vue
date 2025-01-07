@@ -27,7 +27,8 @@ import { Container, Draggable } from "vue3-smooth-dnd";
 
 const props = defineProps({
   modelValue: {type: String, default: ''},
-  maxCount: {type: Number, default: 1}
+  maxCount: {type: Number, default: 1},
+  maxSize: {type: Number, default: 10}
 })
 const emits = defineEmits(['update:modelValue'])
 
@@ -39,7 +40,6 @@ const {
   uploadings,
   isShowUpload,
   oversizeHandle,
-  maxSize,
   viewHandle,
   deleteUploading,
   isLoading,

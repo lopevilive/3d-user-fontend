@@ -8,7 +8,6 @@ export const useUploadImages = (props, emits) => {
   const {shopId} = route.params
 
   const uploadings = ref([])
-  const maxSize = 10 // M
   
   const handleUpload = async (file) => {
     try {
@@ -94,7 +93,7 @@ export const useUploadImages = (props, emits) => {
   })
 
   const oversizeHandle = (file) => {
-    showFailToast(`最大支持上传 ${maxSize}M 的图片`)
+    showFailToast(`最大支持上传 ${props.maxSize}M 的图片`)
   }
 
   const viewHandle = (idx) => {
@@ -113,7 +112,6 @@ export const useUploadImages = (props, emits) => {
     let len = fileList?.value?.length || 0
     let count = (props.maxCount - len) || 0
     return count
-
   })
 
 
@@ -126,7 +124,6 @@ export const useUploadImages = (props, emits) => {
     uploadings,
     isShowUpload,
     oversizeHandle,
-    maxSize,
     viewHandle,
     deleteUploading,
     isLoading,
