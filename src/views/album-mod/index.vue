@@ -20,7 +20,7 @@
           :rules="[{required: true, message: '名称不能为空'}]"
         />
 
-        <VanField is-link >
+        <!-- <VanField is-link >
           <template #label>
             <FormLabel label="所属行业" :tips="businessTips"/>
           </template>
@@ -30,7 +30,7 @@
             </div>
           </template>
         </VanField>
-        <Select v-model="data.business" :columns="businessOpts" v-model:show="showBusinessPicker" />
+        <Select v-model="data.business" :columns="businessOpts" v-model:show="showBusinessPicker" /> -->
 
         <VanField is-link>
           <template #label>
