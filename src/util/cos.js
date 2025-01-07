@@ -7,7 +7,10 @@ import { globalData } from '@/store'
 
 let keyData = null
 const getKey = async () => {
-  if (keyData) return keyData
+  if (keyData) {
+    let expired = (keyData.data.expiredTime - 60 * 5) * 1000 // 提前5分钟重新获取key
+    if (Date.now() < expired) return keyData
+  }
   keyData = await getCosTempKeys()
   return keyData
 }
