@@ -77,7 +77,7 @@ export const useSetting = (props, emits) => {
       url: shopInfo.url?.split(',')?.[0] || '',
       title: shopInfo.name,
       desc1: [shopInfo.desc || ''],
-      desc2: ['长按识别小程序码~'],
+      desc2: [],
       scene: {name: 'product-manage', shopId}
     })
   }

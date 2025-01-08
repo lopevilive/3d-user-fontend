@@ -44,7 +44,7 @@ export const useProductDetial = () => {
       url: info.value.url?.split(',')?.[0] || '',
       title: shopInfo.name,
       desc1: [info.value.desc],
-      desc2: ['长按识别小程序码~'],
+      desc2: [],
       scene: { name: 'product-detial', shopId, id: info.value.id }
     })
     
