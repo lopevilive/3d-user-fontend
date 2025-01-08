@@ -5,7 +5,7 @@
     label="产品描述"
     placeholder="描述一下产品的信息～"
     type="textarea"
-    :maxlength="252"
+    :maxlength="500"
     :rows="4"
     :clearable="true"
     :show-word-limit="isShowLimit"
