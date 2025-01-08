@@ -61,6 +61,7 @@ export const uploadFile = async (file, shopId) => {
           "rules": [{
               "fileid": fileName,
               "rule": "imageMogr2/format/jpg"
+              // "rule": "imageMogr2/quality/95/format/jpg"
           }]
         })
       }

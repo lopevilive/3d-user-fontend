@@ -93,7 +93,7 @@ export const useUploadImages = (props, emits) => {
   })
 
   const oversizeHandle = (file) => {
-    showFailToast(`最大支持上传 ${props.maxSize}M 的图片`)
+    showFailToast(`最大支持上传 ${props.maxSize}M 的图片。大图上传请联系客服～`)
   }
 
   const viewHandle = (idx) => {
