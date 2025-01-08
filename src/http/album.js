@@ -14,6 +14,10 @@ export const shopMod = (payload) => {
   return post(`${album}ShopMod`, payload);
 };
 
+export const updateLevel = (payload) => {
+  return post(`${album}UpdateLevel`, payload);
+};
+
 export const productMod = (payload) => {
   return post(`${album}ProductMod`, payload)
 }

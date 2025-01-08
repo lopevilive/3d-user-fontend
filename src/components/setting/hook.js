@@ -81,6 +81,11 @@ export const useSetting = (props, emits) => {
       scene: {name: 'product-manage', shopId}
     })
   }
+
+  const updateAlbumRef = ref()
+  const upDateAlbum = async () => {
+    updateAlbumRef.value.show()
+  }
   
   const actions = [
     [
@@ -103,9 +108,12 @@ export const useSetting = (props, emits) => {
       {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact']},
     ],
     [
-      {name: '分享画册', color: '#64b486', action: acShare, includes: ['product-manage', 'contact']},
+      {name: '分享画册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact']},
       {name: '画册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
-      {name: '画册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]}
+    ],
+    [
+      {name: '画册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]},
+      {name: '升级画册', color: '#5794f7', action: upDateAlbum, includes: ['product-manage'], rids: [99]},
     ]
   ]
 
@@ -156,6 +164,7 @@ export const useSetting = (props, emits) => {
     offset,
     bubbleClickHandle,
     actionHandle,
-    gap
+    gap,
+    updateAlbumRef
   }
 }

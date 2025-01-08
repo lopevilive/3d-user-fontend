@@ -20,12 +20,14 @@
       close-on-click-action
       cancel-text="取消"
     />
+    <UpdateAlbum ref="updateAlbumRef"/>
   </div>
 </template>
 
 <script setup>
 import { useSetting } from './hook'
 import ActionsSheet from '@/components/actions-sheet/index.vue'
+import UpdateAlbum from './UpdateAlbum.vue'
 
 const props = defineProps({
   runtimeData: {type: Object}
@@ -40,7 +42,8 @@ const {
   offset,
   bubbleClickHandle,
   actionHandle,
-  gap
+  gap,
+  updateAlbumRef
 } = useSetting(props, emits)
 
 </script>
