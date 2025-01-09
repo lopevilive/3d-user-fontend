@@ -31,7 +31,7 @@ export const useAttrCfgHook = (props, emits) => {
       const match = dataList.value.find((dataItem) => dataItem.name === obj.name)
       if (match) {
         obj.val = match.val || ''
-        obj.customOpts = match.customOpts || []
+        // obj.customOpts = match.customOpts || []
       }
       const dbItem = dbAttrs.value.find((item) => item.name === obj.name)
       if (dbItem) {
@@ -61,7 +61,7 @@ export const useAttrCfgHook = (props, emits) => {
       const dataItem = dataList.value.find((item) => item.name === dbItem.name)
       if (dataItem) {
         obj.val = dataItem.val || ''
-        obj.customOpts = [...new Set([...dataItem.customOpts, ...dbItem.customOpts])]
+        // obj.customOpts = [...new Set([...dataItem.customOpts, ...dbItem.customOpts])]
       }
       let s = new Set()
       if (!editList.value.includes(obj.name) && obj.val)  s.add(obj.val)
@@ -75,7 +75,7 @@ export const useAttrCfgHook = (props, emits) => {
     for (const dataItem of dataList.value) {
       const isMatched = ret.find((item) => item.name === dataItem.name)
       if (isMatched) continue
-      let obj = {...dataItem, isCustom: true, type: 'single'}
+      let obj = {...dataItem, isCustom: true, type: 'single', customOpts: []}
       let s = new Set()
       if (!editList.value.includes(obj.name) && obj.val)  s.add(obj.val)
       for (const str of obj.customOpts) {
