@@ -8,6 +8,8 @@ export const useAblumList = () => {
 
   const currPage = ref(0)
   const albumList = ref([])
+  const scrollT = ref(0)
+  const listRef = ref()
 
   const loadHandle = async () => {
     fetchLoadingRaw.value = true
@@ -28,6 +30,7 @@ export const useAblumList = () => {
 
   const scrollHandle = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
+    scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
     if (Math.abs(b - a) < 10){
@@ -37,9 +40,17 @@ export const useAblumList = () => {
     }
   }
 
+  const activeHandle = () => {
+    if (scrollT.value) {
+      listRef.value.scrollTop = scrollT.value
+    }
+  }
+
   return {
     scrollHandle,
     loadHandle,
-    albumList
+    albumList,
+    activeHandle,
+    listRef
   }
 }
