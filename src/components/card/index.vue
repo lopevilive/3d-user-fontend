@@ -64,7 +64,11 @@ const isShow = computed(() => {
 
 const isShowIllegal = computed(() => {
   if (props.data.status !== 1) return false
-  if ([3,99].includes(globalData.value.rid)) return true
+  if (globalData.value.rid === 99) return true
+  const { ownerList } = globalData.value.userInfo
+  if (ownerList?.length) {
+    if (ownerList.includes(props.data.id)) return true
+  }
   return false
 })
 
