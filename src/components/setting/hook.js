@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productDel, productMod, moveTopProduct } from '@/http'
+import { productDel, productMod, moveTopProduct, banAlbum } from '@/http'
 import { commonFetch, toSharePage,  shopInfoManage, getImageUrl} from '@/util'
 import { showConfirmDialog } from 'vant';
 
@@ -86,6 +86,14 @@ export const useSetting = (props, emits) => {
   const upDateAlbum = async () => {
     updateAlbumRef.value.show()
   }
+
+  const toBanAlbum = async () => {
+    await showConfirmDialog({
+      message: `确定要封禁?`
+    })
+    await commonFetch(banAlbum, {shopId})
+  }
+  
   
   const actions = [
     [
@@ -114,6 +122,7 @@ export const useSetting = (props, emits) => {
     [
       {name: '画册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]},
       {name: '升级画册', color: '#5794f7', action: upDateAlbum, includes: ['product-manage'], rids: [99]},
+      {name: 'banalbum', color: '#5794f7', action: toBanAlbum, includes: ['product-manage'], rids: [99]}
     ]
   ]
 

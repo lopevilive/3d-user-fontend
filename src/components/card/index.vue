@@ -1,14 +1,19 @@
 <template>
-  <div class="com-card" @click="handleClick">
-    <div class="content">
-      <VanImage fit="cover" :src="getImageUrl(logo)" />
-      <div class="txt-content">
-        <div class="tit">
-          <span class="text">{{ data.name }}</span>
-          <VanTag v-if="isOwner" type="primary">我的画册</VanTag>
-          <VanTag v-if="isAdmin" type="success">管理员</VanTag>
+  <div>
+    <div v-if="isShowIllegal" class="com-card">
+      <div class="com-card"> 很抱歉，目前我们暂时无法支持您的业务需求。希望您能理解。</div>
+    </div>
+    <div v-if="isShow" class="com-card" @click="handleClick">
+      <div class="content">
+        <VanImage fit="cover" :src="getImageUrl(logo)" />
+        <div class="txt-content">
+          <div class="tit">
+            <span class="text">{{ data.name }}</span>
+            <VanTag v-if="isOwner" type="primary">我的画册</VanTag>
+            <VanTag v-if="isAdmin" type="success">管理员</VanTag>
+          </div>
+          <div class="desc">{{ data.desc }}</div>
         </div>
-        <div class="desc">{{ data.desc }}</div>
       </div>
     </div>
   </div>
@@ -49,6 +54,17 @@ const isOwner = computed(() => {
 const isAdmin = computed(() => {
   const {adminList = []} = globalData.value?.userInfo
   if (adminList.includes(props.data.id)) return true
+  return false
+})
+
+const isShow = computed(() => {
+  if (props.data.status === 1) return false
+  return true
+})
+
+const isShowIllegal = computed(() => {
+  if (props.data.status !== 1) return false
+  if ([3,99].includes(globalData.value.rid)) return true
   return false
 })
 

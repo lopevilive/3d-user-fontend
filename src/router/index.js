@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -110,6 +110,11 @@ const router = createRouter({
       component: () => import('@/views/view-share/index.vue')
     },
     {
+      path: '/album-illegal/:id',
+      name: 'album-illegal',
+      component: () => import('@/views/album-illegal/index.vue')
+    },
+    {
       path: '/:catchAll(.*)',
       redirect: '/'
     }
@@ -162,7 +167,7 @@ const init = async (to, from) => {
   const { needPhone } = to.meta
   const {shopId} = to.params
   if (shopId) {
-    viewLog.setlog(shopId)
+    shopInfoManage.getShopInfo(shopId)
   }
   let pass = await handleLogin(to)
   if (pass === false) return false
@@ -173,6 +178,16 @@ const init = async (to, from) => {
       if (!inApp) return false // 这种情况不许打开页面
       toPhone(to)
       return false
+    }
+  }
+  if (shopId) {
+    // 这里判断画册是否被封禁
+    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    shopInfo = shopInfo[0];
+    if (shopInfo.status === 1) {
+      return {name: 'album-illegal', params: {id: shopId}}
+    } else {
+      viewLog.setlog(shopId)
     }
   }
   document.title = to?.query?.title || to?.meta?.title || '小果画册'

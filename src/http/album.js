@@ -102,3 +102,7 @@ export const createInventory = (payload) => {
   return post(`${album}CreateInventory`, payload)
 }
 
+export const banAlbum = (payload) => {
+  return post(`${album}BanAlbum`, payload)
+}
+
