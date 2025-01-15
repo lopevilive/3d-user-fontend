@@ -15,6 +15,8 @@ export const useProductManage = () => {
   const scrollT = ref(0)
   const listRef = ref()
   const finished = ref(false)
+  const total = ref(0)
+  const limit = ref(0)
   const fetchLoadingRaw = ref(false)
   const fetchLoading = computed(() => {
     if (globalLoadingRef.value) return false
@@ -36,7 +38,16 @@ export const useProductManage = () => {
   const productTypes = computed(() => {
     const {rid} = globalData.value
     let ret = [...globalData.value.productTypes]
-    ret.splice(0,0, {name: '全部', id: 0})
+    let allName = '全部'
+    if (rid === 99) {
+      allName += `(${total.value}/${limit.value})`
+    }
+    if ([2,3].includes(rid)) {
+      if (limit.value > 50) {
+        allName += `(${total.value}/${limit.value})`
+      }
+    }
+    ret.splice(0,0, {name: allName, id: 0})
     if ([2,3,99].includes(rid)) {
       ret.push({name:'未分类', id: -1})
       ret.push({name:'已下架', id: -2})
@@ -152,6 +163,8 @@ export const useProductManage = () => {
       fetchLoadingRaw.value = true
       const {data} = await getProduct(payload, {cancelToken: source.token})
       if (data.finished) finished.value = data.finished
+      total.value = data.total
+      limit.value = data.limit
       currPage.value += 1
       // let ret = []
       // new Array(100).fill(0).map(() => {
@@ -329,6 +342,8 @@ export const useProductManage = () => {
     const idList = [...list]
     const res = await commonFetch(getProduct, {shopId, productId: idList})
     if (!res?.list?.length) return
+    total.value = res.total
+    limit.value = res.limit
 
     for (const newItem of res.list) {
       let matched = execList(leftList, newItem)

@@ -140,7 +140,7 @@ const valiPrice = () => {
 }
 
 const disabledAdd = computed(() => {
-  if (specsDisplay.value.length >= 6) return true
+  if (specsDisplay.value.length >= 10) return true
   return false
 })
 
