@@ -64,7 +64,8 @@ export const globalData = ref({
     return data || []
   }),
   selectedAddress: [],
-  invertoryRemark: ''
+  invertoryRemark: '',
+  isPC: false, // 是否 pc 打开
 })
 
 
