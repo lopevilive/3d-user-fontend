@@ -345,3 +345,18 @@ export const sleep = async (time = 100) => {
     }, time)
   })
 }
+
+class RefManage {
+  constructor() {
+    this.instanceRef = null
+  }
+
+  setRef (refVal) {
+    this.instanceRef = refVal
+  }
+  getRef() {
+    return this.instanceRef
+  }
+}
+
+export const encryRefManage = new RefManage()

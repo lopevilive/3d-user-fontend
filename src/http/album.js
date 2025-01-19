@@ -106,3 +106,19 @@ export const banAlbum = (payload) => {
   return post(`${album}BanAlbum`, payload)
 }
 
+export const encryAlbum = (payload) => {
+  return post(`${album}EncryAlbum`, payload)
+}
+
+export const getEncryCode = (payload) => {
+  return post(`${album}GetEncryCode`, payload)
+}
+
+export const updateEncryCode = (payload) => {
+  return post(`${album}UpdateEncryCode`, payload)
+}
+
+export const valiEncryCode = (payload) => {
+  return post(`${album}ValiEncryCode`, payload)
+}
+

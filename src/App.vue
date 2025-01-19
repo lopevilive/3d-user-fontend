@@ -31,15 +31,21 @@
   <VanDialog />
   <VanImagePreview />
   <!-- 这里的目的是加载样式  e-->
+
+   <EncryValiDialog ref="encryDialogRef" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { globalLoading } from '@/util'
+import { globalLoading, encryRefManage } from '@/util'
 import { globalData } from '@/store'
+import EncryValiDialog from '@/components/encry-vali-dialog/index.vue'
 
 const loading = ref(false)
 globalLoading.setRef(loading)
+
+const encryDialogRef = ref()
+encryRefManage.setRef(encryDialogRef)
 
 </script>
 

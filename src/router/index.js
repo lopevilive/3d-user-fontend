@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -163,6 +163,21 @@ const handleLogin = async (to) => {
   }
 }
 
+const handleEncry = async (to) => {
+  if (!['product-manage', 'product-detial'].includes(to.name)) return true
+  const shopId = + to.params.shopId
+  console.log(shopId, 'shopId')
+  const { rid, userInfo: {ownerList, adminList}, encryInfo } = globalData.value
+  // if (rid === 99) return true
+  if (ownerList.includes(shopId)) return true
+  if (adminList.includes(shopId)) return true
+  if (encryInfo[shopId] === true) return true
+
+  const encryDialogRef = encryRefManage.getRef()
+  const ret = await encryDialogRef.value.show(shopId)
+  if (ret === false) return {name: 'home'}
+}
+
 const init = async (to, from) => {
   const { needPhone } = to.meta
   const {shopId} = to.params
@@ -192,6 +207,10 @@ const init = async (to, from) => {
       return {name: 'album-illegal', params: {id: shopId}}
     } else {
       viewLog.setlog(shopId)
+    }
+    if (shopInfo.encry === 1) {
+      const ret = await handleEncry(to)
+      if (ret !== true) return ret
     }
   }
   document.title = to?.query?.title || to?.meta?.title || '小果画册'

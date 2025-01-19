@@ -8,7 +8,7 @@
       <div class="content">
         <div class="content__head">
           <div class="left__inp">
-            <VanField v-if="!checked" v-model="priceDisplay" placeholder="请输入价格" class="pd0" :border="false"/>
+            <VanField v-if="!checked" v-model="priceDisplay" placeholder="请输入价格(选填)" class="pd0" :border="false"/>
           </div>
           <span class="line">|</span>
           <VanCheckbox v-model="checked" shape="square" >多规格</VanCheckbox>

@@ -59,16 +59,18 @@ const isAdmin = computed(() => {
 
 const isShow = computed(() => {
   if (props.data.status === 1) return false
+  if (props.data.encry === 1) { // 加密画册
+    if (isAdmin.value || isOwner.value) return true
+    if (globalData.value.rid === 99) return true
+    return false
+  }
   return true
 })
 
 const isShowIllegal = computed(() => {
   if (props.data.status !== 1) return false
   if (globalData.value.rid === 99) return true
-  const { ownerList } = globalData.value.userInfo
-  if (ownerList?.length) {
-    if (ownerList.includes(props.data.id)) return true
-  }
+  if (isOwner.value) return true
   return false
 })
 
