@@ -1,6 +1,6 @@
 <template>
   <div class="com-footer-bar" v-if="isShow">
-    <div class="item" :class="{active: status === 1}" @click="toProd">
+    <div class="item" :class="{active: [1,3].includes(status)}" @click="toProd">
       <VanIcon name="photo-o"/>
       <div>产品</div>
     </div>
