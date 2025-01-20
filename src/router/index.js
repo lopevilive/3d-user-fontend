@@ -172,7 +172,7 @@ const handleEncry = async (to) => {
   if (!['product-manage'].includes(to.name)) return true
   const shopId = + to.params.shopId
   const { rid, userInfo: {ownerList, adminList}, encryInfo } = globalData.value
-  // if (rid === 99) return true
+  if (rid === 99) return true
   if (ownerList.includes(shopId)) return true
   if (adminList.includes(shopId)) return true
   if (encryInfo[shopId] === true) return true

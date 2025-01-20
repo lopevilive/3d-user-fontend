@@ -68,9 +68,9 @@ export const useSysSetting = () => {
 
   const init = async () => {
     const {rid} = globalData.value
-    // if (![2,3,99].includes(rid)) {
-    //   router.replace('home')
-    // }
+    if (![2,3,99].includes(rid)) {
+      router.replace('home')
+    }
     initShopInfo()
     
   }
