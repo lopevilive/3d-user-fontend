@@ -27,6 +27,12 @@ export const useSysSetting = () => {
   }
 
   const modEncry = async (bool) => {
+    if (bool) {
+      await showConfirmDialog({
+        message: `加密后需要密码才能查看画册列表。`,
+        confirmButtonText: '确认加密'
+      })
+    }
     const res = await commonFetch(encryAlbum, {shopId, encry: bool ? 1: 0})
     encryCode.value = res
     shopInfoManage.dirty(shopId)
