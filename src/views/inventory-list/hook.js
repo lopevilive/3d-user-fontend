@@ -4,7 +4,7 @@ import { showConfirmDialog } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import {add, multiply, bignumber} from 'mathjs'
 import { createInventory } from '@/http'
-import { commonFetch } from '@/util'
+import { commonFetch, toSharePage, shopInfoManage } from '@/util'
 
 export const useInventoryList = () => {
   const route = useRoute()
@@ -115,7 +115,7 @@ export const useInventoryList = () => {
     return false
   })
 
-  const toBuildInventory = async () => {
+  const toCreate = async (type = 0) => {
     const {selectedAddress, addressList} = globalData.value
     let address = ''
     for (const item of addressList) {
@@ -130,19 +130,51 @@ export const useInventoryList = () => {
     })
 
     const payload = {
-      shopId,
+      shopId, type,
       data: {
         list: list,
         remark: globalData.value.invertoryRemark || '',
         address,
         totalCount: totalCount.value,
-        totalPrice: totalPrice.value
-      }
+        totalPrice: totalPrice.value,
+      },
     }
     payload.data = JSON.stringify(payload.data)
     const data = await commonFetch(createInventory, payload)
+    return data
+  }
+
+  const toBuildInventory = async () => {
+    const data = await toCreate(0)
     shopCarInstance.clearAll()
     router.replace({name: 'view-inventory', params: {id: data}, query: {title: '报价清单', toShare: '1'}})
+  }
+
+  const mulShare = async () => {
+    const data = await toCreate(1)
+    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    shopInfo = shopInfo[0];
+    let src_path = `/product-manage/${shopId}/mul-manage/${data}`
+    toSharePage({
+      src_path,
+      url: shopInfo?.url?.split(',')?.[0] || '',
+      title: shopInfo.name,
+      desc1: [shopInfo.desc || ''],
+      desc2: [],
+      scene: {name: 'mul-manage', shopId, id: data}
+    })
+  }
+
+  const isShowEditPrice = computed(() => {
+    if ([2,3,99].includes(globalData.value.rid)) return true
+    return false
+  })
+
+  const priceDialogRef = ref()
+  const editPriceHandle = async (itemData) => {
+    const price = await priceDialogRef.value.getPrice()
+    const {id, spec} = itemData
+    shopCarInstance.updatePrice(id, spec, price)
   }
 
   const init = () => {
@@ -170,6 +202,10 @@ export const useInventoryList = () => {
     totalCount,
     totalPrice,
     toBuildInventory,
-    disabled
+    disabled,
+    mulShare,
+    priceDialogRef,
+    isShowEditPrice,
+    editPriceHandle
   }
 }

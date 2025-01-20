@@ -1,7 +1,7 @@
 
 <template>
   <router-view v-slot="{Component}">
-    <keep-alive :include="['ProductManage']">
+    <keep-alive :include="['ProductManage', 'MulManage']">
       <component :is="Component" />
     </keep-alive>
   </router-view>

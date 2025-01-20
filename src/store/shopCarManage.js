@@ -25,20 +25,32 @@ class ShopCarManage {
     this.toggleAll = ref(true)
     this.allData = null
   }
+
+  getLocalData() {
+    const route = router.currentRoute.value
+    const {shopId} = route.params
+    let localData = localStorage.getItem(`shopCar-${shopId}`) || '{}'
+    localData = JSON.parse(localData)
+    return localData
+  }
+
+  setLocalData(data) {
+    const route = router.currentRoute.value
+    const {shopId} = route.params
+    localStorage.setItem(`shopCar-${shopId}`, JSON.stringify(data))
+  }
+
   getData(productInfo, specName = '__default') {
     const that = this
     const ret = computed({
       get() {
-        const route = router.currentRoute.value
-        const {shopId} = route.params
         const {id, upd_time} = productInfo
         return {
           productInfo,
           count: computed({
             get(){
               if (that.toggleMap.value[id]) {}
-              let data = localStorage.getItem(`shopCar-${shopId}`)
-              data = data ? JSON.parse(data) : {}
+              let data = that.getLocalData()
               data = data[id] || {}
               return data?.countMap?.[specName]?.count || 0
             },
@@ -46,8 +58,7 @@ class ShopCarManage {
               try {
                 that.toggleMap.value[id] = !that.toggleMap.value?.[id]
                 that.toggleAll.value = !that.toggleAll.value
-                let data = localStorage.getItem(`shopCar-${shopId}`) || '{}'
-                data = JSON.parse(data)
+                let data = that.getLocalData()
                 let dataItem = data[id]
                 if (dataItem?.productInfo) {
                   if (dataItem.productInfo.upd_time !== upd_time) { // 商品被修改过了
@@ -66,7 +77,7 @@ class ShopCarManage {
                   dataItem.countMap[specName] = {count: 0}
                 }
                 dataItem.countMap[specName].count = val
-                localStorage.setItem(`shopCar-${shopId}`, JSON.stringify(data))
+                that.setLocalData(data)
               } catch(e) {
                 console.error(e)
                 that.clearAll()
@@ -84,19 +95,17 @@ class ShopCarManage {
     if (this.allData) return this.allData
     this.allData = computed(() => {
       if (this.toggleAll.value) {}
-      const route = router.currentRoute.value
-      const {shopId} = route.params
-      let localData = localStorage.getItem(`shopCar-${shopId}`) || '{}'
-      localData = JSON.parse(localData)
+      let localData = this.getLocalData()
       let ret = []
       localData = Object.values(localData)
       for (const item of localData) {
-        const {countMap, productInfo: {desc, url, id, isSpec, specs, price, upd_time}} = item
+        const {countMap, productInfo: {desc, url, id, isSpec, specs, price, upd_time, modPrice}} = item
         const keys = Object.keys(countMap)
         for (const key of keys) {
           let count = countMap?.[key]?.count || 0
           if (count <= 0) continue
           const retItem = { id, count, upd_time, price,url: getImageUrl(url.split(',')[0]), spec: '', desc}
+          if (modPrice) retItem.modPrice = modPrice
           if (isSpec === 1) {
             let specsList = JSON.parse(specs || '[]')
             for (const item of specsList) {
@@ -115,37 +124,51 @@ class ShopCarManage {
   }
 
   updateCount(id, spec, count) {
-    const route = router.currentRoute.value
-    const {shopId} = route.params
-    let localData = localStorage.getItem(`shopCar-${shopId}`) || '{}'
-    localData = JSON.parse(localData)
+    let localData = this.getLocalData()
     const dataItem = localData[id]
     if (!dataItem) return
     if (!spec) spec = '__default'
     dataItem.countMap[spec] = {count}
-    localStorage.setItem(`shopCar-${shopId}`, JSON.stringify(localData))
+    this.setLocalData(localData)
+    this.toggleMap.value[id] = !this.toggleMap.value?.[id]
+    this.toggleAll.value = !this.toggleAll.value
+  }
+
+  updatePrice(id, spec, price) {
+    let localData = this.getLocalData()
+    const data = localData[id]
+    if (!spec) {
+      data.productInfo.price = price
+    } else {
+      let {specs} = data.productInfo
+      specs = JSON.parse(specs)
+      for (const item of specs) {
+        if (item.name === spec) {
+          item.price = price
+        }
+      }
+      data.productInfo.specs = JSON.stringify(specs)
+    }
+    data.productInfo.modPrice = 1
+
+    this.setLocalData(localData)
     this.toggleMap.value[id] = !this.toggleMap.value?.[id]
     this.toggleAll.value = !this.toggleAll.value
   }
 
   deleteItem({id, spec}) {
-    const route = router.currentRoute.value
-    const {shopId} = route.params
-    let localData = localStorage.getItem(`shopCar-${shopId}`) || '{}'
-    localData = JSON.parse(localData)
+    let localData = this.getLocalData()
     const dataItem = localData[id]
     if (!dataItem) return
     if (!spec) spec = '__default'
     dataItem.countMap[spec] = undefined
-    localStorage.setItem(`shopCar-${shopId}`, JSON.stringify(localData))
+    this.setLocalData(localData)
     this.toggleMap.value[id] = !this.toggleMap.value?.[id]
     this.toggleAll.value = !this.toggleAll.value
   }
 
   clearAll() {
-    const route = router.currentRoute.value
-    const {shopId} = route.params
-    localStorage.setItem(`shopCar-${shopId}`, '{}')
+    this.setLocalData({})
     this.toggleMap.value = {}
     this.toggleAll.value = !this.toggleAll.value
   }

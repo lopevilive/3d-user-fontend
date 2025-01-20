@@ -20,7 +20,10 @@
             :model-value="isCheckedAll"
             @click="checkedAllHandle"
           >全选</VanCheckbox>
-          <VanButton @click="clearAllHandle" size="small" icon="delete-o" type="danger" plain>清空清单</VanButton>
+          <div class="top-bar__right">
+            <VanButton class="mul-share" :disabled="disabled" @click="mulShare" size="small" icon="share-o" type="primary" plain>批量转发</VanButton>
+            <VanButton @click="clearAllHandle" size="small" icon="delete-o" type="danger" plain>清空清单</VanButton>
+          </div>
         </div>
       </VanSticky>
       <div class="list-content">
@@ -39,6 +42,10 @@
               <span class="main-label">单价：</span>
               <span v-if="item.price" class="price">¥{{ item.price }}</span>
               <span v-else> - </span>
+              <VanButton
+                v-if="isShowEditPrice" class="edit-price" text="修改" size="mini" type="primary" icon="edit"
+                @click="editPriceHandle(item)"
+              />
             </div>
             <div class="spec-wrap" v-if="item.spec">
               <span class="main-label">规格：</span>
@@ -72,6 +79,7 @@
     <div v-else>
       <VanEmpty description="暂无清单" />
     </div>
+    <ProductPriceDialog ref="priceDialogRef" />
   </div>
 </template>
 
@@ -79,6 +87,7 @@
 import { useInventoryList } from './hook'
 import CountControls from '@/components/add-controls/CountControls.vue'
 import Address from '@/components/address/index.vue'
+import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 
 const {
   shopCarList,
@@ -94,7 +103,11 @@ const {
   totalCount,
   totalPrice,
   toBuildInventory,
-  disabled
+  disabled,
+  mulShare,
+  priceDialogRef,
+  isShowEditPrice,
+  editPriceHandle
 } = useInventoryList()
 
 init()
@@ -119,6 +132,9 @@ $imgSize: 60px;
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #f5f5f5;
+    .mul-share {
+      margin-right: 10px;
+    }
   }
   .list-content {
     margin-top: 1px;
@@ -158,6 +174,12 @@ $imgSize: 60px;
           overflow: hidden;
         }
         .price-wrap {
+          display: flex;
+          align-items: center;
+          margin: 5px 0;
+          .edit-price {
+            margin-left: 10px;
+          }
           .price {
             color: $red;
           }

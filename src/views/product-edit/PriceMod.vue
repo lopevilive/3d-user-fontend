@@ -16,7 +16,7 @@
         <div class="content__spec" v-if="checked">
           <div class="spec-item" v-for="(item, index) in specsDisplay">
             <VanField
-              :maxlength="6"
+              :maxlength="10"
               v-model="item.name"
               @update:model-value="inputHandle"
               class="pd0 name"

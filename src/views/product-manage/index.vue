@@ -60,7 +60,7 @@
       </div>
     </div>
     <Setting />
-    <MulPrice ref="mulPriceRef"/>
+    <ProductPriceDialog ref="mulPriceRef" title="批量改价" />
     <MulProductType ref="mulProductTypeRef" />
     <ShareFloat />
     <GoTop :listRef="listRef" :scrollT="scrollT"  />
@@ -70,13 +70,13 @@
 <script setup>
 import { onActivated } from 'vue'
 import Setting from '@/components/setting/index.vue'
-import productItem from './ProductItem.vue'
+import productItem from '@/components/product-item/index.vue'
 import {useProductManage} from './hook'
 import { globalData } from '@/store'
-import MulPrice from './MulPrice.vue'
 import MulProductType from './MulProductType.vue'
 import ShareFloat from './ShareFloat.vue'
 import GoTop from './GoTop.vue'
+import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 
 const {
   init,

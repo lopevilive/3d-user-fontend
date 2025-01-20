@@ -33,7 +33,7 @@
 
 <script setup>
 import { globalData } from '@/store'
-import { useProductItem } from './product-item-hook'
+import { useProductItem } from './hook'
 import AddControls from '@/components/add-controls/index.vue'
 
 const props = defineProps({

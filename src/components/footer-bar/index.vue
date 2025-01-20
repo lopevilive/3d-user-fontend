@@ -26,7 +26,7 @@ const router = useRouter()
 const {shopId} = route.params
 
 const isShow = computed(() => {
-  if (['product-manage', 'contact'].includes(route.name)) return true
+  if (['product-manage', 'contact', 'mul-manage'].includes(route.name)) return true
   return false
 })
 
@@ -34,17 +34,33 @@ const status = computed(() => {
   if (!isShow) return 0
   if (route.name === 'product-manage') return 1
   if (route.name === 'contact') return 2
+  if (route.name === 'mul-manage') return 3
   return 0
 })
 
 const toProd = () => {
-  if (status.value === 1) return
-  router.replace({name: 'product-manage',params:{shopId}, query: route.query})
+  if ([1, 3].includes(status.value)) return
+  let query = {...route.query}
+  let {from, id} = query
+  from = +from
+  delete query.from
+  delete query.id
+  if (from === 3) {
+    router.replace({name: 'mul-manage',params:{shopId, id}, query})
+  } else {
+    router.replace({name: 'product-manage',params:{shopId}, query})
+  }
+  
 }
 
 const toContact = () => {
   if (status.value === 2) return
-  router.replace({name: 'contact', params: {shopId}, query: route.query})
+  const query = {...route.query, from: status.value}
+  if (status.value === 3) {
+    query.id = route.params.id
+  }
+
+  router.replace({name: 'contact', params: {shopId}, query})
 }
 
 const toInventoryList = () => {

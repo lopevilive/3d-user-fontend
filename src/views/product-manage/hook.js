@@ -94,7 +94,6 @@ export const useProductManage = () => {
     }
 
     add(list) {
-      this.taskList
       for (const item of list) {
         this.taskList.push(item)
       }

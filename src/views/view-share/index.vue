@@ -46,6 +46,9 @@ const init = () => {
   if (data.name === 'product-manage') {
     toList()
   }
+  if (data.name === 'mul-manage') {
+    router.replace({name: data.name, params: {shopId: data.shopId, id: data.id}})
+  }
 }
 
 init()

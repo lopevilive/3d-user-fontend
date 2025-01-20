@@ -86,6 +86,11 @@ const router = createRouter({
           component: () => import('@/views/address-list/index.vue'),
           meta: {title: '地址列表'}
         },
+        {
+          path: 'mul-manage/:id',
+          name: 'mul-manage',
+          component: () => import('@/views/mul-manage/index.vue')
+        }
       ]
     },
     {
@@ -164,9 +169,8 @@ const handleLogin = async (to) => {
 }
 
 const handleEncry = async (to) => {
-  if (!['product-manage', 'product-detial'].includes(to.name)) return true
+  if (!['product-manage'].includes(to.name)) return true
   const shopId = + to.params.shopId
-  console.log(shopId, 'shopId')
   const { rid, userInfo: {ownerList, adminList}, encryInfo } = globalData.value
   // if (rid === 99) return true
   if (ownerList.includes(shopId)) return true

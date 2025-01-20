@@ -274,7 +274,9 @@ export const copyStr = (str) => {
 }
 
 const sceneMap = { name: 'a', shopId: 'b', id: 'c' }
-const sceneValMap = { a: {'view-inventory': '1', 'product-detial': '2', 'product-manage': '3'} }
+const sceneValMap = {
+  a: {'view-inventory': '1', 'product-detial': '2', 'product-manage': '3', 'mul-manage': '4'}
+}
 
 const encodeScene = (scene) => {
   let ret = ''

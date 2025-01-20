@@ -1,6 +1,6 @@
 <template>
   <VanDialog
-    title="批量改价"
+    :title="title"
     v-model:show="show"
     show-cancel-button
     :beforeClose="beforeClose"
@@ -13,6 +13,10 @@
 import { ref } from 'vue'
 import { priceReg } from '@/util'
 import { showToast } from 'vant';
+
+const props = defineProps({
+  title: {type: String, default: '产品价格'}
+})
 
 const price = ref('')
 const show = ref(false)
@@ -34,6 +38,7 @@ const beforeClose = (action) => {
     return true
   }
   let str = price.value || ''
+  str = str.trim()
   if (!str) {
     resolve(str)
     return true
@@ -44,14 +49,6 @@ const beforeClose = (action) => {
   }
   resolve(str)
   return true
-}
-
-const confirmHandle = () => {
-  resolve(price.value)
-}
-
-const cancelHandle = () => {
-  reject()
 }
 
 defineExpose({getPrice})
