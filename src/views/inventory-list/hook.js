@@ -154,7 +154,7 @@ export const useInventoryList = () => {
     const data = await toCreate(1)
     let shopInfo = await shopInfoManage.getShopInfo(shopId)
     shopInfo = shopInfo[0];
-    let src_path = `/product-manage/${shopId}/mul-manage/${data}`
+    let src_path = `/product-manage/${shopId}/mul-manage/${data}?title=${encodeURIComponent(shopInfo.name)}`
     toSharePage({
       src_path,
       url: shopInfo?.url?.split(',')?.[0] || '',
