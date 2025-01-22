@@ -78,7 +78,7 @@ const toShare = async () => {
   toSharePage({
     src_path,
     url: shopInfo?.url?.split(',')?.[0] || '',
-    title: '报价清单',
+    title: '购物清单',
     desc1: [shopInfo?.name || ''],
     desc2: [displayTime.value],
     scene: { name: 'view-inventory', shopId, id},

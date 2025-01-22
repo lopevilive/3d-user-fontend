@@ -72,7 +72,7 @@
           <div class="bottom-count"> <span class="unit">数量：</span>{{ totalCount }}</div>
         </div>
         <div class="right-content">
-          <VanButton type="success" text="生成报价单" @click="toBuildInventory" :disabled="disabled"/>
+          <VanButton type="success" text="生成购物清单" @click="toBuildInventory" :disabled="disabled"/>
         </div>
       </div>
     </div>

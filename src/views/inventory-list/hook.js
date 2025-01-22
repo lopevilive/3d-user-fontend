@@ -147,7 +147,7 @@ export const useInventoryList = () => {
   const toBuildInventory = async () => {
     const data = await toCreate(0)
     shopCarInstance.clearAll()
-    router.replace({name: 'view-inventory', params: {id: data}, query: {title: '报价清单', toShare: '1'}})
+    router.replace({name: 'view-inventory', params: {id: data}, query: {title: '购物清单', toShare: '1'}})
   }
 
   const mulShare = async () => {
