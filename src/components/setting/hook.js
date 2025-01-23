@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productDel, productMod, moveTopProduct, banAlbum } from '@/http'
-import { commonFetch, toSharePage,  shopInfoManage, getImageUrl} from '@/util'
+import { commonFetch, toSharePage,  shopInfoManage, getImageUrl, getFlexW} from '@/util'
 import { showConfirmDialog } from 'vant';
 
 export const useSetting = (props, emits) => {
@@ -12,8 +12,8 @@ export const useSetting = (props, emits) => {
   const shopId = + route.params.shopId
   const productId = + route.params.id
   const actionsSheetRef = ref()
-  const gap = (window.innerWidth * 24) / 375
-  const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.8});
+  const gap = getFlexW(24)
+  const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.8});
 
   const acProdMod = () => {
     if (route.name !== 'product-manage') {

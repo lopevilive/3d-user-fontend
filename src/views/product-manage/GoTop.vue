@@ -16,15 +16,15 @@
 
 <script setup>
 import {ref, computed} from 'vue'
-import { sleep } from '@/util'
+import { sleep, getFlexW } from '@/util'
 
 const props = defineProps({
   listRef: {type: Object},
   scrollT: {type: Number}
 })
 
-const gap = (window.innerWidth * 24) / 375
-const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.5});
+const gap = getFlexW(24)
+const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.5});
 
 const clickHandle = async () => {
   let remain = props.scrollT || 0

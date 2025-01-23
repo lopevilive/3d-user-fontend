@@ -1,7 +1,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod } from '@/http'
-import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep } from '@/util'
+import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -201,37 +201,36 @@ export const useProductManage = () => {
     refresh()
   }
 
-
-  const flexibleHRaw = (window.innerWidth * 42) / 375
-  const flexibleH = ref(flexibleHRaw)
   const preScrollTop = ref(0)
-
+  const isShowFlexContent = ref(true)
   const handleFlexible = (scrollTop, clientHeight, scrollHeight) => {
-    if (scrollTop <= 0) {
+    if (isShowFlexContent.value) {
+      if ((scrollHeight - clientHeight) < getFlexW(50)) return
+    }
+    
+    if (scrollTop <= getFlexW(10)) {
       preScrollTop.value = 0
-      flexibleH.value = flexibleHRaw
+      isShowFlexContent.value = true
       return
     }
 
-    const range = scrollTop - preScrollTop.value
+    if ((scrollTop + clientHeight + getFlexW(10)) >= scrollHeight) {
+      return
+    }
+
+    if (scrollTop > preScrollTop.value) { // 往下滑动
+      preScrollTop.value = scrollTop
+      isShowFlexContent.value = false
+      return
+    }
+
+    if (scrollTop < preScrollTop.value) { // 往上滑动
+      preScrollTop.value = scrollTop
+      isShowFlexContent.value = true
+      return
+    }
+    
     preScrollTop.value = scrollTop
-
-    const a = scrollTop + clientHeight
-    const b = scrollHeight
-    if (a >= b) {
-      flexibleH.value = 0
-      return
-    }
-    // if (Math.abs(b - a) < 10){
-    //   flexibleH.value = 0
-    //   return
-    // }
-
-    let h = flexibleH.value - range
-    if (h <= 0) h = 0
-    if (h > flexibleHRaw) h = flexibleHRaw
-    if (h === flexibleH.value) return
-    flexibleH.value = h
   }
 
   const scrollHandle = (e) => {
@@ -461,9 +460,9 @@ export const useProductManage = () => {
     handleUpdate,
     tabKey,
     activeHandle,
-    flexibleH,
     searchStr,
     searchBlurHadle,
-    scrollT
+    scrollT,
+    isShowFlexContent
   }
 }

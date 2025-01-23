@@ -16,7 +16,7 @@
 
 <script setup>
 import {ref, computed} from 'vue'
-import { toSharePage,  shopInfoManage, getImageUrl} from '@/util'
+import { toSharePage,  shopInfoManage, getImageUrl, getFlexW} from '@/util'
 import { useRoute } from 'vue-router'
 import { globalData } from '@/store'
 
@@ -24,8 +24,8 @@ const route = useRoute()
 
 const shopId = +route.params.shopId
 
-const gap = (window.innerWidth * 24) / 375
-const offset = ref({ x: (window.innerWidth * (375 - 24 - 30)) / 375, y: window.innerHeight * 0.7});
+const gap = getFlexW(24)
+const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.7});
 
 const clickHandle = async () => {
   let shopInfo = await shopInfoManage.getShopInfo(shopId)

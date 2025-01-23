@@ -25,7 +25,7 @@
           <VanButton text="批量分类" size="small" type="primary" :disabled="selectedList.length === 0" @click="handleMulChangeType" />
         </div>
       </div>
-      <div class="flexible-wrap" :style="`height: ${flexibleH}px;`">
+      <div class="flexible-wrap" :class="{'flex-hide': !isShowFlexContent}">
       <!-- <div class="flexible-wrap"> -->
         <div class="flexible__content">
           <form action="none">
@@ -105,10 +105,10 @@ const {
   handleUpdate,
   tabKey,
   activeHandle,
-  flexibleH,
   searchStr,
   searchBlurHadle,
-  scrollT
+  scrollT,
+  isShowFlexContent
 } = useProductManage()
 
 onActivated(() => {
@@ -172,12 +172,18 @@ export default {
       }
     }
   }
+  .flex-hide {
+    height: 0 !important;
+  }
   .flexible-wrap {
     width: 100%;
     box-sizing: border-box;
     background: $bgWhite;
     padding: 0 $pdH;
     overflow: hidden;
+    height: 42px;
+    transition: height .2s linear;
+   
     .flexible__content {
       padding-top: $pdL;
     }

@@ -362,3 +362,8 @@ class RefManage {
 }
 
 export const encryRefManage = new RefManage()
+
+
+export const getFlexW = (w) => {
+  return (window.innerWidth * w) / 375
+}
