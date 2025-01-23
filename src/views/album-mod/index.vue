@@ -49,8 +49,9 @@
           placeholder="请输入介绍"
           type="textarea"
           show-word-limit
-          :maxlength="300"
-          rows="2"
+          :maxlength="252"
+          :clearable="true"
+          :rows="3"
         >
           <template #label>
             <FormLabel label="业务介绍" tips="填写业务介绍以便更好地展示贵司的服务和产品，帮助客户快速了解您的专业领域"/>

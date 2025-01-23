@@ -207,8 +207,9 @@ init()
         margin-bottom: 5px;
         align-items: center;
         .name {
-          width: 40%;
+          width: 50%;
           flex-shrink: 0;
+          margin-right: 10px;
         }
         :deep(.van-icon) {
           font-size: 18px;

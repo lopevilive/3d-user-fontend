@@ -63,12 +63,19 @@ export const useHome = () => {
   
 
   const preHandle = async () => {
-    const {ownerList = []} = globalData.value?.userInfo
-    if (ownerList.length !== 1) return true
     const pageCount = +sessionStorage.getItem('pageCount')
     if (pageCount !== 1) return true
-    router.push({name: 'product-manage', params: {shopId: ownerList[0]}})
-    return false
+
+    const {ownerList = [], adminList = []} = globalData.value?.userInfo
+    if (ownerList.length === 1 && adminList.length === 0) {
+      router.push({name: 'product-manage', params: {shopId: ownerList[0]}})
+      return false
+    }
+    if (adminList.length === 1 && ownerList.length === 0) {
+      router.push({name: 'product-manage', params: {shopId: adminList[0]}})
+      return false
+    }
+    return true
   }
 
   const isShowCreate = computed(() => {

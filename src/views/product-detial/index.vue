@@ -125,7 +125,11 @@ export default {
         .num {
           font-size: 24px;
           font-weight: bold;
+          word-break: break-all;
         }
+      }
+      .share {
+        flex-shrink: 0;
       }
     }
     .content__specs {

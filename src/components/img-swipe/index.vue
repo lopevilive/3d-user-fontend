@@ -28,7 +28,7 @@ const props = defineProps({
 const swipeRef = ref()
 
 const clickHandle = (idx) => {
-  if (isShowControl.value) return
+  if (globalData.value.isPC) return
   showImagePreview(props.list, idx)
 }
 
@@ -41,6 +41,7 @@ const nextHandle = () => {
 }
 
 const isShowControl = computed(() => {
+  if (props.list?.length === 1) return false
   if (globalData.value.isPC) return true
   return false
 })
