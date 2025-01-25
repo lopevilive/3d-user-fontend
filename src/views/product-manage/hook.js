@@ -402,16 +402,14 @@ export const useProductManage = () => {
     if (type === 'sort') { // 置顶/取消置顶
       refresh()
     }
-    if (['status', 'del'].includes(type)) { // 上架/下架/删除
+    if (type === 'del') { // 删除
       removeList([data.id])
-      if (type === 'del') {
-        if (activeTab.value === -2) {
-          downNum.value -= 1
-          downNum.value = downNum.value ? downNum.value: 0
-        } else if (!data.productType) {
-          unCateNum.value -= 1
-          unCateNum.value = unCateNum.value ? unCateNum.value : 0
-        }
+      if (activeTab.value === -2) {
+        downNum.value -= 1
+        downNum.value = downNum.value ? downNum.value: 0
+      } else if (!data.productType) {
+        unCateNum.value -= 1
+        unCateNum.value = unCateNum.value ? unCateNum.value : 0
       }
     }
     if (type === 'edit') {
