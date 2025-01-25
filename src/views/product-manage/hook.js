@@ -15,8 +15,12 @@ export const useProductManage = () => {
   const scrollT = ref(0)
   const listRef = ref()
   const finished = ref(false)
-  const total = ref(0)
-  const limit = ref(0)
+
+  const total = ref(0) // 总产品数
+  const limit = ref(0) // 产品上限
+  const unCateNum = ref(0) // 未分类数量
+  const downNum = ref(0) // 下架数量
+
   const fetchLoadingRaw = ref(false)
   const fetchLoading = computed(() => {
     if (globalLoadingRef.value) return false
@@ -49,8 +53,16 @@ export const useProductManage = () => {
     }
     ret.splice(0,0, {name: allName, id: 0})
     if ([2,3,99].includes(rid)) {
-      ret.push({name:'未分类', id: -1})
-      ret.push({name:'已下架', id: -2})
+      let name1 = '未分类'
+      if (unCateNum.value) {
+        name1 += `(${unCateNum.value})`
+      }
+      let name2 = '已下架'
+      if(downNum.value) {
+        name2 += `(${downNum.value})`
+      }
+      ret.push({name: name1, id: -1})
+      ret.push({name: name2, id: -2})
     }
     return ret
   })
@@ -164,6 +176,8 @@ export const useProductManage = () => {
       if (data.finished) finished.value = data.finished
       total.value = data.total
       limit.value = data.limit
+      unCateNum.value = data.unCateNum
+      downNum.value = data.downNum
       currPage.value += 1
       // let ret = []
       // new Array(100).fill(0).map(() => {
@@ -296,6 +310,9 @@ export const useProductManage = () => {
       message: `确定${act}所选产品吗？当前选中 ${selectedList.value.length} 个产品`
     })
     await commonFetch(productMod, {id: selectedList.value, status: mod === 'on' ? 0 : 1, shopId})
+    let num = mod === 'on' ? -selectedList.value.length : selectedList.value.length
+    downNum.value += num;
+    downNum.value = downNum.value ? downNum.value : 0
     removeList()
   }
 
@@ -305,7 +322,16 @@ export const useProductManage = () => {
       message: `确定删除所选产品吗？当前选中 ${selectedList.value.length} 个产品`
     })
     await commonFetch(productDel, {id: selectedList.value, shopId})
+    const len = selectedList.value.length;
     removeList()
+    if (activeTab.value === -1) {
+      unCateNum.value -= len;
+      unCateNum.value = unCateNum.value ? unCateNum.value : 0;
+    }
+    if (activeTab.value === -2) {
+      downNum.value -= len;
+      downNum.value = downNum.value ? downNum.value : 0;
+    }
   }
 
   const execList = (refList, newItem) => {
@@ -342,6 +368,8 @@ export const useProductManage = () => {
     if (!res?.list?.length) return
     total.value = res.total
     limit.value = res.limit
+    unCateNum.value = res.unCateNum
+    downNum.value = res.downNum
 
     for (const newItem of res.list) {
       let matched = execList(leftList, newItem)
@@ -366,13 +394,7 @@ export const useProductManage = () => {
   const handleMulChangeType = async () => {
     const productType = await mulProductTypeRef.value.getType()
     await commonFetch(productMod, {productType, id: selectedList.value, shopId})
-    if ([0,-2].includes(activeTab.value)) {
-      return removeAllSelected()
-    }
-    if (productType !== activeTab.value) {
-      return removeList()
-    }
-    removeAllSelected()
+    refresh()
   }
 
   const handleUpdate = async ({type, data}) => {
