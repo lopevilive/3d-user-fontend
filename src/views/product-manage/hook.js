@@ -395,7 +395,20 @@ export const useProductManage = () => {
   const handleMulChangeType = async () => {
     const productType = await mulProductTypeRef.value.getType()
     await commonFetch(productMod, {productType, id: selectedList.value, shopId})
-    refresh()
+    if (activeTab.value === -1) {
+      if (productType) {
+        unCateNum.value -= selectedList.value.length;
+        unCateNum.value = unCateNum.value ? unCateNum.value : 0;
+      }
+    }
+    if ([0,-2].includes(activeTab.value)) {
+      removeAllSelected()
+      return
+    }
+    if (productType !== activeTab.value) {
+      removeList(selectedList.value)
+    }
+    removeAllSelected()
   }
 
   const handleUpdate = async ({type, data}) => {
