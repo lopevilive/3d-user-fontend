@@ -291,16 +291,15 @@ export const useProductManage = () => {
     router.push({name: 'product-edit' })
   }
 
-  const removeList = () => {
+  const removeList = (ids) => {
     leftList.value = leftList.value.filter((item) => {
-      if (selectedList.value.includes(item.id)) return false
+      if (ids.includes(item.id)) return false
       return true
     })
     rightList.value = rightList.value.filter((item) => {
-      if (selectedList.value.includes(item.id)) return false
+      if (ids.includes(item.id)) return false
       return true
     })
-    removeAllSelected()
   }
 
   const handleMulOnOff = async (mod) => {
@@ -313,7 +312,8 @@ export const useProductManage = () => {
     let num = mod === 'on' ? -selectedList.value.length : selectedList.value.length
     downNum.value += num;
     downNum.value = downNum.value ? downNum.value : 0
-    removeList()
+    removeList(selectedList.value)
+    removeAllSelected()
   }
 
   const handleMulDel = async () => {
@@ -323,7 +323,8 @@ export const useProductManage = () => {
     })
     await commonFetch(productDel, {id: selectedList.value, shopId})
     const len = selectedList.value.length;
-    removeList()
+    removeList(selectedList.value)
+    removeAllSelected()
     if (activeTab.value === -1) {
       unCateNum.value -= len;
       unCateNum.value = unCateNum.value ? unCateNum.value : 0;
@@ -402,14 +403,16 @@ export const useProductManage = () => {
       refresh()
     }
     if (['status', 'del'].includes(type)) { // 上架/下架/删除
-      leftList.value = leftList.value.filter((item) => {
-        if (item.id === data.id) return false
-        return true
-      })
-      rightList.value = rightList.value.filter((item) => {
-        if (item.id === data.id) return false
-        return true
-      })
+      removeList([data.id])
+      if (type === 'del') {
+        if (activeTab.value === -2) {
+          downNum.value -= 1
+          downNum.value = downNum.value ? downNum.value: 0
+        } else if (!data.productType) {
+          unCateNum.value -= 1
+          unCateNum.value = unCateNum.value ? unCateNum.value : 0
+        }
+      }
     }
     if (type === 'edit') {
       if (data.id === 0) {
