@@ -122,3 +122,7 @@ export const valiEncryCode = (payload) => {
   return post(`${album}ValiEncryCode`, payload)
 }
 
+export const createFeedback = (payload) => {
+  return post(`${album}CreateFeedback`, payload)
+}
+

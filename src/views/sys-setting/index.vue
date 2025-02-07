@@ -3,7 +3,6 @@
     <VanCell title="编辑画册" is-link @click="toModAlbum" />
     <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
     <VanCell title="联系客服" is-link @click="toContactSys"/>
-    <VanCell title="用户协议" is-link @click="toViewProtocol" />
     <div class="group-tit">隐私设置</div>
     <VanCell title="画册加密">
       <template #value>
@@ -18,6 +17,9 @@
         <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
       </template>
     </VanCell>
+    <div class="group-tit">其他</div>
+    <VanCell title="反馈建议" is-link @click="toFeedback"/>
+    <VanCell title="用户协议" is-link @click="toViewProtocol"/>
   </div>
 </template>
 
@@ -35,7 +37,8 @@ const {
   isEncry,
   encryCode,
   shopInfo,
-  refreshCode
+  refreshCode,
+  toFeedback
 } = useSysSetting()
 
 init()

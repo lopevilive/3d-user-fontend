@@ -90,6 +90,12 @@ const router = createRouter({
           path: 'mul-manage/:id',
           name: 'mul-manage',
           component: () => import('@/views/mul-manage/index.vue')
+        },
+        {
+          path: 'feedback',
+          name: 'feedback',
+          component: () => import('@/views/feedback/index.vue'),
+          meta: {title: '反馈建议'}
         }
       ]
     },

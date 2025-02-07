@@ -66,6 +66,10 @@ export const useSysSetting = () => {
     encryCode.value = res
   }
 
+  const toFeedback = ()  => {
+    router.push({name: 'feedback', params: {shopId}})
+  }
+
   const init = async () => {
     const {rid} = globalData.value
     if (![2,3,99].includes(rid)) {
@@ -85,7 +89,8 @@ export const useSysSetting = () => {
     isEncry,
     encryCode,
     shopInfo,
-    refreshCode
+    refreshCode,
+    toFeedback
   }
 
 }
