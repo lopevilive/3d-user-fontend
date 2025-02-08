@@ -432,6 +432,9 @@ export const useProductManage = () => {
       }
       updateProd([data.id])
     }
+    if (type === 'status') {
+      refresh()
+    }
   }
 
   const activeHandle = () => {

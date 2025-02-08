@@ -93,6 +93,28 @@ export const useSetting = (props, emits) => {
     })
     await commonFetch(banAlbum, {shopId})
   }
+
+  const acDownProduct = async () => {
+    const {runtimeData} = props
+    await showConfirmDialog({
+      title: '下架产品',
+      message: '确定下架该产品?'
+    })
+    await commonFetch(productMod, {id: runtimeData.id, shopId, status: 1})
+    emits('update')
+    globalData.value.productNeedExec.push({type: 'status'})
+  }
+
+  const acOnProduct = async () => {
+    const {runtimeData} = props
+    await showConfirmDialog({
+      title: '上架产品',
+      message: '确定上架该产品?'
+    })
+    await commonFetch(productMod, {id: runtimeData.id, shopId, status:0})
+    emits('update')
+    globalData.value.productNeedExec.push({type: 'status'})
+  }
   
   
   const actions = [
@@ -101,6 +123,9 @@ export const useSetting = (props, emits) => {
     ],
     [
       {name: '产品管理', color: '#5794f7', action: acProdMod, includes: ['product-manage', 'contact']},
+      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact']},
+    ],
+    [
       {name: '置顶', color: '#5794f7', action: acProdMove, includes: ['product-detial'], rule: (runtimeData) => {
         if (!runtimeData) return false
         if (runtimeData?.sort === 0) return true
@@ -112,8 +137,19 @@ export const useSetting = (props, emits) => {
         return false
       }},
       {name: '编辑产品', color: '#5794f7', action: acProdEdit, includes: ['product-detial']},
+    ],
+    [
+      {name: '下架产品', color: '#f29b73', action: acDownProduct, includes: ['product-detial'], rule: (runtimeData) => {
+        if (!runtimeData) return false
+        if (runtimeData?.status === 0) return true
+        return false
+      }},
+      {name: '上架产品', color: '#64b486', action: acOnProduct, includes: ['product-detial'], rule: (runtimeData) => {
+        if (!runtimeData) return false
+        if (runtimeData?.status === 1) return true
+        return false
+      }},
       {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
-      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact']},
     ],
     [
       {name: '分享画册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact']},

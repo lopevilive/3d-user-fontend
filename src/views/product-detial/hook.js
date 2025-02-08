@@ -78,6 +78,12 @@ export const useProductDetial = () => {
     selectedSpecIdx.value = index
   }
 
+  const isShowDownTips = computed(() => {
+    const { status } = info.value
+    if (status === 1) return true
+    return false
+  })
+
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
@@ -99,6 +105,7 @@ export const useProductDetial = () => {
     selectedSpecIdx,
     displayPrice,
     isShowAction,
-    selectHandle
+    selectHandle,
+    isShowDownTips
   }
 }

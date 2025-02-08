@@ -1,5 +1,8 @@
 <template>
   <div class="view-product-detial" v-if="info.id">
+    <div class="down-product-tips" v-if="isShowDownTips">
+      产品已下架～
+    </div>
     <div class="swipe-wrap">
       <ImgSwipe :list="imgList" />
       <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/>
@@ -83,7 +86,8 @@ const {
   selectedSpecIdx,
   displayPrice,
   isShowAction,
-  selectHandle
+  selectHandle,
+  isShowDownTips
 } = useProductDetial()
 
 onMounted(init)
@@ -101,6 +105,18 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  .down-product-tips {
+    position: fixed;
+    background: rgba(0,0,0,.7);
+    width: 100%;
+    height: 30px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 10;
+  }
   .swipe-wrap {
     position: relative;
     .see-3d {
