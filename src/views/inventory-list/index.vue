@@ -80,6 +80,7 @@
       <VanEmpty description="暂无清单" />
     </div>
     <ProductPriceDialog ref="priceDialogRef" />
+    <RecordFloat />
   </div>
 </template>
 
@@ -88,6 +89,7 @@ import { useInventoryList } from './hook'
 import CountControls from '@/components/add-controls/CountControls.vue'
 import Address from '@/components/address/index.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
+import RecordFloat from './RecordFloat.vue'
 
 const {
   shopCarList,

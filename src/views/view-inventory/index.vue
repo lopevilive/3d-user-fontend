@@ -24,7 +24,7 @@
               <span class="tit">单价：</span>
               <span class="price-num">¥{{ item.price || '-' }}</span>
             </div>
-            <div>x {{ item.count }}</div>
+            <div class="count">x {{ item.count }}</div>
           </div>
         </div>
       </div>
@@ -157,6 +157,7 @@ init()
         align-items: center;
         .tit {
           color: $grey7;
+          flex-shrink: 0;
         }
       }
       .price-content {
@@ -165,6 +166,10 @@ init()
         align-items: center;
         .price-num {
           color: $red;
+          word-break: break-all;
+        }
+        .count {
+          flex-shrink: 0;
         }
       }
     }
@@ -190,7 +195,12 @@ init()
     justify-content: space-between;
     .left-content {
       .item {
+        display: flex;
         margin-bottom: 5px;
+        align-items: baseline;
+        .tit {
+          flex-shrink: 0;
+        }
         .price-unit {
           color: $red;
         }
@@ -198,11 +208,15 @@ init()
           color: $red;
           font-size: 18px;
           font-weight: bold;
+          word-break: break-all;
         }
       }
       .tit {
         color: $grey7;
       }
+    }
+    .right-content {
+      flex-shrink: 0;
     }
   }
 }
