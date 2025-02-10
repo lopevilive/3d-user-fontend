@@ -11,7 +11,7 @@
     <div class="content">
       <!-- <VanIcon name="orders-o"/> -->
        <span class="txt">历史</span>
-      <span class="txt">记录</span>
+      <span class="txt">清单</span>
     </div>
   </VanFloatingBubble>
   <VanDialog title="历史清单" v-model:show="isShowDialog" confirmButtonText="关闭">
