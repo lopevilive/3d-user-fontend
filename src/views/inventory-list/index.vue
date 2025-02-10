@@ -66,7 +66,7 @@
       <div class="bottom-content">
         <div class="left-content">
           <div class="bottom-price">
-            <span>合计：</span>
+            <span style="flex-shrink: 0;">合计：</span>
             <span class="price">¥{{ totalPrice }}</span>
           </div>
           <div class="bottom-count"> <span class="unit">数量：</span>{{ totalCount }}</div>
@@ -168,6 +168,7 @@ $imgSize: 60px;
         padding: 0 10px;
         .main-label {
           color: $grey7;
+          flex-shrink: 0;
         }
         .tit-wrap {
           width: 100%; 
@@ -179,9 +180,11 @@ $imgSize: 60px;
           margin: 5px 0;
           .edit-price {
             margin-left: 10px;
+            flex-shrink: 0;
           }
           .price {
             color: $red;
+            word-break: break-all;
           }
         }
         .num-wrap {
@@ -221,14 +224,19 @@ $imgSize: 60px;
   .bottom-price {
     font-size: 16px;
     font-weight: bold;
+    display: flex;
     .price {
       color: $red;
+      word-break: break-all;
     }
   }
   .bottom-count {
     .unit {
       font-weight: bold;
     }
+  }
+  .right-content {
+    flex-shrink: 0;
   }
 }
 
