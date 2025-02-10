@@ -9,7 +9,9 @@
     v-if="isShow"
   >
     <div class="content">
-      <VanIcon name="orders-o"/>
+      <!-- <VanIcon name="orders-o"/> -->
+       <span class="txt">历史</span>
+      <span class="txt">记录</span>
     </div>
   </VanFloatingBubble>
   <VanDialog title="历史清单" v-model:show="isShowDialog" confirmButtonText="关闭">
@@ -36,7 +38,7 @@ const router = useRouter()
 const shopId = + route.params.shopId
 
 const gap = getFlexW(24)
-const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.7});
+const offset = ref({ x: getFlexW(375 - 24 - 40), y: window.innerHeight * 0.7});
 const limit = 5
 
 const inventoryList = ref([])
@@ -69,11 +71,19 @@ init()
 
 <style lang="scss">
 .record-float {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   opacity: .8;
+  background: $grey9;
   .content {
-    font-size: 18px;
+    // font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .txt {
+      font-size: 10px;
+    }
   }
 }
 .inventory-dialog-list {
