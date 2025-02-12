@@ -223,6 +223,7 @@ const init = async (to, from) => {
       if (ret !== true) return ret
     }
   }
+  wx.miniProgram.postMessage({ data: {type: 'router', name: to.name}})
   document.title = to?.query?.title || to?.meta?.title || '小果画册'
 }
 
