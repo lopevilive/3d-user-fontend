@@ -134,7 +134,10 @@ export const priceReg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/
 
 export const toContactSys = async () => {
   const inApp = isInApp()
-  if (!inApp) return
+  if (!inApp) {
+    showToast('请在小程序内打开')
+    return
+  }
   const payload = {
     qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/WechatIMG619.jpg',
     message: `长按识别二维码～`

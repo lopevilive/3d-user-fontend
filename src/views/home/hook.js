@@ -9,10 +9,6 @@ export const useHome = () => {
   const router = useRouter()
   const loading = globalLoading.getRef()
 
-  const toAlbum = () => {
-    router.push({name: 'album-mod'})
-  }
-
   const mineList = ref([])
   // 获取我创建/管理的画册
   const getMineList = async () => {
@@ -96,7 +92,6 @@ export const useHome = () => {
   
   return {
     loading,
-    toAlbum,
     init,
     mineList,
     demoList,
