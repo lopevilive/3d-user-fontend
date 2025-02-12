@@ -66,7 +66,7 @@ const actionHandle = (ac) => {
 .com-home-edit-float {
   width: 30px;
   height: 30px;
-  opacity: .8;
+  // opacity: .8;
   .content {
     font-weight: bold;
     font-size: 20px;
