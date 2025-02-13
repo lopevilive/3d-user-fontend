@@ -46,7 +46,7 @@ const acCreateAlbum = () => {
 
 const actions = [
   [
-    {name: '创建画册', color: '#64b486', action: acCreateAlbum},
+    // {name: '创建画册', color: '#64b486', action: acCreateAlbum},
     {name: '联系客服', color: '#5794f7', action: toContactSys}
   ]
 ]

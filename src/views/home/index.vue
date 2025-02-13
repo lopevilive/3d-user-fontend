@@ -1,10 +1,10 @@
 <template>
   <div class="view-home" v-if="!loading">
     <div style="height: 1px;"></div>
-    <!-- <div class="header mrM" v-if="isShowCreate">
+    <div class="header mrM" v-if="isShowCreate">
       <span class="text">我也想做一本产品画册!</span>
       <VanButton class="btn" size="small" @click="toAlbum">立即创建</VanButton>
-    </div> -->
+    </div>
     <div v-if="mineList?.length">
       <h3 class="mrM">我的画册</h3>
       <Card class="mrM" v-for="item in mineList" :data="item" />
@@ -35,7 +35,8 @@ const {
   mineList,
   logList,
   demoList,
-  isShowCreate
+  isShowCreate,
+  toAlbum
 } = useHome()
 
 init()

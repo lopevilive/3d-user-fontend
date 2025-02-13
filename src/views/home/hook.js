@@ -78,6 +78,10 @@ export const useHome = () => {
     if (globalData.value?.userInfo?.ownerList?.length) return false
     return true
   })
+
+  const toAlbum = () => {
+    router.push({name: 'album-mod'})
+  }
   
   const init = async () => {
     globalData.value.editStatus = 0;
@@ -96,6 +100,7 @@ export const useHome = () => {
     mineList,
     demoList,
     logList,
-    isShowCreate
+    isShowCreate,
+    toAlbum
   }
 }
