@@ -463,7 +463,7 @@ export const useProductManage = () => {
     if (toDetial) {
       updateTitStatus += 1
       router.replace({name: 'product-manage',  params: {shopId}})
-      await sleep(50)
+      await sleep(300)
       router.push({name: 'product-detial', params: {id: toDetial}, query: {title, imageUrl}})
     }
     loadHandle()

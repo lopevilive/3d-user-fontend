@@ -1,4 +1,4 @@
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { computed, ref } from 'vue'
 import { globalLoading, viewLog, shopInfoManage} from '@/util'
 import { globalData } from '@/store'
@@ -6,6 +6,7 @@ import { globalData } from '@/store'
 
 
 export const useHome = () => {
+  const route = useRoute()
   const router = useRouter()
   const loading = globalLoading.getRef()
 
@@ -61,6 +62,7 @@ export const useHome = () => {
   const preHandle = async () => {
     const pageCount = +sessionStorage.getItem('pageCount')
     if (pageCount !== 1) return true
+    if (route.query?.noRedict) return true
 
     const {ownerList = [], adminList = []} = globalData.value?.userInfo
     if (ownerList.length === 1 && adminList.length === 0) {
