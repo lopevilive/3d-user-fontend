@@ -3,12 +3,11 @@
     <VanCell title="编辑画册" is-link @click="toModAlbum" />
     <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
     <VanCell title="联系客服" is-link @click="toContactSys"/>
+    <!-- 隐私设置 -->
     <div class="group-tit">隐私设置</div>
-    <VanCell title="画册加密">
+    <VanCell title="画册加密" class="cell__switch">
       <template #value>
-        <div>
           <VanSwitch v-model="isEncry"/>
-        </div>
       </template>
     </VanCell>
     <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="画册密码" :label="encryCode">
@@ -17,6 +16,8 @@
         <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
       </template>
     </VanCell>
+    
+    <!-- 其他 -->
     <div class="group-tit">其他</div>
     <VanCell title="反馈建议" is-link @click="toFeedback"/>
     <VanCell title="用户协议" is-link @click="toViewProtocol"/>
@@ -55,6 +56,12 @@ init()
   }
   .btn-copy {
     margin-left: 10px;
+  }
+  .cell__switch {
+    :deep(.van-cell__value) {
+      display: flex;
+      flex-direction: row-reverse;
+    }   
   }
 }
 

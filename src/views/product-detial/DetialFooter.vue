@@ -59,7 +59,7 @@ const totalCount = computed(() => {
   bottom: 0;
   left: 0;
   // height: $footerBarH;
-  height: 60px;
+  height: $footerBarH;
   width: 100%;
   border-top: 1px solid $bgGrey;
   display: flex;
@@ -67,7 +67,7 @@ const totalCount = computed(() => {
   padding: 0 $pdH;
   .left-content {
     display: flex;
-    height: 40px;
+    height: 50px;
     .content-item {
       display: flex;
       align-items: center;
@@ -89,7 +89,7 @@ const totalCount = computed(() => {
     }
   }
   .right-content {
-    height: 40px;
+    height: 50px;
     display: flex;
     align-items: center;
     :deep(.van-button__text) {

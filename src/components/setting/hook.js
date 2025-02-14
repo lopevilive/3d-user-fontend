@@ -149,7 +149,7 @@ export const useSetting = (props, emits) => {
         if (runtimeData?.status === 1) return true
         return false
       }},
-      {name: '删除产品', color: '#ee0a24', action: acProdDel, includes: ['product-detial']},
+      {name: '删除产品', color: '#ee0a24', icon: 'delete-o', action: acProdDel, includes: ['product-detial']},
     ],
     [
       {name: '分享画册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact']},
