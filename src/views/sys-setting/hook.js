@@ -51,7 +51,26 @@ export const useSysSetting = () => {
 
   const modWaterMark = async (val) => {
     if (val) {
-
+      let info = await shopInfoManage.getData(shopId)
+      info = info[0]
+      if (![1,2,3,4,5].includes(info.level)) {
+        await showConfirmDialog({
+          message: '开通会员后可开启水印功能。\n(注：会员99/年)',
+          confirmButtonText: '去联系客服',
+          cancelButtonText: '好的'
+        })
+        toContactSys()
+        return
+      }
+      await showConfirmDialog({
+        message: `后续新上传的图片都会自动添加水印`,
+        confirmButtonText: '确认开启'
+      })
+    } else {
+      await showConfirmDialog({
+        message: `确定关闭水印？`,
+        confirmButtonText: '确定'
+      })
     }
     await commonFetch(modWaterMarkCgi, {shopId, waterMark: val ? 1: 0})
     shopInfoManage.dirty(shopId)

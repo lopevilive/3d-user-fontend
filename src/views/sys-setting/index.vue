@@ -15,7 +15,7 @@
         <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
       </template>
     </VanCell>
-    <VanCell title="图片添加水印" class="cell__switch">
+    <VanCell title="图片水印" class="cell__switch">
       <template #value>
           <VanSwitch v-model="isWaterMark"/>
       </template>
