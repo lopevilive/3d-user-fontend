@@ -43,7 +43,7 @@ export const useUploadImages = (props, emits) => {
     try {
       uploadings.value.push(file)
       file.status = 'uploading'
-      const {Location: url} = await uploadFile(file.file, shopId, watermarkCfg)
+      const {Location: url} = await uploadFile(file.file, shopId, watermarkCfg, props.noJPG)
       if (!url) return
       uploadings.value = uploadings.value.filter((item) => {
         if (item === file) return false

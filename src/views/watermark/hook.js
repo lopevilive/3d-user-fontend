@@ -102,6 +102,8 @@ export const useWaterMark = () => {
   
   const toCreateWatermark = async () => {
     watermarkCfg.value.fileid = `watermark_${shopId}_${Date.now()}.jpg`
+    const {type, image} = watermarkCfg.value
+    if (type === 1 && !image) return
     try {
       globalLoading.start()
       const res = await watermark(watermarkCfg.value)

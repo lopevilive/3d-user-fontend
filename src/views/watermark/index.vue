@@ -63,7 +63,7 @@
       <UploadImgs ref="replaceImgRef" :noWatermark="1" @update:modelValue="handleReplaceImg" @start="startReplaceHandle" />
     </div>
     <div class="replace-img">
-      <UploadImgs ref="waterImgRef" :noWatermark="1" @update:modelValue="handleWaterImg" @start="startReplaceHandle" />
+      <UploadImgs ref="waterImgRef" :noWatermark="1" :noJPG="1" @update:modelValue="handleWaterImg" @start="startReplaceHandle" />
     </div>
   </div>
 </template>

@@ -30,7 +30,8 @@ const props = defineProps({
   modelValue: {type: String, default: ''},
   maxCount: {type: Number, default: 1},
   maxSize: {type: Number, default: 10},
-  noWatermark: {type: Number, default: 0}
+  noWatermark: {type: Number, default: 0},
+  noJPG: {type: Number, default: 0}
 })
 const emits = defineEmits(['update:modelValue', 'start'])
 

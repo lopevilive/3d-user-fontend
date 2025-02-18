@@ -58,7 +58,7 @@ export const cos = new COS({
   }
 });
 
-export const uploadFile = async (file, shopId, watermarkCfg) => {
+export const uploadFile = async (file, shopId, watermarkCfg, noJPG) => {
   try {
     const {userId} = globalData.value.userInfo
     if (!userId) throw new Error('缺失用户信息')
@@ -73,11 +73,19 @@ export const uploadFile = async (file, shopId, watermarkCfg) => {
     let fileName = `${pre}_${fileNameRaw}`
 
     let rule = 'imageMogr2/format/jpg'
+    if (noJPG === 1) {
+      rule = 'imageMogr2'
+    }
     if (watermarkCfg) {
       let str = getWatermarkRule(watermarkCfg)
-      rule += `|${str}`
+      if (rule) {
+        rule += `|${str}`
+      } else {
+        rule = str
+      }
       fileName = `${pre}_${Math.floor(Math.random() * 1000)}_${fileNameRaw}`
     }
+    console.log(rule)
     await getKey()
     const data = await cos.uploadFile({
       Bucket, // 填写自己的 bucket，必须字段
