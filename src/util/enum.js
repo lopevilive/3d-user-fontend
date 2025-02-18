@@ -106,3 +106,17 @@ export const getBusinessCfg = (businessId) => {
   return {}
 }
 
+export const watermark_cfg_def = {
+  type: 2, // 1-图片水印、2-文字水印
+  text: '',
+  fontsize: 40,
+  fill: '#3D3D3D',
+  degree: 0,
+  gravity: 'southeast',
+  configkey: '',
+  dissolve: 90,
+  batch: 0,
+  previewUrl: '',
+  fileid: ''
+}
+

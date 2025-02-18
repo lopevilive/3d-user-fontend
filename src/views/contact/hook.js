@@ -27,7 +27,7 @@ export const useContact = () => {
   })
 
   const init = async () => {
-    const res = await shopInfoManage.getShopInfo(shopId)
+    const res = await shopInfoManage.getData(shopId)
     shopInfo.value = res[0]
   }
 

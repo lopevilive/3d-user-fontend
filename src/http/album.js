@@ -126,3 +126,14 @@ export const createFeedback = (payload) => {
   return post(`${album}CreateFeedback`, payload)
 }
 
+export const modWaterMark = (payload) => {
+  return post(`${album}ModWaterMark`, payload)
+}
+
+export const getWatermarkCfg = (payload) => {
+  return post(`${album}GetWatermarkCfg`, payload)
+}
+
+export const saveWatermarkCfg = (payload) => {
+  return post(`${album}SaveWatermarkCfg`, payload)
+}

@@ -20,7 +20,7 @@ export const useHome = () => {
       return true
     })
     if (list.length) {
-      let data = await shopInfoManage.getShopInfo(list)
+      let data = await shopInfoManage.getData(list)
       data = data || []
       mineList.value = data.sort((a) => {
         if (ownerList.includes(a.id)) return -1
@@ -35,7 +35,7 @@ export const useHome = () => {
   const getDemoList = async () => {
     const {demoShops = []} = globalData.value?.userInfo
     if (demoShops.length) {
-      const data = await shopInfoManage.getShopInfo(demoShops)
+      const data = await shopInfoManage.getData(demoShops)
       demoList.value = data
     }
   }
@@ -53,7 +53,7 @@ export const useHome = () => {
       return true
     })
     if (logIds.length) {
-      const data = await shopInfoManage.getShopInfo(logIds)
+      const data = await shopInfoManage.getData(logIds)
       logList.value = data
     }
   }

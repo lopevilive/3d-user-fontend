@@ -57,7 +57,7 @@ export const useStaffVerify = () => {
   }
   
   const handleCreate = async () => {
-    const data = await shopInfoManage.getShopInfo(shopId)
+    const data = await shopInfoManage.getData(shopId)
     shopInfo.value = data?.[0] || {}
     try {
       let pass = await handleDialog()

@@ -37,7 +37,7 @@ export const useProductDetial = () => {
   }
 
   const shareHandle = async () => {
-    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0]
     toSharePage({
       src_path: `/product-manage/${shopId}?toDetial=${info.value.id}&title=${encodeURIComponent(info.value.desc)}&imageUrl=${encodeURIComponent(getImageUrl(info.value.url.split(',')[0]))}`,

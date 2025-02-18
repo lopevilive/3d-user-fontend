@@ -81,7 +81,7 @@ export const useStaffManage = () => {
       return
     }
     if (!shopInfo.value) {
-      const ret = await shopInfoManage.getShopInfo(shopId)
+      const ret = await shopInfoManage.getData(shopId)
       shopInfo.value = ret[0]
     }
     const {id: inviteId, nickName} = data

@@ -83,7 +83,7 @@ export const useAlbumMod = () => {
 
   const init = async () => {
     if (!isEdit) return
-    const res = await shopInfoManage.getShopInfo(shopId)
+    const res = await shopInfoManage.getData(shopId)
     if (res?.length) data.value = res[0]
   }
 

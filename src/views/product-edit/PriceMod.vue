@@ -170,7 +170,7 @@ const delHandle = (index) => {
 }
 
 const init = async () => {
-  const res = await shopInfoManage.getShopInfo(shopId)
+  const res = await shopInfoManage.getData(shopId)
   if (res?.length === 1) shopInfo.value = res[0]
 }
 

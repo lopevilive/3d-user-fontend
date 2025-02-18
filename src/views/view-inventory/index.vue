@@ -73,7 +73,7 @@ const dataList = ref([])
 const toShare = async () => {
   let src_path = route.fullPath
   src_path = src_path.replace(/(&)?toShare=1/, '')
-  let shopInfo = await shopInfoManage.getShopInfo(shopId)
+  let shopInfo = await shopInfoManage.getData(shopId)
   shopInfo = shopInfo[0]
   toSharePage({
     src_path,

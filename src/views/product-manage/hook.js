@@ -82,7 +82,7 @@ export const useProductManage = () => {
   }
 
   const fetchShop = async () => {
-    const res = await shopInfoManage.getShopInfo(shopId)
+    const res = await shopInfoManage.getData(shopId)
     if (res?.[0]) shopInfo.value = res[0]
     setTitle()
   }
@@ -100,7 +100,7 @@ export const useProductManage = () => {
         if (leftList.value.length === 0) nums = 7
         const list = this.taskList.splice(0, nums)
         handleRes(list)
-        await sleep(300)
+        await sleep(200)
       }
       this.runing = false
     }

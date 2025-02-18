@@ -70,7 +70,7 @@ export const useSetting = (props, emits) => {
   }
 
   const acShare = async () => {
-    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0]
     toSharePage({
       src_path: `/product-manage/${shopId}?title=${encodeURIComponent(shopInfo.name)}&imageUrl=${encodeURIComponent(getImageUrl(shopInfo.url.split(',')[0]))}`,

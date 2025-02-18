@@ -77,7 +77,7 @@ export const useMulManage = () => {
   }
 
   const getData = async () => {
-    let ret = await commonFetch(getInventory, { id })
+    let ret = await commonFetch(getInventory, { id, type: 1 })
     if (!ret.length) return
     ret = ret[0]
     const data = JSON.parse(ret.data)
@@ -114,7 +114,7 @@ export const useMulManage = () => {
   }
 
   const setTitle = async () => {
-    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0]
     const {name, url} = shopInfo
     router.replace({name: 'mul-manage', params: route.params, query: {

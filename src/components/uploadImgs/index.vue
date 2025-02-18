@@ -8,6 +8,7 @@
       </Container>
       <ImgItem v-else v-for="item in fileList" :data="item" @delete="deleteUploading" />
       <VanUploader
+        ref="vanUploaderRef"
         :after-read="afterRead"
         :multiple="true"
         preview-size="16vw"
@@ -28,9 +29,10 @@ import { Container, Draggable } from "vue3-smooth-dnd";
 const props = defineProps({
   modelValue: {type: String, default: ''},
   maxCount: {type: Number, default: 1},
-  maxSize: {type: Number, default: 10}
+  maxSize: {type: Number, default: 10},
+  noWatermark: {type: Number, default: 0}
 })
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'start'])
 
 const {
   afterRead,
@@ -43,10 +45,12 @@ const {
   viewHandle,
   deleteUploading,
   isLoading,
-  maxC
+  maxC,
+  vanUploaderRef,
+  chooseFile
 } = useUploadImages(props, emits)
 
-defineExpose({isLoading})
+defineExpose({isLoading, chooseFile})
 
 </script>
 

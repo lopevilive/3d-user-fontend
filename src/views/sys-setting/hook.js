@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { encryAlbum, getEncryCode, updateEncryCode } from '@/http'
+import { encryAlbum, getEncryCode, updateEncryCode, modWaterMark as modWaterMarkCgi } from '@/http'
 import { toContactSys, shopInfoManage, commonFetch } from '@/util'
 import { showConfirmDialog } from 'vant';
 
@@ -49,8 +49,27 @@ export const useSysSetting = () => {
     }
   })
 
+  const modWaterMark = async (val) => {
+    if (val) {
+
+    }
+    await commonFetch(modWaterMarkCgi, {shopId, waterMark: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const isWaterMark = computed({
+    get() {
+      if (shopInfo.value?.waterMark === 1) return true
+      return false
+    },
+    set(val) {
+      modWaterMark(val)
+    }
+  })
+
   const initShopInfo = async () => {
-    let info = await shopInfoManage.getShopInfo(shopId)
+    let info = await shopInfoManage.getData(shopId)
     shopInfo.value = info[0]
     if (isEncry.value) {
       let code = await commonFetch(getEncryCode, {shopId})
@@ -70,11 +89,15 @@ export const useSysSetting = () => {
     router.push({name: 'feedback', params: {shopId}})
   }
 
+  const handleWaterMark = () => {
+    router.push({name: 'watermark'})
+  }
+
   const init = async () => {
     const {rid} = globalData.value
-    if (![2,3,99].includes(rid)) {
-      router.replace('home')
-    }
+    // if (![2,3,99].includes(rid)) {
+    //   router.replace('home')
+    // }
     initShopInfo()
     
   }
@@ -90,7 +113,9 @@ export const useSysSetting = () => {
     encryCode,
     shopInfo,
     refreshCode,
-    toFeedback
+    toFeedback,
+    isWaterMark,
+    handleWaterMark
   }
 
 }

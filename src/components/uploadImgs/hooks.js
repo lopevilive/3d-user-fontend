@@ -1,5 +1,5 @@
 import {computed, ref} from 'vue'
-import { uploadFile } from '@/util'
+import { uploadFile, shopInfoManage, watermarkManage, watermark_cfg_def } from '@/util'
 import { useRoute } from 'vue-router'
 import { showFailToast, showImagePreview} from 'vant'
 
@@ -8,12 +8,42 @@ export const useUploadImages = (props, emits) => {
   const {shopId} = route.params
 
   const uploadings = ref([])
+
+  const getWaterCfg = async () => {
+    if (!shopId) return null
+    if (props.noWatermark === 1) return null
+    let shopInfo = await shopInfoManage.getData(shopId)
+    shopInfo = shopInfo[0]
+    if (shopInfo.waterMark === 1) {
+      let ret = await watermarkManage.getData(shopId)
+      if (ret.length) {
+        ret = ret[0]
+        let cfg = ret.cfg
+        cfg = JSON.parse(cfg)
+        const data = {
+          type: ret.type,
+          text: ret.text,
+          ...cfg
+        }
+        return data
+      } else {
+        return {
+          ...watermark_cfg_def,
+          text: shopInfo.name
+        }
+      }
+    } else {
+      return null
+    }
+  }
   
   const handleUpload = async (file) => {
+    emits('start')
+    const watermarkCfg = await getWaterCfg()
     try {
       uploadings.value.push(file)
       file.status = 'uploading'
-      const {Location: url} = await uploadFile(file.file, shopId)
+      const {Location: url} = await uploadFile(file.file, shopId, watermarkCfg)
       if (!url) return
       uploadings.value = uploadings.value.filter((item) => {
         if (item === file) return false
@@ -114,8 +144,11 @@ export const useUploadImages = (props, emits) => {
     return count
   })
 
+  const vanUploaderRef = ref()
+  const chooseFile = () => {
+    vanUploaderRef.value.chooseFile()
+  }
 
-  
   return {
     afterRead,
     deleteHandle,
@@ -127,6 +160,8 @@ export const useUploadImages = (props, emits) => {
     viewHandle,
     deleteUploading,
     isLoading,
-    maxC
+    maxC,
+    vanUploaderRef,
+    chooseFile
   }
 }

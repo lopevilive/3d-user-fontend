@@ -128,7 +128,7 @@ export default {
   .content {
     background: $bgWhite;
     padding: $pdM;
-    padding-bottom: $footerBarH;
+    padding-bottom: 100px;
     .content__head {
       display: flex;
       justify-content: space-between;

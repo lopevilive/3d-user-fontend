@@ -16,7 +16,7 @@ export const useAttrCfgHook = (props, emits) => {
 
   const dbAttrs = ref([])
   const getDbAttrs = async () => {
-    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    let shopInfo = await shopInfoManage.getData(shopId)
     let str = shopInfo?.[0]?.attrs || ''
     if (!str) str = '[]'
     dbAttrs.value = JSON.parse(str)

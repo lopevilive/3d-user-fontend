@@ -96,6 +96,12 @@ const router = createRouter({
           name: 'feedback',
           component: () => import('@/views/feedback/index.vue'),
           meta: {title: '反馈建议'}
+        },
+        {
+          path: 'watermark',
+          name: 'watermark',
+          component: () => import('@/views/watermark/index.vue'),
+          meta: {title: '水印设置'}
         }
       ]
     },
@@ -196,7 +202,7 @@ const init = async (to, from) => {
     globalData.value.isPC = true
   }
   if (shopId) {
-    shopInfoManage.getShopInfo(shopId)
+    shopInfoManage.getData(shopId)
   }
   let pass = await handleLogin(to)
   if (pass === false) return false
@@ -211,7 +217,7 @@ const init = async (to, from) => {
   }
   if (shopId) {
     // 这里判断画册是否被封禁
-    let shopInfo = await shopInfoManage.getShopInfo(shopId)
+    let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0];
     if (shopInfo.status === 1) {
       return {name: 'album-illegal', params: {id: shopId}}

@@ -213,7 +213,7 @@ export const useProductEdit = () => {
   }
 
   const getShopInfo = async () => {
-    const res = await shopInfoManage.getShopInfo(shopId)
+    const res = await shopInfoManage.getData(shopId)
     shopInfo.value = res[0]
   }
 
@@ -228,12 +228,12 @@ export const useProductEdit = () => {
   })
 
   const maxCount = computed(() => {
-    if ([1,2,3].includes(shopInfo.value.level)) return 12
+    if ([1,2,3,4,5].includes(shopInfo.value.level)) return 12
     return 6
   })
 
   const maxSize = computed(() => {
-    if ([1,2,3].includes(shopInfo.value.level)) return 20
+    if ([1,2,3,4,5].includes(shopInfo.value.level)) return 20
     return 10
   })
 

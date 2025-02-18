@@ -2,7 +2,6 @@
   <div class="view-sys-setting">
     <VanCell title="编辑画册" is-link @click="toModAlbum" />
     <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
-    <VanCell title="联系客服" is-link @click="toContactSys"/>
     <!-- 隐私设置 -->
     <div class="group-tit">隐私设置</div>
     <VanCell title="画册加密" class="cell__switch">
@@ -16,9 +15,16 @@
         <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
       </template>
     </VanCell>
+    <VanCell title="图片添加水印" class="cell__switch">
+      <template #value>
+          <VanSwitch v-model="isWaterMark"/>
+      </template>
+    </VanCell>
+    <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
     
     <!-- 其他 -->
     <div class="group-tit">其他</div>
+    <VanCell title="联系客服" is-link @click="toContactSys"/>
     <VanCell title="反馈建议" is-link @click="toFeedback"/>
     <VanCell title="用户协议" is-link @click="toViewProtocol"/>
   </div>
@@ -39,7 +45,9 @@ const {
   encryCode,
   shopInfo,
   refreshCode,
-  toFeedback
+  toFeedback,
+  isWaterMark,
+  handleWaterMark
 } = useSysSetting()
 
 init()
