@@ -62,7 +62,7 @@ export const uploadFile = async (file, shopId, watermarkCfg) => {
   try {
     const {userId} = globalData.value.userInfo
     if (!userId) throw new Error('缺失用户信息')
-    let fileName = await md5File(file)
+    let fileNameRaw = await md5File(file)
     let pre = ''
     if (shopId) pre = String(shopId)
     if (pre) {
@@ -70,12 +70,13 @@ export const uploadFile = async (file, shopId, watermarkCfg) => {
     } else {
       pre = `uid${userId}`
     }
-    fileName = `${pre}_${fileName}`
+    let fileName = `${pre}_${fileNameRaw}`
 
     let rule = 'imageMogr2/format/jpg'
     if (watermarkCfg) {
       let str = getWatermarkRule(watermarkCfg)
       rule += `|${str}`
+      fileName = `${pre}_${Math.floor(Math.random() * 1000)}_${fileNameRaw}`
     }
     await getKey()
     const data = await cos.uploadFile({
