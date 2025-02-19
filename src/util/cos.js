@@ -72,9 +72,9 @@ export const uploadFile = async (file, shopId, watermarkCfg, noJPG) => {
     }
     let fileName = `${pre}_${fileNameRaw}`
 
-    let rule = 'imageMogr2/format/jpg'
+    let rule = 'imageMogr2/format/jpg/auto-orient'
     if (noJPG === 1) {
-      rule = 'imageMogr2'
+      rule = 'imageMogr2/auto-orient'
     }
     if (watermarkCfg) {
       let str = getWatermarkRule(watermarkCfg)
@@ -85,7 +85,6 @@ export const uploadFile = async (file, shopId, watermarkCfg, noJPG) => {
       }
       fileName = `${pre}_${Math.floor(Math.random() * 1000)}_${fileNameRaw}`
     }
-    console.log(rule)
     await getKey()
     const data = await cos.uploadFile({
       Bucket, // 填写自己的 bucket，必须字段
