@@ -43,13 +43,8 @@ export const useProductManage = () => {
     const {rid} = globalData.value
     let ret = [...globalData.value.productTypes]
     let allName = '全部'
-    if (rid === 99) {
+    if ([2,3,99].includes(rid)) {
       allName += `(${total.value}/${limit.value})`
-    }
-    if ([2,3].includes(rid)) {
-      if (limit.value > 50) {
-        allName += `(${total.value}/${limit.value})`
-      }
     }
     ret.splice(0,0, {name: allName, id: 0})
     if ([2,3,99].includes(rid)) {
