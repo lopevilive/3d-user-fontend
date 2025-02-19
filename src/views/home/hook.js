@@ -33,7 +33,10 @@ export const useHome = () => {
   const demoList = ref([])
   // 获取案例画册
   const getDemoList = async () => {
-    const {demoShops = []} = globalData.value?.userInfo
+    const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
+    if (globalData.value.rid !== 99) {
+      if (adminList.length || ownerList.length) return
+    }
     if (demoShops.length) {
       const data = await shopInfoManage.getData(demoShops)
       demoList.value = data
