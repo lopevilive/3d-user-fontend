@@ -4,6 +4,7 @@ import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
 import { EventEmitter } from 'eventemitter3'
 import copy from 'copy-to-clipboard';
+import { toPng } from 'html-to-image';
 
 
 class LoadingManage {
@@ -247,7 +248,56 @@ class RefManage {
 
 export const encryRefManage = new RefManage()
 
-
 export const getFlexW = (w) => {
   return (window.innerWidth * w) / 375
+}
+
+export const textToPngFile = async (text, options = {}) => {
+  // 创建临时DOM节点
+  const node = document.createElement('div');
+  Object.assign(node.style, {
+    display: 'inline-block',
+    fontSize: options.fontSize || '24px',
+    color: options.color || '#000',
+    whiteSpace: 'nowrap' // 防止文字换行
+  });
+  node.textContent = text;
+
+  // 插入文档流（隐藏）
+  // node.style.position = 'absolute';
+  // node.style.left = '-9999px';
+  document.body.appendChild(node);
+
+  try {
+    // 生成PNG dataURL
+    const dataUrl = await toPng(node, {
+      skipFonts: true, // 跳过字体检测
+      cacheBust: true, // 避免缓存
+    });
+
+    // 转换为File对象
+    const file = await fetch(dataUrl)
+      .then(res => res.blob())
+      .then(blob => new File([blob], 'text.png', { type: 'image/png' }));
+
+    return file;
+  } finally {
+    // 清理临时节点
+    document.body.removeChild(node);
+  }
+}
+
+export const formatWatermarkPayload = (watermarkCfg, shopId) => {
+  const {
+    type, text, configkey, previewUrl, fontsize, fill, degree, gravity,
+    dissolve, batch, image, textUrl
+  } = watermarkCfg
+  let cfg = {
+    fontsize, fill, degree, gravity, dissolve, batch,
+    image: image || '',
+    textUrl: textUrl || ''
+  }
+  cfg = JSON.stringify(cfg)
+  const payload = { shopId, type, configkey, text: text || '', previewUrl, cfg }
+  return payload
 }

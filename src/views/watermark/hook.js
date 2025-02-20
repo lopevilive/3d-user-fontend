@@ -1,6 +1,9 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { shopInfoManage, commonFetch, watermark_cfg_def, emojiReg, watermarkManage, globalLoading, watermark } from '@/util'
+import {
+  shopInfoManage, commonFetch, watermarkManage, globalLoading, watermark,
+  uploadFile, textToPngFile, formatWatermarkPayload
+} from '@/util'
 import { saveWatermarkCfg } from '@/http'
 import { showImagePreview, showFailToast } from 'vant'
 
@@ -49,6 +52,7 @@ export const useWaterMark = () => {
     const ret = await posSelectRef.value.show()
     if (ret === 'batch') {
       watermarkCfg.value.batch = 1
+      watermarkCfg.value.degree = 45
     } else {
       watermarkCfg.value.batch = 0
       watermarkCfg.value.gravity = ret
@@ -61,7 +65,7 @@ export const useWaterMark = () => {
     const ret = await dialogSizeRef.value.show({
       val: watermarkCfg.value.fontsize,
       title: '水印大小',
-      min: 10,
+      min: 5,
       max: 100,
       step: 2
     })
@@ -100,10 +104,22 @@ export const useWaterMark = () => {
     toCreateWatermark()
   }
   
+  const textNodeRef = ref()
   const toCreateWatermark = async () => {
+    const { text, fill, type, image } = watermarkCfg.value
+    if (type === 2) {
+      globalLoading.start()
+      const file = await textToPngFile(text, {color: fill})
+      const ret = await uploadFile(file, shopId, null, 1)
+      watermarkCfg.value.textUrl = `//${ret.Location}`
+      globalLoading.stop()
+    }
+
+    if (type === 1) {
+      if (!image) return
+    }
     watermarkCfg.value.fileid = `watermark_${shopId}_${Date.now()}.jpg`
-    const {type, image} = watermarkCfg.value
-    if (type === 1 && !image) return
+    
     try {
       globalLoading.start()
       const res = await watermark(watermarkCfg.value)
@@ -113,47 +129,40 @@ export const useWaterMark = () => {
     } finally {
       globalLoading.stop()
     }
-    
   }
   
   const getCfg = async () => {
-    const ret = await watermarkManage.getData(shopId)
-    if (ret.length) {
-      const {configkey, cfg, type, text, previewUrl} = ret[0]
-      let newObj = {
-        type,
-        text,
-        configkey,
-        previewUrl
-      }
-      if (cfg) {
-        newObj = {...newObj, ...JSON.parse(cfg)}
-      }
-      watermarkCfg.value = newObj
-    } else {
-      watermarkCfg.value = watermark_cfg_def
-      let key = shopInfo.value.url.split(',')[0]
-      key = key.split('.com/')[1]
-      watermarkCfg.value.configkey = key;
-      watermarkCfg.value.text = shopInfo.value.name.replaceAll(emojiReg, '')
-      toCreateWatermark()
+    let ret = await watermarkManage.getData(shopId)
+    if (!ret.length) return
+    ret = ret[0]
+    const {configkey, cfg, type, text, previewUrl} = ret
+    const newObj = {
+      type, text, configkey, previewUrl,
+      ...JSON.parse(cfg)
     }
+    watermarkCfg.value = newObj
+    if (!previewUrl) toCreateWatermark()
+
+    // if (ret.length) {
+    //   const {configkey, cfg, type, text, previewUrl} = ret[0]
+    //   let newObj = { type, text, configkey, previewUrl }
+    //   if (cfg) {
+    //     newObj = {...newObj, ...JSON.parse(cfg)}
+    //   }
+    //   watermarkCfg.value = newObj
+    // } else {
+    //   watermarkCfg.value = watermark_cfg_def
+    //   let key = shopInfo.value.url.split(',')[0]
+    //   key = key.split('.com/')[1]
+    //   watermarkCfg.value.configkey = key;
+    //   watermarkCfg.value.text = shopInfo.value.name.replaceAll(emojiReg, '')
+    //   toCreateWatermark()
+    // }
   }
   
   const saveHandle = async() => {
-    const {
-      type, text, configkey, previewUrl, fontsize, fill, degree, gravity, dissolve, batch, image
-    } = watermarkCfg.value
-    let cfg = {
-      fontsize, fill, degree, gravity, dissolve, batch, image: image || ''
-    }
-    cfg = JSON.stringify(cfg)
-    const payload = {
-      shopId, type, configkey,
-      text: text || '',
-      previewUrl,
-      cfg
-    }
+    const { type, image } = watermarkCfg.value
+    const payload = formatWatermarkPayload(watermarkCfg.value, shopId)
     if (type === 1 && !image) {
       showFailToast('请上传图片水印')
       return
@@ -218,7 +227,7 @@ export const useWaterMark = () => {
     modPos, posSelectRef, modSize, dialogSizeRef, modDegree, modDissolve,
     dialogColorRef, modColor, saveHandle, handlePreview, changeImgHandle,
     replaceImgRef, handleReplaceImg, startReplaceHandle, switchToImg, waterImgRef,
-    handleWaterImg, modImage, switchToText
+    handleWaterImg, modImage, switchToText, textNodeRef
   }
 
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="view-watermark">
     <div class="img-wrap">
+      <!-- :src="getImageUrl(watermarkCfg.previewUrl)" -->
       <VanImage
         class="preview-img"
         :src="getImageUrl(watermarkCfg.previewUrl)"
@@ -36,7 +37,7 @@
               <span class="color" :style="`background-color: ${watermarkCfg.fill}`"></span>
             </div>
           </div>
-          <div class="item" @click="modDegree" v-if="watermarkCfg.type===2">
+          <div class="item" @click="modDegree" v-if="watermarkCfg.batch === 1">
             <div class="name">水印角度</div>
             <div class="desc">{{ watermarkCfg.degree }}°</div>
           </div>
@@ -83,7 +84,7 @@ const {
   posSelectRef, modPos, modSize, dialogSizeRef, modDegree, modDissolve,
   dialogColorRef, modColor, saveHandle, handlePreview, changeImgHandle,
   replaceImgRef, handleReplaceImg, startReplaceHandle, switchToImg, waterImgRef,
-  handleWaterImg, modImage, switchToText
+  handleWaterImg, modImage, switchToText, textNodeRef
 } = useWaterMark()
 
 init()

@@ -1,8 +1,11 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { encryAlbum, getEncryCode, updateEncryCode, modWaterMark as modWaterMarkCgi } from '@/http'
-import { toContactSys, shopInfoManage, commonFetch } from '@/util'
+import { encryAlbum, getEncryCode, updateEncryCode, modWaterMark as modWaterMarkCgi, saveWatermarkCfg } from '@/http'
+import {
+  toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
+  textToPngFile, uploadFile, globalLoading
+} from '@/util'
 import { showConfirmDialog } from 'vant';
 
 export const useSysSetting = () => {
@@ -49,11 +52,31 @@ export const useSysSetting = () => {
     }
   })
 
+  const setWatermarkCfg = async () => {
+    globalLoading.start()
+    try {
+      let ret = await watermarkManage.getData(shopId)
+      if (ret.length) return
+      const watermarkCfg = {...watermark_cfg_def}
+      watermarkCfg.configkey = shopInfo.value.url.split(',')[0].split('.com/')[1]
+      watermarkCfg.text = shopInfo.value.name
+      const file = await textToPngFile(watermarkCfg.text, {color: watermarkCfg.fill})
+      const uploadRet = await uploadFile(file, shopId, null, 1)
+      watermarkCfg.textUrl = `//${uploadRet.Location}`
+      const payload = formatWatermarkPayload(watermarkCfg, shopId)
+      await commonFetch(saveWatermarkCfg, payload)
+      watermarkManage.dirty(shopId)
+    } catch(e) {
+      console.error(e)
+      showFailToast(e.message || '水印开启有误，请联系管理员~')
+    } finally {
+      globalLoading.stop()
+    }
+  }
+  
   const modWaterMark = async (val) => {
     if (val) {
-      let info = await shopInfoManage.getData(shopId)
-      info = info[0]
-      if (![1,2,3,4,5].includes(info.level)) {
+      if (![1,2,3,4,5].includes(shopInfo.value.level)) {
         await showConfirmDialog({
           message: '开通会员后可开启水印功能。\n(注：会员99/年)',
           confirmButtonText: '去联系客服',
@@ -66,6 +89,7 @@ export const useSysSetting = () => {
         message: `后续新上传的图片都会自动添加水印`,
         confirmButtonText: '确认开启'
       })
+      setWatermarkCfg() // 设置默认水印配置
     } else {
       await showConfirmDialog({
         message: `确定关闭水印？`,
@@ -88,9 +112,9 @@ export const useSysSetting = () => {
   })
 
   const initShopInfo = async () => {
-    let info = await shopInfoManage.getData(shopId)
+    const info = await shopInfoManage.getData(shopId)
     shopInfo.value = info[0]
-    if (isEncry.value) {
+    if (isEncry.value && !encryCode.value) {
       let code = await commonFetch(getEncryCode, {shopId})
       encryCode.value = code
     }

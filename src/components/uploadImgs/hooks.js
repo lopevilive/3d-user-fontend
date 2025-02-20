@@ -1,5 +1,5 @@
 import {computed, ref} from 'vue'
-import { uploadFile, shopInfoManage, watermarkManage, watermark_cfg_def } from '@/util'
+import { uploadFile, shopInfoManage, watermarkManage } from '@/util'
 import { useRoute } from 'vue-router'
 import { showFailToast, showImagePreview} from 'vant'
 
@@ -18,19 +18,14 @@ export const useUploadImages = (props, emits) => {
       let ret = await watermarkManage.getData(shopId)
       if (ret.length) {
         ret = ret[0]
-        let cfg = ret.cfg
-        cfg = JSON.parse(cfg)
         const data = {
           type: ret.type,
           text: ret.text,
-          ...cfg
+          ...JSON.parse(ret.cfg)
         }
         return data
       } else {
-        return {
-          ...watermark_cfg_def,
-          text: shopInfo.name
-        }
+        return null
       }
     } else {
       return null

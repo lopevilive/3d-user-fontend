@@ -20,7 +20,7 @@ const beforeClose = (action) => {
     return true
   }
   text.value = text.value.trim()
-  text.value = text.value.replaceAll(emojiReg, '')
+  // text.value = text.value.replaceAll(emojiReg, '')
   if (!text.value) {
     showFailToast('请输入内容~')
     return false
