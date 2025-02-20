@@ -19,7 +19,7 @@
     </template>
   </div>
   <Setting />
-  <EditFloat v-if="isShowCreate"/>
+  <!-- <EditFloat v-if="isShowCreate"/> -->
 </template>
 
 

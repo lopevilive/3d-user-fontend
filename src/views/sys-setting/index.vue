@@ -1,32 +1,45 @@
 <template>
   <div class="view-sys-setting">
-    <VanCell title="编辑画册" is-link @click="toModAlbum" />
-    <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
-    <!-- 隐私设置 -->
-    <div class="group-tit">隐私设置</div>
-    <VanCell title="画册加密" class="cell__switch">
-      <template #value>
-          <VanSwitch v-model="isEncry"/>
-      </template>
-    </VanCell>
-    <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="画册密码" :label="encryCode">
-      <template #value>
-        <VanButton text="刷新密码" size="small" @click="refreshCode" />
-        <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
-      </template>
-    </VanCell>
-    <VanCell title="图片水印" class="cell__switch">
-      <template #value>
-          <VanSwitch v-model="isWaterMark"/>
-      </template>
-    </VanCell>
-    <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
+    <van-cell-group inset title="账号">
+      <VanCell title="编辑画册" is-link @click="toModAlbum" />
+      <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
+    </van-cell-group>
     
+    <!-- 隐私设置 -->
+    <van-cell-group inset title="隐私设置">
+      <VanCell title="画册加密" class="cell__switch">
+        <template #value>
+            <VanSwitch v-model="isEncry"/>
+        </template>
+      </VanCell>
+      <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="画册密码" :label="encryCode">
+        <template #value>
+          <VanButton text="刷新密码" size="small" @click="refreshCode" />
+          <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
+        </template>
+      </VanCell>
+      <VanCell title="图片水印" class="cell__switch">
+        <template #value>
+            <VanSwitch v-model="isWaterMark"/>
+        </template>
+      </VanCell>
+      <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
+    </van-cell-group>
+
     <!-- 其他 -->
-    <div class="group-tit">其他</div>
-    <VanCell title="联系客服" is-link @click="toContactSys"/>
-    <VanCell title="反馈建议" is-link @click="toFeedback"/>
-    <VanCell title="用户协议" is-link @click="toViewProtocol"/>
+    <van-cell-group inset title="其他">
+      <VanCell title="联系客服" is-link @click="toContactSys"/>
+      <!-- <VanCell is-link>
+        <template #title>
+          <div class="vip-item">
+            <div>画册会员</div>
+            <VanIcon name="gem-o" />
+          </div>
+        </template>
+      </VanCell> -->
+      <VanCell title="反馈建议" is-link @click="toFeedback"/>
+      <VanCell title="用户协议" is-link @click="toViewProtocol"/>
+    </van-cell-group>
   </div>
 </template>
 
@@ -58,10 +71,6 @@ init()
 <style lang="scss" scoped>
 .view-sys-setting {
   margin-bottom: $footerBarH;
-  .group-tit {
-    padding: 0 $pdH;
-    line-height: 30px;
-  }
   .btn-copy {
     margin-left: 10px;
   }
@@ -69,7 +78,11 @@ init()
     :deep(.van-cell__value) {
       display: flex;
       flex-direction: row-reverse;
-    }   
+    }
+  }
+  .vip-item {
+    display: flex;
+    align-items: center;
   }
 }
 
