@@ -3,6 +3,14 @@
     <van-cell-group inset title="账号">
       <VanCell title="编辑画册" is-link @click="toModAlbum" />
       <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
+      <VanCell is-link @click="showVip">
+        <template #title>
+          <div class="vip-item">
+            <div>会员权益</div>
+            <VanIcon name="gem-o" />
+          </div>
+        </template>
+      </VanCell>
     </van-cell-group>
     
     <!-- 隐私设置 -->
@@ -29,38 +37,22 @@
     <!-- 其他 -->
     <van-cell-group inset title="其他">
       <VanCell title="联系客服" is-link @click="toContactSys"/>
-      <!-- <VanCell is-link>
-        <template #title>
-          <div class="vip-item">
-            <div>画册会员</div>
-            <VanIcon name="gem-o" />
-          </div>
-        </template>
-      </VanCell> -->
       <VanCell title="反馈建议" is-link @click="toFeedback"/>
       <VanCell title="用户协议" is-link @click="toViewProtocol"/>
     </van-cell-group>
   </div>
+  <DialogVip ref="dialogVipRef" />
 </template>
 
 <script setup>
 import { useSysSetting } from './hook'
 import { copyStr } from '@/util'
+import DialogVip from './DialogVip.vue'
 
 const {
-  toModAlbum,
-  toModStaff,
-  toViewProtocol,
-  init,
-  globalData,
-  toContactSys,
-  isEncry,
-  encryCode,
-  shopInfo,
-  refreshCode,
-  toFeedback,
-  isWaterMark,
-  handleWaterMark
+  toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
+  isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
+  showVip, dialogVipRef
 } = useSysSetting()
 
 init()
@@ -83,6 +75,9 @@ init()
   .vip-item {
     display: flex;
     align-items: center;
+    .van-icon {
+      color: #FFD700;
+    }
   }
 }
 

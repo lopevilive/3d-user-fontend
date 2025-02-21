@@ -79,7 +79,7 @@ export const useSysSetting = () => {
       if (![1,2,3,4,5].includes(shopInfo.value.level)) {
         await showConfirmDialog({
           message: '开通会员后可开启水印功能。\n(注：会员99/年)',
-          confirmButtonText: '去联系客服',
+          confirmButtonText: '联系客服开通',
           cancelButtonText: '好的'
         })
         toContactSys()
@@ -136,6 +136,11 @@ export const useSysSetting = () => {
     router.push({name: 'watermark'})
   }
 
+  const dialogVipRef = ref()
+  const showVip = () => {
+    dialogVipRef.value.show()
+  }
+  
   const init = async () => {
     const {rid} = globalData.value
     // if (![2,3,99].includes(rid)) {
@@ -146,19 +151,9 @@ export const useSysSetting = () => {
   }
 
   return {
-    toModAlbum,
-    toModStaff,
-    toViewProtocol,
-    init,
-    globalData,
-    toContactSys,
-    isEncry,
-    encryCode,
-    shopInfo,
-    refreshCode,
-    toFeedback,
-    isWaterMark,
-    handleWaterMark
+    toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
+    isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
+    showVip, dialogVipRef
   }
 
 }
