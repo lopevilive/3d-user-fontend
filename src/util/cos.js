@@ -37,7 +37,7 @@ const getWatermarkRule = (data) => {
 
   // 经过安全base64编码 使用 COS.util.encodeBase64 方法需要sdk版本至少为1.4.19
   const imgUrlBase64 = COS.util.encodeBase64(imgUrl, true);
-  ret = `watermark/1/image/${imgUrlBase64}/gravity/${gravity}/dissolve/${dissolve}/scatype/1/spcent/${fontsize *  10}/dx/10/dy/0`;
+  ret = `watermark/1/image/${imgUrlBase64}/gravity/${gravity}/dissolve/${dissolve}/scatype/1/spcent/${fontsize *  10}/dx/20/dy/20/blogo/1`;
   if (batch) {
     ret += `/batch/1/degree/${degree || 0}`
   }

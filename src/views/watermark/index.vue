@@ -20,7 +20,7 @@
             <div class="name">图片水印</div>
             <div class="desc img-watermark">
               <div v-if="!watermarkCfg.image">点击上传</div>
-              <VanImage v-else :src="getImageUrl(watermarkCfg.image)"/>
+              <VanImage v-else :src="getImageUrl(watermarkCfg.image)" fit="contain"/>
             </div>
           </div>
           <div class="item" @click="modPos">

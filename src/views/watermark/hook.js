@@ -67,7 +67,7 @@ export const useWaterMark = () => {
       title: '水印大小',
       min: 5,
       max: 100,
-      step: 2
+      step: 1
     })
     watermarkCfg.value.fontsize = ret
     toCreateWatermark()
