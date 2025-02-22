@@ -96,7 +96,7 @@ export const useProductManage = () => {
     async exe () {
       this.runing = true
       while(this.taskList.length) {
-        let nums = 1
+        let nums = 2
         if (leftList.value.length === 0) nums = 7
         const list = this.taskList.splice(0, nums)
         handleRes(list)
