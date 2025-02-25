@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct,shopMod } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, toContactSys, shopInfoManage } from '@/util'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, toContactSys, shopInfoManage, getSpecPrices } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -82,7 +82,8 @@ export const useProductEdit = () => {
     })
     payload.attr = JSON.stringify(attr)
     if (payload.isSpec === 1) {
-      payload.price = ''
+      const {min} = getSpecPrices(JSON.parse(payload.specs))
+      payload.price = `${min}`
     } else {
       payload.specs = ''
     }

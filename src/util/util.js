@@ -301,3 +301,21 @@ export const formatWatermarkPayload = (watermarkCfg, shopId) => {
   const payload = { shopId, type, configkey, text: text || '', previewUrl, cfg }
   return payload
 }
+
+export const getSpecPrices = (list) => {
+  let min = 0
+  let max = 0
+  let idx = 0
+  for (const item of list) {
+    let specPrice = +item.price
+    idx += 1
+    if (idx === 1) {
+      min = specPrice
+      max = specPrice
+      continue
+    }
+    if (specPrice < min) min = specPrice
+    if (specPrice > max) max = specPrice
+  }
+  return {min, max}
+}

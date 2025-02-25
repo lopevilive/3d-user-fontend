@@ -40,9 +40,14 @@
         </div>
       </div>
       <div class="tabs">
-        <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
-          <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
-        </VanTabs>
+        <div class="tabs__left">
+          <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
+            <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
+          </VanTabs>
+        </div>
+        <div class="tabs__right">
+          <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
+        </div>
       </div>
     </div>
     <div class="product-content">
@@ -77,38 +82,15 @@ import MulProductType from './MulProductType.vue'
 import ShareFloat from './ShareFloat.vue'
 import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
+import SortControl from '@/components/sort-control/index.vue'
 
 const {
-  init,
-  activeTab,
-  productTypes,
-  tabChangeHandle,
-  leftList,
-  rightList,
-  leftListRef,
-  rightListRef,
-  scrollHandle,
-  finished,
-  fetchLoading,
-  selectedList,
-  selectedHandle,
-  removeAllSelected,
-  handleEditDone,
-  addProdHandle,
-  handleMulOnOff,
-  handleMulDel,
-  handleMulPrice,
-  handleMulChangeType,
-  mulPriceRef,
-  mulProductTypeRef,
-  listRef,
-  handleUpdate,
-  tabKey,
-  activeHandle,
-  searchStr,
-  searchBlurHadle,
-  scrollT,
-  isShowFlexContent
+  init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
+  rightListRef, scrollHandle, finished, fetchLoading, selectedList, selectedHandle,
+  removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
+  handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef,
+  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, isShowFlexContent,
+  priceSort, priceSortChangeHandle
 } = useProductManage()
 
 onActivated(() => {
@@ -194,7 +176,15 @@ export default {
   .tabs{
     padding: 0 $pdM $pdL $pdM;
     background: $bgWhite;
-    // margin-top: $mrL;
+    display: flex;
+    align-items: center;
+    .tabs__left {
+      flex: 1;
+    }
+    .tabs__right {
+      flex-shrink: 0;
+      padding-left: 10px;
+    }
     :deep(.van-tabs__wrap) {
       height: 36px;
       .van-tabs__nav {

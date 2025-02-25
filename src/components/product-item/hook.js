@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, moveTopProduct, productMod } from '@/http'
-import { commonFetch, EE, getImageUrl } from '@/util'
+import { commonFetch, EE, getImageUrl, getSpecPrices } from '@/util'
 import { globalData } from '@/store'
 import { showConfirmDialog } from 'vant';
 
@@ -156,21 +156,7 @@ export const useProductItem = (props, emits) => {
     const { price, isSpec, specs } = props.data
     if (isSpec === 0) return price
     let list = JSON.parse(specs)
-    // return list?.[0]?.price || ''
-    let min = 0
-    let max = 0
-    let idx = 0
-    for (const item of list) {
-      let specPrice = +item.price
-      idx += 1
-      if (idx === 1) {
-        min = specPrice
-        max = specPrice
-        continue
-      }
-      if (specPrice < min) min = specPrice
-      if (specPrice > max) max = specPrice
-    }
+    const {min, max} = getSpecPrices(list)
     if (max === min) return `${max}`
     return `${min} ~ ${max}`
   })

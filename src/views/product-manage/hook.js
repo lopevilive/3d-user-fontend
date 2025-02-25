@@ -33,6 +33,7 @@ export const useProductManage = () => {
   const shopInfo = ref({})
   const activeTab = ref(0)
   const selectedList = ref([]) // 多选的项
+  const priceSort = ref(0)
 
   const leftList = ref([])
   const rightList = ref([])
@@ -157,7 +158,8 @@ export const useProductManage = () => {
       currPage: currPage.value,
       productType: activeTab.value,
       status: 0,
-      searchStr: searchStr.value || ''
+      searchStr: searchStr.value || '',
+      priceSort: priceSort.value
     }
     if (activeTab.value === -2) { // 已下架
       ret.productType = 0
@@ -457,6 +459,10 @@ export const useProductManage = () => {
     }
   }
 
+  const priceSortChangeHandle = async () => {
+    refresh()
+  }
+
   const init = async () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
@@ -471,37 +477,11 @@ export const useProductManage = () => {
   }
 
   return {
-    init,
-    productTypes,
-    activeTab,
-    loadHandle,
-    finished,
-    fetchLoading,
-    refresh,
-    tabChangeHandle,
-    leftList,
-    rightList,
-    leftListRef,
-    rightListRef,
-    scrollHandle,
-    selectedList,
-    selectedHandle,
-    removeAllSelected,
-    handleEditDone,
-    addProdHandle,
-    handleMulOnOff,
-    handleMulDel,
-    handleMulPrice,
-    handleMulChangeType,
-    mulPriceRef,
-    mulProductTypeRef,
-    listRef,
-    handleUpdate,
-    tabKey,
-    activeHandle,
-    searchStr,
-    searchBlurHadle,
-    scrollT,
-    isShowFlexContent
+    init, productTypes, activeTab, loadHandle, finished, fetchLoading, refresh,
+    tabChangeHandle, leftList, rightList, leftListRef, rightListRef, scrollHandle,
+    selectedList, selectedHandle, removeAllSelected, handleEditDone, addProdHandle,
+    handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,
+    mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
+    scrollT, isShowFlexContent, priceSort, priceSortChangeHandle
   }
 }
