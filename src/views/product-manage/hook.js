@@ -366,6 +366,10 @@ export const useProductManage = () => {
   }
 
   const updateProd = async (list) => {
+    if ([1,2].includes(priceSort.value)) {
+      refresh()
+      return
+    }
     const idList = [...list]
     const res = await commonFetch(getProduct, {shopId, productId: idList})
     if (!res?.list?.length) return

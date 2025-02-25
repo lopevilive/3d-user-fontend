@@ -180,6 +180,7 @@ export default {
     align-items: center;
     .tabs__left {
       flex: 1;
+      overflow: auto;
     }
     .tabs__right {
       flex-shrink: 0;
