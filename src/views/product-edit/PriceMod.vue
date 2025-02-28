@@ -16,7 +16,7 @@
         <div class="content__spec" v-if="checked">
           <div class="spec-item" v-for="(item, index) in specsDisplay">
             <VanField
-              :maxlength="10"
+              :maxlength="12"
               v-model="item.name"
               @update:model-value="inputHandle"
               class="pd0 name"
@@ -140,7 +140,7 @@ const valiPrice = () => {
 }
 
 const disabledAdd = computed(() => {
-  if (specsDisplay.value.length >= 10) return true
+  if (specsDisplay.value.length >= 16) return true
   return false
 })
 

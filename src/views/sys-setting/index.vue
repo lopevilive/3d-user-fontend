@@ -47,7 +47,7 @@
 <script setup>
 import { useSysSetting } from './hook'
 import { copyStr } from '@/util'
-import DialogVip from './DialogVip.vue'
+import DialogVip from '@/components/dialog-vip/index.vue'
 
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,

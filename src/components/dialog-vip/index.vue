@@ -1,15 +1,15 @@
 <template>
   <VanDialog
     v-model:show="isShow" show-cancel-button
-    :beforeClose="beforeClose" title="会员权益"
+    :beforeClose="beforeClose" :title="title"
     confirmButtonText="联系客服开通"
     cancelButtonText="关闭"
   >
-    <div class="com-sys-setting__dialog-vip">
+    <div class="com-dialog-vip">
       <div class="table-content">
         <div class="list">
           <div class="tit">会员类型</div>
-          <div class="list-item">基础</div>
+          <div class="list-item">普通用户</div>
           <div class="list-item">300容量会员</div>
           <div class="list-item">600容量会员</div>
           <div class="list-item">1000容量会员</div>
@@ -55,6 +55,10 @@
 import { ref } from 'vue'
 import { toContactSys } from '@/util'
 
+const props = defineProps({
+  title: {type: String, default: '会员权益'}
+})
+
 const isShow = ref(false)
 
 const show = () => {
@@ -76,7 +80,7 @@ defineExpose({show})
 </script>
 
 <style lang="scss" scoped>
-.com-sys-setting__dialog-vip {
+.com-dialog-vip {
   .table-content {
     display: flex;
     overflow: auto;

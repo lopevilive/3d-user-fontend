@@ -60,16 +60,20 @@ export const useProductEdit = () => {
   }
 
 
+  const dialogVipRef = ref()
   const handleOverCount = async (obj) => {
     const {limit, curr} = obj
-    try {
-      await showConfirmDialog({
-        message: `当前最多上传 ${limit} 个产品。\n开通会员请联系客服(99/年-300个)。\n(注：开通会员后单个产品可上传12张图片)`,
-        confirmButtonText: '去联系客服',
-        cancelButtonText: '好的'
-      })
-      toContactSys()
-    } catch(e){}
+    if (limit) {
+      dialogVipRef.value.show()
+    }
+    // try {
+      // await showConfirmDialog({
+      //   message: `当前最多上传 ${limit} 个产品。\n开通会员请联系客服\n(99/年-可上传300个)。\n(注：开通会员后单个产品可上传12张图片)`,
+      //   confirmButtonText: '去联系客服',
+      //   cancelButtonText: '好的'
+      // })
+      // toContactSys()
+    // } catch(e){}
   }
 
   const getPayload = () => {
@@ -263,6 +267,7 @@ export const useProductEdit = () => {
     busiCfg,
     maxCount,
     imgCount,
-    maxSize
+    maxSize,
+    dialogVipRef
   }
 }

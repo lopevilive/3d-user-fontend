@@ -23,17 +23,6 @@
           v-model:isSpec="data.isSpec"
           v-model:specs="data.specs"
         />
-        <!-- <VanField
-          v-model="data.price"
-          label="产品价格"
-          placeholder="请输入价格"
-          :rules="[{validator: valiPrice}]"
-          :maxlength="8"
-        >
-          <template>
-            
-          </template>
-        </VanField> -->
         <StatusSelect v-model="data.status"/>
         
       </VanCellGroup>
@@ -104,6 +93,7 @@
     <ProductTypeDialog ref="productTypeDialogRef"/>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
     <ModelDisplay ref="modelDisplayRef" :productInfo="data" />
+    <DialogVip ref="dialogVipRef" title="产品数量已达上限" />
     <div class="bottom">
       <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
     </div>
@@ -123,6 +113,7 @@ import ModelDisplay from '@/components/model-display/index.vue'
 import Desc from './Desc.vue'
 import AttrCfg from './AttrCfg.vue'
 import PriceMod from './PriceMod.vue'
+import DialogVip from '@/components/dialog-vip/index.vue'
 
 const {
   formRef,
@@ -144,7 +135,8 @@ const {
   busiCfg,
   maxCount,
   imgCount,
-  maxSize
+  maxSize,
+  dialogVipRef
 } = useProductEdit()
 
 init()
