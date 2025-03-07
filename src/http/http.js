@@ -6,7 +6,7 @@ import { toLogin } from '@/util'
 const http = axios.create({
   timeout: 1000 * 10,
   withCredentials: true,
-  baseURL: '//xiaoguo.afxa.cn'
+  baseURL: '//xiaoguo.mkeg.cn'
 });
 
 // 请求拦截器
