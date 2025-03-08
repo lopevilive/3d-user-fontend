@@ -21,6 +21,7 @@
       cancel-text="取消"
     />
     <UpdateAlbum ref="updateAlbumRef"/>
+    <ModShopStatus ref="modShopStatusRef"/>
   </div>
 </template>
 
@@ -28,6 +29,7 @@
 import { useSetting } from './hook'
 import ActionsSheet from '@/components/actions-sheet/index.vue'
 import UpdateAlbum from './UpdateAlbum.vue'
+import ModShopStatus from './ModShopStatus.vue'
 
 const props = defineProps({
   runtimeData: {type: Object}
@@ -43,7 +45,8 @@ const {
   bubbleClickHandle,
   actionHandle,
   gap,
-  updateAlbumRef
+  updateAlbumRef,
+  modShopStatusRef
 } = useSetting(props, emits)
 
 </script>

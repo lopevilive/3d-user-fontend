@@ -37,7 +37,7 @@
         </div>
         <div class="list list-min">
           <div class="tit">价格</div>
-          <div class="list-item">¥0</div>
+          <div class="list-item">免费</div>
           <div class="list-item">¥99/年</div>
           <div class="list-item">¥199/年</div>
           <div class="list-item">¥299/年</div>

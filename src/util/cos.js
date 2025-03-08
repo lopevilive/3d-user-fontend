@@ -43,27 +43,6 @@ const getWatermarkRule = (data) => {
   }
 
   return ret
-
-
-
-  // if (type === 2) { // 文字水印
-  //   const textBase64 = COS.util.encodeBase64(text, true)
-  //   const colorBase64 = COS.util.encodeBase64(fill, true)
-  //   ret = `|watermark/${type}/text/${textBase64}/fill/${colorBase64}/fontsize/${fontsize}/dissolve/${dissolve}/gravity/${gravity}/dx/30/dy/30/degree/${degree}/spacing/30`
-  //   if (batch) {
-  //     ret += '/batch/1'
-  //   }
-  // }
-  // if (type === 1) { // 图片水印
-  //   const imgUrl = `http:${image}`
-  //   // 经过安全base64编码 使用 COS.util.encodeBase64 方法需要sdk版本至少为1.4.19
-  //   const imgUrlBase64 = COS.util.encodeBase64(imgUrl, true);
-  //   ret = `watermark/1/image/${imgUrlBase64}/gravity/${gravity}/dissolve/${dissolve}/scatype/1/spcent/${fontsize *  10}`;
-  //   if (batch) {
-  //     ret += '/batch/1'
-  //   }
-  // }
-  // return ret
 }
 
 

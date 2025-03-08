@@ -1,12 +1,15 @@
 <template>
   <div>
     <div v-if="isShowIllegal" class="com-card">
-      <div class="com-card"> 很抱歉，目前我们暂时无法支持您的业务需求。希望您能理解。</div>
+      <div class="com-card"> 很抱歉，目前我们暂时无法支持您的业务需求。希望您能理解
+        <VanButton size="mini" text="联系客服" @click="toContactSys"/>
+      </div>
     </div>
     <div v-if="isShow" class="com-card" @click="handleClick">
       <div class="content">
         <VanImage fit="cover" :src="getImageUrl(logo)" />
         <div class="txt-content">
+          <div v-if="isShowStatus" class="admin-info">status: {{ data.status }} / auditing: {{ data.auditing }}</div>
           <div class="tit">
             <span class="text">{{ data.name }}</span>
             <VanTag v-if="isOwner" type="primary">我的画册</VanTag>
@@ -22,7 +25,7 @@
 <script setup>
 import {computed} from 'vue'
 import { useRouter } from 'vue-router'
-import { getImageUrl } from '@/util'
+import { getImageUrl, toContactSys } from '@/util'
 import { globalData } from '@/store'
 
 const props = defineProps({
@@ -58,10 +61,10 @@ const isAdmin = computed(() => {
 })
 
 const isShow = computed(() => {
+  if (globalData.value.rid === 99) return true
   if (props.data.status === 1) return false
   if (props.data.encry === 1) { // 加密画册
     if (isAdmin.value || isOwner.value) return true
-    if (globalData.value.rid === 99) return true
     return false
   }
   return true
@@ -69,8 +72,13 @@ const isShow = computed(() => {
 
 const isShowIllegal = computed(() => {
   if (props.data.status !== 1) return false
-  if (globalData.value.rid === 99) return true
+  if (globalData.value.rid === 99) return false
   if (isOwner.value) return true
+  return false
+})
+
+const isShowStatus= computed(() => {
+  if (globalData.value.rid === 99) return true
   return false
 })
 
@@ -113,6 +121,10 @@ const isShowIllegal = computed(() => {
       -webkit-box-orient: vertical;
       line-clamp: 3;
     }
+  }
+  .admin-info {
+    font-size: 12px;
+    color: $grey7;
   }
 }
 </style>

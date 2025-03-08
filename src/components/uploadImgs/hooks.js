@@ -1,5 +1,5 @@
 import {computed, ref} from 'vue'
-import { uploadFile, shopInfoManage, watermarkManage } from '@/util'
+import { uploadFile, shopInfoManage, watermarkManage, auditingImg } from '@/util'
 import { useRoute } from 'vue-router'
 import { showFailToast, showImagePreview} from 'vant'
 
@@ -38,7 +38,9 @@ export const useUploadImages = (props, emits) => {
     try {
       uploadings.value.push(file)
       file.status = 'uploading'
-      const {Location: url} = await uploadFile(file.file, shopId, watermarkCfg, props.noJPG)
+      const uploadRet = await uploadFile(file.file, shopId, watermarkCfg, props.noJPG)
+      const {Location: url, UploadResult: {OriginalInfo: {Key: fileName}}} = uploadRet
+      auditingImg(fileName, shopId) // 这里不需要等结果
       if (!url) return
       uploadings.value = uploadings.value.filter((item) => {
         if (item === file) return false

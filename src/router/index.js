@@ -220,7 +220,10 @@ const init = async (to, from) => {
     let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0];
     if (shopInfo.status === 1) {
-      return {name: 'album-illegal', params: {id: shopId}}
+      const { rid } = globalData.value
+      if (rid !== 99) {
+        return {name: 'album-illegal', params: {id: shopId}}
+      }
     } else {
       viewLog.setlog(shopId)
     }

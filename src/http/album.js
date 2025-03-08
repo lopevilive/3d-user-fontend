@@ -102,8 +102,8 @@ export const createInventory = (payload) => {
   return post(`${album}CreateInventory`, payload)
 }
 
-export const banAlbum = (payload) => {
-  return post(`${album}BanAlbum`, payload)
+export const modShopStatus = (payload) => {
+  return post(`${album}ModShopStatus`, payload)
 }
 
 export const encryAlbum = (payload) => {
@@ -136,4 +136,8 @@ export const getWatermarkCfg = (payload) => {
 
 export const saveWatermarkCfg = (payload) => {
   return post(`${album}SaveWatermarkCfg`, payload)
+}
+
+export const auditingImgCgi = (payload) => {
+  return post(`${album}AuditingImg`, payload)
 }
