@@ -11,11 +11,18 @@ export const useAblumList = () => {
   const scrollT = ref(0)
   const listRef = ref()
 
+  const searchCond = ref({
+    str: '',
+    shopId: '',
+    status: '0',
+    auditing: '0'
+  })
+
   const loadHandle = async () => {
     fetchLoadingRaw.value = true
     const data = await commonFetch(getAllShop, {
-      currPage: currPage.value,
-      pageSize: 12
+      currPage: currPage.value, pageSize: 12,
+      ...searchCond.value
     })
     fetchLoadingRaw.value = false
     if (data.finished) finished.value = data.finished
@@ -23,6 +30,12 @@ export const useAblumList = () => {
     for (const item of data.list) {
       albumList.value.push(item)
     }
+  }
+
+  const initLoad = () => {
+    currPage.value = 0
+    albumList.value = []
+    loadHandle()
   }
 
   const finished = ref(false)
@@ -51,6 +64,8 @@ export const useAblumList = () => {
     loadHandle,
     albumList,
     activeHandle,
-    listRef
+    listRef,
+    searchCond,
+    initLoad
   }
 }
