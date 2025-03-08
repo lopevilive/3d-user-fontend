@@ -35,6 +35,7 @@ export const useAblumList = () => {
   const initLoad = () => {
     currPage.value = 0
     albumList.value = []
+    finished.value = false
     loadHandle()
   }
 
