@@ -58,7 +58,7 @@ const getPayload = () => {
     status = 1
     auditing = 2
   }
-  if (selectVal.value = 4) {
+  if (selectVal.value === 4) {
     status = 0
     auditing = 0
   }
