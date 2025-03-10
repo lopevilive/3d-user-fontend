@@ -14,8 +14,8 @@ export const useAblumList = () => {
   const searchCond = ref({
     str: '',
     shopId: '',
-    status: '0',
-    auditing: '0'
+    status: '',
+    auditing: ''
   })
 
   const loadHandle = async () => {
