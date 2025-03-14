@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { Container, Draggable } from "vue3-smooth-dnd";
 import { modProdTypesSort } from '@/http'
@@ -81,6 +81,18 @@ const saveHandle = async () => {
     globalData.value._productTypes[shopId].done = false
   }
 }
+
+watch(() => isShow.value, (val) => {
+  if (val) {
+    document.body.className = 'van-overflow-hidden'
+  } else {
+    document.body.className = ''
+  }
+})
+
+onBeforeUnmount(() => {
+  document.body.className = ''
+})
 
 defineExpose({show})
 
