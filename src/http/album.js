@@ -26,12 +26,12 @@ export const moveTopProduct = (payload) => {
   return post(`${album}MoveTopProduct`, payload)
 }
 
-export const moveTopProductType = (payload) => {
-  return post(`${album}MoveTopProductType`, payload)
-}
-
 export const productDel = (payload) => {
   return post(`${album}ProductDel`, payload)
+}
+
+export const modProdTypesSort = (payload) => {
+  return post(`${album}ModProdTypesSort`, payload)
 }
 
 export const getProduct = (...args) => {

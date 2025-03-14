@@ -90,7 +90,6 @@
         <AttrCfg v-model="data.attr" :attr-cfg="busiCfg.attrCfg"/>
       </VanCellGroup>
     </VanForm>
-    <ProductTypeDialog ref="productTypeDialogRef"/>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
     <ModelDisplay ref="modelDisplayRef" :productInfo="data" />
     <DialogVip ref="dialogVipRef" title="产品数量已达上限" />
@@ -104,7 +103,6 @@
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import Select from '@/components/select/index.vue'
 import {useProductEdit} from './hooks'
-import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
 import FormLabel from '@/components/form-label/index.vue'
 import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/components/prod-type-select/index.vue'
@@ -124,7 +122,6 @@ const {
   model3dOpts,
   showModel3d,
   validUrl,
-  productTypeDialogRef,
   scanClickHandle,
   qrcodeScannerRef,
   scanHandle,

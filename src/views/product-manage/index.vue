@@ -1,6 +1,6 @@
 <template>
   <div class="com-product-manage">
-    <div>
+    <div class="header-wrap">
       <div class="mode__edit"  v-if="globalData.editStatus === 1">
         <div class="edit-left">
           <VanButton text="新增产品" size="small" type="primary" :round="true" icon="plus" @click="addProdHandle"/>
@@ -49,6 +49,11 @@
           <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
         </div>
       </div>
+      <div class="sub-tabs" v-if="subTypesList.length">
+        <VanTabs v-model:active="subActiveTab" :shrink="true" :before-change="beforeSubChange" >
+          <VanTab v-for="item in subTypesList" :key="item.id" :title="item.name" :name="item.id"></VanTab>
+        </VanTabs>
+      </div>
     </div>
     <div class="product-content">
       <div class="wrap">
@@ -90,7 +95,7 @@ const {
   removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef,
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, isShowFlexContent,
-  priceSort, priceSortChangeHandle
+  priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange
 } = useProductManage()
 
 onActivated(() => {
@@ -113,6 +118,9 @@ export default {
   background: $bgGrey;
   display: flex;
   flex-direction: column;
+  .header-wrap {
+
+  }
   .mode__edit {
     background: $bgWhite;
     display: flex;
@@ -197,6 +205,25 @@ export default {
           height: 4px;
           bottom: 0;
         }
+      }
+    }
+  }
+  .sub-tabs {
+    padding: 0 $pdM $pdL $pdM;
+    background: $bgWhite;
+    :deep(.van-tabs__wrap) {
+      height: 20px;
+      .van-tabs__nav {
+        padding-bottom: 0;
+        .van-tabs__line {
+          display: none;
+        }
+      }
+      .van-tab--active {
+        background: $themeColor;
+        color: #fff;
+        border-radius: 5px;
+        font-weight: normal;
       }
     }
   }

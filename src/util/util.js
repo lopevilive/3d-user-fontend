@@ -5,6 +5,7 @@ import hex from 'crypto-js/enc-hex'
 import { EventEmitter } from 'eventemitter3'
 import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
+import { globalData } from '@/store'
 
 
 class LoadingManage {
@@ -318,4 +319,28 @@ export const getSpecPrices = (list) => {
     if (specPrice > max) max = specPrice
   }
   return {min, max}
+}
+
+export const formatType = (val) => {
+  const ret = { type1: null, type2: null }
+  if (!val) return ret
+  let str = String(val)
+  let [val1, val2] = str.split('-')
+  if (val1) ret.type1 = Number(val1)
+  if (val2) ret.type2 = Number(val2)
+  return ret
+}
+
+export const getTypeName = (typeStr) => {
+  let ret = ''
+  const {type1, type2} = formatType(typeStr)
+  for (const item of globalData.value.productTypes) {
+    if (item.id === type1) ret = item.name
+  }
+  if (type2) {
+    for (const item of globalData.value.productTypes) {
+      if (item.id === type2) ret = `${ret}/${item.name}`
+    }
+  }
+  return ret
 }

@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, moveTopProduct, productMod } from '@/http'
-import { commonFetch, EE, getImageUrl, getSpecPrices } from '@/util'
+import { commonFetch, EE, getImageUrl, getSpecPrices, getTypeName } from '@/util'
 import { globalData } from '@/store'
 import { showConfirmDialog } from 'vant';
 
@@ -136,11 +136,13 @@ export const useProductItem = (props, emits) => {
     let str = ''
     const { productType } = props.data
     if (productType) {
-      for (const item of globalData.value.productTypes) {
-        if (item.id === +productType) {
-          str = item.name
-        }
-      }
+      const ret = getTypeName(productType)
+      if (ret) str = ret
+      // for (const item of globalData.value.productTypes) {
+      //   if (item.id === +productType) {
+      //     str = item.name
+      //   }
+      // }
     }
 
     for(const item of attr) {

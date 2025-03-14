@@ -1,7 +1,7 @@
 import {ref, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import { getProduct } from '@/http'
-import { commonFetch,toSharePage, shopInfoManage, getImageUrl } from '@/util'
+import { commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName } from '@/util'
 import { globalData } from '@/store'
 
 
@@ -23,11 +23,8 @@ export const useProductDetial = () => {
     let attr = info.value?.attr || '[]'
     attr = JSON.parse(attr)
     if (info.value.productType) {
-      for (const item of globalData.value.productTypes) {
-        if (item.id === +info.value.productType) {
-          attr.splice(0,0 , {name: '分类', val: item.name})
-        }
-      }
+      const ret = getTypeName(info.value.productType)
+      if (ret) attr.splice(0,0 , {name: '分类', val: ret})
     }
     return attr
   })

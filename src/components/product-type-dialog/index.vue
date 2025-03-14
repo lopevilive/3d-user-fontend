@@ -12,7 +12,7 @@
       />
       <div class="type-mod-dialog__tips">注：单次可新增 {{ MaxNums }} 个分类</div>
     </template>
-    <VanField v-else placeholder="请输入分类名称" v-model="data.name" :maxlength="6" input-align="center"/>
+    <VanField v-else placeholder="请输入分类名称" v-model="data.name" :maxlength="8" input-align="center"/>
   </VanDialog>
 </template>
 

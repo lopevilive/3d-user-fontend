@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct,shopMod } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, toContactSys, shopInfoManage, getSpecPrices } from '@/util'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices, formatType } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -66,14 +66,6 @@ export const useProductEdit = () => {
     if (limit) {
       dialogVipRef.value.show()
     }
-    // try {
-      // await showConfirmDialog({
-      //   message: `当前最多上传 ${limit} 个产品。\n开通会员请联系客服\n(99/年-可上传300个)。\n(注：开通会员后单个产品可上传12张图片)`,
-      //   confirmButtonText: '去联系客服',
-      //   cancelButtonText: '好的'
-      // })
-      // toContactSys()
-    // } catch(e){}
   }
 
   const getPayload = () => {
@@ -124,12 +116,26 @@ export const useProductEdit = () => {
     }
   }
 
+  const validataProdType = async () => {
+    if (!data.value.productType) return true
+    const {type1, type2} = formatType(data.value.productType)
+    if (!type1) return true
+    for (const item of globalData.value.productTypes) {
+      if (item.parentId === type1 && !type2) {
+        showToast('请选择二级分类')
+        throw new Error('分类校验失败')
+      }
+    }
+    return true
+  }
+
   const uploadImgsRef = ref()
   const saveHandle = async () => {
     if (uploadImgsRef.value.isLoading) {
       showToast('请等待图片上传完成再保存～')
       return
     }
+    await validataProdType()
     await formRef.value.validate()
     const payload = getPayload()
     handleSpecCfg(payload) // 更新多规格的配置
@@ -184,8 +190,6 @@ export const useProductEdit = () => {
     if (!data.value.url) return false
     return true
   }
-
-  const productTypeDialogRef = ref()
 
   const qrcodeScannerRef = ref()
   const scanClickHandle = () => {
@@ -256,7 +260,6 @@ export const useProductEdit = () => {
     showModel3d,
     model3dOpts,
     validUrl,
-    productTypeDialogRef,
     qrcodeScannerRef,
     scanClickHandle,
     scanHandle,

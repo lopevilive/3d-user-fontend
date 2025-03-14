@@ -2,15 +2,18 @@
 <template>
   <div class="view-type-manage">
     <div class="tit">分类列表</div>
-    <VanList :finished="true">
-      <VanCell v-for="item in data" :key="item.id" :title="item.name">
-         <div class="opt">
-          <VanIcon name="setting-o" @click="settingClickHandle(item)"/>
-        </div>
-      </VanCell>
-    </VanList>
+    <VanCollapse v-model="activeNames">
+      <TypeContentWrap v-for="item in displayTypes" :key="item.id" @setClick="settingClickHandle(item)">
+        <VanCollapseItem v-if="isShowColl(item)" :title="item.name" :name="item.id">
+          <TypeContentWrap v-for="subItem in getSubTypes(item)" @setClick="settingClickHandle(subItem)">
+            <VanCell :title="subItem.name"/>
+          </TypeContentWrap>
+        </VanCollapseItem>
+        <VanCell v-else :title="item.name"/>
+      </TypeContentWrap>
+    </VanCollapse>
     <div class="bottom-btn">
-      <VanButton text="新增分类" block type="primary" native-type="submit" @click="addHandle"/>
+      <VanButton text="新增一级分类" block type="primary" native-type="submit" @click="addHandle"/>
     </div>
     <ProductTypeDialog ref="dialogEditRef"/>
     <VanActionSheet
@@ -21,20 +24,27 @@
       cancel-text="取消"
     />
   </div>
+  <DialogSort ref="dialogSortRef"/>
 </template>
 
 <script setup>
 import ProductTypeDialog from '@/components/product-type-dialog/index.vue'
 import { useTypeManage } from './hook'
+import TypeContentWrap from './TypeContentWrap.vue'
+import DialogSort from './DialogSort.vue'
 
 const {
-  data,
+  displayTypes,
   dialogEditRef,
   addHandle,
   actions,
   showAction,
   selectHandle,
-  settingClickHandle
+  settingClickHandle,
+  isShowColl,
+  activeNames,
+  getSubTypes,
+  dialogSortRef
 } = useTypeManage()
 
 

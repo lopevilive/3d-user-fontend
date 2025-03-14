@@ -42,7 +42,10 @@ export const useProductManage = () => {
 
   const productTypes = computed(() => {
     const {rid} = globalData.value
-    let ret = [...globalData.value.productTypes]
+    let ret = []
+    for (const item of globalData.value.productTypes) {
+      if (!item.parentId) ret.push(item)
+    }
     let allName = '全部'
     if (rid === 99) {
       allName += `(${total.value}/${limit.value})`
@@ -67,6 +70,22 @@ export const useProductManage = () => {
     }
     return ret
   })
+
+  const subActiveTab = ref(0)
+  const subTypesList = computed(() => {
+    let ret = []
+    for (const item of globalData.value.productTypes) {
+      if (!activeTab.value) continue
+      if (item.parentId === activeTab.value) ret.push(item)
+    }
+    return ret
+  })
+
+  const beforeSubChange = (id) => {
+    if (subActiveTab.value === id) return
+    subActiveTab.value = id
+    refresh()
+  }
 
   let updateTitStatus = 1 //  0-完成设置title、大于0-未完成
   const setTitle = () => {
@@ -149,6 +168,12 @@ export const useProductManage = () => {
     }
   }
 
+  const formatType = () => {
+    let ret = `${activeTab.value}`
+    if (subActiveTab.value) ret += `-${subActiveTab.value}`
+    return ret
+  }
+  
   let preSearchStr = ''
   const getPayload = () => {
     preSearchStr = searchStr.value
@@ -156,13 +181,13 @@ export const useProductManage = () => {
       shopId,
       pageSize,
       currPage: currPage.value,
-      productType: activeTab.value,
+      productType: formatType(),
       status: 0,
       searchStr: searchStr.value || '',
       priceSort: priceSort.value
     }
     if (activeTab.value === -2) { // 已下架
-      ret.productType = 0
+      ret.productType = '0'
       ret.status = 1
     }
     return ret
@@ -197,6 +222,15 @@ export const useProductManage = () => {
   }
 
   const tabChangeHandle = () => {
+    subActiveTab.value = 0
+    if (activeTab.value) {
+      for (const item of globalData.value.productTypes) {
+        if (item.parentId === activeTab.value) {
+          subActiveTab.value = item.id
+          break
+        }
+      }
+    }
     refresh()
   }
 
@@ -401,19 +435,20 @@ export const useProductManage = () => {
   const handleMulChangeType = async () => {
     const productType = await mulProductTypeRef.value.getType()
     await commonFetch(productMod, {productType, id: selectedList.value, shopId})
-    if (activeTab.value === -1) {
-      if (productType) {
-        unCateNum.value -= selectedList.value.length;
-        unCateNum.value = unCateNum.value ? unCateNum.value : 0;
-      }
-    }
-    if ([0,-2].includes(activeTab.value)) {
-      removeAllSelected()
-      return
-    }
-    if (productType !== activeTab.value) {
-      removeList(selectedList.value)
-    }
+    // if (activeTab.value === -1) {
+    //   if (productType) {
+    //     unCateNum.value -= selectedList.value.length;
+    //     unCateNum.value = unCateNum.value ? unCateNum.value : 0;
+    //   }
+    // }
+    // if ([0,-2].includes(activeTab.value)) {
+    //   removeAllSelected()
+    //   return
+    // }
+    // if (productType !== activeTab.value) {
+    //   removeList(selectedList.value)
+    // }
+    refresh()
     removeAllSelected()
   }
 
@@ -486,6 +521,7 @@ export const useProductManage = () => {
     selectedList, selectedHandle, removeAllSelected, handleEditDone, addProdHandle,
     handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
-    scrollT, isShowFlexContent, priceSort, priceSortChangeHandle
+    scrollT, isShowFlexContent, priceSort, priceSortChangeHandle, subTypesList, subActiveTab,
+    beforeSubChange
   }
 }

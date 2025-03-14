@@ -13,39 +13,42 @@ export const useDialogEdit = (emits) => {
   const isShow = ref(false)
   const data = ref({})
   const isMul = ref(false)
+  const parentId = ref(0)
   const dataList = ref([])
   
-  const show = (item, mul = false) => {
+  const show = (item, mul = false, payload = {}) => {
     if (!item) return
     isShow.value = true
     data.value = item
     isMul.value = mul
+    parentId.value = payload.parentId
     dataList.value = new Array(MaxNums).fill(null).map(() => ({id: 0, name: ''}))
   }
 
   const tit = computed(() => {
-    if (!data.value) return ''
-    const {id} = data.value
-    if (id) return '编辑分类'
+    if (parentId.value) return '新增二级分类'
+    if (data.value.id) return '编辑分类'
     return '新增分类'
   })
 
   const getData = () => {
-    return {
-      data: [{...data.value, shopId: + shopId}],
-      shopId
-    }
+    let ret = {...data.value, shopId: + shopId}
+    if (parentId.value) ret.parentId = parentId.value
+    return { data: [ret], shopId }
   }
 
   const getMulData = () => {
-    return {
-      data: dataList.value.filter((item) => item.name).map((item) => ({...item, shopId: +shopId})),
-      shopId
-    }
+    let ret = dataList.value.filter((item) => item.name)
+    ret = ret.map((item) => {
+      let tmp = {...item, shopId: +shopId}
+      if (parentId.value) tmp.parentId = parentId.value
+      return tmp
+    })
+    return {data: ret, shopId}
   }
 
   const handleConfirm = async () => {
-    const payload = isMul.value ? getMulData() : getData()
+    const payload = isMul.value ? getMulData(): getData()
     await commonFetch(productTypesMod, payload)
     showSuccessToast('保存成功～')
     globalData.value._productTypes[shopId].done = false
