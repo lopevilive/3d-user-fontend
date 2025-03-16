@@ -68,7 +68,7 @@ export const globalData = ref({
   invertoryRemark: '',
   isPC: false, // 是否 pc 打开
   encryInfo: {},
-  hasInventory: false
+  hasInventory: {}
 })
 
 

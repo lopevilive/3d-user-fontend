@@ -506,7 +506,7 @@ export const useProductManage = () => {
     const {userInfo: {userId}} = globalData.value
     if (!userId) return
     const data = await commonFetch(getInventory, {shopId, userId, limit: 5})
-    if (data.length) globalData.value.hasInventory = true
+    if (data.length) globalData.value.hasInventory[shopId] = true
   }
   
   const init = async () => {

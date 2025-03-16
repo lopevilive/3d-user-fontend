@@ -80,7 +80,7 @@ const totalCount = computed(() => {
 
 const isShowCart = computed(() => {
   if (totalCount.value > 0) return true
-  if (globalData.value.hasInventory) return true
+  if (globalData.value.hasInventory[shopId]) return true
   return false
 })
 

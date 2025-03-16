@@ -76,8 +76,9 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <VanEmpty description="暂无清单" />
+    <div v-else class="no-data-wrap">
+      <VanEmpty description="暂无产品" />
+      <VanButton text="返回" block @click="goBack"/>
     </div>
     <ProductPriceDialog ref="priceDialogRef" />
     <RecordFloat />
@@ -109,7 +110,8 @@ const {
   mulShare,
   priceDialogRef,
   isShowEditPrice,
-  editPriceHandle
+  editPriceHandle,
+  goBack
 } = useInventoryList()
 
 init()
@@ -121,6 +123,9 @@ init()
 $imgSize: 60px;
 
 .view-invetory-list {
+  .no-data-wrap {
+    padding: 0 12px;
+  }
   .content {
     padding-bottom: $footerBarH;
     .remark {

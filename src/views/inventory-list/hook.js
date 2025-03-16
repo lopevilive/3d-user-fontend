@@ -177,6 +177,10 @@ export const useInventoryList = () => {
     shopCarInstance.updatePrice(id, spec, price)
   }
 
+  const goBack = () => {
+    router.go(-1)
+  }
+
   const init = () => {
     selectedList.value = []
     for (const item of shopCarList.value) {
@@ -206,6 +210,7 @@ export const useInventoryList = () => {
     mulShare,
     priceDialogRef,
     isShowEditPrice,
-    editPriceHandle
+    editPriceHandle,
+    goBack
   }
 }
