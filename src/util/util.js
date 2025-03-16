@@ -6,6 +6,7 @@ import { EventEmitter } from 'eventemitter3'
 import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
+import { setViewLogs } from '@/http'
 
 
 class LoadingManage {
@@ -111,21 +112,36 @@ class ViewLog {
   }
   setlog (shopId) {
     shopId = Number(shopId)
-    if (!shopId) return
-    let viewStore = this.getlog()
-    let idx = viewStore.findIndex((item) => item === shopId)
+    const { viewLogs=[], ownerList=[], adminList=[], demoShops=[] } = globalData.value.userInfo
+    if (ownerList.includes(shopId)) return
+    if (adminList.includes(shopId)) return
+    if (demoShops.includes(shopId)) return
+    const idx = viewLogs.findIndex((item) => item === shopId)
     if (idx !== -1) {
-      viewStore.splice(idx, 1)
+      if ((idx + 1) === viewLogs.length) return
+      viewLogs.splice(idx, 1)
     }
-    viewStore.push(shopId)
-    viewStore = viewStore.slice(-this.maxLen)
-    localStorage.setItem('viewItem', JSON.stringify(viewStore))
+    let newList = viewLogs
+    newList.push(shopId)
+    newList = newList.slice(-this.maxLen)
+    globalData.value.userInfo.viewLogs = newList
+    setViewLogs({list: [...newList]})
   }
   getlog () {
-    let viewStore = localStorage.getItem('viewItem')
-    if (!viewStore) viewStore = '[]'
-    viewStore = JSON.parse(viewStore)
-    return viewStore
+    let localLogs = localStorage.getItem('viewItem') // 兼容历史数据，后续可删除这个逻辑
+    if (!localLogs) localLogs = '[]'
+    localLogs = JSON.parse(localLogs)
+    const { viewLogs=[], ownerList=[], adminList=[], demoShops=[] } = globalData.value.userInfo
+    let s = new Set([...viewLogs, ...localLogs])
+    s = [...s]
+    const ret = []
+    for (const item of s) {
+      if (ownerList.includes(item)) continue
+      if (adminList.includes(item)) continue
+      if (demoShops.includes(item)) continue
+      ret.push(item)
+    }
+    return ret.reverse()
   }
 }
 

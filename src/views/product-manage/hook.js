@@ -1,6 +1,6 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { productDel, getProduct, productMod } from '@/http'
+import { productDel, getProduct, productMod, getInventory } from '@/http'
 import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
@@ -502,6 +502,13 @@ export const useProductManage = () => {
     refresh()
   }
 
+  const formatInventory = async () => {
+    const {userInfo: {userId}} = globalData.value
+    if (!userId) return
+    const data = await commonFetch(getInventory, {shopId, userId, limit: 5})
+    if (data.length) globalData.value.hasInventory = true
+  }
+  
   const init = async () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
@@ -513,6 +520,7 @@ export const useProductManage = () => {
     }
     loadHandle()
     fetchShop()
+    formatInventory()
   }
 
   return {

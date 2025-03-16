@@ -47,33 +47,29 @@ export const useHome = () => {
   const logList = ref([])
   // 获取最近浏览的画册
   const getLogList = async () => {
-    const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
     let logIds = viewLog.getlog()
-    logIds = logIds.reverse()
-    let tmp = [...ownerList, ...adminList, ...demoShops]
-    logIds = logIds.filter((item) => {
-      if (tmp.includes(item)) return false
-      return true
-    })
     if (logIds.length) {
       const data = await shopInfoManage.getData(logIds)
       logList.value = data
     }
   }
-  
 
   const preHandle = async () => {
     const pageCount = +sessionStorage.getItem('pageCount')
     if (pageCount !== 1) return true
     if (route.query?.noRedict) return true
 
-    const {ownerList = [], adminList = []} = globalData.value?.userInfo
+    const {ownerList = [], adminList = [], viewLogs = []} = globalData.value?.userInfo
     if (ownerList.length === 1 && adminList.length === 0) {
       router.push({name: 'product-manage', params: {shopId: ownerList[0]}})
       return false
     }
     if (adminList.length === 1 && ownerList.length === 0) {
       router.push({name: 'product-manage', params: {shopId: adminList[0]}})
+      return false
+    }
+    if (viewLogs.length === 1) {
+      router.push({name: 'product-manage', params: {shopId: viewLogs[0]}})
       return false
     }
     return true

@@ -11,6 +11,7 @@ export const globalData = ref({
     // isSup: false, // 是否超级管理员
     // hasPhone: false, // 是否认证手机号
     // demoShops: [], // 案例画册
+    // viewLogs: [], // 浏览记录
   },
   editStatus: 0, // 编辑状态，0-非编辑、1-编辑中
   productNeedExec: [], // 需要更新的产品
@@ -66,7 +67,8 @@ export const globalData = ref({
   selectedAddress: [],
   invertoryRemark: '',
   isPC: false, // 是否 pc 打开
-  encryInfo: {}
+  encryInfo: {},
+  hasInventory: false
 })
 
 
