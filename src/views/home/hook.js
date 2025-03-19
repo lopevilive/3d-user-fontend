@@ -68,7 +68,7 @@ export const useHome = () => {
       router.push({name: 'product-manage', params: {shopId: adminList[0]}})
       return false
     }
-    if (viewLogs.length === 1) {
+    if (viewLogs.length === 1 && ownerList.length === 0 && adminList.length === 0) {
       router.push({name: 'product-manage', params: {shopId: viewLogs[0]}})
       return false
     }

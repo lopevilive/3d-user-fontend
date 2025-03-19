@@ -19,6 +19,7 @@
       @delete="onDelete"
       :address-info="currData"
       :show-delete="isShowDel"
+      :tel-validator="() => true"
     />
   </VanActionSheet>
 </template>
