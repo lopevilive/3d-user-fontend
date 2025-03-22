@@ -12,14 +12,12 @@
   <VanActionSheet
       v-model:show="showAction"
     >
-    <VanAddressEdit
-      :areaList="areaList"
-      show-set-default
+    <AddressEdit
+      v-if="showAction"
       @save="onSave"
       @delete="onDelete"
       :address-info="currData"
       :show-delete="isShowDel"
-      :tel-validator="() => true"
     />
   </VanActionSheet>
 </template>
@@ -28,9 +26,10 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { areaList } from '@vant/area-data';
 import { addressMod, addressDel } from '@/http'
 import { commonFetch } from '@/util'
+import { showConfirmDialog } from 'vant';
+import AddressEdit from '@/components/address-edit/index.vue'
 
 const router = useRouter()
 const showAction = ref(false)
@@ -43,6 +42,9 @@ const isShowDel = computed(() => {
 
 const onAdd = () => {
   currData.value = {id: 0}
+  if (globalData.value.addressList.length === 0) {
+    currData.value.isDefault = true
+  }
   showAction.value = true
 }
 
@@ -60,6 +62,7 @@ const onSave = async (data) => {
 }
 
 const onDelete = async (data) => {
+  await showConfirmDialog({message: '确定删除该地址？'})
   showAction.value = false
   await commonFetch(addressDel, {id: data.id})
   globalData.value._addressList.done = false

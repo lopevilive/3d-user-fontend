@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { encryAlbum, getEncryCode, updateEncryCode, modWaterMark as modWaterMarkCgi, saveWatermarkCfg } from '@/http'
+import { encryAlbum, getEncryCode, updateEncryCode, modWaterMark as modWaterMarkCgi, saveWatermarkCfg, modAddressStatus } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
   textToPngFile, uploadFile, globalLoading
@@ -111,6 +111,25 @@ export const useSysSetting = () => {
     }
   })
 
+  const toModAddressStatus = async (val) => {
+    if (val) {
+      await showConfirmDialog({message: '确定开启？'})
+    }
+    await commonFetch(modAddressStatus, {shopId, addressStatus: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const needAddress = computed({
+    get() {
+      if (shopInfo.value?.addressStatus === 1) return true
+      return false
+    },
+    set(val) {
+      toModAddressStatus(val)
+    }
+  })
+
   const initShopInfo = async () => {
     const info = await shopInfoManage.getData(shopId)
     shopInfo.value = info[0]
@@ -153,7 +172,7 @@ export const useSysSetting = () => {
   return {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-    showVip, dialogVipRef
+    showVip, dialogVipRef, needAddress
   }
 
 }

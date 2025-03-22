@@ -102,6 +102,12 @@ const router = createRouter({
           name: 'watermark',
           component: () => import('@/views/watermark/index.vue'),
           meta: {title: '水印设置'}
+        },
+        {
+          path: 'cus-inventory',
+          name: 'cus-inventory',
+          component: () => import('@/views/cus-inventory/index.vue'),
+          meta: {title: '客户清单'}
         }
       ]
     },

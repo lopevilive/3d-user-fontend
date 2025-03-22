@@ -171,6 +171,7 @@ export const toLogin = (fullPath)  => {
 }
 
 export const copyStr = (str) => {
+  if (!str) return
   const res = copy(str)
   if (res) showSuccessToast('复制成功～')
 }

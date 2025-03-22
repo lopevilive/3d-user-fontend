@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { shopCarInstance, globalData } from '@/store'
-import { showConfirmDialog } from 'vant'
+import { showConfirmDialog, showFailToast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import {add, multiply, bignumber} from 'mathjs'
 import { createInventory } from '@/http'
@@ -120,11 +120,12 @@ export const useInventoryList = () => {
     let address = ''
     for (const item of addressList) {
       if (selectedAddress.includes(item.id)) {
-        address = `${item.province}${item.city}${item.county}${item.addressDetail} ${item.name} ${item.tel}`
+        address = `${item.name || ''} ${item.province || ''}${item.city || ''}${item.county || ''}${item.addressDetail || ''} ${item.tel || ''}`
       }
     }
     const list = shopCarList.value.map((item) => {
-      return { ...item,
+      return {
+        ...item,
         desc: item.desc.replaceAll(emojiReg, '')
       }
     })
@@ -141,10 +142,19 @@ export const useInventoryList = () => {
     }
     payload.data = JSON.stringify(payload.data)
     const data = await commonFetch(createInventory, payload)
+    if (type === 0) globalData.value.hasInventory[shopId] = true
     return data
   }
 
   const toBuildInventory = async () => {
+    let shopInfo = await shopInfoManage.getData(shopId)
+    shopInfo = shopInfo[0];
+    if (shopInfo.addressStatus === 1) {
+      if (globalData.value.selectedAddress.length === 0) {
+        showFailToast('请填写收货信息~')
+        return
+      }
+    }
     const data = await toCreate(0)
     shopCarInstance.clearAll()
     router.replace({name: 'view-inventory', params: {id: data}, query: {title: '购物清单', toShare: '1'}})

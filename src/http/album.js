@@ -141,3 +141,15 @@ export const saveWatermarkCfg = (payload) => {
 export const auditingImgCgi = (payload) => {
   return post(`${album}AuditingImg`, payload)
 }
+
+export const getCusInventory = (payload) => {
+  return post(`${album}GetCusInventory`, payload)
+}
+
+export const modInventoryStatus = (payload) => {
+  return post(`${album}ModInventoryStatus`, payload)
+}
+
+export const modAddressStatus = (payload) => {
+  return post(`${album}ModAddressStatus`, payload)
+}

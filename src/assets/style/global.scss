@@ -66,4 +66,10 @@ $footerBarH: 80px;
   font-weight: bold;
 }
 
+.cell-label-width-200 {
+  .van-cell__label {
+    width: 200%;
+  }
+}
+
 

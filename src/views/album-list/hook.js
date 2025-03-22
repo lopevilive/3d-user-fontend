@@ -2,8 +2,6 @@ import { ref } from 'vue'
 import { commonFetch } from '@/util'
 import { getAllShop } from '@/http'
 
-
-
 export const useAblumList = () => {
 
   const currPage = ref(0)

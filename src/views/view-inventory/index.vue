@@ -1,5 +1,26 @@
 <template>
   <div class="view-view-inventory" v-if="info.add_time">
+    <div class="order-wrap">
+      <div class="left">
+        <span>清单号：{{ info.orderId }}</span>
+      </div>
+      <div class="right">
+        <VanButton text="复制" size="small" @click="copyStr(info.orderId)" />
+      </div>
+    </div>
+    <div class="order-wrap" v-if="[2,3,99].includes(globalData.rid)">
+      <div class="left">
+        <span>清单状态：</span>
+        <VanTag type="primary" v-if="info.status === 0">待处理</VanTag>
+        <VanTag type="success" v-if="info.status === 1">已完成</VanTag>
+        <VanTag color="#6e7071" v-if="info.status === 2">已取消</VanTag>
+      </div>
+      <div class="right" v-if="[2,3,99].includes(globalData.rid)">
+        <VanButton v-if="[0,1].includes(info.status)" @click="cancelHandle" text="取消清单" size="small" type="warning"/>
+        <VanButton v-if="[0,2].includes(info.status)" @click="finishHandle" text="完成清单" size="small" type="success"/>
+      </div>
+
+    </div>
     <VanCell class="desc-item" title="收货地址" :label="info.address || '无'" >
       <template #value>
         <VanButton @click="copyStr(info.address)" text="复制地址" size="small" :disabled="!info.address"/>
@@ -46,7 +67,7 @@
         </div>
       </div>
       <div class="right-content">
-        <VanButton text="转发清单"  type="primary" icon="share-o" @click="toShare"/>
+        <VanButton text="转发清单" type="primary" icon="share-o" @click="toShare"/>
       </div>
      </div>
   </div>
@@ -58,9 +79,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { toSharePage, shopInfoManage, commonFetch, copyStr } from '@/util'
-import { getInventory } from '@/http'
+import { getInventory, modInventoryStatus } from '@/http'
 import { useRoute } from 'vue-router'
 import dayjs from 'dayjs'
+import { globalData } from '@/store'
+import { showConfirmDialog } from 'vant'
 
 const route = useRoute()
 
@@ -92,9 +115,7 @@ const getInventoryData = async () => {
     ret = ret[0]
     const tmp = JSON.parse(ret.data)
     info.value = {
-      add_time: ret.add_time,
-      id: ret.id,
-      shopId: ret.shopId,
+      ...ret,
       address: tmp.address,
       remark: tmp.remark,
       totalCount: tmp.totalCount,
@@ -104,17 +125,31 @@ const getInventoryData = async () => {
   }
 }
 
-const init = async () => {
-  await getInventoryData()
-  if (route.query.toShare === '1') {
-    toShare()
-  }
+const cancelHandle = async () => {
+  await showConfirmDialog({message: '确定取消该清单？'})
+  await commonFetch(modInventoryStatus, {shopId, id, status: 2})
+  globalData.value.inventoryNeedExec.push(id)
+  getInventoryData()
+}
+
+const finishHandle = async () => {
+  await showConfirmDialog({message: '确定完成该清单？'})
+  await commonFetch(modInventoryStatus, {shopId, id, status: 1})
+  globalData.value.inventoryNeedExec.push(id)
+  getInventoryData()
 }
 
 const displayTime = computed(() => {
   if (!info.value.add_time) return '-'
   return dayjs(info.value.add_time * 1000).format('YYYY/MM/DD HH:mm')
 })
+
+const init = async () => {
+  await getInventoryData()
+  if (route.query.toShare === '1') {
+    toShare()
+  }
+}
 
 init()
 
@@ -124,6 +159,26 @@ init()
 <style lang="scss" scoped>
 .view-view-inventory {
   padding-bottom: $footerBarH;
+  .order-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $bgWhite;
+    border-bottom: 1px solid $bgGrey;
+    padding: 5px 16px;
+    .left {
+      font-size: 12px;
+      color: $grey8;
+      .van-tag {
+        margin-left: 5px;
+      }
+    }
+    .right {
+      .van-button {
+        margin-left: 10px;
+      }
+    }
+  }
   .desc-item {
     :deep(.van-cell__title) {
       width: 70%;
@@ -178,7 +233,9 @@ init()
     background: $bgWhite;
     margin-top: 2px;
     padding: 10px $pdH;
-    font-size: 12px;
+    .left {
+      font-size: 12px;
+    }
     color: $grey9;
   }
   .bottom-footer {
@@ -194,6 +251,7 @@ init()
     padding: 10px $pdH;
     justify-content: space-between;
     .left-content {
+      flex: 1;
       .item {
         display: flex;
         margin-bottom: 5px;
@@ -217,6 +275,9 @@ init()
     }
     .right-content {
       flex-shrink: 0;
+      .van-button {
+        margin-left: 5px;
+      }
     }
   }
 }

@@ -29,7 +29,7 @@ const toAddress = () => {
 const displayTit = computed(() => {
   const { selectedAddress, addressList } = globalData.value
   const currAddress = addressList.find((item) => selectedAddress.includes(item.id))
-  if (!currAddress) return '收货地址（选填）'
+  if (!currAddress) return '收货信息（选填）'
   return `${currAddress.name} ${currAddress.tel}`
 })
 
