@@ -20,7 +20,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { commonFetch} from '@/util'
-import { updateLevel } from '@/http'
+import { modShopStatus } from '@/http'
 import {showSuccessToast} from 'vant'
 
 const route = useRoute()
@@ -37,7 +37,7 @@ const confirmHandle = async () => {
   let expiredTime = Math.floor(Date.now() / 1000)
   expiredTime += y * (12 * 30 + 10 ) * 24 * 60 * 60
   const payload = {shopId,level: l, expiredTime}
-  await commonFetch(updateLevel, payload)
+  await commonFetch(modShopStatus, payload)
   showSuccessToast('升级成功～')
 }
 

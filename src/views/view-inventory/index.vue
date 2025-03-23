@@ -93,6 +93,12 @@ const shopId = +route.params.shopId
 const info = ref({})
 const dataList = ref([])
 
+const getExportStatus = (shopInfo) => {
+  if ([2,3,99].includes(globalData.value.rid)) return ''
+  if (shopInfo.inveExportStatus === 1) return '1'
+  return ''
+}
+
 const toShare = async () => {
   let src_path = route.fullPath
   src_path = src_path.replace(/(&)?toShare=1/, '')
@@ -105,7 +111,8 @@ const toShare = async () => {
     desc1: [shopInfo?.name || ''],
     desc2: [displayTime.value],
     scene: { name: 'view-inventory', shopId, id},
-    inventoryId: id
+    inventoryId: id,
+    noExport: getExportStatus(shopInfo)
   })
 }
 

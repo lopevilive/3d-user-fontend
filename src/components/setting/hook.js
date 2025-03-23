@@ -116,6 +116,7 @@ export const useSetting = (props, emits) => {
   
   
   const acToCusInventory = () => {
+    globalData.value.cusInventoryNeedUpdate = true
     router.push({name: 'cus-inventory'})
   }
   

@@ -16,11 +16,17 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, watch, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { globalData } from '@/store'
+import { shopInfoManage } from '@/util'
 
 const router = useRouter()
+const route = useRoute()
+
+const shopId = + route.params.shopId
+
+const shopInfo = ref({})
 
 const toAddress = () => {
   router.push({name: 'address-list'})
@@ -29,8 +35,12 @@ const toAddress = () => {
 const displayTit = computed(() => {
   const { selectedAddress, addressList } = globalData.value
   const currAddress = addressList.find((item) => selectedAddress.includes(item.id))
-  if (!currAddress) return '收货信息（选填）'
-  return `${currAddress.name} ${currAddress.tel}`
+  if (currAddress) {
+    return `${currAddress.name} ${currAddress.tel}`
+  }
+  let ret = '收货信息'
+  if (shopInfo.value.addressStatus === 0) ret += '（选填）'
+  return ret
 })
 
 const displayDesc = computed(() => {
@@ -53,6 +63,13 @@ watch(displayAddressList, (list) => {
     }
   }
 })
+
+const init = async () => {
+  let info = await shopInfoManage.getData(shopId)
+  shopInfo.value = info[0]
+}
+
+init()
 
 </script>
 

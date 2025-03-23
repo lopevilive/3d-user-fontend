@@ -97,7 +97,11 @@ export const useCusInventory = () => {
         globalData.value.inventoryNeedExec = []
         updateInventory(id)
       }
+      if (globalData.value.cusInventoryNeedUpdate) {
+        tabChangeHandle()
+      }
     }
+    globalData.value.cusInventoryNeedUpdate = false
   }
   
   const isShowMulHandle = computed(() => {

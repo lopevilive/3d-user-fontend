@@ -14,10 +14,6 @@ export const shopMod = (payload) => {
   return post(`${album}ShopMod`, payload);
 };
 
-export const updateLevel = (payload) => {
-  return post(`${album}UpdateLevel`, payload);
-};
-
 export const productMod = (payload) => {
   return post(`${album}ProductMod`, payload)
 }
@@ -126,10 +122,6 @@ export const createFeedback = (payload) => {
   return post(`${album}CreateFeedback`, payload)
 }
 
-export const modWaterMark = (payload) => {
-  return post(`${album}ModWaterMark`, payload)
-}
-
 export const getWatermarkCfg = (payload) => {
   return post(`${album}GetWatermarkCfg`, payload)
 }
@@ -148,8 +140,4 @@ export const getCusInventory = (payload) => {
 
 export const modInventoryStatus = (payload) => {
   return post(`${album}ModInventoryStatus`, payload)
-}
-
-export const modAddressStatus = (payload) => {
-  return post(`${album}ModAddressStatus`, payload)
 }

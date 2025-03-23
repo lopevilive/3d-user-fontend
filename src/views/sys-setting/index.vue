@@ -40,11 +40,11 @@
             <VanSwitch v-model="needAddress"/>
         </template>
       </VanCell>
-      <!-- <VanCell title="禁止用户导出清单"  class="cell-label-width-200" label="开启后，客户无法导出清单 Excel">
+      <VanCell title="禁止导出 Excel"  class="cell-label-width-200" label="开启后，客户无法导出清单 Excel">
         <template #value>
-            <VanSwitch v-model="isWaterMark"/>
+            <VanSwitch v-model="inveExportStatus"/>
         </template>
-      </VanCell> -->
+      </VanCell>
     </van-cell-group>
 
 
@@ -66,7 +66,7 @@ import DialogVip from '@/components/dialog-vip/index.vue'
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-  showVip, dialogVipRef, needAddress
+  showVip, dialogVipRef, needAddress, inveExportStatus
 } = useSysSetting()
 
 init()

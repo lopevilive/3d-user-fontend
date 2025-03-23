@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { encryAlbum, getEncryCode, updateEncryCode, modWaterMark as modWaterMarkCgi, saveWatermarkCfg, modAddressStatus } from '@/http'
+import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
   textToPngFile, uploadFile, globalLoading
@@ -96,7 +96,7 @@ export const useSysSetting = () => {
         confirmButtonText: '确定'
       })
     }
-    await commonFetch(modWaterMarkCgi, {shopId, waterMark: val ? 1: 0})
+    await commonFetch(modShopStatus, {shopId, waterMark: val ? 1: 0})
     shopInfoManage.dirty(shopId)
     initShopInfo()
   }
@@ -115,7 +115,7 @@ export const useSysSetting = () => {
     if (val) {
       await showConfirmDialog({message: '确定开启？'})
     }
-    await commonFetch(modAddressStatus, {shopId, addressStatus: val ? 1: 0})
+    await commonFetch(modShopStatus, {shopId, addressStatus: val ? 1: 0})
     shopInfoManage.dirty(shopId)
     initShopInfo()
   }
@@ -127,6 +127,25 @@ export const useSysSetting = () => {
     },
     set(val) {
       toModAddressStatus(val)
+    }
+  })
+
+  const toModInveExportStatus = async (val) => {
+    if (val) {
+      await showConfirmDialog({message: '确定开启？'})
+    }
+    await commonFetch(modShopStatus, {shopId, inveExportStatus: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const inveExportStatus = computed({
+    get() {
+      if (shopInfo.value?.inveExportStatus === 1) return true
+      return false
+    },
+    set(val) {
+      toModInveExportStatus(val)
     }
   })
 
@@ -172,7 +191,7 @@ export const useSysSetting = () => {
   return {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-    showVip, dialogVipRef, needAddress
+    showVip, dialogVipRef, needAddress, inveExportStatus
   }
 
 }
