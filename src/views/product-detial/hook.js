@@ -1,17 +1,20 @@
 import {ref, computed} from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/http'
-import { commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName } from '@/util'
+import { commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName, formatAttrs } from '@/util'
 import { globalData } from '@/store'
 
 
 export const useProductDetial = () => {
   const route = useRoute()
+  const router = useRouter()
   const productId = +route.params.id
   const shopId = +route.params.shopId
 
   const info = ref({})
   const modelDisplayRef = ref()
+  const done = ref(false)
+  const shopInfo = ref()
 
   const imgList = computed(() => {
     const {url} = info.value
@@ -20,8 +23,7 @@ export const useProductDetial = () => {
   })
 
   const displayAttrs = computed(() => {
-    let attr = info.value?.attr || '[]'
-    attr = JSON.parse(attr)
+    let attr = formatAttrs(info.value?.attr, shopInfo.value)
     if (info.value.productType) {
       const ret = getTypeName(info.value.productType)
       if (ret) attr.splice(0,0 , {name: '分类', val: ret})
@@ -81,9 +83,22 @@ export const useProductDetial = () => {
     return false
   })
 
+  const isShowEmpty = computed(() => {
+    if (info.value.id) return false
+    if (done.value === true) return true
+    return false
+  })
+
+  const goback = () => {
+    router.go(-1)
+  }
+  
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
+    const ret = await shopInfoManage.getData(shopId)
+    shopInfo.value = ret[0]
+    done.value = true
     if (data.list.length) {
       info.value = data.list[0]
     }
@@ -103,6 +118,8 @@ export const useProductDetial = () => {
     displayPrice,
     isShowAction,
     selectHandle,
-    isShowDownTips
+    isShowDownTips,
+    goback,
+    isShowEmpty
   }
 }

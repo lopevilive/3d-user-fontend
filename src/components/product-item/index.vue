@@ -20,13 +20,40 @@
     <div class="setting" v-if="globalData.editStatus === 1" @click="settingClickHandle">
       <VanIcon name="edit" />
     </div>
-    <VanActionSheet
+    <ActionSheet
       :actions="actions"
-      v-model:show="isShow"
+      ref="actionRef"
       cancel-text="取消"
-      teleport="body"
+      :autoClose="false"
       @select="selectHandle"
-    />
+    >
+      <template #actionItem="actionItem">
+        <template  v-if="['前移', '后移'].includes(actionItem.data.name)">
+          <div class="mod-post-wrap">
+            <span>{{ actionItem.data.name }}</span>
+            <VanField
+              placeholder="请输入" v-if="actionItem.data.name === '前移'"
+              input-align="center" type="digit"
+              v-model="posTop"
+            />
+            <VanField
+              placeholder="请输入" v-if="actionItem.data.name === '后移'"
+              input-align="center" type="digit"
+              v-model="posDown"
+            />
+            <span>位</span>
+            <VanButton text="确定" size="small" type="primary" @click="modPosHandle(actionItem.data)" />
+          </div>
+        </template>
+        <VanButton
+          v-else
+          class="van-action-sheet__item"
+          :text="actionItem.data.name"
+          @click="selectHandle(actionItem.data)"
+          :style="`color: ${actionItem.data.color};`"
+        />
+      </template>
+    </ActionSheet>
     <VanCheckbox v-model="checked" shape="square" v-if="globalData.editStatus === 1" @change="changeHandle"/>
   </div>
 </template>
@@ -35,25 +62,20 @@
 import { globalData } from '@/store'
 import { useProductItem } from './hook'
 import AddControls from '@/components/add-controls/index.vue'
+import ActionSheet from '@/components/actions-sheet/index.vue'
 
 const props = defineProps({
-  data: {type: Object}
+  data: {type: Object},
+  productType: {type: String, default: ''},
+  isShowSort: {type: Boolean, default: true},
+  shopInfo: {type: Object, default: () => {}}
 })
 
 const emits = defineEmits(['update','selected'])
 
 const {
-  actions,
-  isShow,
-  settingClickHandle,
-  selectHandle,
-  handleClick,
-  urlDisplay,
-  checked,
-  changeHandle,
-  displayAttrs,
-  isShowSticky,
-  priceDisplay
+  actions, settingClickHandle, selectHandle, handleClick, urlDisplay, checked, changeHandle,
+  displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle
 } = useProductItem(props,emits)
 
 </script>
@@ -174,6 +196,20 @@ const {
   25%, 50% { transform: rotate(0deg); }
   50%, 75% { transform: rotate(-0.3deg); }
   75%, 100% { transform: rotate(0deg); }
+}
+
+.mod-post-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-left: 50px;
+  .van-field {
+    width: 70px;
+  }
+  .van-button {
+    margin-left: 20px;
+  }
 }
 
 </style>

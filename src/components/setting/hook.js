@@ -155,7 +155,7 @@ export const useSetting = (props, emits) => {
     [
       {name: '分享画册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact']},
       {name: '客户清单', color: '#5794f7', icon: 'orders-o', action: acToCusInventory , includes: ['product-manage', 'contact']},
-      {name: '画册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'product-detial', 'contact']},
+      {name: '画册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'contact']},
     ],
     [
       {name: '画册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]},

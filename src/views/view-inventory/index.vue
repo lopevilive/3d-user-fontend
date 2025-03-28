@@ -32,7 +32,7 @@
       </template>
     </VanCell>
     <div class="content-list">
-      <div class="list-item" v-for="item in dataList">
+      <div class="list-item" v-for="item in dataList" @click="goDetial(item.id)">
         <div class="img"><VanImage :src="item.url" fit="cover"/></div>
         <div class="content">
           <div class="ellipsis">{{ item.desc }}</div>
@@ -80,12 +80,13 @@
 import { ref, computed } from 'vue'
 import { toSharePage, shopInfoManage, commonFetch, copyStr } from '@/util'
 import { getInventory, modInventoryStatus } from '@/http'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { globalData } from '@/store'
 import { showConfirmDialog } from 'vant'
 
 const route = useRoute()
+const router = useRouter()
 
 const id = +route.params.id
 const shopId = +route.params.shopId
@@ -150,6 +151,10 @@ const displayTime = computed(() => {
   if (!info.value.add_time) return '-'
   return dayjs(info.value.add_time * 1000).format('YYYY/MM/DD HH:mm')
 })
+
+const goDetial = (id) => {
+  router.push({name: 'product-detial', params: {id}})
+}
 
 const init = async () => {
   await getInventoryData()

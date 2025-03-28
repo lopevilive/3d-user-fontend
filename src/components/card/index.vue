@@ -2,7 +2,8 @@
   <div>
     <div v-if="isShowIllegal" class="com-card">
       <div class="com-card"> 很抱歉，目前我们暂时无法支持您的业务需求。希望您能理解
-        <VanButton size="mini" text="联系客服" @click="toContactSys"/>
+        <VanButton v-if="isShowContcat" size="mini" text="联系客服" @click="toContactSys"/>
+        <div>联系邮箱：lopevilive@gmail.com</div>
       </div>
     </div>
     <div v-if="isShow" class="com-card" @click="handleClick">
@@ -74,6 +75,11 @@ const isShowIllegal = computed(() => {
   if (props.data.status !== 1) return false
   if (globalData.value.rid === 99) return false
   if (isOwner.value) return true
+  return false
+})
+
+const isShowContcat = computed(() => {
+  if ([1,2,3,4,5].includes(props.data.level)) return true
   return false
 })
 

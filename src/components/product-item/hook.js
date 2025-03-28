@@ -1,24 +1,23 @@
 import { ref, computed, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { productDel, moveTopProduct, productMod } from '@/http'
-import { commonFetch, EE, getImageUrl, getSpecPrices, getTypeName } from '@/util'
+import { productDel, moveTopProduct, productMod, modProductPos } from '@/http'
+import { commonFetch, EE, getImageUrl, getSpecPrices, getTypeName, formatAttrs } from '@/util'
 import { globalData } from '@/store'
 import { showConfirmDialog } from 'vant';
-
 
 export const useProductItem = (props, emits) => {
   const router = useRouter()
   const route = useRoute()
 
-  const isShow = ref(false)
   const shopId = + route.params.shopId
+  const posTop = ref(5)
+  const posDown = ref(5)
 
   const actions = computed(() => {
     const {status, sort} = props.data
-    let ret = [
+    let ret1 = [
       {
-        name: '修改产品',
-        color: '#5794f7',
+        name: '修改产品', color: '#5794f7',
         action: () => {
           const {id} = props.data
           router.push({name: 'product-edit', params: {id}})
@@ -26,36 +25,10 @@ export const useProductItem = (props, emits) => {
       },
     ];
 
-    if (status === 0) {
-      if (sort !== 0) {
-        ret.push({
-          name: '取消置顶',
-          color: '#f29b73',
-          action: async () => {
-            const {id} = props.data
-            await commonFetch(productMod, {id, shopId, sort: 0})
-            emits('update', {type: 'sort', data: props.data})
-          }
-        })
-      } else {
-        ret.push({
-          name: '置顶产品',
-          color: '#5794f7',
-          action: async () => {
-            const {id} = props.data
-            await commonFetch(moveTopProduct, {id, shopId})
-            emits('update', {type: 'sort', data: props.data})
-          }
-        })
-      }
-      
-    }
-
     const act = status === 0 ? '下架' : '上架'
     const color = status === 0 ? '#f29b73' : '#58bd6b'
-    ret.push({
-      name: `${act}产品`,
-      color,
+    ret1.push({
+      name: `${act}产品`, color,
       action: async () => {
         const {id} = props.data
         await showConfirmDialog({
@@ -66,10 +39,9 @@ export const useProductItem = (props, emits) => {
         emits('update', {type: 'status', data: props.data})
       }
     })
-    ret.push({
-      name: '删除产品',
-      // icon: 'delete-o',
-      color: '#ee0a24',
+
+    ret1.push({
+      name: '删除产品', color: '#ee0a24',
       action: async () => {
         const {id} = props.data
         await showConfirmDialog({
@@ -79,17 +51,50 @@ export const useProductItem = (props, emits) => {
         emits('update', {type: 'del', data: props.data})
       }
     })
+
+    let ret2 = []
+
+    if (status === 0) {
+      if (sort !== 0) {
+        ret2.push({
+          name: '取消置顶', color: '#f29b73',
+          action: async () => {
+            const {id} = props.data
+            await commonFetch(productMod, {id, shopId, sort: 0})
+            emits('update', {type: 'sort', data: props.data})
+          }
+        })
+      } else {
+        ret2.push({
+          name: '置顶产品', color: '#5794f7',
+          action: async () => {
+            const {id} = props.data
+            await commonFetch(moveTopProduct, {id, shopId})
+            emits('update', {type: 'sort', data: props.data})
+          }
+        })
+      }
+    }
+
+    if (props.data.sort === 0) {
+      ret2.push({ name: '前移', color: '#5794f7'})
+      ret2.push({ name: '后移', color: '#5794f7'})
+    }
+    const ret = [ret1]
+    if (props.isShowSort) ret.push(ret2)
     return ret
   })
 
+  const actionRef = ref()
   const selectHandle = (item) => {
-    isShow.value = false
+    actionRef.value.close()
     const {action} = item
     action()
   }
 
+
   const  settingClickHandle = () => {
-    isShow.value = true
+    actionRef.value.show()
   }
 
   const handleClick = () => {
@@ -131,18 +136,12 @@ export const useProductItem = (props, emits) => {
   })
 
   const displayAttrs = computed(() => {
-    let attr = props.data.attr || '[]'
-    attr = JSON.parse(attr)
+    let attr = formatAttrs(props.data.attr, props.shopInfo)
     let str = ''
     const { productType } = props.data
     if (productType) {
       const ret = getTypeName(productType)
       if (ret) str = ret
-      // for (const item of globalData.value.productTypes) {
-      //   if (item.id === +productType) {
-      //     str = item.name
-      //   }
-      // }
     }
 
     for(const item of attr) {
@@ -170,17 +169,26 @@ export const useProductItem = (props, emits) => {
     return false
   })
 
+  const modPosHandle = async (data) => {
+    let type = ''
+    let step = 0
+    if (data.name === '前移') {
+      type = 'top'
+      step = Number(posTop.value)
+    }
+    if (data.name === '后移') {
+      type = 'down'
+      step = Number(posDown.value)
+    }
+    actionRef.value.close()
+    if (!step) return
+    const preId = await commonFetch(modProductPos, {shopId, id: props.data.id, step, type, productType: props.productType })
+    emits('update', {type: 'pos', data: {id: props.data.id, preId, type}})
+  }
+  
+
   return {
-    actions,
-    isShow,
-    selectHandle,
-    settingClickHandle,
-    handleClick,
-    urlDisplay,
-    checked,
-    changeHandle,
-    displayAttrs,
-    isShowSticky,
-    priceDisplay
+    actions, selectHandle, settingClickHandle, handleClick, urlDisplay, checked, changeHandle,
+    displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle
   }
 }

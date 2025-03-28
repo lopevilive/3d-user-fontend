@@ -59,10 +59,16 @@
       <div class="wrap">
         <div class="list" @scroll="scrollHandle" ref="listRef">
             <div ref="leftListRef" class="left-list list-item">
-              <productItem v-for="item in leftList" :data="item" :key="item.id" @update="handleUpdate" @selected="selectedHandle" />
+              <productItem v-for="item in leftList" :data="item" :key="item.id"
+                @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
+                :isShowSort="isShowSort" :shopInfo="shopInfo"
+              />
             </div>
             <div ref="rightListRef" class="right-list list-item">
-              <productItem v-for="item in rightList" :data="item" :key="item.id" @update="handleUpdate" @selected="selectedHandle" />
+              <productItem v-for="item in rightList" :data="item" :key="item.id"
+                @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
+                :isShowSort="isShowSort" :shopInfo="shopInfo"
+              />
             </div>
             <div v-if="fetchLoading" class="loading"><VanLoading /></div>
             <div v-if="finished" class="done">到底啦～</div>
@@ -95,7 +101,8 @@ const {
   removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef,
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, isShowFlexContent,
-  priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange
+  priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
+  shopInfo
 } = useProductManage()
 
 onActivated(() => {

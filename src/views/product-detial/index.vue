@@ -63,6 +63,10 @@
     </VanActionSheet>
     <DetialFooter :productInfo="info"/>
   </div>
+  <div v-if="isShowEmpty" class="no-data-wrap">
+    <VanEmpty description="暂无数据～" />
+    <VanButton type="primary" block text="返回" @click="goback"/>
+  </div>
 </template>
 
 <script setup>
@@ -87,7 +91,9 @@ const {
   displayPrice,
   isShowAction,
   selectHandle,
-  isShowDownTips
+  isShowDownTips,
+  goback,
+  isShowEmpty
 } = useProductDetial()
 
 onMounted(init)
@@ -226,6 +232,9 @@ export default {
 }
 .action-price {
   color: $red;
+}
+.no-data-wrap {
+  padding: 0 20px;
 }
 
 </style>

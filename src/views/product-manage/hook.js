@@ -107,10 +107,12 @@ export const useProductManage = () => {
     setTitle()
   }
 
+
   class ListManage {
     constructor() {
       this.taskList = []
       this.runing = false
+      this.cacheList = []
     }
 
     async exe () {
@@ -128,13 +130,16 @@ export const useProductManage = () => {
     add(list) {
       for (const item of list) {
         this.taskList.push(item)
+        this.cacheList.push(item)
       }
       if (!this.runing) this.exe()
     }
 
     clear() {
       this.taskList = []
+      this.cacheList = []
     }
+
   }
 
   const listManage = new ListManage()
@@ -248,6 +253,8 @@ export const useProductManage = () => {
 
   const searchBlurHadle = () => {
     if (preSearchStr === searchStr.value) return
+    activeTab.value = 0
+    subActiveTab.value = 0
     refresh()
   }
 
@@ -452,6 +459,47 @@ export const useProductManage = () => {
     removeAllSelected()
   }
 
+  const getPreIdx = (preId) => {
+    let idx = 0
+    let firstNoSortId
+    for (const item of listManage.cacheList) {
+      if (item.sort > 0) {
+        idx += 1
+        continue
+      }
+      firstNoSortId = item.id
+      break
+    }
+    if (preId === 0) return idx
+    const curIdx = listManage.cacheList.findIndex((item) => item.id === preId)
+    if (curIdx === -1) return -1
+    let ret = Math.max(curIdx, idx)
+    return ret + 1
+  }
+  
+  const handlePosChange = (data) => {
+    const {id, preId, type} = data
+    const idx = listManage.cacheList.findIndex((item) => item.id === id)
+    if (idx === -1) return
+    const currItem = listManage.cacheList.splice(idx, 1)[0]
+    let preIdx = getPreIdx(preId)
+    if (preIdx !== -1) {
+      listManage.cacheList.splice(preIdx, 0, currItem)
+    }
+    leftList.value = []
+    rightList.value = []
+    let num = 0
+    for (const item of listManage.cacheList) {
+      if ((num % 2) === 0) {
+        leftList.value.push(item)
+      } else {
+        rightList.value.push(item)
+      }
+      num += 1
+    }
+
+  }
+  
   const handleUpdate = async ({type, data}) => {
     if (type === 'sort') { // 置顶/取消置顶
       refresh()
@@ -475,6 +523,9 @@ export const useProductManage = () => {
     }
     if (type === 'status') {
       refresh()
+    }
+    if (type === 'pos') {
+      handlePosChange(data)
     }
   }
 
@@ -508,6 +559,13 @@ export const useProductManage = () => {
     const data = await commonFetch(getInventory, {shopId, userId, limit: 5})
     if (data.length) globalData.value.hasInventory[shopId] = true
   }
+
+  const isShowSort = computed(() => {
+    if ([1,2].includes(priceSort.value)) {
+      return false
+    }
+    return true
+  })
   
   const init = async () => {
     globalData.value.productNeedExec = []
@@ -530,6 +588,6 @@ export const useProductManage = () => {
     handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
     scrollT, isShowFlexContent, priceSort, priceSortChangeHandle, subTypesList, subActiveTab,
-    beforeSubChange
+    beforeSubChange, formatType, isShowSort, shopInfo
   }
 }

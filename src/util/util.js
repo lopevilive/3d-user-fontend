@@ -7,6 +7,7 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
+import { getBusinessCfg } from '@/util'
 
 
 class LoadingManage {
@@ -359,5 +360,36 @@ export const getTypeName = (typeStr) => {
       if (item.id === type2) ret = `${ret}/${item.name}`
     }
   }
+  return ret
+}
+
+export const formatAttrs= (str, shopInfo) => {
+  let attr = str || '[]'
+  attr = JSON.parse(attr)
+  let ret = []
+  const {id, attrs, business} = shopInfo
+  if (id) {
+    const defautSort = []
+    const {attrCfg} = getBusinessCfg(business)
+    for (const item of attrCfg) {
+      defautSort.push(item)
+    }
+    const cfgAttrs = JSON.parse(attrs || '[]')
+    for (const item of cfgAttrs) {
+      const idx = defautSort.findIndex((m) => m.name === item.name)
+      if (idx !== -1) continue
+      defautSort.push(item)
+    }
+    for (const item of defautSort) {
+      const matchedItem = attr.find((m) => m.name === item.name)
+      if (matchedItem) ret.push(matchedItem)
+    }
+    for (const item of attr) {
+      const idx = ret.findIndex((m) => m.name === item.name)
+      if (idx !== -1) continue
+      ret.push(item)
+    }
+  } else ret = attr
+
   return ret
 }

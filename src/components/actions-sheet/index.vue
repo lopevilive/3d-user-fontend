@@ -1,14 +1,16 @@
 <template>
-  <VanActionSheet class="com-actions-sheet" v-model:show="isShow" :duration="0">
+  <VanActionSheet class="com-actions-sheet" v-model:show="isShow" :duration="0" teleport="body">
     <div v-for="group in actions" class="group">
       <div class="group-item" v-for="actionItem in group">
-        <VanIcon class="item__icon" :style="`color: ${actionItem.color};`" v-if="actionItem.icon" :name="actionItem.icon" />
-        <VanButton
-          class="van-action-sheet__item"
-          :text="actionItem.name"
-          @click="selectHandle(actionItem)"
-          :style="`color: ${actionItem.color};`"
-        />
+        <slot name="actionItem" :data="actionItem">
+          <VanIcon class="item__icon" :style="`color: ${actionItem.color};`" v-if="actionItem.icon" :name="actionItem.icon" />
+          <VanButton
+            class="van-action-sheet__item"
+            :text="actionItem.name"
+            @click="selectHandle(actionItem)"
+            :style="`color: ${actionItem.color};`"
+          />
+        </slot>
       </div>
     </div>
   </VanActionSheet>
@@ -20,12 +22,13 @@ import { useActionsSheet } from './hook'
 const emits = defineEmits(['select'])
 
 const props = defineProps({
-  actions: {type: Array, default: () => []}
+  actions: {type: Array, default: () => []},
+  autoClose: {type: Boolean, default: true}
 })
 
-const { show, isShow, selectHandle } = useActionsSheet(emits)
+const { show, isShow, selectHandle, close } = useActionsSheet(props, emits)
 
-defineExpose({show})
+defineExpose({show, close})
 
 </script>
 
