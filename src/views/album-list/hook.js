@@ -12,7 +12,7 @@ export const useAblumList = () => {
   const searchCond = ref({
     str: '',
     shopId: '',
-    status: '',
+    status: '0',
     auditing: ''
   })
 
