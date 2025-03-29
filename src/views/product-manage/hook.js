@@ -253,8 +253,10 @@ export const useProductManage = () => {
 
   const searchBlurHadle = () => {
     if (preSearchStr === searchStr.value) return
-    activeTab.value = 0
-    subActiveTab.value = 0
+    if (searchStr.value) {
+      activeTab.value = 0
+      subActiveTab.value = 0
+    }
     refresh()
   }
 
