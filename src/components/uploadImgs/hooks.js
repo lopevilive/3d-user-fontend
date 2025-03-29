@@ -40,7 +40,8 @@ export const useUploadImages = (props, emits) => {
       file.status = 'uploading'
       const uploadRet = await uploadFile(file.file, shopId, watermarkCfg, props.noJPG)
       const {Location: url, UploadResult: {OriginalInfo: {Key: fileName}}} = uploadRet
-      auditingImg(fileName, shopId) // 这里不需要等结果
+      const res = await auditingImg(fileName, shopId) // 等待审核
+      if (res !== 0) throw new Error('系统繁忙，请重启小程序～')
       if (!url) return
       uploadings.value = uploadings.value.filter((item) => {
         if (item === file) return false
