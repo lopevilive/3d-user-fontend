@@ -363,7 +363,7 @@ export const getTypeName = (typeStr) => {
   return ret
 }
 
-export const formatAttrs= (str, shopInfo) => {
+export const formatAttrs= (str, shopInfo = {}) => {
   let attr = str || '[]'
   attr = JSON.parse(attr)
   let ret = []
