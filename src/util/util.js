@@ -325,7 +325,8 @@ export const getSpecPrices = (list) => {
   let min = 0
   let max = 0
   let idx = 0
-  for (const item of list) {
+  const realList = list.filter((item) => item.price === '' ? false : true)
+  for (const item of realList) {
     let specPrice = +item.price
     idx += 1
     if (idx === 1) {
