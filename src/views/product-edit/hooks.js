@@ -117,15 +117,15 @@ export const useProductEdit = () => {
   }
 
   const validataProdType = async () => {
-    if (!data.value.productType) return true
-    const {type1, type2} = formatType(data.value.productType)
-    if (!type1) return true
-    for (const item of globalData.value.productTypes) {
-      if (item.parentId === type1 && !type2) {
-        showToast('请选择二级分类')
-        throw new Error('分类校验失败')
-      }
-    }
+    // if (!data.value.productType) return true
+    // const {type1, type2} = formatType(data.value.productType)
+    // if (!type1) return true
+    // for (const item of globalData.value.productTypes) {
+    //   if (item.parentId === type1 && !type2) {
+    //     showToast('请选择二级分类')
+    //     throw new Error('分类校验失败')
+    //   }
+    // }
     return true
   }
 

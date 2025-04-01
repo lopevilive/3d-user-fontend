@@ -7,9 +7,7 @@
     is-link
     :required="true"
     readonly
-  >
-
-  </VanField>
+  />
   <Select v-model="val" :columns="columns"  v-model:show="show"/>
 </template>
 

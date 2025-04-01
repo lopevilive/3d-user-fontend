@@ -1,6 +1,6 @@
 <template>
   <div class="com-img-swipe-wrap">
-    <VanSwipe ref="swipeRef" class="com-img-swipe" :class="{mode2: mode === 2}" lazy-render>
+    <VanSwipe ref="swipeRef" :style="styleDisplay" class="com-img-swipe" :class="{mode2: mode === 2, mode1: mode === 1}" lazy-render :autoplay="autoplay">
       <VanSwipeItem v-for="(item, idx) in list" >
         <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getImageUrl(item)" @click="clickHandle(idx)"/>
       </VanSwipeItem>
@@ -16,13 +16,15 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getImageUrl } from '@/util'
+import { getImageUrl, getFlexW } from '@/util'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
 
 const props = defineProps({
   list: {type: Array, default: () => []},
-  mode: {type: Number, default: 1} // 1 | 2
+  mode: {type: Number, default: 1}, // 1 | 2
+  scale: {type: String, default: '0.5'},
+  autoplay: {type: Number, default: 0}
 })
 
 const swipeRef = ref()
@@ -44,6 +46,15 @@ const isShowControl = computed(() => {
   if (props.list?.length === 1) return false
   if (globalData.value.isPC) return true
   return false
+})
+
+const styleDisplay = computed(() => {
+  let ret = '';
+  if (props.mode === 2) {
+    const h = getFlexW(375 * Number(props.scale))
+    ret += `height: ${h}px;`
+  }
+  return ret
 })
 
 </script>
@@ -74,11 +85,12 @@ const isShowControl = computed(() => {
 }
 .com-img-swipe {
   width: 375px;
-  min-height: 200px;
+  &.mode1 {
+    min-height: 200px;
+  }
   &.mode2 {
-    height: 200px;
     :deep(.van-image) {
-      height: 200px;
+      height: 100%;
     }
   }
   :deep(.van-swipe__track) {

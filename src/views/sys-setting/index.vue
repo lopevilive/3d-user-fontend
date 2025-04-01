@@ -34,7 +34,13 @@
       <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
     </van-cell-group>
 
-    <van-cell-group inset title="清单设置">
+    <van-cell-group inset title="画册配置">
+      <VanCell title="首页轮播图"  class="cell-label-width-200" label="店铺置顶信息与活动，支持自动轮播切换">
+        <template #value>
+            <VanSwitch v-model="bannerStatus"/>
+        </template>
+      </VanCell>
+      <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
       <VanCell title="收货信息必填"  class="cell-label-width-200" label="开启后，客户需要填写收货信息才能提交清单">
         <template #value>
             <VanSwitch v-model="needAddress"/>
@@ -66,7 +72,7 @@ import DialogVip from '@/components/dialog-vip/index.vue'
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-  showVip, dialogVipRef, needAddress, inveExportStatus
+  showVip, dialogVipRef, needAddress, inveExportStatus, toBannerCfg, bannerStatus
 } = useSysSetting()
 
 init()

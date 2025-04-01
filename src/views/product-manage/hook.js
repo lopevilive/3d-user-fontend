@@ -78,12 +78,18 @@ export const useProductManage = () => {
       if (!activeTab.value) continue
       if (item.parentId === activeTab.value) ret.push(item)
     }
+    if (ret.length) {
+      ret.splice(0,0, {name: '全部', id: 0})
+    }
     return ret
   })
 
   const beforeSubChange = (id) => {
-    if (subActiveTab.value === id) return
-    subActiveTab.value = id
+    if (subActiveTab.value === id) {
+      subActiveTab.value = 0
+    } else {
+      subActiveTab.value = id
+    }
     refresh()
   }
 
@@ -175,7 +181,7 @@ export const useProductManage = () => {
 
   const formatType = () => {
     let ret = `${activeTab.value}`
-    if (subActiveTab.value) ret += `-${subActiveTab.value}`
+    if (subTypesList.value.length) ret += `-${subActiveTab.value}`
     return ret
   }
   
@@ -228,14 +234,6 @@ export const useProductManage = () => {
 
   const tabChangeHandle = () => {
     subActiveTab.value = 0
-    if (activeTab.value) {
-      for (const item of globalData.value.productTypes) {
-        if (item.parentId === activeTab.value) {
-          subActiveTab.value = item.id
-          break
-        }
-      }
-    }
     refresh()
   }
 
@@ -260,41 +258,8 @@ export const useProductManage = () => {
     refresh()
   }
 
-  const preScrollTop = ref(0)
-  const isShowFlexContent = ref(true)
-  const handleFlexible = (scrollTop, clientHeight, scrollHeight) => {
-    if (isShowFlexContent.value) {
-      if ((scrollHeight - clientHeight) < getFlexW(50)) return
-    }
-    
-    if (scrollTop <= getFlexW(10)) {
-      preScrollTop.value = 0
-      isShowFlexContent.value = true
-      return
-    }
-
-    if ((scrollTop + clientHeight + getFlexW(10)) >= scrollHeight) {
-      return
-    }
-
-    if (scrollTop > preScrollTop.value) { // 往下滑动
-      preScrollTop.value = scrollTop
-      isShowFlexContent.value = false
-      return
-    }
-
-    if (scrollTop < preScrollTop.value) { // 往上滑动
-      preScrollTop.value = scrollTop
-      isShowFlexContent.value = true
-      return
-    }
-    
-    preScrollTop.value = scrollTop
-  }
-
   const scrollHandle = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
-    handleFlexible(scrollTop, clientHeight, scrollHeight)
     scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
@@ -532,7 +497,7 @@ export const useProductManage = () => {
   }
 
   const activeHandle = () => {
-    setTitle()
+    fetchShop()
     tabKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) {
       listRef.value.scrollTop = scrollT.value
@@ -568,6 +533,25 @@ export const useProductManage = () => {
     }
     return true
   })
+
+  const stickyPos = computed(() => {
+    if (globalData.value.editStatus !== 1) return 0
+    return getFlexW(51)
+  })
+
+  const isShowBanner = computed(() => {
+    if (globalData.value.editStatus === 1) return false
+    if (shopInfo.value.bannerStatus !== 1) return false
+    return true
+  })
+
+  const bannerCfg = computed(() => {
+    const info = JSON.parse(shopInfo.value.bannerCfg)
+    return {
+      imgList: info.url.split(','),
+      scale: info.scale
+    }
+  })
   
   const init = async () => {
     globalData.value.productNeedExec = []
@@ -589,7 +573,7 @@ export const useProductManage = () => {
     selectedList, selectedHandle, removeAllSelected, handleEditDone, addProdHandle,
     handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
-    scrollT, isShowFlexContent, priceSort, priceSortChangeHandle, subTypesList, subActiveTab,
-    beforeSubChange, formatType, isShowSort, shopInfo
+    scrollT, priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
+    beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner
   }
 }

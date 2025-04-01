@@ -178,6 +178,37 @@ export const useSysSetting = () => {
   const showVip = () => {
     dialogVipRef.value.show()
   }
+
+  const toModBannerStatus = async (val) => {
+    const payload = {
+      shopId, bannerStatus: val ? 1: 0
+    }
+    if (val) {
+      let cfg = shopInfo.value.bannerCfg
+      if (!cfg) {
+        cfg = { url: shopInfo.value.url.split(',')[0], scale: '0.33'}
+        cfg = JSON.stringify(cfg)
+        payload.bannerCfg = cfg
+      }
+    }
+    await commonFetch(modShopStatus, payload)
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const bannerStatus = computed({
+    get(){
+      if (shopInfo.value?.bannerStatus === 1) return true
+      return false
+    },
+    set(val) {
+      toModBannerStatus(val)
+    }
+  })
+  
+  const toBannerCfg = () => {
+    router.push({name: 'banner-cfg', params: {shopId}})
+  }
   
   const init = async () => {
     const {rid} = globalData.value
@@ -191,7 +222,7 @@ export const useSysSetting = () => {
   return {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-    showVip, dialogVipRef, needAddress, inveExportStatus
+    showVip, dialogVipRef, needAddress, inveExportStatus, toBannerCfg, bannerStatus
   }
 
 }

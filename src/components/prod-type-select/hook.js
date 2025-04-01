@@ -63,6 +63,9 @@ export const useProdTypeSelect = (props, emits) => {
         ret.push({text: item.name, value: item.id})
       }
     }
+    if (ret.length) {
+      ret.splice(0,0, {text: '无', value: ''})
+    }
     return ret
   })
 
@@ -76,9 +79,14 @@ export const useProdTypeSelect = (props, emits) => {
       return ''
     },
     set(val) {
-      if (!val) return
+      // if (!val) return
       const {type1} = formatType(props.modelValue)
-      emits('update:modelValue', `${type1}-${val}`)
+      if (!val) {
+        emits('update:modelValue', `${type1}`)
+      } else {
+        emits('update:modelValue', `${type1}-${val}`)
+      }
+      
     }
   })
 

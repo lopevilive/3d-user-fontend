@@ -108,6 +108,12 @@ const router = createRouter({
           name: 'cus-inventory',
           component: () => import('@/views/cus-inventory/index.vue'),
           meta: {title: '客户清单'}
+        },
+        {
+          path: 'banner-cfg',
+          name: 'banner-cfg',
+          component: () => import('@/views/banner-cfg/index.vue'),
+          meta: {title: '轮播图设置'}
         }
       ]
     },

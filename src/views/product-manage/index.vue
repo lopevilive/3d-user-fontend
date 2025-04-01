@@ -25,39 +25,39 @@
           <VanButton text="批量分类" size="small" type="primary" :disabled="selectedList.length === 0" @click="handleMulChangeType" />
         </div>
       </div>
-      <div class="flexible-wrap" :class="{'flex-hide': !isShowFlexContent}">
-      <!-- <div class="flexible-wrap"> -->
-        <div class="flexible__content">
-          <form action="none">
-            <VanSearch
-              show-action
-              placeholder="请输入搜索关键词"
-              v-model="searchStr"
-              @blur="searchBlurHadle"
-              @cancel="searchBlurHadle"
-            />
-          </form>
-        </div>
-      </div>
-      <div class="tabs">
-        <div class="tabs__left">
-          <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
-            <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
-          </VanTabs>
-        </div>
-        <div class="tabs__right">
-          <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
-        </div>
-      </div>
-      <div class="sub-tabs" v-if="subTypesList.length">
-        <VanTabs v-model:active="subActiveTab" :shrink="true" :before-change="beforeSubChange" >
-          <VanTab v-for="item in subTypesList" :key="item.id" :title="item.name" :name="item.id"></VanTab>
-        </VanTabs>
-      </div>
     </div>
     <div class="product-content">
       <div class="wrap">
         <div class="list" @scroll="scrollHandle" ref="listRef">
+          <ImgSwipe v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale" :autoplay="3000"/>
+          <VanSticky :offset-top="stickyPos" class="sticky-wrap">
+            <div class="flexible__content">
+              <form action="none">
+                <VanSearch
+                  show-action
+                  placeholder="请输入搜索关键词"
+                  v-model="searchStr"
+                  @blur="searchBlurHadle"
+                  @cancel="searchBlurHadle"
+                />
+              </form>
+            </div>
+            <div class="tabs">
+              <div class="tabs__left">
+                <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
+                  <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
+                </VanTabs>
+              </div>
+              <div class="tabs__right">
+                <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
+              </div>
+            </div>
+            <div class="sub-tabs" v-if="subTypesList.length">
+              <VanTabs v-model:active="subActiveTab" :shrink="true" :before-change="beforeSubChange">
+                <VanTab v-for="item in subTypesList" :key="item.id" :title="item.name" :name="item.id"></VanTab>
+              </VanTabs>
+            </div>
+          </VanSticky>
             <div ref="leftListRef" class="left-list list-item">
               <productItem v-for="item in leftList" :data="item" :key="item.id"
                 @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
@@ -94,15 +94,16 @@ import ShareFloat from './ShareFloat.vue'
 import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import SortControl from '@/components/sort-control/index.vue'
+import ImgSwipe from '@/components/img-swipe/index.vue'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
   rightListRef, scrollHandle, finished, fetchLoading, selectedList, selectedHandle,
   removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
-  handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef,
-  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, isShowFlexContent,
+  handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef, bannerCfg,
+  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos,
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
-  shopInfo
+  shopInfo, isShowBanner
 } = useProductManage()
 
 onActivated(() => {
@@ -125,9 +126,6 @@ export default {
   background: $bgGrey;
   display: flex;
   flex-direction: column;
-  .header-wrap {
-
-  }
   .mode__edit {
     background: $bgWhite;
     display: flex;
@@ -167,25 +165,6 @@ export default {
       :deep(.van-button) {
         margin-right: 0;
       }
-    }
-  }
-  .flex-hide {
-    height: 0 !important;
-  }
-  .flexible-wrap {
-    width: 100%;
-    box-sizing: border-box;
-    background: $bgWhite;
-    padding: 0 $pdH;
-    overflow: hidden;
-    height: 42px;
-    transition: height .2s linear;
-   
-    .flexible__content {
-      padding-top: $pdL;
-    }
-    :deep(.van-search) {
-      padding: 0;
     }
   }
   .tabs{
@@ -232,6 +211,11 @@ export default {
         border-radius: 5px;
         font-weight: normal;
       }
+      .van-tabs__nav {
+        .van-tab:first-child{
+          display: none;
+        }
+      }
     }
   }
   .product-content {
@@ -245,17 +229,33 @@ export default {
       height: 100%;
       position: relative;
     }
+    .sticky-wrap {
+      width: 100%;
+      .flexible__content {
+        :deep(.van-search) {
+          padding-bottom: 0;
+        }
+      }
+    }
     .list {
       position: absolute;
       box-sizing: border-box;
       width: 100%;
       max-height: 100%;
       overflow: auto;
-      padding: 4px;
+      // padding: 4px;
       display: flex;
       flex-wrap: wrap;
       justify-content:space-between;
       align-items:flex-start;
+      .left-list {
+        padding-left: 4px;
+        box-sizing: border-box;
+      }
+      .right-list {
+        padding-right: 4px;;
+        box-sizing: border-box;
+      }
       .list-item {
         width: 50%;
         display: flex;

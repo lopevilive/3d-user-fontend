@@ -9,7 +9,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import ProdTypeSelect from '/Users/crushcaca/Desktop/pro/user-font-end/src/components/prod-type-select/index.vue'
+import ProdTypeSelect from '@/components/prod-type-select/index.vue'
 import { formatType } from '@/util'
 import { globalData } from '@/store'
 import { showToast } from 'vant'
@@ -33,15 +33,15 @@ const beforeClose = (action) => {
     reject()
     return true
   }
-  const {type1, type2} = formatType(prodType.value)
-  if (type1) {
-    for (const item of globalData.value.productTypes) {
-      if (item.parentId === type1 && !type2) {
-        showToast('请选择二级分类')
-        return false
-      }
-    }
-  } 
+  // const {type1, type2} = formatType(prodType.value)
+  // if (type1) {
+  //   for (const item of globalData.value.productTypes) {
+  //     if (item.parentId === type1 && !type2) {
+  //       showToast('请选择二级分类')
+  //       return false
+  //     }
+  //   }
+  // } 
   resolve(prodType.value)
   return true
 
