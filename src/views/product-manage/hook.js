@@ -85,6 +85,7 @@ export const useProductManage = () => {
   })
 
   const beforeSubChange = (id) => {
+    if (subActiveTab.value === 0 && id === 0) return
     if (subActiveTab.value === id) {
       subActiveTab.value = 0
     } else {
@@ -553,6 +554,20 @@ export const useProductManage = () => {
     }
   })
   
+  const type1PopRef = ref()
+  const type1PopClickHandle = async () => {
+    const ret = await type1PopRef.value.show()
+    if (ret === activeTab.value) return
+    activeTab.value = ret
+    tabChangeHandle()
+  }
+
+  const type2PopRef = ref()
+  const type2PopClickHandle = async () => {
+    const ret = await type2PopRef.value.show()
+    beforeSubChange(ret)
+  }
+  
   const init = async () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
@@ -574,6 +589,7 @@ export const useProductManage = () => {
     handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
     scrollT, priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
-    beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner
+    beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
+    type1PopClickHandle, type2PopRef, type2PopClickHandle
   }
 }

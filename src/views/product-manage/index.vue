@@ -49,13 +49,19 @@
                 </VanTabs>
               </div>
               <div class="tabs__right">
+                <VanIcon @click="type1PopClickHandle" name="bars" class="bar-icon" v-if="productTypes.length > 5" />
                 <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
               </div>
             </div>
             <div class="sub-tabs" v-if="subTypesList.length">
-              <VanTabs v-model:active="subActiveTab" :shrink="true" :before-change="beforeSubChange">
-                <VanTab v-for="item in subTypesList" :key="item.id" :title="item.name" :name="item.id"></VanTab>
-              </VanTabs>
+              <div class="sub-tabs__left">
+                <VanTabs v-model:active="subActiveTab" :shrink="true" :before-change="beforeSubChange">
+                  <VanTab v-for="item in subTypesList" :key="item.id" :title="item.name" :name="item.id"></VanTab>
+                </VanTabs>
+              </div>
+              <div class="sub-tabs_right">
+                <VanIcon @click="type2PopClickHandle" name="bars" class="bar-icon" v-if="subTypesList.length > 5" />
+              </div>
             </div>
           </VanSticky>
             <div ref="leftListRef" class="left-list list-item">
@@ -79,7 +85,9 @@
     <ProductPriceDialog ref="mulPriceRef" title="批量改价" />
     <MulProductType ref="mulProductTypeRef" />
     <ShareFloat />
-    <GoTop :listRef="listRef" :scrollT="scrollT"  />
+    <GoTop :listRef="listRef" :scrollT="scrollT" />
+    <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
+    <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
   </div>
 </template>
 
@@ -95,6 +103,7 @@ import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import SortControl from '@/components/sort-control/index.vue'
 import ImgSwipe from '@/components/img-swipe/index.vue'
+import TypePop from './TypePop.vue'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
@@ -103,7 +112,7 @@ const {
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef, bannerCfg,
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos,
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
-  shopInfo, isShowBanner
+  shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle
 } = useProductManage()
 
 onActivated(() => {
@@ -167,6 +176,11 @@ export default {
       }
     }
   }
+  .bar-icon {
+    font-size: 18px;
+    padding-right: 5px;
+    margin-right: 3px;
+  }
   .tabs{
     padding: 0 $pdM $pdL $pdM;
     background: $bgWhite;
@@ -179,6 +193,8 @@ export default {
     .tabs__right {
       flex-shrink: 0;
       padding-left: 10px;
+      display: flex;
+      align-items: center;
     }
     :deep(.van-tabs__wrap) {
       height: 36px;
@@ -197,6 +213,19 @@ export default {
   .sub-tabs {
     padding: 0 $pdM $pdL $pdM;
     background: $bgWhite;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    .sub-tabs__left{
+      flex: 1;
+      overflow: auto;
+      box-sizing: border-box;
+    }
+    .sub-tabs_right {
+      padding-left: 10px;
+    }
     :deep(.van-tabs__wrap) {
       height: 20px;
       .van-tabs__nav {
