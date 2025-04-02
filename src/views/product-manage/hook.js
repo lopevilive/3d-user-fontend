@@ -107,10 +107,10 @@ export const useProductManage = () => {
     }})
   }
 
-  const fetchShop = async () => {
+  const fetchShop = async (updateTit = true) => {
     const res = await shopInfoManage.getData(shopId)
     if (res?.[0]) shopInfo.value = res[0]
-    setTitle()
+    updateTit && setTitle()
   }
 
 
@@ -497,7 +497,7 @@ export const useProductManage = () => {
   }
 
   const activeHandle = () => {
-    fetchShop()
+    fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) {
       listRef.value.scrollTop = scrollT.value
