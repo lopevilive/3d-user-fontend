@@ -2,6 +2,7 @@ import {computed, ref} from 'vue'
 import { uploadFile, shopInfoManage, watermarkManage, auditingImg } from '@/util'
 import { useRoute } from 'vue-router'
 import { showFailToast, showImagePreview} from 'vant'
+import { globalData } from '@/store'
 
 export const useUploadImages = (props, emits) => {
   const route = useRoute()
@@ -125,6 +126,7 @@ export const useUploadImages = (props, emits) => {
   }
 
   const viewHandle = (idx) => {
+    if (globalData.value.isPC) return
     const list = fileList.value.map((item) => item.url)
     showImagePreview(list, idx)
   }
