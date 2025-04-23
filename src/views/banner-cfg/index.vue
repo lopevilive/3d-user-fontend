@@ -15,7 +15,7 @@
         <UploadImgs ref="uploadImgsRef" :maxCount="maxCount" v-model="data.url" />
       </template>
     </VanField>
-    <VanField label="内容比例" readonly is-link @click="isShowScale = true" v-model="scaleDisplay" />
+    <VanField label="内容高度" readonly is-link @click="isShowScale = true" v-model="scaleDisplay" />
     <Select v-model="data.scale" :columns="columns" v-model:show="isShowScale" />
     <div class="bottom">
       <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
