@@ -26,7 +26,7 @@
 <script setup>
 import {computed} from 'vue'
 import { useRouter } from 'vue-router'
-import { getImageUrl, toContactSys } from '@/util'
+import { getImageUrl, toContactSys, isVip } from '@/util'
 import { globalData } from '@/store'
 
 const props = defineProps({
@@ -79,8 +79,7 @@ const isShowIllegal = computed(() => {
 })
 
 const isShowContcat = computed(() => {
-  if ([1,2,3,4,5].includes(props.data.level)) return true
-  return false
+  return isVip(props.data.level)
 })
 
 const isShowStatus= computed(() => {

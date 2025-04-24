@@ -209,9 +209,12 @@ const handleEncry = async (to) => {
 const init = async (to, from) => {
   const { needPhone } = to.meta
   const {shopId} = to.params
-  const {isPC} = to.query
+  const {isPC, wxEnv} = to.query
   if (isPC) {
     globalData.value.isPC = true
+  }
+  if (wxEnv) {
+    globalData.value.wxEnv = wxEnv
   }
   if (shopId) {
     shopInfoManage.getData(shopId)

@@ -3,11 +3,22 @@
     <van-cell-group inset title="账号">
       <VanCell title="编辑画册" is-link @click="toModAlbum" />
       <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
-      <VanCell is-link @click="showVip">
+      <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
           <div class="vip-item">
             <div>会员权益</div>
             <VanIcon name="gem-o" />
+          </div>
+        </template>
+        <template #label>
+          <div class="vip-desc-wrap">
+            <div class="left-wrap">
+              <span>当前：</span>
+              <span>{{ vipName }}</span>
+            </div>
+            <div class="right-wrap" v-if="isVip(vipInfo.level)">
+              {{ expiredTimeDisplay }} 到期
+            </div>
           </div>
         </template>
       </VanCell>
@@ -61,18 +72,17 @@
       <VanCell title="用户协议" is-link @click="toViewProtocol"/>
     </van-cell-group>
   </div>
-  <DialogVip ref="dialogVipRef" />
 </template>
 
 <script setup>
 import { useSysSetting } from './hook'
-import { copyStr } from '@/util'
-import DialogVip from '@/components/dialog-vip/index.vue'
+import { copyStr, isVip } from '@/util'
 
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-  showVip, dialogVipRef, needAddress, inveExportStatus, toBannerCfg, bannerStatus
+  showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName,
+  vipInfo, expiredTimeDisplay, isShowVip
 } = useSysSetting()
 
 init()
@@ -98,6 +108,10 @@ init()
     .van-icon {
       color: #FFD700;
     }
+  }
+  .vip-desc-wrap {
+    display: flex;
+    justify-content: space-between;
   }
 }
 

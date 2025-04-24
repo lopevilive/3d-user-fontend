@@ -1,3 +1,4 @@
+<!-- 弃用 -->
 <template>
   <VanDialog
     v-model:show="isShow" show-cancel-button

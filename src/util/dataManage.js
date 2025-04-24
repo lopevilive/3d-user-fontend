@@ -1,4 +1,4 @@
-import { getShop, getWatermarkCfg } from '@/http'
+import { getShop, getWatermarkCfg, getVipInfo } from '@/http'
 import { commonFetch } from '@/util'
 
 class DataManage {
@@ -58,7 +58,8 @@ class DataManage {
       const fn = this.getFn()
       let payload = realList
       if (payload.length === 1) payload = payload[0]
-      const dataList = await commonFetch(fn, {shopId: payload})
+      let dataList = await commonFetch(fn, {shopId: payload})
+      if (!Array.isArray(dataList)) dataList = [dataList]
       for (const id of realList) {
         const resItem = dataList.find((item) => item[this.key] === id)
         const matchItem = this.dataStore.find((item) => item.shopId === id)
@@ -123,11 +124,8 @@ class DataManage {
   }
 }
 
-export const shopInfoManage = new DataManage(() => {
-  return getShop
-})
+export const shopInfoManage = new DataManage(() => getShop)
 
-export const watermarkManage = new DataManage(() => {
-  return getWatermarkCfg
-}, 'shopId')
-window.watermarkManage = watermarkManage
+export const watermarkManage = new DataManage(() => getWatermarkCfg, 'shopId')
+
+export const vipInfoManage = new DataManage(() => getVipInfo, 'shopId')

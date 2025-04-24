@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
-import { getBusinessCfg } from '@/util'
+import { getBusinessCfg, E_vip_map } from '@/util'
 
 
 class LoadingManage {
@@ -169,6 +169,14 @@ export const toContactSys = async () => {
 
 export const toLogin = (fullPath)  => {
   wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(fullPath)}`})
+}
+
+export const toVip = (payload, shopInfo) => {
+  const inApp = isInApp()
+  if (!inApp) return showToast('请在小程序内打开')
+  const payloadStr = encodeURIComponent(JSON.stringify(payload))
+  const shopStr = encodeURIComponent(JSON.stringify(shopInfo))
+  wx.miniProgram.navigateTo({url: `../vip/vip?payload=${payloadStr}&shopInfo=${shopStr}`})
 }
 
 export const copyStr = (str) => {
@@ -393,4 +401,11 @@ export const formatAttrs= (str, shopInfo = {}) => {
   } else ret = attr
 
   return ret
+}
+
+export const isVip = (level) => {
+  for (const item of E_vip_map) {
+    if (item.level === level) return item.isVip
+  }
+  return false
 }

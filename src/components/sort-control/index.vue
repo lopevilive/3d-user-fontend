@@ -48,7 +48,7 @@ const clickHandle = () => {
     }
     .active {
       font-weight: bold;
-      color: #000;
+      color: $themeColor;
     }
   }
 }

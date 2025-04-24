@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct,shopMod } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices, formatType } from '@/util'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices, formatType, isVip } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -237,12 +237,12 @@ export const useProductEdit = () => {
   })
 
   const maxCount = computed(() => {
-    if ([1,2,3,4,5].includes(shopInfo.value.level)) return 12
+    if (isVip(shopInfo.value.level)) return 12
     return 6
   })
 
   const maxSize = computed(() => {
-    if ([1,2,3,4,5].includes(shopInfo.value.level)) return 20
+    if (isVip(shopInfo.value.level)) return 20
     return 10
   })
 

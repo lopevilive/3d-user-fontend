@@ -120,3 +120,12 @@ export const watermark_cfg_def = {
   fileid: ''
 }
 
+export const E_vip_map = [
+  {level: 0, name: '普通用户', isVip: false},
+  {level: 1, name: '300 容量会员', isVip: true},
+  {level: 2, name: '600 容量会员', isVip: true},
+  {level: 3, name: '1000 容量会员', isVip: true},
+  {level: 4, name: '1500 容量会员', isVip: true},
+  {level: 5, name: '2000 容量会员', isVip: true},
+]
+

@@ -145,3 +145,7 @@ export const modInventoryStatus = (payload) => {
 export const modProductPos = (payload) => {
   return post(`${album}ModProductPos`, payload)
 }
+
+export const getVipInfo = (payload) => {
+  return post(`${album}GetVipInfo`, payload)
+}

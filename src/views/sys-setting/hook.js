@@ -4,9 +4,10 @@ import { globalData } from '@/store'
 import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
-  textToPngFile, uploadFile, globalLoading
+  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getImageUrl
 } from '@/util'
 import { showConfirmDialog } from 'vant';
+import dayjs from 'dayjs'
 
 export const useSysSetting = () => {
   const route = useRoute()
@@ -15,6 +16,7 @@ export const useSysSetting = () => {
   const shopId = +route.params.shopId
 
   const shopInfo = ref({})
+  const vipInfo = ref({})
   const encryCode = ref()
 
   const toModAlbum = () => {
@@ -76,7 +78,7 @@ export const useSysSetting = () => {
   
   const modWaterMark = async (val) => {
     if (val) {
-      if (![1,2,3,4,5].includes(shopInfo.value.level)) {
+      if (!isVip(shopInfo.value.level)) {
         await showConfirmDialog({
           message: '开通会员后可开启水印功能。\n(注：会员99/年)',
           confirmButtonText: '联系客服开通',
@@ -174,9 +176,16 @@ export const useSysSetting = () => {
     router.push({name: 'watermark'})
   }
 
-  const dialogVipRef = ref()
+  const isShowVip = computed(() => {
+    if (['develop', 'trial'].includes(globalData.value.wxEnv)) return true
+    return false
+  })
+  
   const showVip = () => {
-    dialogVipRef.value.show()
+    toVip(vipInfo.value, {
+      shopId, name: shopInfo.value.name,
+      url: getImageUrl(shopInfo.value.url.split(',')[0])
+    })
   }
 
   const toModBannerStatus = async (val) => {
@@ -209,6 +218,24 @@ export const useSysSetting = () => {
   const toBannerCfg = () => {
     router.push({name: 'banner-cfg', params: {shopId}})
   }
+
+  const initVipInfo = async () => {
+    const ret = await vipInfoManage.getData(shopId)
+    vipInfo.value = ret[0]
+  }
+
+  const vipName = computed(() => {
+    const {level} = vipInfo.value
+    for (const item of E_vip_map) {
+      if (item.level === level) return item.name
+    }
+    return ''
+  })
+
+  const expiredTimeDisplay = computed(() => {
+    if (!vipInfo.value.expiredTime) return ''
+    return dayjs(vipInfo.value.expiredTime * 1000).format('YYYY/MM/DD')
+  })
   
   const init = async () => {
     const {rid} = globalData.value
@@ -216,13 +243,14 @@ export const useSysSetting = () => {
     //   router.replace('home')
     // }
     initShopInfo()
-    
+    initVipInfo()
   }
 
   return {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-    showVip, dialogVipRef, needAddress, inveExportStatus, toBannerCfg, bannerStatus
+    showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipInfo,
+    vipName, vipInfo, expiredTimeDisplay, isShowVip
   }
 
 }
