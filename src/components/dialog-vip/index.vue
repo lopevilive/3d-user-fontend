@@ -1,9 +1,8 @@
-<!-- 弃用 -->
 <template>
   <VanDialog
     v-model:show="isShow" show-cancel-button
     :beforeClose="beforeClose" :title="title"
-    confirmButtonText="联系客服开通"
+    confirmButtonText="前往开通"
     cancelButtonText="关闭"
   >
     <div class="com-dialog-vip">
@@ -54,11 +53,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { toContactSys } from '@/util'
+import { toVip } from '@/util'
+import { useRoute } from 'vue-router'
 
 const props = defineProps({
   title: {type: String, default: '会员权益'}
 })
+
+const route = useRoute()
+const shopId = + route.params.shopId
 
 const isShow = ref(false)
 
@@ -71,10 +74,9 @@ const beforeClose = (action) => {
     return true
   }
   setTimeout(() => {
-    toContactSys()
+    toVip(shopId)
   }, 0);
   return true
-
 }
 
 defineExpose({show})

@@ -4,7 +4,7 @@ import { globalData } from '@/store'
 import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
-  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getImageUrl
+  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip
 } from '@/util'
 import { showConfirmDialog } from 'vant';
 import dayjs from 'dayjs'
@@ -78,13 +78,13 @@ export const useSysSetting = () => {
   
   const modWaterMark = async (val) => {
     if (val) {
-      if (!isVip(shopInfo.value.level)) {
+      if (!isVip(shopInfo.value)) {
         await showConfirmDialog({
           message: '开通会员后可开启水印功能。\n(注：会员99/年)',
-          confirmButtonText: '联系客服开通',
+          confirmButtonText: '前往开通',
           cancelButtonText: '好的'
         })
-        toContactSys()
+        toVip(shopId)
         return
       }
       await showConfirmDialog({
@@ -177,15 +177,12 @@ export const useSysSetting = () => {
   }
 
   const isShowVip = computed(() => {
-    if (['develop', 'trial'].includes(globalData.value.wxEnv)) return true
+    if (['develop', 'trial', 'release'].includes(globalData.value.wxEnv)) return true
     return false
   })
   
   const showVip = () => {
-    toVip(vipInfo.value, {
-      shopId, name: shopInfo.value.name,
-      url: getImageUrl(shopInfo.value.url.split(',')[0])
-    })
+    toVip(shopId)
   }
 
   const toModBannerStatus = async (val) => {
@@ -249,7 +246,7 @@ export const useSysSetting = () => {
   return {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-    showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipInfo,
+    showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus,
     vipName, vipInfo, expiredTimeDisplay, isShowVip
   }
 

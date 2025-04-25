@@ -16,7 +16,7 @@
               <span>当前：</span>
               <span>{{ vipName }}</span>
             </div>
-            <div class="right-wrap" v-if="isVip(vipInfo.level)">
+            <div class="right-wrap" v-if="isVip(shopInfo, false)">
               {{ expiredTimeDisplay }} 到期
             </div>
           </div>
@@ -82,7 +82,7 @@ const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName,
-  vipInfo, expiredTimeDisplay, isShowVip
+  expiredTimeDisplay, isShowVip
 } = useSysSetting()
 
 init()

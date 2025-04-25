@@ -79,7 +79,7 @@ const isShowIllegal = computed(() => {
 })
 
 const isShowContcat = computed(() => {
-  return isVip(props.data.level)
+  return isVip(props.data, false)
 })
 
 const isShowStatus= computed(() => {

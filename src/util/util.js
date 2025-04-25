@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
-import { getBusinessCfg, E_vip_map } from '@/util'
+import { getBusinessCfg, E_vip_map, vipInfoManage, shopInfoManage } from '@/util'
 
 
 class LoadingManage {
@@ -171,11 +171,19 @@ export const toLogin = (fullPath)  => {
   wx.miniProgram.redirectTo({url: `../login/login?src_path=${encodeURIComponent(fullPath)}`})
 }
 
-export const toVip = (payload, shopInfo) => {
+export const toVip = async (shopId) => {
   const inApp = isInApp()
   if (!inApp) return showToast('请在小程序内打开')
-  const payloadStr = encodeURIComponent(JSON.stringify(payload))
-  const shopStr = encodeURIComponent(JSON.stringify(shopInfo))
+  let vipInfo = await vipInfoManage.getData(shopId)
+  vipInfo = vipInfo[0]
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0]
+  const shopData = {
+    shopId, name: shopInfo.name,
+    url: getImageUrl(shopInfo.url.split(',')[0])
+  }
+  const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
+  const shopStr = encodeURIComponent(JSON.stringify(shopData))
   wx.miniProgram.navigateTo({url: `../vip/vip?payload=${payloadStr}&shopInfo=${shopStr}`})
 }
 
@@ -403,9 +411,15 @@ export const formatAttrs= (str, shopInfo = {}) => {
   return ret
 }
 
-export const isVip = (level) => {
+export const isVip = (shopInfo, valiTime = true) => {
+  const { level, expiredTime } = shopInfo
+  let ret = false
   for (const item of E_vip_map) {
-    if (item.level === level) return item.isVip
+    if (item.level === level) ret = item.isVip
   }
-  return false
+  if (valiTime && ret) {
+    const nowTime = Math.floor(Date.now() / 1000)
+    if (nowTime > expiredTime) ret = false
+  }
+  return ret
 }

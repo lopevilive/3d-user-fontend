@@ -237,12 +237,12 @@ export const useProductEdit = () => {
   })
 
   const maxCount = computed(() => {
-    if (isVip(shopInfo.value.level)) return 12
+    if (isVip(shopInfo.value)) return 12
     return 6
   })
 
   const maxSize = computed(() => {
-    if (isVip(shopInfo.value.level)) return 20
+    if (isVip(shopInfo.value)) return 20
     return 10
   })
 
