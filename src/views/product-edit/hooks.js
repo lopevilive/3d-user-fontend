@@ -242,7 +242,10 @@ export const useProductEdit = () => {
   })
 
   const maxSize = computed(() => {
-    if (isVip(shopInfo.value)) return 20
+    if (isVip(shopInfo.value)) {
+      if ([516].includes(shopId)) return 40
+      return 20
+    }
     return 10
   })
 
