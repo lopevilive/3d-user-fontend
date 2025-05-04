@@ -16,9 +16,10 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getImageUrl, getFlexW } from '@/util'
+import { getImageUrl, getFlexW, isVip, shopInfoManage } from '@/util'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
+import { useRoute } from 'vue-router'
 
 const props = defineProps({
   list: {type: Array, default: () => []},
@@ -27,11 +28,28 @@ const props = defineProps({
   autoplay: {type: Number, default: 0}
 })
 
+const route = useRoute()
+
+const shopId = + route.params.shopId
+
 const swipeRef = ref()
+const shopInfo = ref()
+
+const displayPreviewList = computed(() => {
+  let ret = []
+  for (const item of props.list) {
+    if (shopInfo.value && isVip(shopInfo.value)) {
+      ret.push(item)
+      continue
+    }
+    ret.push(getImageUrl(item))
+  }
+  return ret
+})
 
 const clickHandle = (idx) => {
   if (globalData.value.isPC) return
-  showImagePreview(props.list, idx)
+  showImagePreview(displayPreviewList.value, idx)
 }
 
 const prevHandle = () => {
@@ -56,6 +74,15 @@ const styleDisplay = computed(() => {
   }
   return ret
 })
+
+const init = async () => {
+  if (shopId) {
+    const info = await shopInfoManage.getData(shopId)
+    shopInfo.value = info[0]
+  }
+}
+
+init()
 
 </script>
 
