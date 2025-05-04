@@ -8,7 +8,13 @@ import { globalData } from '@/store'
 export const useHome = () => {
   const route = useRoute()
   const router = useRouter()
-  const loading = globalLoading.getRef()
+
+  const inited = ref(false)
+  const gbLoading = globalLoading.getRef()
+  const loading = computed(() => {
+    if (inited.value) return false
+    return gbLoading.value
+  })
 
   const mineList = ref([])
   // 获取我创建/管理的画册
@@ -85,13 +91,17 @@ export const useHome = () => {
   }
   
   const init = async () => {
-    globalData.value.editStatus = 0;
-    globalData.value.productNeedExec = []
-    const pass = await preHandle()
-    if (!pass) return
-    getMineList()
-    getLogList()
-    getDemoList()
+    try {
+      globalData.value.editStatus = 0;
+      globalData.value.productNeedExec = []
+      const pass = await preHandle()
+      if (!pass) return
+      getMineList()
+      getLogList()
+      getDemoList()
+    } finally {
+      inited.value = true
+    }
   }
 
   

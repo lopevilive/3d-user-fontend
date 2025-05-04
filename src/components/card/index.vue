@@ -24,9 +24,10 @@
 </template>
 
 <script setup>
-import {computed} from 'vue'
+import {computed, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl, toContactSys, isVip } from '@/util'
+import { valiEncryCode } from '@/http'
 import { globalData } from '@/store'
 
 const props = defineProps({
@@ -61,12 +62,27 @@ const isAdmin = computed(() => {
   return false
 })
 
+
+const encryVal = ref(false)
+const handleEncry = async () => {
+  const shopId = props.data.id
+  let ret = localStorage.getItem('encryData')
+  if (!ret) ret = '{}'
+  const data = JSON.parse(ret)
+  if (!data[shopId]) return false
+  const valiRet = await valiEncryCode({shopId, passStr: data[shopId]})
+  if (valiRet.data === true) {
+    encryVal.value = true
+  }
+}
+
+
 const isShow = computed(() => {
   if (globalData.value.rid === 99) return true
   if (props.data.status === 1) return false
   if (props.data.encry === 1) { // 加密画册
     if (isAdmin.value || isOwner.value) return true
-    return false
+    return encryVal.value
   }
   return true
 })
@@ -86,6 +102,15 @@ const isShowStatus= computed(() => {
   if (globalData.value.rid === 99) return true
   return false
 })
+
+
+const init = async () => {
+  if (props.data.encry === 1) {
+    handleEncry()
+  }
+}
+
+init()
 
 </script>
 
