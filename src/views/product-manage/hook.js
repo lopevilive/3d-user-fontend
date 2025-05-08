@@ -1,7 +1,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod, getInventory } from '@/http'
-import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW } from '@/util'
+import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil} from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -42,9 +42,19 @@ export const useProductManage = () => {
 
   const productTypes = computed(() => {
     const {rid} = globalData.value
+    const {requiredType} = shopInfo.value
     let ret = []
     for (const item of globalData.value.productTypes) {
-      if (!item.parentId) ret.push(item)
+      if (!item.parentId) {
+        let name = item.name
+        if (requiredType) {
+          const {type1} = formatTypeUtil(requiredType)
+          if (type1 === item.id) {
+            name = `${name}(必选)`
+          }
+        }
+        ret.push({...item, name})
+      }
     }
     let allName = '全部'
     if (rid === 99) {
@@ -74,9 +84,19 @@ export const useProductManage = () => {
   const subActiveTab = ref(0)
   const subTypesList = computed(() => {
     let ret = []
+    const {requiredType} = shopInfo.value
     for (const item of globalData.value.productTypes) {
       if (!activeTab.value) continue
-      if (item.parentId === activeTab.value) ret.push(item)
+      if (item.parentId === activeTab.value) {
+        let name = item.name
+        if (requiredType) {
+          const {type2} = formatTypeUtil(requiredType)
+          if (type2 && type2 === item.id) {
+            name = `${name}(必选)`
+          }
+        }
+        ret.push({...item, name})
+      }
     }
     if (ret.length) {
       ret.splice(0,0, {name: '全部', id: 0})
@@ -497,6 +517,21 @@ export const useProductManage = () => {
     }
   }
 
+  const handleRequiredType = async () => {
+    const { activeType } = route.query
+    if (!activeType) return
+    const {type1, type2} = formatTypeUtil(activeType)
+    activeTab.value = type1;
+    subActiveTab.value = type2 || 0
+    refresh()
+    const {name, url} = shopInfo.value
+    await sleep(300)
+    router.replace({name: 'product-manage', params: {shopId}, query: {
+      title: name,
+      imageUrl: getImageUrl(url?.split?.(',')?.[0] || '')
+    }})
+  }
+  
   const activeHandle = () => {
     fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100)
@@ -515,6 +550,7 @@ export const useProductManage = () => {
       const execPayload = tmpList.pop()
       handleUpdate(execPayload)
     }
+    handleRequiredType()
   }
 
   const priceSortChangeHandle = async () => {

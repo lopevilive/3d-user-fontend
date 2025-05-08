@@ -4,7 +4,7 @@ import { globalData } from '@/store'
 import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
-  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip
+  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName
 } from '@/util'
 import { showConfirmDialog } from 'vant';
 import dayjs from 'dayjs'
@@ -233,6 +233,20 @@ export const useSysSetting = () => {
     if (!vipInfo.value.expiredTime) return ''
     return dayjs(vipInfo.value.expiredTime * 1000).format('YYYY/MM/DD')
   })
+
+  const displayRequiredType = computed(() => {
+    const { requiredType } = shopInfo.value
+    if (!requiredType) return '无'
+    return getTypeName(requiredType)
+  })
+
+  const typeSelectDialogRef = ref()
+  const handleRequiredType = async () => {
+    const productType = await typeSelectDialogRef.value.getType(shopInfo.value.requiredType, '选择分类')
+    await commonFetch(modShopStatus, {shopId, requiredType: productType})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
   
   const init = async () => {
     const {rid} = globalData.value
@@ -246,8 +260,8 @@ export const useSysSetting = () => {
   return {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-    showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus,
-    vipName, vipInfo, expiredTimeDisplay, isShowVip
+    showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
+    expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef
   }
 
 }

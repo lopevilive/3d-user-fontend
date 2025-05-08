@@ -99,12 +99,12 @@ class ShopCarManage {
       let ret = []
       localData = Object.values(localData)
       for (const item of localData) {
-        const {countMap, productInfo: {desc, url, id, isSpec, specs, price, upd_time, modPrice}} = item
+        const {countMap, productInfo: {desc, url, id, isSpec, specs, price, upd_time, modPrice, productType}} = item
         const keys = Object.keys(countMap)
         for (const key of keys) {
           let count = countMap?.[key]?.count || 0
           if (count <= 0) continue
-          const retItem = { id, count, upd_time, price,url: getImageUrl(url.split(',')[0]), spec: '', desc}
+          const retItem = { id, count, upd_time, price,url: getImageUrl(url.split(',')[0]), spec: '', desc, productType}
           if (modPrice) retItem.modPrice = modPrice
           if (isSpec === 1) {
             let specsList = JSON.parse(specs || '[]')

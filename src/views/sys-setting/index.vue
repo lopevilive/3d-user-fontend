@@ -45,13 +45,7 @@
       <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
     </van-cell-group>
 
-    <van-cell-group inset title="画册配置">
-      <VanCell title="首页轮播图"  class="cell-label-width-200" label="店铺置顶信息与活动，支持自动轮播切换">
-        <template #value>
-            <VanSwitch v-model="bannerStatus"/>
-        </template>
-      </VanCell>
-      <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
+    <van-cell-group inset title="购物清单设置">
       <VanCell title="收货信息必填"  class="cell-label-width-200" label="开启后，客户需要填写收货信息才能提交清单">
         <template #value>
             <VanSwitch v-model="needAddress"/>
@@ -62,6 +56,24 @@
             <VanSwitch v-model="inveExportStatus"/>
         </template>
       </VanCell>
+      <VanCell
+        title="必选分类" class="cell-label-width-200"
+        label="客户必须选择指定分类下的产品方可提交清单（如：口味、是否需要餐具等。）"
+        @click="handleRequiredType"
+      >
+        <template #value>
+          <div>{{ displayRequiredType }}</div>
+        </template>
+      </VanCell>
+    </van-cell-group>
+
+    <van-cell-group inset title="画册设置">
+      <VanCell title="首页轮播图"  class="cell-label-width-200" label="店铺置顶信息与活动，支持自动轮播切换">
+        <template #value>
+            <VanSwitch v-model="bannerStatus"/>
+        </template>
+      </VanCell>
+      <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
     </van-cell-group>
 
 
@@ -71,18 +83,20 @@
       <VanCell title="反馈建议" is-link @click="toFeedback"/>
       <VanCell title="用户协议" is-link @click="toViewProtocol"/>
     </van-cell-group>
+    <TypeSelectDialog  ref="typeSelectDialogRef" />
   </div>
 </template>
 
 <script setup>
 import { useSysSetting } from './hook'
 import { copyStr, isVip } from '@/util'
+import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName,
-  expiredTimeDisplay, isShowVip
+  expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef
 } = useSysSetting()
 
 init()

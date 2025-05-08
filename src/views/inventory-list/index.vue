@@ -72,7 +72,7 @@
           <div class="bottom-count"> <span class="unit">数量：</span>{{ totalCount }}</div>
         </div>
         <div class="right-content">
-          <VanButton type="success" text="生成购物清单" @click="toBuildInventory" :disabled="disabled"/>
+          <VanButton type="success" :text="canBuild ? '生成购物清单' : '未选必选品'" @click="toBuildInventory" :disabled="disabled"/>
         </div>
       </div>
     </div>
@@ -93,25 +93,9 @@ import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import RecordFloat from './RecordFloat.vue'
 
 const {
-  shopCarList,
-  handleUpdateCount,
-  deleteItem,
-  clearAllHandle,
-  remark,
-  getIsCheck,
-  checkClickHandle,
-  init,
-  isCheckedAll,
-  checkedAllHandle,
-  totalCount,
-  totalPrice,
-  toBuildInventory,
-  disabled,
-  mulShare,
-  priceDialogRef,
-  isShowEditPrice,
-  editPriceHandle,
-  goBack
+  shopCarList, handleUpdateCount, deleteItem, clearAllHandle, remark, getIsCheck, checkClickHandle,
+  init, isCheckedAll, checkedAllHandle, totalCount, totalPrice, toBuildInventory, disabled, mulShare,
+  priceDialogRef, isShowEditPrice, editPriceHandle, goBack, canBuild
 } = useInventoryList()
 
 init()

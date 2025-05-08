@@ -1,6 +1,6 @@
 <template>
   <VanDialog
-    title="批量分类" v-model:show="show" show-cancel-button
+    :title="dialogTit" v-model:show="show" show-cancel-button
     :beforeClose="beforeClose"
   >
     <ProdTypeSelect v-model="prodType"/>
@@ -17,11 +17,14 @@ import { showToast } from 'vant'
 const prodType = ref('')
 const show = ref(false)
 
+const dialogTit = ref('批量分类')
+
 let resolve
 let reject
-const getType = async () => {
+const getType = async (val, title = '批量分类') => {
+  dialogTit.value = title
   show.value = true
-  prodType.value = ''
+  prodType.value = val || ''
   return new Promise((a, b) => {
     resolve = a
     reject = b

@@ -4,7 +4,7 @@ import { showConfirmDialog, showFailToast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import {add, multiply, bignumber} from 'mathjs'
 import { createInventory } from '@/http'
-import { commonFetch, toSharePage, shopInfoManage, emojiReg } from '@/util'
+import { commonFetch, toSharePage, shopInfoManage, emojiReg, formatType } from '@/util'
 
 export const useInventoryList = () => {
   const route = useRoute()
@@ -12,6 +12,7 @@ export const useInventoryList = () => {
   const shopId = +route.params.shopId
 
   const shopCarList = shopCarInstance.getAllData()
+  const shopInfo = ref({})
 
   const handleUpdateCount = (item, val) => {
     val = Number(val)
@@ -146,10 +147,18 @@ export const useInventoryList = () => {
     return data
   }
 
+  const toRequiredView = () => {
+    const {requiredType} = shopInfo.value
+    router.replace({name: 'product-manage', params: {shopId}, query: {activeType: requiredType} })
+  }
+  
   const toBuildInventory = async () => {
-    let shopInfo = await shopInfoManage.getData(shopId)
-    shopInfo = shopInfo[0];
-    if (shopInfo.addressStatus === 1) {
+    if (!canBuild.value) {
+      toRequiredView()
+      return
+    }
+    const {addressStatus} = shopInfo.value
+    if (addressStatus === 1) {
       if (globalData.value.selectedAddress.length === 0) {
         showFailToast('请填写收货信息~')
         return
@@ -162,14 +171,13 @@ export const useInventoryList = () => {
 
   const mulShare = async () => {
     const data = await toCreate(1)
-    let shopInfo = await shopInfoManage.getData(shopId)
-    shopInfo = shopInfo[0];
     let src_path = `/product-manage/${shopId}/mul-manage/${data}?title=${encodeURIComponent(shopInfo.name)}`
+    const {url, name, desc} = shopInfo.value
     toSharePage({
       src_path,
-      url: shopInfo?.url?.split(',')?.[0] || '',
-      title: shopInfo.name,
-      desc1: [shopInfo.desc || ''],
+      url: url?.split(',')?.[0] || '',
+      title: name,
+      desc1: [desc || ''],
       desc2: [],
       scene: {name: 'mul-manage', shopId, id: data}
     })
@@ -191,15 +199,31 @@ export const useInventoryList = () => {
     router.go(-1)
   }
 
-  const init = () => {
+  const canBuild = computed(() => {
+    const {requiredType} = shopInfo.value
+    if (!requiredType) return true
+    const {type1, type2} = formatType(requiredType)
+    for (const item of shopCarList.value) {
+      const {type1: tmp1, type2: tmp2} = formatType(item.productType)
+      if (type2) {
+        if (type1 === tmp1 && type2 === tmp2) return true
+      } else {
+        if (type1 === tmp1) return true
+      }
+    }
+    return false
+  })
+
+  const init = async () => {
     selectedList.value = []
     for (const item of shopCarList.value) {
       const {id, spec} = item
       let key = `${id}-${spec}`
       selectedList.value.push(key)
     }
+    const tmp = await shopInfoManage.getData(shopId)
+    shopInfo.value = tmp[0]
   }
-
 
 
   return {
@@ -221,6 +245,7 @@ export const useInventoryList = () => {
     priceDialogRef,
     isShowEditPrice,
     editPriceHandle,
-    goBack
+    goBack,
+    canBuild
   }
 }

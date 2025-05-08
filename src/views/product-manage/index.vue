@@ -83,7 +83,7 @@
     </div>
     <Setting />
     <ProductPriceDialog ref="mulPriceRef" title="批量改价" />
-    <MulProductType ref="mulProductTypeRef" />
+    <TypeSelectDialog ref="mulProductTypeRef" />
     <ShareFloat />
     <GoTop :listRef="listRef" :scrollT="scrollT" />
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
@@ -97,7 +97,7 @@ import Setting from '@/components/setting/index.vue'
 import productItem from '@/components/product-item/index.vue'
 import {useProductManage} from './hook'
 import { globalData } from '@/store'
-import MulProductType from './MulProductType.vue'
+import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 import ShareFloat from './ShareFloat.vue'
 import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'

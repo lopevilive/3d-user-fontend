@@ -11,7 +11,7 @@ export const useProdTypeSelect = (props, emits) => {
         ret.push({text: item.name, value: item.id})
       }
     }
-    ret.splice(0,0, {text: '未分类', value: ''})
+    ret.splice(0,0, {text: '无', value: ''})
     return ret
   })
   
