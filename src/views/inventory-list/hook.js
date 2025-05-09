@@ -171,8 +171,8 @@ export const useInventoryList = () => {
 
   const mulShare = async () => {
     const data = await toCreate(1)
-    let src_path = `/product-manage/${shopId}/mul-manage/${data}?title=${encodeURIComponent(shopInfo.name)}`
     const {url, name, desc} = shopInfo.value
+    let src_path = `/product-manage/${shopId}/mul-manage/${data}?title=${encodeURIComponent(name)}`
     toSharePage({
       src_path,
       url: url?.split(',')?.[0] || '',
