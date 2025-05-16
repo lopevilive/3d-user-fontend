@@ -432,8 +432,11 @@ export const handleSpecCfg = async (payload, shopId) => {
     let specCfg = shopInfo?.specCfg || '[]'
     specCfg = JSON.parse(specCfg)
     let specList = JSON.parse(payload.specs)
-    // let pass = false
-    let newList = specList.map((item) => item.name)
+    let newList = []
+    for (const item of specList) {
+      if (!item.name || !item.price) continue
+      newList.push(item.name)
+    }
     for (const item of specCfg) {
       if (newList.includes(item)) continue
       newList.push(item)
@@ -441,14 +444,6 @@ export const handleSpecCfg = async (payload, shopId) => {
     newList = newList.splice(0, 6)
     newList = JSON.stringify(newList)
     if (newList === shopInfo?.specCfg) return
-    // for (const specItem of specList) {
-    //   if (specCfg.includes(specItem.name)) continue
-    //   pass = true
-    //   specCfg.push(specItem.name)
-    // }
-    // if (!pass) return
-    // specCfg = specCfg.slice(-6)
-    // if (!specCfg.length) return
     await modShopStatus({specCfg: newList, shopId})
     shopInfoManage.dirty(shopId)
   } catch(e) {
