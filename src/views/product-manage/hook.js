@@ -427,6 +427,12 @@ export const useProductManage = () => {
     if (priceInfo.isSpec === 1) {
       const {min} = getSpecPrices(JSON.parse(priceInfo.specs))
       priceInfo.price = `${min}`
+      let tmp = JSON.parse(priceInfo.specs)
+      priceInfo.specs = []
+      for (const item of tmp) {
+        if (item.name && item.price) priceInfo.specs.push(item)
+      }
+      priceInfo.specs = JSON.stringify(priceInfo.specs)
     } else {
       priceInfo.specs = ''
     }
