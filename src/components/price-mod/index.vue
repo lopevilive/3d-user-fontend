@@ -23,7 +23,6 @@
               :border="false"
               placeholder="规格名称" 
               :readonly="isDialog"
-              @click="handleClick(item, 'name')"
             />
             <VanField
               :maxlength="8"
@@ -33,7 +32,6 @@
               :border="false"
               placeholder="价格"
               :readonly="isDialog"
-               @click="handleClick(item, 'price')"
             />
             <VanIcon name="back-top" class="move" v-if="isShowMove(index)" @click="moveHandle(index)"/>
             <VanIcon name="delete-o" class="del" v-if="isShowDel" @click="delHandle(index)" />
@@ -43,14 +41,12 @@
       </div>
     </template>
   </VanField>
-  <DialogMod ref="dialogModRef" />
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { priceReg, shopInfoManage } from '@/util'
-import DialogMod from './DialogMod.vue'
 
 const props = defineProps({
   price: {type: String},
@@ -177,17 +173,6 @@ const delHandle = (index) => {
   const list = [...specsDisplay.value]
   list.splice(index, 1)
   emits('update:specs', JSON.stringify(list))
-}
-
-const dialogModRef = ref()
-const handleClick = async (item, key) => {
-  if (!props.isDialog) return
-  const title = key === 'name' ? '规格名称' : '价格'
-  const maxlength = key === 'name' ? 12 : 8
-  const val = item[key] || ''
-  const ret = await dialogModRef.value.getVal({title, val, maxlength})
-  item[key] = ret
-  inputHandle()
 }
 
 const init = async () => {

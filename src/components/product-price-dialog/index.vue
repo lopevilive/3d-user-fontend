@@ -11,7 +11,6 @@
         v-model:price="price"
         v-model:isSpec="isSpec"
         v-model:specs="specs"
-        :isDialog="true"
         :noSpecs="noSpecs"
         ref="priceModRef"
       />
@@ -42,7 +41,7 @@ defineExpose({getPrice})
     width: 60px;
   }
   .dialog-content {
-    max-height: 300px;
+    max-height: 250px;
     overflow: auto;
   }
 }
