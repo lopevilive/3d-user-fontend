@@ -1,7 +1,10 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod, getInventory } from '@/http'
-import { commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil} from '@/util'
+import {
+  commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil,
+  getSpecPrices, handleSpecCfg
+} from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
 import { showConfirmDialog } from 'vant';
@@ -420,8 +423,15 @@ export const useProductManage = () => {
 
   const mulPriceRef = ref()
   const handleMulPrice = async () => {
-    const price = await mulPriceRef.value.getPrice()
-    await commonFetch(productMod, {price, id: selectedList.value, shopId})
+    const priceInfo = await mulPriceRef.value.getPrice()
+    if (priceInfo.isSpec === 1) {
+      const {min} = getSpecPrices(JSON.parse(priceInfo.specs))
+      priceInfo.price = `${min}`
+    } else {
+      priceInfo.specs = ''
+    }
+    await commonFetch(productMod, {...priceInfo, id: selectedList.value, shopId})
+    handleSpecCfg(priceInfo, shopId)
     updateProd(selectedList.value)
     removeAllSelected()
   }

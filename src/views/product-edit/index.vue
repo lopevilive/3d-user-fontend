@@ -110,7 +110,7 @@ import StatusSelect from './StatusSelect.vue'
 import ModelDisplay from '@/components/model-display/index.vue'
 import Desc from './Desc.vue'
 import AttrCfg from './AttrCfg.vue'
-import PriceMod from './PriceMod.vue'
+import PriceMod from '@/components/price-mod/index.vue'
 import DialogVip from '@/components/dialog-vip/index.vue'
 
 const {

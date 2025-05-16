@@ -4,53 +4,47 @@
     v-model:show="show"
     show-cancel-button
     :beforeClose="beforeClose"
+    class="com-dialog-prod-price"
   >
-    <VanField required label="价格" :maxlength="10" v-model="price" placeholder="请输入价格"/>
+    <div class="dialog-content">
+      <PriceMod
+        v-model:price="price"
+        v-model:isSpec="isSpec"
+        v-model:specs="specs"
+        :isDialog="true"
+        :noSpecs="noSpecs"
+        ref="priceModRef"
+      />
+    </div>
   </VanDialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { priceReg } from '@/util'
-import { showToast } from 'vant';
+import { useProductPriceDialog } from './hook'
+import PriceMod from '@/components/price-mod/index.vue'
 
 const props = defineProps({
-  title: {type: String, default: '产品价格'}
+  title: {type: String, default: '产品价格'},
+  noSpecs: {type: Boolean, default: false}
 })
 
-const price = ref('')
-const show = ref(false)
-
-let resolve
-let reject
-const getPrice = async () => {
-  show.value = true
-  price.value = ''
-  return new Promise((a, b) => {
-    resolve = a
-    reject = b
-  })
-}
-
-const beforeClose = (action) => {
-  if (action === 'cancel') {
-    reject()
-    return true
-  }
-  let str = price.value || ''
-  str = str.trim()
-  if (!str) {
-    resolve(str)
-    return true
-  }
-  if (!priceReg.test(str)) {
-    showToast('请输入正确价格')
-    return false
-  }
-  resolve(str)
-  return true
-}
+const {
+  price, show, getPrice, beforeClose, isSpec, specs, priceModRef
+} = useProductPriceDialog()
 
 defineExpose({getPrice})
 
 </script>
+
+<style lang="scss">
+.com-dialog-prod-price {
+  .van-cell__title {
+    width: 60px;
+  }
+  .dialog-content {
+    max-height: 300px;
+    overflow: auto;
+  }
+}
+
+</style>

@@ -6,7 +6,7 @@ import { EventEmitter } from 'eventemitter3'
 import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
-import { setViewLogs } from '@/http'
+import { setViewLogs, modShopStatus } from '@/http'
 import { getBusinessCfg, E_vip_map, vipInfoManage, shopInfoManage } from '@/util'
 
 
@@ -422,4 +422,28 @@ export const isVip = (shopInfo, valiTime = true) => {
     if (nowTime > expiredTime) ret = false
   }
   return ret
+}
+
+export const handleSpecCfg = async (payload, shopId) => {
+  try {
+    if (payload.isSpec !== 1) return
+    let shopInfo = await shopInfoManage.getData(shopId)
+    shopInfo = shopInfo[0]
+    let specCfg = shopInfo?.specCfg || '[]'
+    specCfg = JSON.parse(specCfg)
+    let specList = JSON.parse(payload.specs)
+    let pass = false
+    for (const specItem of specList) {
+      if (specCfg.includes(specItem.name)) continue
+      pass = true
+      specCfg.push(specItem.name)
+    }
+    if (!pass) return
+    specCfg = specCfg.slice(-6)
+    if (!specCfg.length) return
+    await modShopStatus({specCfg: JSON.stringify(specCfg), shopId})
+    shopInfoManage.dirty(shopId)
+  } catch(e) {
+    console.error(e)
+  }
 }

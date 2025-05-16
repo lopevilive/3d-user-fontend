@@ -10,8 +10,8 @@
           <div class="left__inp">
             <VanField v-if="!checked" v-model="priceDisplay" placeholder="请输入价格(选填)" class="pd0" :border="false"/>
           </div>
-          <span class="line">|</span>
-          <VanCheckbox v-model="checked" shape="square" >多规格</VanCheckbox>
+          <span class="line" v-if="!noSpecs">|</span>
+          <VanCheckbox v-if="!noSpecs" v-model="checked" shape="square" >多规格</VanCheckbox>
         </div>
         <div class="content__spec" v-if="checked">
           <div class="spec-item" v-for="(item, index) in specsDisplay">
@@ -22,6 +22,8 @@
               class="pd0 name"
               :border="false"
               placeholder="规格名称" 
+              :readonly="isDialog"
+              @click="handleClick(item, 'name')"
             />
             <VanField
               :maxlength="8"
@@ -29,7 +31,9 @@
               @update:model-value="inputHandle"
               class="pd0"
               :border="false"
-              placeholder="规格价格"
+              placeholder="价格"
+              :readonly="isDialog"
+               @click="handleClick(item, 'price')"
             />
             <VanIcon name="back-top" class="move" v-if="isShowMove(index)" @click="moveHandle(index)"/>
             <VanIcon name="delete-o" class="del" v-if="isShowDel" @click="delHandle(index)" />
@@ -39,17 +43,21 @@
       </div>
     </template>
   </VanField>
+  <DialogMod ref="dialogModRef" />
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { priceReg, shopInfoManage } from '@/util'
+import DialogMod from './DialogMod.vue'
 
 const props = defineProps({
   price: {type: String},
   isSpec: {type: Number},
-  specs: {type: String}
+  specs: {type: String},
+  isDialog: {type: Boolean, default: false},
+  noSpecs: {type: Boolean, default: false}
 })
 
 const emits = defineEmits(['update:price', 'update:isSpec', 'update:specs'])
@@ -133,10 +141,12 @@ const valiPrice = () => {
     }
     if (ret.length < 2) return '请至少填写 2 个规格'
   } else { // 单规格
-    const price = props.price || ''
+    let price = props.price || ''
+    price = price.trim()
     if (!price) return true
     if (!priceReg.test(price)) return '请输入正确价格'
   }
+  return true
 }
 
 const disabledAdd = computed(() => {
@@ -169,12 +179,25 @@ const delHandle = (index) => {
   emits('update:specs', JSON.stringify(list))
 }
 
+const dialogModRef = ref()
+const handleClick = async (item, key) => {
+  if (!props.isDialog) return
+  const title = key === 'name' ? '规格名称' : '价格'
+  const maxlength = key === 'name' ? 12 : 8
+  const val = item[key] || ''
+  const ret = await dialogModRef.value.getVal({title, val, maxlength})
+  item[key] = ret
+  inputHandle()
+}
+
 const init = async () => {
   const res = await shopInfoManage.getData(shopId)
   if (res?.length === 1) shopInfo.value = res[0]
 }
 
 init()
+
+defineExpose({valiPrice, init})
 
 </script>
 

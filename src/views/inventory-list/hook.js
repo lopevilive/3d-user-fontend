@@ -190,9 +190,9 @@ export const useInventoryList = () => {
 
   const priceDialogRef = ref()
   const editPriceHandle = async (itemData) => {
-    const price = await priceDialogRef.value.getPrice()
+    const priceInfo = await priceDialogRef.value.getPrice()
     const {id, spec} = itemData
-    shopCarInstance.updatePrice(id, spec, price)
+    shopCarInstance.updatePrice(id, spec, priceInfo.price)
   }
 
   const goBack = () => {

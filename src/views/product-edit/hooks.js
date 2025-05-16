@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct,shopMod } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices, formatType, isVip } from '@/util'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices, formatType, isVip, handleSpecCfg } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -94,28 +94,6 @@ export const useProductEdit = () => {
     return payload
   }
 
-  const handleSpecCfg = async (payload) => {
-    try {
-      if (payload.isSpec !== 1) return
-      let specCfg = shopInfo.value?.specCfg || '[]'
-      specCfg = JSON.parse(specCfg)
-      let specList = JSON.parse(payload.specs)
-      let pass = false
-      for (const specItem of specList) {
-        if (specCfg.includes(specItem.name)) continue
-        pass = true
-        specCfg.push(specItem.name)
-      }
-      if (!pass) return
-      specCfg = specCfg.slice(-3)
-      if (!specCfg.length) return
-      shopMod({ ...shopInfo.value, specCfg: JSON.stringify(specCfg)})
-      shopInfoManage.dirty(shopInfo.value.id)
-    } catch(e) {
-      console.error(e)
-    }
-  }
-
   const validataProdType = async () => {
     // if (!data.value.productType) return true
     // const {type1, type2} = formatType(data.value.productType)
@@ -138,7 +116,7 @@ export const useProductEdit = () => {
     await validataProdType()
     await formRef.value.validate()
     const payload = getPayload()
-    handleSpecCfg(payload) // 更新多规格的配置
+    handleSpecCfg(payload, shopId) // 更新多规格的配置
     const res = await commonFetch(productMod, payload)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)
