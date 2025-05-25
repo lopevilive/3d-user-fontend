@@ -247,6 +247,25 @@ export const useSysSetting = () => {
     shopInfoManage.dirty(shopId)
     initShopInfo()
   }
+
+  const toModTypeStatus = async (val) => {
+    const payload = {
+      shopId, typeStatus: val ? 1: 0
+    }
+    await commonFetch(modShopStatus, payload)
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const typeStatus = computed({
+    get() {
+      if (shopInfo.value?.typeStatus === 1) return true
+      return false
+    },
+    set(val) {
+      toModTypeStatus(val)
+    }
+  })
   
   const init = async () => {
     const {rid} = globalData.value
@@ -258,7 +277,7 @@ export const useSysSetting = () => {
   }
 
   return {
-    toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
+    toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys, typeStatus,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef

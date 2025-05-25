@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { productTypesDel } from '@/http'
-import { commonFetch } from '@/util'
+import { commonFetch, productTypesManage } from '@/util'
 import { showConfirmDialog } from 'vant';
 import { globalData} from '@/store'
 
@@ -30,6 +30,7 @@ export const useTypeManage = () => {
       })
       await commonFetch(productTypesDel, {id: currmodItem.value.id, shopId})
       globalData.value._productTypes[shopId].done = false
+      productTypesManage.dirty(shopId)
     } catch (error) {}
   }
 

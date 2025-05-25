@@ -3,7 +3,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod, getInventory } from '@/http'
 import {
   commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil,
-  getSpecPrices, handleSpecCfg
+  getSpecPrices, handleSpecCfg, productTypesManage
 } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
@@ -43,11 +43,15 @@ export const useProductManage = () => {
   const leftListRef = ref()
   const rightListRef = ref()
 
+  let preTypeStatus = -1
+  const prodTypeFetchDone = ref(false)
+
   const productTypes = computed(() => {
-    const {rid} = globalData.value
+    const {rid, productTypes} = globalData.value
     const {requiredType} = shopInfo.value
     let ret = []
-    for (const item of globalData.value.productTypes) {
+    if (!prodTypeFetchDone.value) return ret
+    for (const item of productTypes) {
       if (!item.parentId) {
         let name = item.name
         if (requiredType) {
@@ -68,7 +72,9 @@ export const useProductManage = () => {
         allName += `(${total.value}/${limit.value})`
       }
     }
-    ret.splice(0,0, {name: allName, id: 0})
+    if (shopInfo.value.typeStatus === 0) {
+      ret.splice(0,0, {name: allName, id: 0})
+    }
     if ([2,3,99].includes(rid)) {
       let name1 = '未分类'
       if (unCateNum.value) {
@@ -275,7 +281,7 @@ export const useProductManage = () => {
 
   const searchBlurHadle = () => {
     if (preSearchStr === searchStr.value) return
-    if (searchStr.value) {
+    if (searchStr.value && shopInfo.value.typeStatus === 0) {
       activeTab.value = 0
       subActiveTab.value = 0
     }
@@ -548,8 +554,8 @@ export const useProductManage = () => {
     }})
   }
   
-  const activeHandle = () => {
-    fetchShop(false)
+  const activeHandle = async () => {
+    await fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) {
       listRef.value.scrollTop = scrollT.value
@@ -567,6 +573,17 @@ export const useProductManage = () => {
       handleUpdate(execPayload)
     }
     handleRequiredType()
+    if (preTypeStatus === -1) {
+      preTypeStatus = shopInfo.value.typeStatus
+    } else {
+      if (preTypeStatus !== shopInfo.value.typeStatus) {
+        preTypeStatus = shopInfo.value.typeStatus
+        if (preTypeStatus === 0) {
+          activeTab.value = 0
+          tabChangeHandle()
+        }
+      }
+    }
   }
 
   const priceSortChangeHandle = async () => {
@@ -619,6 +636,23 @@ export const useProductManage = () => {
     const ret = await type2PopRef.value.show()
     beforeSubChange(ret)
   }
+
+  const preHandle = async () => {
+    formatInventory()
+    await productTypesManage.getData(shopId)
+    prodTypeFetchDone.value = true
+  }
+  
+  const setFirstType = async () => {
+    const ret = await productTypesManage.getData(shopId)
+    const list = ret[0].list || []
+    for (const item of list) {
+      if (item.parentId === 0) {
+        activeTab.value = item.id
+        break;
+      }
+    }
+  }
   
   const init = async () => {
     globalData.value.productNeedExec = []
@@ -629,9 +663,12 @@ export const useProductManage = () => {
       await sleep(300)
       router.push({name: 'product-detial', params: {id: toDetial}, query: {title, imageUrl}})
     }
+    preHandle()
+    await fetchShop()
+    if (shopInfo.value.typeStatus === 1) {
+      setFirstType()
+    }
     loadHandle()
-    fetchShop()
-    formatInventory()
   }
 
   return {

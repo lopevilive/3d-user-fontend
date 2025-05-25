@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
-import { getProductTypes, getAddressList } from '@/http'
-import { commonFetch } from '@/util'
+import { getAddressList } from '@/http'
+import { commonFetch, productTypesManage } from '@/util'
 import router from '@/router/index.js'
 
 export const globalData = ref({
@@ -28,9 +28,13 @@ export const globalData = ref({
     const matched = globalData.value._productTypes?.[shopId]
     if (!matched.done) {
       matched.done = true
-      commonFetch(getProductTypes, {shopId})
-      .then((data) => { matched.data = data })
-      .catch((err) => { matched.data = []})
+      productTypesManage.getData(shopId)
+        .then((ret) => {
+          matched.data = ret[0]?.list || []
+        })
+        .catch((err) => {
+          matched.data = []
+        })
     }
     return matched.data || []
   }),

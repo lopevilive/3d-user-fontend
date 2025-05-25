@@ -29,7 +29,7 @@ import { ref, watch, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { Container, Draggable } from "vue3-smooth-dnd";
 import { modProdTypesSort } from '@/http'
-import { commonFetch } from '@/util'
+import { commonFetch, productTypesManage } from '@/util'
 import { globalData } from '@/store'
 
 const route = useRoute()
@@ -79,6 +79,7 @@ const saveHandle = async () => {
   } finally {
     isShow.value = false
     globalData.value._productTypes[shopId].done = false
+    productTypesManage.dirty(shopId)
   }
 }
 

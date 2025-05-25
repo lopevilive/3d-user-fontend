@@ -1,6 +1,6 @@
 import { ref, computed} from 'vue'
 import { productTypesMod } from '@/http'
-import { commonFetch } from '@/util'
+import { commonFetch, productTypesManage } from '@/util'
 import { useRoute } from 'vue-router'
 import {showSuccessToast, showFailToast} from 'vant'
 import { globalData } from '@/store'
@@ -52,6 +52,7 @@ export const useDialogEdit = (emits) => {
     await commonFetch(productTypesMod, payload)
     showSuccessToast('保存成功～')
     globalData.value._productTypes[shopId].done = false
+    productTypesManage.dirty(shopId)
     emits('update')
   }
 

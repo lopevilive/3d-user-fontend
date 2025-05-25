@@ -22,6 +22,7 @@
           </div>
         </template>
       </VanCell>
+      <VanCell title="联系客服" is-link @click="toContactSys"/>
     </van-cell-group>
     
     <!-- 隐私设置 -->
@@ -74,12 +75,16 @@
         </template>
       </VanCell>
       <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
+      <VanCell title="隐藏“全部”标签页"  class="cell-label-width-200" label="开启后，产品分类导航栏中的‘全部’标签页将被隐藏">
+        <template #value>
+            <VanSwitch v-model="typeStatus"/>
+        </template>
+      </VanCell>
     </van-cell-group>
 
 
     <!-- 其他 -->
     <van-cell-group inset title="其他">
-      <VanCell title="联系客服" is-link @click="toContactSys"/>
       <VanCell title="反馈建议" is-link @click="toFeedback"/>
       <VanCell title="用户协议" is-link @click="toViewProtocol"/>
     </van-cell-group>
@@ -95,7 +100,7 @@ import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
-  showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName,
+  showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef
 } = useSysSetting()
 

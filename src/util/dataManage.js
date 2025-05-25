@@ -1,4 +1,4 @@
-import { getShop, getWatermarkCfg, getVipInfo } from '@/http'
+import { getShop, getWatermarkCfg, getVipInfo, getProductTypes } from '@/http'
 import { commonFetch } from '@/util'
 
 class DataManage {
@@ -129,3 +129,5 @@ export const shopInfoManage = new DataManage(() => getShop)
 export const watermarkManage = new DataManage(() => getWatermarkCfg, 'shopId')
 
 export const vipInfoManage = new DataManage(() => getVipInfo, 'shopId')
+
+export const productTypesManage = new DataManage(() => getProductTypes, 'shopId')
