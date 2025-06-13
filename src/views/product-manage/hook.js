@@ -130,7 +130,7 @@ export const useProductManage = () => {
     if (!name) return
     updateTitStatus -= 1
     if (updateTitStatus > 0) return
-    if (route.query?.title) return
+    // if (route.query?.title) return
     router.replace({name: 'product-manage', params: route.params, query: {
       title: name,
       imageUrl: getImageUrl(url?.split(',')?.[0] || '')
@@ -666,7 +666,7 @@ export const useProductManage = () => {
     preHandle()
     await fetchShop()
     if (shopInfo.value.typeStatus === 1) {
-      setFirstType()
+      await setFirstType()
     }
     loadHandle()
   }
