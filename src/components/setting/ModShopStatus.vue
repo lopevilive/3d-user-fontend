@@ -33,7 +33,7 @@ const selectOpts = [
   {text: '放过', value: 1},
   {text: '持续审核', value: 2},
   {text: '封禁', value: 3},
-  {text: '解封画册', value: 4}
+  {text: '解封图册', value: 4}
 ]
 
 const displayVal = computed(() => {

@@ -2,11 +2,11 @@
   <div class="view-home" v-if="!loading">
     <div style="height: 1px;"></div>
     <div class="header mrM" v-if="isShowCreate">
-      <span class="text">我也想做一本产品画册!</span>
+      <span class="text">我也想做一本产品图册!</span>
       <VanButton class="btn" size="small" @click="toAlbum">立即创建</VanButton>
     </div>
     <div v-if="mineList?.length">
-      <h3 class="mrM">我的画册</h3>
+      <h3 class="mrM">我的图册</h3>
       <Card class="mrM" v-for="item in mineList" :data="item" />
     </div>
     <template v-if="logList.length">
@@ -14,7 +14,7 @@
       <Card class="mrM" v-for="item in logList" :data="item" />
     </template>
     <template v-if="demoList.length">
-      <h3 class="mrM">案例画册</h3>
+      <h3 class="mrM">案例图册</h3>
       <Card class="mrM" v-for="item in demoList" :data="item" />
     </template>
   </div>

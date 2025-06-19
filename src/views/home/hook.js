@@ -17,7 +17,7 @@ export const useHome = () => {
   })
 
   const mineList = ref([])
-  // 获取我创建/管理的画册
+  // 获取我创建/管理的图册
   const getMineList = async () => {
     const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
     let list = [...ownerList, ...adminList]
@@ -37,7 +37,7 @@ export const useHome = () => {
   
   
   const demoList = ref([])
-  // 获取案例画册
+  // 获取案例图册
   const getDemoList = async () => {
     const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
     if (globalData.value.rid !== 99) {
@@ -51,7 +51,7 @@ export const useHome = () => {
   
 
   const logList = ref([])
-  // 获取最近浏览的画册
+  // 获取最近浏览的图册
   const getLogList = async () => {
     let logIds = viewLog.getlog()
     if (logIds.length) {

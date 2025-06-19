@@ -1,7 +1,7 @@
 <template>
   <div class="view-sys-setting">
     <van-cell-group inset title="账号">
-      <VanCell title="编辑画册" is-link @click="toModAlbum" />
+      <VanCell title="编辑图册" is-link @click="toModAlbum" />
       <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
       <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
@@ -27,12 +27,12 @@
     
     <!-- 隐私设置 -->
     <van-cell-group inset title="隐私设置">
-      <VanCell title="画册加密" class="cell__switch">
+      <VanCell title="图册加密" class="cell__switch">
         <template #value>
             <VanSwitch v-model="isEncry"/>
         </template>
       </VanCell>
-      <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="画册密码" :label="encryCode">
+      <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="图册密码" :label="encryCode">
         <template #value>
           <VanButton text="刷新密码" size="small" @click="refreshCode" />
           <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
@@ -68,7 +68,7 @@
       </VanCell>
     </van-cell-group>
 
-    <van-cell-group inset title="画册设置">
+    <van-cell-group inset title="图册设置">
       <VanCell title="首页轮播图"  class="cell-label-width-200" label="店铺置顶信息与活动，支持自动轮播切换">
         <template #value>
             <VanSwitch v-model="bannerStatus"/>

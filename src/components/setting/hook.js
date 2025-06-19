@@ -153,13 +153,13 @@ export const useSetting = (props, emits) => {
       {name: '删除产品', color: '#ee0a24', icon: 'delete-o', action: acProdDel, includes: ['product-detial']},
     ],
     [
-      {name: '分享画册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact']},
+      {name: '分享图册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact']},
       {name: '客户清单', color: '#5794f7', icon: 'orders-o', action: acToCusInventory , includes: ['product-manage', 'contact']},
-      {name: '画册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'contact']},
+      {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'contact']},
     ],
     [
-      {name: '画册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]},
-      {name: '升级画册', color: '#5794f7', action: upDateAlbum, includes: ['product-manage'], rids: [99]},
+      {name: '图册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]},
+      {name: '升级图册', color: '#5794f7', action: upDateAlbum, includes: ['product-manage'], rids: [99]},
       {name: 'modStatus', color: '#5794f7', action: toModStatus, includes: ['product-manage'], rids: [99]}
     ]
   ]

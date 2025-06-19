@@ -13,7 +13,7 @@
           <div v-if="isShowStatus" class="admin-info">status: {{ data.status }} / auditing: {{ data.auditing }}</div>
           <div class="tit">
             <span class="text">{{ data.name }}</span>
-            <VanTag v-if="isOwner" type="primary">我的画册</VanTag>
+            <VanTag v-if="isOwner" type="primary">我的图册</VanTag>
             <VanTag v-if="isAdmin" type="success">管理员</VanTag>
           </div>
           <div class="desc">{{ data.desc }}</div>
@@ -80,7 +80,7 @@ const handleEncry = async () => {
 const isShow = computed(() => {
   if (globalData.value.rid === 99) return true
   if (props.data.status === 1) return false
-  if (props.data.encry === 1) { // 加密画册
+  if (props.data.encry === 1) { // 加密图册
     if (isAdmin.value || isOwner.value) return true
     return encryVal.value
   }

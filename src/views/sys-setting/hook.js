@@ -34,7 +34,7 @@ export const useSysSetting = () => {
   const modEncry = async (bool) => {
     if (bool) {
       await showConfirmDialog({
-        message: `加密后需要密码才能查看画册列表。`,
+        message: `加密后需要密码才能查看图册列表。`,
         confirmButtonText: '确认加密'
       })
     }

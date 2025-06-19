@@ -66,7 +66,7 @@ const router = createRouter({
           path: 'sys-setting',
           name: 'sys-setting',
           component: () => import('@/views/sys-setting/index.vue'),
-          meta: {title: '画册设置'}
+          meta: {title: '图册设置'}
         },
         {
           path: 'inventory-list',
@@ -231,7 +231,7 @@ const init = async (to, from) => {
     }
   }
   if (shopId) {
-    // 这里判断画册是否被封禁
+    // 这里判断图册是否被封禁
     let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0];
     if (shopInfo.status === 1) {
@@ -248,7 +248,7 @@ const init = async (to, from) => {
     }
   }
   wx.miniProgram.postMessage({ data: {type: 'router', name: to.name}})
-  document.title = to?.query?.title || to?.meta?.title || '小果画册'
+  document.title = to?.query?.title || to?.meta?.title || '小果图册'
 }
 
 router.beforeEach(async (to, from) => {
