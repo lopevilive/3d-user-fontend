@@ -564,8 +564,8 @@ export const useProductManage = () => {
   }
   
   const activeHandle = async () => {
-    await fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100)
+    await fetchShop(false)
     if (scrollT.value) {
       listRef.value.scrollTop = scrollT.value
     }
