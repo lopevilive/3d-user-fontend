@@ -21,7 +21,7 @@
             @click="checkedAllHandle"
           >全选</VanCheckbox>
           <div class="top-bar__right">
-            <VanButton class="mul-share" :disabled="disabled" @click="mulShare" size="small" icon="share-o" type="primary" plain>批量转发</VanButton>
+            <VanButton v-if="isShowMul" class="mul-share" :disabled="disabled" @click="mulShare" size="small" icon="share-o" type="primary" plain>批量转发</VanButton>
             <VanButton @click="clearAllHandle" size="small" icon="delete-o" type="danger" plain>清空清单</VanButton>
           </div>
         </div>
@@ -95,7 +95,7 @@ import RecordFloat from './RecordFloat.vue'
 const {
   shopCarList, handleUpdateCount, deleteItem, clearAllHandle, remark, getIsCheck, checkClickHandle,
   init, isCheckedAll, checkedAllHandle, totalCount, totalPrice, toBuildInventory, disabled, mulShare,
-  priceDialogRef, isShowEditPrice, editPriceHandle, goBack, canBuild
+  priceDialogRef, isShowEditPrice, editPriceHandle, goBack, canBuild, isShowMul
 } = useInventoryList()
 
 init()

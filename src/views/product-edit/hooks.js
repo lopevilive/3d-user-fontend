@@ -1,8 +1,10 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { productMod, getProduct,shopMod } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices, formatType, isVip, handleSpecCfg } from '@/util'
+import { productMod, getProduct } from '@/http'
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices,
+ handleSpecCfg, toVip, vipInfoManage
+} from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -13,6 +15,7 @@ export const useProductEdit = () => {
   const shopId = +route.params.shopId
 
   const shopInfo = ref({})
+  const vipInfo = ref()
 
   const busiCfg = computed(() => {
     const {business} = shopInfo.value
@@ -94,26 +97,12 @@ export const useProductEdit = () => {
     return payload
   }
 
-  const validataProdType = async () => {
-    // if (!data.value.productType) return true
-    // const {type1, type2} = formatType(data.value.productType)
-    // if (!type1) return true
-    // for (const item of globalData.value.productTypes) {
-    //   if (item.parentId === type1 && !type2) {
-    //     showToast('请选择二级分类')
-    //     throw new Error('分类校验失败')
-    //   }
-    // }
-    return true
-  }
-
   const uploadImgsRef = ref()
   const saveHandle = async () => {
     if (uploadImgsRef.value.isLoading) {
       showToast('请等待图片上传完成再保存～')
       return
     }
-    await validataProdType()
     await formRef.value.validate()
     const payload = getPayload()
     handleSpecCfg(payload, shopId) // 更新多规格的配置
@@ -215,21 +204,37 @@ export const useProductEdit = () => {
   })
 
   const maxCount = computed(() => {
-    if (isVip(shopInfo.value)) return 12
-    return 6
+    const cfg = vipInfo.value?.cfg
+    const level = vipInfo.value?.level
+    if (!cfg) return 6
+    const matchItem = cfg.find((item) => item.level === level)
+    return matchItem.imgC
   })
 
   const maxSize = computed(() => {
-    if (isVip(shopInfo.value)) {
-      if ([516].includes(shopId)) return 40
-      return 20
-    }
-    return 10
+    if ([516].includes(shopId)) return 40 // 特殊逻辑
+    const cfg = vipInfo.value?.cfg
+    const level = vipInfo.value?.level
+    if (!cfg) return 10
+    const matchItem = cfg.find((item) => item.level === level)
+    if (!matchItem) return 10
+    return matchItem.imgS;
   })
 
+  const goVip = () => {
+    toVip(shopId)
+  }
+
+  const getVipInfo = async () => {
+    const ret = await vipInfoManage.getData(shopId)
+    vipInfo.value = ret[0]
+  }
+  
+  
   const init = () => {
     getProductInfo()
     getShopInfo()
+    getVipInfo()
   }
 
   return {
@@ -252,6 +257,7 @@ export const useProductEdit = () => {
     maxCount,
     imgCount,
     maxSize,
-    dialogVipRef
+    dialogVipRef,
+    goVip
   }
 }

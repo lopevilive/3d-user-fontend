@@ -27,23 +27,32 @@ const shopId = +route.params.shopId
 const gap = getFlexW(24)
 const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.7});
 
+const shopInfo = ref({})
+
 const clickHandle = async () => {
-  let shopInfo = await shopInfoManage.getData(shopId)
-  shopInfo = shopInfo[0]
+  const {name, url, desc} = shopInfo.value
   toSharePage({
-    src_path: `/product-manage/${shopId}?title=${encodeURIComponent(shopInfo.name)}&imageUrl=${encodeURIComponent(getImageUrl(shopInfo.url.split(',')[0]))}`,
-    url: shopInfo.url?.split(',')?.[0] || '',
-    title: shopInfo.name,
-    desc1: [shopInfo.desc || ''],
+    src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
+    url: url?.split(',')?.[0] || '',
+    title: name,
+    desc1: [desc || ''],
     desc2: [],
     scene: {name: 'product-manage', shopId}
   })
 }
 
 const isShow = computed(() => {
+  if (shopInfo.value.forwardPermi === 1) return false
   if ([0,1,10].includes(globalData.value.rid)) return true
   return false
 })
+
+const init = async () => {
+  const tmp = await shopInfoManage.getData(shopId)
+  shopInfo.value = tmp[0]
+}
+
+init()
 
 </script>
 

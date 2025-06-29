@@ -192,23 +192,24 @@ const handleLogin = async (to) => {
   }
 }
 
-const handleEncry = async (to) => {
-  if (!['product-manage'].includes(to.name)) return true
-  const shopId = + to.params.shopId
+const handleEncry = async (shopId, to) => {
+  if (!shopId) return
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0];
+  if (shopInfo.encry !== 1) return
+  if (!['product-manage'].includes(to.name)) return
   const { rid, userInfo: {ownerList, adminList}, encryInfo } = globalData.value
-  if (rid === 99) return true
-  if (ownerList.includes(shopId)) return true
-  if (adminList.includes(shopId)) return true
-  if (encryInfo[shopId] === true) return true
+  if (rid === 99) return
+  if (ownerList.includes(shopId)) return
+  if (adminList.includes(shopId)) return
+  if (encryInfo[shopId] === true) return
 
   const encryDialogRef = encryRefManage.getRef()
   const ret = await encryDialogRef.value.show(shopId)
   if (ret === false) return {name: 'home'}
 }
 
-const init = async (to, from) => {
-  const { needPhone } = to.meta
-  const {shopId} = to.params
+const handleQuery = (to) => {
   const {isPC, wxEnv} = to.query
   if (isPC) {
     globalData.value.isPC = true
@@ -216,37 +217,82 @@ const init = async (to, from) => {
   if (wxEnv) {
     globalData.value.wxEnv = wxEnv
   }
+}
+
+const handlePhone = (to) => {
+  const { needPhone } = to.meta
+  if (!needPhone) return
+  const {hasPhone} = globalData.value.userInfo
+  if (hasPhone) return
+  const inApp = isInApp()
+  if (!inApp) return false // 这种情况不许打开页面
+  toPhone(to)
+  return false
+}
+
+const handleIllegal = async (shopId) => {
+  if (!shopId) return
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0];
+  if (shopInfo.status !== 1) return
+  const { rid } = globalData.value
+  if (rid === 99) return // 超级管理员
+  return {name: 'album-illegal', params: {id: shopId}}
+}
+
+const handleLog = (to, shopId) => {
+  if (!shopId) return
+  if (!['product-manage', 'product-detial'].includes(to.name)) return
+  viewLog.setlog(shopId)
+}
+
+const forwardObj = {}
+const handleForwardPermi = async (shopId) => {
+  if (!shopId) return
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0];
+  const { forwardPermi } = shopInfo
+  const { rid } = globalData.value
+  if (!forwardObj[shopId]) {
+    if (forwardPermi !== 1) return
+    forwardObj[shopId] = {done:false, forwardPermi}
+  }
+  const data = forwardObj[shopId]
+  if (data.forwardPermi !== forwardPermi) {
+    data.done = false
+    data.forwardPermi = forwardPermi
+  }
+  if (data.done) return
+  data.done = true
+  const isAdmin = [2, 3, 99].includes(rid) ? 1: 0;
+  wx.miniProgram.postMessage({ data: {type: 'forward', forwardPermi: data.forwardPermi, isAdmin, shopId}})
+}
+
+
+const init = async (to, from) => {
+  let {shopId} = to.params
   if (shopId) {
+    shopId = +shopId
     shopInfoManage.getData(shopId)
   }
-  let pass = await handleLogin(to)
+  handleQuery(to) //  保存小程序传过来的参数
+
+  let pass = await handleLogin(to) // 处理登录
   if (pass === false) return false
-  if (needPhone) {
-    const {hasPhone} = globalData.value.userInfo
-    if (!hasPhone) {
-      const inApp = isInApp()
-      if (!inApp) return false // 这种情况不许打开页面
-      toPhone(to)
-      return false
-    }
-  }
-  if (shopId) {
-    // 这里判断图册是否被封禁
-    let shopInfo = await shopInfoManage.getData(shopId)
-    shopInfo = shopInfo[0];
-    if (shopInfo.status === 1) {
-      const { rid } = globalData.value
-      if (rid !== 99) {
-        return {name: 'album-illegal', params: {id: shopId}}
-      }
-    } else {
-      viewLog.setlog(shopId)
-    }
-    if (shopInfo.encry === 1) {
-      const ret = await handleEncry(to)
-      if (ret !== true) return ret
-    }
-  }
+
+  pass = handlePhone(to) // 判断是否需要手机验证
+  if (pass === false) return false
+
+  pass = await handleIllegal(shopId) // 判断是否封禁画册
+  if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+  
+  handleLog(to, shopId) // 写入浏览记录
+
+  pass = await handleEncry(shopId, to) // 判断是否加密画册
+  if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+
+  handleForwardPermi(shopId) // 处理转发权限
+  // 这里是把当前页面信息传给小程序
   wx.miniProgram.postMessage({ data: {type: 'router', name: to.name}})
   document.title = to?.query?.title || to?.meta?.title || '小果图册'
 }

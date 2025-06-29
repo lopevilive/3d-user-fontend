@@ -36,12 +36,11 @@ export const useProductDetial = () => {
   }
 
   const shareHandle = async () => {
-    let shopInfo = await shopInfoManage.getData(shopId)
-    shopInfo = shopInfo[0]
+    const {name} = shopInfo.value
     toSharePage({
       src_path: `/product-manage/${shopId}?toDetial=${info.value.id}&title=${encodeURIComponent(info.value.desc)}&imageUrl=${encodeURIComponent(getImageUrl(info.value.url.split(',')[0]))}`,
       url: info.value.url?.split(',')?.[0] || '',
-      title: shopInfo.name,
+      title: name,
       desc1: [info.value.desc],
       desc2: [],
       scene: { name: 'product-detial', shopId, id: info.value.id }
@@ -93,6 +92,13 @@ export const useProductDetial = () => {
     router.go(-1)
   }
   
+  const isShowShare = computed(() => {
+    const {rid} = globalData.value
+    if ([2,3,99].includes(rid)) return true
+    if (shopInfo.value.forwardPermi === 1) return false
+    return true
+  })
+  
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
@@ -105,21 +111,8 @@ export const useProductDetial = () => {
   }
 
   return {
-    info,
-    imgList,
-    handleView3D,
-    init,
-    modelDisplayRef,
-    shareHandle,
-    displayAttrs,
-    isShowSticky,
-    specsDisplay,
-    selectedSpecIdx,
-    displayPrice,
-    isShowAction,
-    selectHandle,
-    isShowDownTips,
-    goback,
-    isShowEmpty
+    info, imgList, handleView3D, init, modelDisplayRef, shareHandle, displayAttrs,
+    isShowSticky, specsDisplay, selectedSpecIdx, displayPrice, isShowAction, selectHandle,
+    isShowDownTips, goback, isShowEmpty, isShowShare
   }
 }

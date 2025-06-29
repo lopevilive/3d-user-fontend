@@ -1,7 +1,7 @@
 import {computed, ref} from 'vue'
 import { uploadFile, shopInfoManage, watermarkManage, auditingImg } from '@/util'
 import { useRoute } from 'vue-router'
-import { showFailToast, showImagePreview} from 'vant'
+import { showImagePreview} from 'vant'
 import { globalData } from '@/store'
 
 export const useUploadImages = (props, emits) => {
@@ -121,8 +121,10 @@ export const useUploadImages = (props, emits) => {
     return true
   })
 
+
+  const overDialogRef = ref()
   const oversizeHandle = (file) => {
-    showFailToast(`最大支持上传 ${props.maxSize}M 的图片。大图上传请联系客服～`)
+    overDialogRef.value.show(props.maxSize)
   }
 
   const viewHandle = (idx) => {
@@ -162,6 +164,7 @@ export const useUploadImages = (props, emits) => {
     isLoading,
     maxC,
     vanUploaderRef,
-    chooseFile
+    chooseFile,
+    overDialogRef
   }
 }

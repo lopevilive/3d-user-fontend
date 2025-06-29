@@ -17,7 +17,8 @@
           :required="true"
           placeholder="请输入公司名称/图册名称"
           :maxlength="20"
-          :rules="[{required: true, message: '名称不能为空'}]"
+          required
+          :rules="[{validator: valiName}]"
         />
 
         <!-- <VanField is-link >
@@ -52,6 +53,7 @@
           :maxlength="252"
           :clearable="true"
           :rows="3"
+          :rules="[{validator: valiDesc}]"
         >
           <template #label>
             <FormLabel label="业务介绍" tips="填写业务介绍以便更好地展示贵司的服务和产品，帮助客户快速了解您的专业领域"/>
@@ -112,7 +114,9 @@ const {
   businessClick,
   uploadImgsRef,
   uploadImgsRef2,
-  loading
+  loading,
+  valiName,
+  valiDesc
 } = useAlbumMod()
 
 

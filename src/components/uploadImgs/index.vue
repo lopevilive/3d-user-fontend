@@ -19,11 +19,13 @@
       />
     </div>
   </div>
+  <OverDialog ref='overDialogRef' />
 </template>
 
 <script setup>
 import { useUploadImages } from './hooks'
 import ImgItem from './imgItem.vue'
+import OverDialog from './OverDialog.vue'
 import { Container, Draggable } from "vue3-smooth-dnd";
 
 const props = defineProps({
@@ -48,7 +50,8 @@ const {
   isLoading,
   maxC,
   vanUploaderRef,
-  chooseFile
+  chooseFile,
+  overDialogRef
 } = useUploadImages(props, emits)
 
 defineExpose({isLoading, chooseFile})

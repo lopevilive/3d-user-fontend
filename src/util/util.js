@@ -237,11 +237,11 @@ export const decodeScene = (str) => {
 }
 
 export const toSharePage = (payload = {}) => {
-  const inApp = isInApp()
-  if (!inApp) {
-    showToast('请在小程序内打开')
-    return
-  }
+  // const inApp = isInApp()
+  // if (!inApp) {
+  //   showToast('请在小程序内打开')
+  //   return
+  // }
   let query = ''
   for (const key of Object.keys(payload)) {
     let val = payload[key]

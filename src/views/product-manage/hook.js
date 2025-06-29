@@ -392,9 +392,18 @@ export const useProductManage = () => {
         }
       }
       if (activeTab.value > 0) {
-        if (+newItem.productType !== activeTab.value) {
-          refList.value.splice(idx, 1)
-          return matched
+        if (newItem.productType) {
+          const {type1, type2} = formatTypeUtil(newItem.productType)
+          if (type1 !== activeTab.value) {
+            refList.value.splice(idx, 1)
+            return matched
+          }
+          if (subActiveTab.value) {
+            if (subActiveTab.value !== type2) {
+              refList.value.splice(idx, 1)
+              return matched
+            }
+          }
         }
       }
       refList.value[idx] = newItem

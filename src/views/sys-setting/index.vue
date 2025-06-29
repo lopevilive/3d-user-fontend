@@ -27,6 +27,11 @@
     
     <!-- 隐私设置 -->
     <van-cell-group inset title="隐私设置">
+      <VanCell title="限制转发" class="cell-label-width-200" label="开启后，仅管理员可转发分享图册" v-if="isShowForward">
+        <template #value>
+            <VanSwitch v-model="isForwardPermi"/>
+        </template>
+      </VanCell>
       <VanCell title="图册加密" class="cell__switch">
         <template #value>
             <VanSwitch v-model="isEncry"/>
@@ -101,7 +106,8 @@ const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
-  expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef
+  expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
+  isForwardPermi, isShowForward
 } = useSysSetting()
 
 init()

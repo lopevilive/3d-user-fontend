@@ -9,7 +9,14 @@
           readonly
         >
           <template #label>
-            <FormLabel label="产品图片" tips="首张图片作为产品封面，支持拖动调整图片顺序"/>
+            <FormLabel label="产品图片" tips="tmp">
+              <template #default>
+                <div class="img-tips-wrap">
+                  首张图片作为产品封面，可以拖动调整图片顺序。会员支持上传更多图片，
+                  <span class="to-vip" @click="goVip">前往了解</span>。
+                </div>
+              </template>
+            </FormLabel>
             ({{imgCount}}/{{ maxCount }})
           </template>
           <template #input>
@@ -133,7 +140,8 @@ const {
   maxCount,
   imgCount,
   maxSize,
-  dialogVipRef
+  dialogVipRef,
+  goVip
 } = useProductEdit()
 
 init()
@@ -186,6 +194,15 @@ init()
     padding-top: 8px;
     box-sizing: border-box;
     background: $bgWhite;
+  }
+}
+
+.img-tips-wrap {
+  padding: 20px 10px;
+  color: $grey7;
+  font-size: $fsM;
+  .to-vip {
+    color: #3d8bf2;
   }
 }
 

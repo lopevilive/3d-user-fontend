@@ -214,6 +214,13 @@ export const useInventoryList = () => {
     return false
   })
 
+  const isShowMul = computed(() => {
+    const {rid} = globalData.value
+    if ([2,3,99].includes(rid)) return true
+    if (shopInfo.value.forwardPermi === 1) return false
+    return true
+  })
+
   const init = async () => {
     selectedList.value = []
     for (const item of shopCarList.value) {
@@ -246,6 +253,7 @@ export const useInventoryList = () => {
     isShowEditPrice,
     editPriceHandle,
     goBack,
-    canBuild
+    canBuild,
+    isShowMul
   }
 }

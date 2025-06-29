@@ -15,7 +15,7 @@
             <span class="num">{{ displayPrice }}</span>
           </template>
         </div>
-        <div class="share">
+        <div class="share" v-if="isShowShare">
           <VanButton @click="shareHandle" size="small" icon="share-o" icon-position="right">分享</VanButton>
         </div>
       </div>
@@ -93,7 +93,8 @@ const {
   selectHandle,
   isShowDownTips,
   goback,
-  isShowEmpty
+  isShowEmpty,
+  isShowShare
 } = useProductDetial()
 
 onMounted(init)

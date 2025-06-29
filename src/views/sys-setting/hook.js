@@ -180,6 +180,12 @@ export const useSysSetting = () => {
     if (['develop', 'trial', 'release'].includes(globalData.value.wxEnv)) return true
     return false
   })
+
+  const isShowForward = computed(() => {
+    console.log(globalData.value.wxEnv)
+    if (['develop', 'trial'].includes(globalData.value.wxEnv)) return true
+    return false
+  })
   
   const showVip = () => {
     toVip(shopId)
@@ -266,6 +272,33 @@ export const useSysSetting = () => {
       toModTypeStatus(val)
     }
   })
+
+  const modForwardPermi = async (val) => {
+    if (val) {
+      if (!isVip(shopInfo.value)) {
+        await showConfirmDialog({
+          message: '开通会员后可开启该功能。\n(注：会员99/年)',
+          confirmButtonText: '前往开通',
+          cancelButtonText: '好的'
+        })
+        toVip(shopId)
+        return
+      }
+    }
+    await commonFetch(modShopStatus, {shopId, forwardPermi: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const isForwardPermi = computed({
+    get() {
+      if (shopInfo.value?.forwardPermi === 1) return true
+      return false
+    },
+    set(val) {
+      modForwardPermi(val)
+    }
+  })
   
   const init = async () => {
     const {rid} = globalData.value
@@ -280,7 +313,8 @@ export const useSysSetting = () => {
     toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys, typeStatus,
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
-    expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef
+    expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
+    isForwardPermi, isShowForward
   }
 
 }

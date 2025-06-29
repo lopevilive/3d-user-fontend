@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { shopCreate, shopMod } from '@/http'
-import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl, sleep } from '@/util'
+import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl, sleep, emojiReg } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast } from 'vant';
@@ -81,6 +81,20 @@ export const useAlbumMod = () => {
     showBusinessPicker.value = true
   }
 
+  const valiName = () => {
+    data.value.name = data.value.name.trim()
+    let reg = new RegExp(emojiReg)
+    if (!data.value.name) return '请输入名称'
+    if (reg.test(data.value.name)) return '不能输入表情符'
+  }
+
+  const valiDesc = () => {
+    data.value.desc = data.value.desc.trim()
+    if (!data.value.desc) return true
+    let reg = new RegExp(emojiReg)
+    if (reg.test(data.value.desc)) return '不能输入表情符'
+  }
+  
   const init = async () => {
     if (!isEdit) return
     const res = await shopInfoManage.getData(shopId)
@@ -103,6 +117,8 @@ export const useAlbumMod = () => {
     businessClick,
     uploadImgsRef,
     uploadImgsRef2,
-    loading
+    loading,
+    valiName,
+    valiDesc
   }
 }
