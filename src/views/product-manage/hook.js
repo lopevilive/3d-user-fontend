@@ -269,6 +269,7 @@ export const useProductManage = () => {
   }
 
   const refresh = () => {
+    if (!inited) return false
     currPage.value = 0
     finished.value = false
     leftList.value = []
@@ -552,7 +553,6 @@ export const useProductManage = () => {
   }
   
   const activeHandle = async () => {
-    if (!inited) return false
     await fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100) // 用于更新 tab分类组件
     if (scrollT.value) { // 这里让页面滚动到上次的位置
@@ -664,7 +664,7 @@ export const useProductManage = () => {
     if (shopInfo.value.typeStatus === 1) {
       await setFirstType()
     }
-    loadHandle()
+    await loadHandle()
     inited = true
   }
 
