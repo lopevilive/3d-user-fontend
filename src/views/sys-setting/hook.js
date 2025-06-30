@@ -261,6 +261,7 @@ export const useSysSetting = () => {
     await commonFetch(modShopStatus, payload)
     shopInfoManage.dirty(shopId)
     initShopInfo()
+    globalData.value.prodManageNeedUpdate = true
   }
   
   const typeStatus = computed({

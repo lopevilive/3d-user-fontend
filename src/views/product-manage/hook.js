@@ -43,8 +43,9 @@ export const useProductManage = () => {
   const leftListRef = ref()
   const rightListRef = ref()
 
-  let preTypeStatus = -1
   const prodTypeFetchDone = ref(false)
+
+  let inited = false // 是否初始化完成
 
   const productTypes = computed(() => {
     const {rid, productTypes} = globalData.value
@@ -253,12 +254,12 @@ export const useProductManage = () => {
       // })
       // listManage.add(ret)
       listManage.add(data.list)
+    }catch(e) {
+      console.error(e)
+    } finally {
       setTimeout(() => {
         fetchLoadingRaw.value = false
       }, 0);
-    }catch(e) {
-      fetchLoadingRaw.value = false
-      console.error(e)
     }
   }
 
@@ -461,19 +462,6 @@ export const useProductManage = () => {
   const handleMulChangeType = async () => {
     const productType = await mulProductTypeRef.value.getType()
     await commonFetch(productMod, {productType, id: selectedList.value, shopId})
-    // if (activeTab.value === -1) {
-    //   if (productType) {
-    //     unCateNum.value -= selectedList.value.length;
-    //     unCateNum.value = unCateNum.value ? unCateNum.value : 0;
-    //   }
-    // }
-    // if ([0,-2].includes(activeTab.value)) {
-    //   removeAllSelected()
-    //   return
-    // }
-    // if (productType !== activeTab.value) {
-    //   removeList(selectedList.value)
-    // }
     refresh()
     removeAllSelected()
   }
@@ -564,12 +552,13 @@ export const useProductManage = () => {
   }
   
   const activeHandle = async () => {
-    tabKey.value = Math.floor(Math.random() * 100)
+    if (!inited) return false
     await fetchShop(false)
-    if (scrollT.value) {
+    tabKey.value = Math.floor(Math.random() * 100) // 用于更新 tab分类组件
+    if (scrollT.value) { // 这里让页面滚动到上次的位置
       listRef.value.scrollTop = scrollT.value
     }
-    if (globalData.value?.productNeedExec?.length) {
+    if (globalData.value?.productNeedExec?.length) { // 这里处理编辑产品后，同步产品列表里面产品信息
       let tmpList = globalData.value.productNeedExec
       globalData.value.productNeedExec = []
       for (const item of tmpList) {
@@ -581,16 +570,14 @@ export const useProductManage = () => {
       const execPayload = tmpList.pop()
       handleUpdate(execPayload)
     }
-    handleRequiredType()
-    if (preTypeStatus === -1) {
-      preTypeStatus = shopInfo.value.typeStatus
-    } else {
-      if (preTypeStatus !== shopInfo.value.typeStatus) {
-        preTypeStatus = shopInfo.value.typeStatus
-        if (preTypeStatus === 0) {
-          activeTab.value = 0
-          tabChangeHandle()
-        }
+    handleRequiredType() // 当漏选必选产品时，跳转到对应的必选分类
+    if (globalData.value.prodManageNeedUpdate) {
+      globalData.value.prodManageNeedUpdate = false
+      if (shopInfo.value.typeStatus === 0) {
+        activeTab.value = 0
+        tabChangeHandle()
+      } else {
+        tabKey.value = Math.floor(Math.random() * 100)
       }
     }
   }
@@ -678,10 +665,11 @@ export const useProductManage = () => {
       await setFirstType()
     }
     loadHandle()
+    inited = true
   }
 
   return {
-    init, productTypes, activeTab, loadHandle, finished, fetchLoading, refresh,
+    init, productTypes, activeTab, finished, fetchLoading, refresh,
     tabChangeHandle, leftList, rightList, leftListRef, rightListRef, scrollHandle,
     selectedList, selectedHandle, removeAllSelected, handleEditDone, addProdHandle,
     handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,

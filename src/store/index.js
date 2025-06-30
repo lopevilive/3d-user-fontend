@@ -75,7 +75,8 @@ export const globalData = ref({
   wxEnv: 'release',
   encryInfo: {},
   hasInventory: {},
-  cusInventoryNeedUpdate: false
+  cusInventoryNeedUpdate: false,
+  prodManageNeedUpdate: false
 })
 
 
