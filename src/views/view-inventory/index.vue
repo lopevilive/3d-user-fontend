@@ -97,6 +97,7 @@ const dataList = ref([])
 const getExportStatus = (shopInfo) => {
   if ([2,3,99].includes(globalData.value.rid)) return ''
   if (shopInfo.inveExportStatus === 1) return '1'
+  if (shopInfo.forwardPermi === 1) return '1'
   return ''
 }
 

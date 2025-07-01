@@ -183,7 +183,7 @@ export const useSysSetting = () => {
 
   const isShowForward = computed(() => {
     console.log(globalData.value.wxEnv)
-    if (['develop', 'trial'].includes(globalData.value.wxEnv)) return true
+    if (['develop', 'trial', 'release'].includes(globalData.value.wxEnv)) return true
     return false
   })
   
