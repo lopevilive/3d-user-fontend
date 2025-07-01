@@ -72,13 +72,15 @@ export const useSetting = (props, emits) => {
   const acShare = async () => {
     let shopInfo = await shopInfoManage.getData(shopId)
     shopInfo = shopInfo[0]
+    const {name, url, desc, forwardPermi} = shopInfo
     toSharePage({
-      src_path: `/product-manage/${shopId}?title=${encodeURIComponent(shopInfo.name)}&imageUrl=${encodeURIComponent(getImageUrl(shopInfo.url.split(',')[0]))}`,
-      url: shopInfo.url?.split(',')?.[0] || '',
-      title: shopInfo.name,
-      desc1: [shopInfo.desc || ''],
+      src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
+      url: url?.split(',')?.[0] || '',
+      title: name,
+      desc1: [desc || ''],
       desc2: [],
-      scene: {name: 'product-manage', shopId}
+      scene: {name: 'product-manage', shopId},
+      forwardPermi
     })
   }
 

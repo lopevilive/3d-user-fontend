@@ -49,17 +49,17 @@
         </template>
       </VanCell>
       <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
+      <VanCell title="禁止导出 Excel"  class="cell-label-width-200" label="开启后，客户无法导出清单 Excel">
+        <template #value>
+            <VanSwitch v-model="inveExportStatus"/>
+        </template>
+      </VanCell>
     </van-cell-group>
 
     <van-cell-group inset title="购物清单设置">
       <VanCell title="收货信息必填"  class="cell-label-width-200" label="开启后，客户需要填写收货信息才能提交清单">
         <template #value>
             <VanSwitch v-model="needAddress"/>
-        </template>
-      </VanCell>
-      <VanCell title="禁止导出 Excel"  class="cell-label-width-200" label="开启后，客户无法导出清单 Excel">
-        <template #value>
-            <VanSwitch v-model="inveExportStatus"/>
         </template>
       </VanCell>
       <VanCell
