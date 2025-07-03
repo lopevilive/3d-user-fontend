@@ -120,18 +120,28 @@ const toShare = async () => {
 
 const getInventoryData = async () => {
   let ret = await commonFetch(getInventory, {id})
-  if (ret.length) {
-    ret = ret[0]
-    const tmp = JSON.parse(ret.data)
-    info.value = {
-      ...ret,
-      address: tmp.address,
-      remark: tmp.remark,
-      totalCount: tmp.totalCount,
-      totalPrice: tmp.totalPrice
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0]
+  ret = ret?.[0]
+  if (!ret) return false // 清单不存在了
+  if (shopInfo.forwardPermi === 1) { // 限制转发图册的时候，只有创建者或者管理员能打开清单
+    const {rid, userInfo: {userId}} = globalData.value
+    if (![2,3,99].includes(rid)) { // 非管理员
+      if (ret.userId !== userId) { // 不是本人打开清单
+        return false
+      }
     }
-    dataList.value = tmp.list
   }
+
+  const tmp = JSON.parse(ret.data)
+  info.value = {
+    ...ret,
+    address: tmp.address,
+    remark: tmp.remark,
+    totalCount: tmp.totalCount,
+    totalPrice: tmp.totalPrice
+  }
+  dataList.value = tmp.list
 }
 
 const cancelHandle = async () => {
@@ -158,7 +168,11 @@ const goDetial = (id) => {
 }
 
 const init = async () => {
-  await getInventoryData()
+  const ret = await getInventoryData()
+  if (ret === false) {
+    router.replace({name: 'home'})
+    return
+  }
   if (route.query.toShare === '1') {
     toShare()
   }
