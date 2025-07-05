@@ -129,3 +129,7 @@ export const E_vip_map = [
   {level: 5, name: '2000 容量会员', isVip: true},
 ]
 
+export const E_illegal_reg = [
+  ['辟','邪'],
+]
+

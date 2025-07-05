@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { shopCreate, shopMod } from '@/http'
-import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl, sleep, emojiReg } from '@/util'
+import { commonFetch, keyReplace, E_business, globalLoading, shopInfoManage, getImageUrl, sleep, emojiReg, valiIllegalStr } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast } from 'vant';
@@ -86,6 +86,8 @@ export const useAlbumMod = () => {
     let reg = new RegExp(emojiReg)
     if (!data.value.name) return '请输入名称'
     if (reg.test(data.value.name)) return '不能输入表情符'
+    const ret = valiIllegalStr(data.value.name)
+    if (ret) return `不能包含【${ret}】等敏感词。`
   }
 
   const valiDesc = () => {
@@ -93,6 +95,8 @@ export const useAlbumMod = () => {
     if (!data.value.desc) return true
     let reg = new RegExp(emojiReg)
     if (reg.test(data.value.desc)) return '不能输入表情符'
+    const ret = valiIllegalStr(data.value.desc)
+    if (ret) return `不能包含【${ret}】等敏感词。`
   }
   
   const init = async () => {

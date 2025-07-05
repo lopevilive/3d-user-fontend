@@ -1,6 +1,6 @@
 import { ref, computed} from 'vue'
 import { productTypesMod } from '@/http'
-import { commonFetch, productTypesManage } from '@/util'
+import { commonFetch, productTypesManage, valiIllegalStr } from '@/util'
 import { useRoute } from 'vue-router'
 import {showSuccessToast, showFailToast} from 'vant'
 import { globalData } from '@/store'
@@ -62,10 +62,20 @@ export const useDialogEdit = (emits) => {
       msg = '请至少输入一个名称'
       for(const item of dataList.value) {
         if (item.name) msg = ''
+        const ret = valiIllegalStr(item.name)
+        if (ret) {
+          msg = `不能包含【${ret}】等敏感词。`
+          break;
+        }
       }
-    } else {
+    } else { // 添加单个
       if (data.value.name === '') {
         msg = '请输入名称'
+      } else {
+        const ret = valiIllegalStr(data.value.name)
+        if (ret) {
+          msg = `不能包含【${ret}】等敏感词。`
+        }
       }
     }
     return msg

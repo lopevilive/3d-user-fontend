@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs, modShopStatus } from '@/http'
-import { getBusinessCfg, E_vip_map, vipInfoManage, shopInfoManage } from '@/util'
+import { getBusinessCfg, E_vip_map, vipInfoManage, shopInfoManage, E_illegal_reg } from '@/util'
 
 
 class LoadingManage {
@@ -448,5 +448,24 @@ export const handleSpecCfg = async (payload, shopId) => {
     shopInfoManage.dirty(shopId)
   } catch(e) {
     console.error(e)
+  }
+}
+
+export const valiIllegalStr = (str) => {
+  if (!str) return
+  for (const item of E_illegal_reg) {
+    let reg = ''
+    let msg = ''
+    for (const s of item) {
+      if (!reg) {
+        reg = s;
+        msg = s
+        continue
+      }
+      reg += `.{0,5}${s}`
+      msg += s
+    }
+    reg = new RegExp(reg)
+    if (reg.test(str)) return msg
   }
 }

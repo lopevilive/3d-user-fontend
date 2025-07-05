@@ -29,6 +29,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { showToast, showConfirmDialog} from 'vant';
+import { valiIllegalStr } from '@/util'
 
 const props = defineProps({
   attrList: {type: Array, default: () => []}
@@ -64,6 +65,11 @@ const beforeClose = async (action) => {
       showToast('该属性已存在')
       return false
     }
+  }
+  const ret = valiIllegalStr(value)
+  if (ret) {
+    showToast(`不能包含【${ret}】等敏感词。`)
+    return false
   }
   emits('update', {name: value})
   return true

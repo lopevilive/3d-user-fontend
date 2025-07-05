@@ -36,6 +36,8 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
+import { valiIllegalStr } from '@/util'
+import { showToast } from 'vant'
 
 const emits =  defineEmits(['update'])
 
@@ -84,6 +86,13 @@ const beforeClose = async (action) => {
   if (action === 'cancel') return true
   vanFieldRef?.value?.blur()
   await nextTick()
+  for (const str of customOpts.value) {
+    const ret = valiIllegalStr(str)
+    if (ret) {
+      showToast(`不能包含【${ret}】等敏感词。`)
+      return false
+    }
+  }
   emits('update', {data: rawData.value, list: customOpts.value})
   return true
 }

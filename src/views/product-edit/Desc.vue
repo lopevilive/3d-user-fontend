@@ -9,12 +9,13 @@
     :rows="4"
     :clearable="true"
     :show-word-limit="isShowLimit"
-    :rules="[{required: true, message: '产品描述不能为空'}]"
+    :rules="[{validator: validDesc}]"
   />
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { valiIllegalStr } from '@/util'
 
 const props = defineProps({
   modelValue: {type: String}
@@ -37,6 +38,12 @@ const valDisplay = computed({
     emits('update:modelValue', val)
   }
 })
+
+const validDesc = () => {
+  if (!props.modelValue) return '产品描述不能为空'
+  const ret = valiIllegalStr(props.modelValue)
+  if (ret) return `不能包含【${ret}】等敏感词。`
+}
 
 
 
