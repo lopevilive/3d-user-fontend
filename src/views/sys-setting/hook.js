@@ -182,7 +182,6 @@ export const useSysSetting = () => {
   })
 
   const isShowForward = computed(() => {
-    console.log(globalData.value.wxEnv)
     if (['develop', 'trial', 'release'].includes(globalData.value.wxEnv)) return true
     return false
   })
@@ -301,6 +300,22 @@ export const useSysSetting = () => {
     }
   })
   
+  const displayTypeSideMod = computed(() => {
+    if (shopInfo.value.typeSideMod === 0) return '上方'
+    if (shopInfo.value.typeSideMod === 1) return '左侧'
+    return ''
+  })
+
+  const typeSideSelectRef = ref()
+
+  const handleTypeSideClick = async () => {
+    const ret = await typeSideSelectRef.value.getTypeSide()
+    if (ret === shopInfo.value.typeSideMod) return
+    await commonFetch(modShopStatus, {shopId, typeSideMod: ret})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
   const init = async () => {
     const {rid} = globalData.value
     // if (![2,3,99].includes(rid)) {
@@ -315,7 +330,7 @@ export const useSysSetting = () => {
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
-    isForwardPermi, isShowForward
+    isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick
   }
 
 }

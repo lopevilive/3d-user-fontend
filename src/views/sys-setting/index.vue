@@ -29,12 +29,12 @@
     <van-cell-group inset title="隐私设置">
       <VanCell title="限制转发" class="cell-label-width-200" label="开启后，仅管理员可转发分享图册" v-if="isShowForward">
         <template #value>
-            <VanSwitch v-model="isForwardPermi"/>
+          <VanSwitch v-model="isForwardPermi"/>
         </template>
       </VanCell>
       <VanCell title="图册加密" class="cell__switch">
         <template #value>
-            <VanSwitch v-model="isEncry"/>
+          <VanSwitch v-model="isEncry"/>
         </template>
       </VanCell>
       <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="图册密码" :label="encryCode">
@@ -45,13 +45,13 @@
       </VanCell>
       <VanCell title="图片水印" class="cell__switch">
         <template #value>
-            <VanSwitch v-model="isWaterMark"/>
+          <VanSwitch v-model="isWaterMark"/>
         </template>
       </VanCell>
       <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
-      <VanCell title="禁止导出 Excel"  class="cell-label-width-200" label="开启后，客户无法导出清单 Excel">
+      <VanCell title="限制导出 Excel"  class="cell-label-width-200" label="开启后，仅管理员可导出清单 Excel">
         <template #value>
-            <VanSwitch v-model="inveExportStatus"/>
+          <VanSwitch v-model="inveExportStatus"/>
         </template>
       </VanCell>
     </van-cell-group>
@@ -76,13 +76,18 @@
     <van-cell-group inset title="图册设置">
       <VanCell title="首页轮播图"  class="cell-label-width-200" label="店铺置顶信息与活动，支持自动轮播切换">
         <template #value>
-            <VanSwitch v-model="bannerStatus"/>
+          <VanSwitch v-model="bannerStatus"/>
         </template>
       </VanCell>
       <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
       <VanCell title="隐藏“全部”标签页"  class="cell-label-width-200" label="开启后，产品分类导航栏中的‘全部’标签页将被隐藏">
         <template #value>
-            <VanSwitch v-model="typeStatus"/>
+          <VanSwitch v-model="typeStatus"/>
+        </template>
+      </VanCell>
+      <VanCell title="分类栏位置"  class="cell-label-width-200" @click="handleTypeSideClick">
+        <template #value>
+          <div>{{ displayTypeSideMod }}</div>
         </template>
       </VanCell>
     </van-cell-group>
@@ -95,19 +100,21 @@
     </van-cell-group>
     <TypeSelectDialog  ref="typeSelectDialogRef" />
   </div>
+  <TypeSideSelect ref="typeSideSelectRef" />
 </template>
 
 <script setup>
 import { useSysSetting } from './hook'
 import { copyStr, isVip } from '@/util'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
+import TypeSideSelect from './TypeSideSelect.vue'
 
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
-  isForwardPermi, isShowForward
+  isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick
 } = useSysSetting()
 
 init()

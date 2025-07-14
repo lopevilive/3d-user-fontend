@@ -13,7 +13,7 @@ import {computed} from 'vue'
 
 const props = defineProps({
   modelValue: {type: [String, Number], default: ''},
-  columns: {type: Array, default: () => []},
+  columns: {type: Array, default: () => []}, // {text: '', value: xx}
   show: {type: Boolean, default: false}
 })
 

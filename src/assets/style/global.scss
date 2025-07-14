@@ -28,6 +28,7 @@ $grey: #333333;
 $greyPlaceholder: #c8c9cc;
 $red: #ea5a39;
 $fontWhite: #fefefe;
+$grey6: #525151;
 $grey7: #646566;
 $grey8: #6e7071;
 $grey9: #bebcbb;
@@ -36,6 +37,7 @@ $grey9: #bebcbb;
 $bgWhite: #fff;
 $bgGrey: #f5f5f5;
 $bgGrey2: #e3e3e3;
+$bgGrey3: #eeeeee;
 
 
 // 阴影
@@ -72,4 +74,12 @@ $footerBarH: 80px;
   }
 }
 
+.line2-ell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+}
 

@@ -27,12 +27,25 @@
       </div>
     </div>
     <div class="product-content">
+      <div class="left-wrap" v-if="typeMod === 1">
+        <LeftTypeMod 
+          :productTypes="productTypes" :subTypesList="subTypesList"
+          v-model:activeTab="activeTab"
+          @type1Change="tabChangeHandle"
+          :subActiveTab="subActiveTab"
+          @type2Change="beforeSubChange"
+        />
+      </div>
       <div class="wrap">
         <div class="list" @scroll="scrollHandle" ref="listRef">
-          <ImgSwipe v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale" :autoplay="3000"/>
+          <ImgSwipe
+            v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale"
+            :autoplay="3000" :width="typeMod === 1 ? 275 : 375"
+            :key="bannerKey"
+          />
           <VanSticky :offset-top="stickyPos" class="sticky-wrap">
             <div class="flexible__content">
-              <form action="none">
+              <form action="none" class="content-form" :class="{'pd-10': typeMod === 1}">
                 <VanSearch
                   show-action
                   placeholder="请输入搜索关键词"
@@ -40,9 +53,10 @@
                   @blur="searchBlurHadle"
                   @cancel="searchBlurHadle"
                 />
+                <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
               </form>
             </div>
-            <div class="tabs">
+            <div class="tabs" v-if="typeMod === 0">
               <div class="tabs__left">
                 <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
                   <VanTab v-for="item in productTypes" :key="item.id" :title="item.name" :name="item.id"></VanTab>
@@ -50,10 +64,10 @@
               </div>
               <div class="tabs__right">
                 <VanIcon @click="type1PopClickHandle" name="bars" class="bar-icon" v-if="productTypes.length > 5" />
-                <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
+                <!-- <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/> -->
               </div>
             </div>
-            <div class="sub-tabs" v-if="subTypesList.length">
+            <div class="sub-tabs" v-if="subTypesList.length && typeMod === 0">
               <div class="sub-tabs__left">
                 <VanTabs v-model:active="subActiveTab" :shrink="true" :before-change="beforeSubChange">
                   <VanTab v-for="item in subTypesList" :key="item.id" :title="item.name" :name="item.id"></VanTab>
@@ -64,20 +78,20 @@
               </div>
             </div>
           </VanSticky>
-            <div ref="leftListRef" class="left-list list-item">
-              <productItem v-for="item in leftList" :data="item" :key="item.id"
-                @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
-                :isShowSort="isShowSort" :shopInfo="shopInfo"
-              />
-            </div>
-            <div ref="rightListRef" class="right-list list-item">
-              <productItem v-for="item in rightList" :data="item" :key="item.id"
-                @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
-                :isShowSort="isShowSort" :shopInfo="shopInfo"
-              />
-            </div>
-            <div v-if="fetchLoading" class="loading"><VanLoading /></div>
-            <div v-if="finished" class="done">到底啦～</div>
+          <div ref="leftListRef" class="left-list list-item">
+            <productItem v-for="item in leftList" :data="item" :key="item.id"
+              @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
+              :isShowSort="isShowSort" :shopInfo="shopInfo"
+            />
+          </div>
+          <div ref="rightListRef" class="right-list list-item">
+            <productItem v-for="item in rightList" :data="item" :key="item.id"
+              @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
+              :isShowSort="isShowSort" :shopInfo="shopInfo"
+            />
+          </div>
+          <div v-if="fetchLoading" class="loading"><VanLoading /></div>
+          <div v-if="finished" class="done">到底啦～</div>
         </div>
       </div>
     </div>
@@ -104,15 +118,16 @@ import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import SortControl from '@/components/sort-control/index.vue'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import TypePop from './TypePop.vue'
+import LeftTypeMod from './LeftTypeMod.vue'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
   rightListRef, scrollHandle, finished, fetchLoading, selectedList, selectedHandle,
   removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef, bannerCfg,
-  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos,
+  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos, bannerKey, 
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
-  shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle
+  shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod
 } = useProductManage()
 
 onActivated(() => {
@@ -177,9 +192,10 @@ export default {
     }
   }
   .bar-icon {
-    font-size: 18px;
+    font-size: 20px;
     padding-right: 5px;
     margin-right: 3px;
+    color: $themeColor;
   }
   .tabs{
     padding: 0 $pdM $pdL $pdM;
@@ -253,16 +269,37 @@ export default {
     overflow: hidden;
     box-sizing: border-box;
     margin-bottom: $footerBarH;
-    .wrap {
-      width: 100%;
+    display: flex;
+    .left-wrap {
+      width: 100px;
+      flex-shrink: 0;
       height: 100%;
+      overflow: auto;
+      background: $bgWhite;
+    }
+    .wrap {
+      // width: 100%;
+      // height: 100%;
       position: relative;
+      flex-shrink: 0;
+      flex: 1;
     }
     .sticky-wrap {
       width: 100%;
       .flexible__content {
+        .content-form {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 10px 0 5px;
+          background-color: $bgWhite;
+        }
+        .pd-10 {
+          padding-bottom: 10px;
+        }
         :deep(.van-search) {
-          padding-bottom: 0;
+          padding: 0;
+          flex: 1;
         }
       }
     }

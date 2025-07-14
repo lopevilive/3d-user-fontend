@@ -1,6 +1,10 @@
 <template>
   <div class="com-img-swipe-wrap">
-    <VanSwipe ref="swipeRef" :style="styleDisplay" class="com-img-swipe" :class="{mode2: mode === 2, mode1: mode === 1}" lazy-render :autoplay="autoplay">
+    <VanSwipe
+      ref="swipeRef" :style="styleDisplay" class="com-img-swipe"
+      :class="{mode2: mode === 2, mode1: mode === 1}" lazy-render
+      :autoplay="autoplay"
+    >
       <VanSwipeItem v-for="(item, idx) in list" >
         <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getImageUrl(item)" @click="clickHandle(idx)"/>
       </VanSwipeItem>
@@ -25,7 +29,8 @@ const props = defineProps({
   list: {type: Array, default: () => []},
   mode: {type: Number, default: 1}, // 1 | 2
   scale: {type: String, default: '0.5'},
-  autoplay: {type: Number, default: 0}
+  autoplay: {type: Number, default: 0},
+  width: {type: Number, default: 375},
 })
 
 const route = useRoute()
@@ -70,9 +75,11 @@ const isShowControl = computed(() => {
 const styleDisplay = computed(() => {
   let ret = '';
   if (props.mode === 2) {
-    const h = getFlexW(375 * Number(props.scale))
+    const h = getFlexW(props.width * Number(props.scale))
     ret += `height: ${h}px;`
   }
+  const w = getFlexW(props.width)
+  ret += `width: ${w}px;`
   return ret
 })
 
@@ -113,6 +120,7 @@ init()
 }
 .com-img-swipe {
   width: 375px;
+  // width: 275px;
   &.mode1 {
     min-height: 200px;
   }

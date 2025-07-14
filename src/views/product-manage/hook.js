@@ -47,6 +47,8 @@ export const useProductManage = () => {
 
   let inited = false // 是否初始化完成
 
+  const bannerKey = ref(Math.floor(Math.random() * 100))
+
   const productTypes = computed(() => {
     const {rid, productTypes} = globalData.value
     const {requiredType} = shopInfo.value
@@ -555,6 +557,7 @@ export const useProductManage = () => {
   const activeHandle = async () => {
     await fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100) // 用于更新 tab分类组件
+    bannerKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) { // 这里让页面滚动到上次的位置
       listRef.value.scrollTop = scrollT.value
     }
@@ -650,6 +653,11 @@ export const useProductManage = () => {
     }
   }
   
+  const typeMod = computed(() => {
+    if (shopInfo.value.typeSideMod === 1) return 1 // 在左侧
+    return 0 // 在上方
+  })
+  
   const init = async () => {
     globalData.value.productNeedExec = []
     const {toDetial, title, imageUrl} = route.query
@@ -676,6 +684,6 @@ export const useProductManage = () => {
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
     scrollT, priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
     beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
-    type1PopClickHandle, type2PopRef, type2PopClickHandle
+    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey
   }
 }
