@@ -169,7 +169,6 @@ class ShopCarManage {
     dataItem.countMap = {}
     dataItem.productInfo = newInfo
     this.setLocalData(localData)
-    console.log(localData, 'cccc')
     this.toggleMap.value[id] = !this.toggleMap.value?.[id]
     this.toggleAll.value = !this.toggleAll.value
   }

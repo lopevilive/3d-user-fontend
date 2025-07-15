@@ -223,7 +223,6 @@ export const useInventoryList = () => {
 
   const validProd = async () => { // 这里校验产品
     const rawData = shopCarInstance.getLocalData()
-    console.log(rawData)
     const ids = Object.keys(rawData).map((item) => Number(item))
     if (!ids.length) return
     const ret = await commonFetch(getProduct, {shopId, productId: ids, pageSize: 1000, status: 0})
