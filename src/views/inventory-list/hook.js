@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
 import { shopCarInstance, globalData } from '@/store'
-import { showConfirmDialog, showFailToast } from 'vant'
+import { showConfirmDialog, showFailToast, showToast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import {add, multiply, bignumber} from 'mathjs'
-import { createInventory } from '@/http'
+import { createInventory, getProduct } from '@/http'
 import { commonFetch, toSharePage, shopInfoManage, emojiReg, formatType } from '@/util'
 
 export const useInventoryList = () => {
@@ -221,7 +221,32 @@ export const useInventoryList = () => {
     return true
   })
 
+  const validProd = async () => { // 这里校验产品
+    const rawData = shopCarInstance.getLocalData()
+    console.log(rawData)
+    const ids = Object.keys(rawData).map((item) => Number(item))
+    if (!ids.length) return
+    const ret = await commonFetch(getProduct, {shopId, productId: ids, pageSize: 1000, status: 0})
+    let change = false
+    for (const id of ids) {
+      const rawItem = rawData[id]
+      const newInfo = ret.list.find((retItem) => retItem.id === id)
+      if (!newInfo) { // 产品被删除/下架
+        shopCarInstance.deleteProd(id)
+        continue
+      }
+      if (newInfo.upd_time) {
+        if (rawItem.productInfo.upd_time !== newInfo.upd_time) { // 产品信息发生变化
+          change = true
+          shopCarInstance.updateProdInfo(id, newInfo)
+        }
+      }
+    }
+    if (change) showToast('部分产品信息发生变化，请重新添加～')
+  }
+
   const init = async () => {
+    await validProd() // 校验产品合法性
     selectedList.value = []
     for (const item of shopCarList.value) {
       const {id, spec} = item

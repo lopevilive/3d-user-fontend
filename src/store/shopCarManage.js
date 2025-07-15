@@ -26,7 +26,7 @@ class ShopCarManage {
     this.allData = null
   }
 
-  getLocalData() {
+  getLocalData() { // 获取原生清单信息
     const route = router.currentRoute.value
     const {shopId} = route.params
     let localData = localStorage.getItem(`shopCar-${shopId}`) || '{}'
@@ -34,13 +34,13 @@ class ShopCarManage {
     return localData
   }
 
-  setLocalData(data) {
+  setLocalData(data) { // 设置原生清单信息
     const route = router.currentRoute.value
     const {shopId} = route.params
     localStorage.setItem(`shopCar-${shopId}`, JSON.stringify(data))
   }
 
-  getData(productInfo, specName = '__default') {
+  getData(productInfo, specName = '__default') { // 获取某个产品的清单数量，返回 computed 属性
     const that = this
     const ret = computed({
       get() {
@@ -56,21 +56,17 @@ class ShopCarManage {
             },
             set(val) {
               try {
-                that.toggleMap.value[id] = !that.toggleMap.value?.[id]
-                that.toggleAll.value = !that.toggleAll.value
+                that.toggleMap.value[id] = !that.toggleMap.value?.[id] // 这里是为了触发依赖更新
+                that.toggleAll.value = !that.toggleAll.value // 这里是为了触发依赖更新
                 let data = that.getLocalData()
                 let dataItem = data[id]
-                if (dataItem?.productInfo) {
-                  if (dataItem.productInfo.upd_time !== upd_time) { // 商品被修改过了
-                    dataItem.countMap = {}
-                    dataItem.productInfo = productInfo
-                  }
-                }
+                // if (dataItem?.productInfo && dataItem.productInfo.upd_time !== upd_time) { // 商品被修改过了
+                //   console.log(1)
+                //   dataItem.countMap = {}
+                //   dataItem.productInfo = productInfo
+                // }
                 if (!dataItem) {
-                  dataItem = {
-                    productInfo,
-                    countMap: {}
-                  }
+                  dataItem = { productInfo, countMap: {} }
                   data[id] = dataItem
                 }
                 if (!dataItem.countMap?.[specName]) {
@@ -91,7 +87,7 @@ class ShopCarManage {
     return ret
   }
 
-  getAllData () {
+  getAllData () { // 返回computed 属性。全部产品信息
     if (this.allData) return this.allData
     this.allData = computed(() => {
       if (this.toggleAll.value) {}
@@ -123,7 +119,7 @@ class ShopCarManage {
     return this.allData
   }
 
-  updateCount(id, spec, count) {
+  updateCount(id, spec, count) { // 更新数量
     let localData = this.getLocalData()
     const dataItem = localData[id]
     if (!dataItem) return
@@ -134,7 +130,7 @@ class ShopCarManage {
     this.toggleAll.value = !this.toggleAll.value
   }
 
-  updatePrice(id, spec, price) {
+  updatePrice(id, spec, price) { // 手动更新价格
     let localData = this.getLocalData()
     const data = localData[id]
     if (!spec) {
@@ -156,7 +152,7 @@ class ShopCarManage {
     this.toggleAll.value = !this.toggleAll.value
   }
 
-  deleteItem({id, spec}) {
+  deleteItem({id, spec}) { // 删除某项
     let localData = this.getLocalData()
     const dataItem = localData[id]
     if (!dataItem) return
@@ -167,7 +163,18 @@ class ShopCarManage {
     this.toggleAll.value = !this.toggleAll.value
   }
 
-  clearAll() {
+  updateProdInfo(id, newInfo) { // 更新某个产品信息
+    let localData = this.getLocalData()
+    const dataItem = localData[id]
+    dataItem.countMap = {}
+    dataItem.productInfo = newInfo
+    this.setLocalData(localData)
+    console.log(localData, 'cccc')
+    this.toggleMap.value[id] = !this.toggleMap.value?.[id]
+    this.toggleAll.value = !this.toggleAll.value
+  }
+
+  clearAll() { // 清空清单
     this.setLocalData({})
     this.toggleMap.value = {}
     this.toggleAll.value = !this.toggleAll.value
