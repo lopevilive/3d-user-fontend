@@ -4,7 +4,7 @@
       <div class="single" v-if="productInfo.isSpec === 0">
         <CountControls v-model:count="carInfo.count.value" />
       </div>
-      <div v-if="productInfo.isSpec === 1" class="select-spec" @click="isShowSpecs = true">选规格</div>
+      <div v-if="[1,2].includes(productInfo.isSpec)" class="select-spec" @click="specClickHandle">选规格</div>
     </template>
 
     <template v-if="mode === 1">
@@ -20,31 +20,20 @@
        
       <!-- 多规格 -->
       <VanButton
-        v-if="productInfo.isSpec === 1"
+        v-if="[1,2].includes(productInfo.isSpec)"
         size="small" text="+加入清单" color="#f6d961" round
-        @click="isShowSpecs = true"
+        name="add-controls-spec"
+        @click="specClickHandle"
       />
     </template>
-    <VanActionSheet
-      v-model:show="isShowSpecs"
-      cancel-text="完成"
-      teleport="body"
-    >
-      <div v-for="item in specsList" class="spec-item">
-        <div class="left-content">
-          {{ item.name }}  &nbsp;&nbsp;<span class="price"> ¥{{ item.price }}</span>
-        </div>
-        <div class="right-content">
-          <CountControls v-model:count="item.data.count.value" />
-        </div>
-      </div>
-    </VanActionSheet>
+    <SpecAdd v-if="[1,2].includes(productInfo.isSpec)" ref="specAddRef" :productInfo="productInfo" />
   </div>
 </template>
 
 <script setup>
 import { useAddControls } from './hook'
 import CountControls from './CountControls.vue'
+import SpecAdd from './SpecAdd.vue'
 
 const props = defineProps({
   productInfo: {type: Object, default: () => {}},
@@ -52,10 +41,7 @@ const props = defineProps({
 })
 
 const {
-  isShow,
-  carInfo,
-  isShowSpecs,
-  specsList
+  isShow, carInfo, specAddRef, specClickHandle
 } = useAddControls(props)
 
 </script>

@@ -2,6 +2,7 @@
   <div class="product-edit">
     <VanForm label-align="left" ref="formRef">
       <VanCellGroup>
+        <!-- 产品图片 -->
         <VanField
           v-model="data.url"
           :required="true"
@@ -23,15 +24,19 @@
             <UploadImgs v-model="data.url" :maxCount="maxCount" :maxSize="maxSize" ref="uploadImgsRef"/>
           </template>
         </VanField>
+        <!-- 产品描述 -->
         <Desc  v-model="data.desc"/>
+        <!-- 产品分类 -->
         <ProdTypeSelect v-model="data.productType" />
+        <!-- 产品价格 -->
         <PriceMod
           v-model:price="data.price"
           v-model:isSpec="data.isSpec"
-          v-model:specs="data.specs"
+          v-model:specDetials="data.specDetials"
+          @resetValidation="handleResetValidation"
         />
+        <!-- 上/下架 -->
         <StatusSelect v-model="data.status"/>
-        
       </VanCellGroup>
 
       <VanCellGroup v-if="type3DOpts.length">
@@ -121,32 +126,21 @@ import PriceMod from '@/components/price-mod/index.vue'
 import DialogVip from '@/components/dialog-vip/index.vue'
 
 const {
-  formRef,
-  data,
-  saveHandle,
-  init,
-  model3DDisplay,
-  model3dOpts,
-  showModel3d,
-  validUrl,
-  scanClickHandle,
-  qrcodeScannerRef,
-  scanHandle,
-  type3DOpts,
-  modelDisplayRef,
-  preview3D,
-  uploadImgsRef,
-  busiCfg,
-  maxCount,
-  imgCount,
-  maxSize,
-  dialogVipRef,
-  goVip
+  formRef, data, saveHandle, init, model3DDisplay, model3dOpts, showModel3d, validUrl, scanClickHandle,
+  qrcodeScannerRef, scanHandle, type3DOpts, modelDisplayRef, preview3D, uploadImgsRef, busiCfg, maxCount,
+  imgCount, maxSize, dialogVipRef, goVip, handleResetValidation
 } = useProductEdit()
 
 init()
 
 
+
+</script>
+
+<script>
+export default {
+  name: 'ProductEdit'
+}
 
 </script>
 

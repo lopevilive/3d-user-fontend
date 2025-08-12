@@ -79,7 +79,6 @@ const init = async () => {
   let info = await shopInfoManage.getData(shopId)
   info = info[0]
   data.value = JSON.parse(info.bannerCfg)
-  console.log(data.value)
 }
 
 init()

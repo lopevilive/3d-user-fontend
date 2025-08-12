@@ -338,22 +338,21 @@ export const formatWatermarkPayload = (watermarkCfg, shopId) => {
 }
 
 export const getSpecPrices = (list) => {
-  let min = 0
-  let max = 0
-  let idx = 0
-  const realList = list.filter((item) => item.price === '' ? false : true)
-  for (const item of realList) {
+  let min = -1
+  let max = -1
+  for (const item of list) {
+    if (item.price === '') continue
     let specPrice = +item.price
-    idx += 1
-    if (idx === 1) {
-      min = specPrice
-      max = specPrice
-      continue
-    }
+    if (min === -1) min = specPrice
+    if (max === -1) max = specPrice
     if (specPrice < min) min = specPrice
     if (specPrice > max) max = specPrice
   }
-  return {min, max}
+  return {
+    min: min === -1 ? '' : min,
+    max: max === -1 ? '' : max
+  }
+  
 }
 
 export const formatType = (val) => {
@@ -424,7 +423,7 @@ export const isVip = (shopInfo, valiTime = true) => {
   return ret
 }
 
-export const handleSpecCfg = async (payload, shopId) => {
+export const handleSpecCfg = async (payload, shopId) => { // todo
   try {
     if (payload.isSpec !== 1) return
     let shopInfo = await shopInfoManage.getData(shopId)
@@ -468,4 +467,62 @@ export const valiIllegalStr = (str) => {
     reg = new RegExp(reg)
     if (reg.test(str)) return msg
   }
+}
+
+export const getMulSpecName = (idList, mulSpecs) => {
+  const ret = []
+  for (const id of idList) {
+    if ([undefined, null].includes(id)) {
+      ret.push(null)
+      continue
+    }
+    for (const item of mulSpecs) {
+      for (const subItem of item.list) {
+        if (id === subItem.id) ret.push(subItem.name)
+      }
+    }
+  }
+  return ret
+}
+
+export const getSelectedItemByIdList = (idList, mulSpecPriceList) => {
+  for (const priceItem of mulSpecPriceList) {
+    let isMatched = true
+    for (let i = 0; i < priceItem.list.length; i ++) {
+      if (priceItem.list[i] === idList[i]) continue
+      isMatched = false
+    }
+    if (isMatched) return priceItem
+  }
+  return null;
+}
+
+export const getMulSpecUrl = (idList, mulSpecs, mulSpecPriceList) => {
+  let cfgUrl = '' // 配置的规格图片
+  let matchedUrl = '' // 组合规格图片
+  for  (let i = 0; i < mulSpecs.length; i ++) {
+    if (mulSpecs[i].useImg !== 1) continue
+    const id = idList[i]
+    if ([undefined, null].includes(id)) continue
+    const matchedItem = mulSpecs[i].list.find((item) => item.id === id)
+    cfgUrl = matchedItem?.url || ''
+  }
+
+  const tmpIdx = idList.findIndex((item) => [undefined,null].includes(item))
+  if (tmpIdx !== -1) return cfgUrl || '' // 还没选齐规格
+  for (const priceItem of mulSpecPriceList) {
+    let matched = true
+    for (let i = 0; i < priceItem.list.length; i ++ ) {
+      if (idList.includes(priceItem.list[i])) continue
+      matched = false
+      break
+    }
+    if (matched) {
+      matchedUrl = priceItem.url || ''
+      break
+    }
+  }
+  if (matchedUrl === 'none') return ''
+  if (matchedUrl) return matchedUrl
+  return cfgUrl || ''
 }

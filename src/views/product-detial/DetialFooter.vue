@@ -12,7 +12,6 @@
       </div>
     </div>
     <div class="right-content">
-      <!-- <VanButton size="small" text="+加入清单" color="#f6d961" round/> -->
        <AddControls :productInfo="productInfo" :mode="1" />
     </div>
   </div>

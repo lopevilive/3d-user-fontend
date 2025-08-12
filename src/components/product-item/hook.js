@@ -154,11 +154,15 @@ export const useProductItem = (props, emits) => {
   })
 
   const priceDisplay = computed(() => {
-    const { price, isSpec, specs } = props.data
+    const { price, isSpec, specDetials } = props.data
     if (isSpec === 0) return price
-    let list = JSON.parse(specs)
+    const data = JSON.parse(specDetials || '{}')
+    let list = []
+    if (isSpec === 1) list = data.singleSpecs || []
+    if (isSpec === 2) list = data.mulSpecPriceList || []
     const {min, max} = getSpecPrices(list)
-    if (max === min) return `${max}`
+    if (min === '') return ''
+    if (min === max) return `${max}`
     return `${min} ~ ${max}`
   })
 

@@ -76,7 +76,9 @@ export const globalData = ref({
   encryInfo: {},
   hasInventory: {},
   cusInventoryNeedUpdate: false,
-  prodManageNeedUpdate: false
+  prodManageNeedUpdate: false,
+  prodEditNeedAlive: false, // 编辑产品页面是否需要 alive
+  specEditNeedAlive: false, // 编辑规格页是否需要 alive
 })
 
 

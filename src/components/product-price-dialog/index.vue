@@ -10,7 +10,7 @@
       <PriceMod
         v-model:price="price"
         v-model:isSpec="isSpec"
-        v-model:specs="specs"
+        v-model:specDetials="specs"
         :noSpecs="noSpecs"
         ref="priceModRef"
       />

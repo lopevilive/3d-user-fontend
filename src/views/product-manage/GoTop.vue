@@ -24,7 +24,7 @@ const props = defineProps({
 })
 
 const gap = getFlexW(24)
-const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.5});
+const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.7});
 
 const clickHandle = async () => {
   let remain = props.scrollT || 0

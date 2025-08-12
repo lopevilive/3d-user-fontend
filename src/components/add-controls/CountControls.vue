@@ -3,25 +3,25 @@
     <div class="tool" v-if="count > 0" @click="desHandle">
       <span>-</span>
     </div>
-    <span class="count" v-if="count > 0 && mode === 0">{{ count }}</span>
-    <div v-if="mode === 1">
-      <VanField v-model="countDisplay" :maxlength="7" type="number" class="pd0" placeholder="请输入" input-align="center" />
-    </div>
+    <span class="count" v-if="count > 0" @click="clickHandle">{{ count }}</span>
     <div class="tool" @click="addHandle">
       <span>+</span>
     </div>
+    <InputDialog ref="inputDialogRef" />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import InputDialog from '@/components/input-dialog/index.vue'
 
 const props = defineProps({
   count: {type: Number, default: 0},
-  mode: {type: Number, default: 0}
 })
 
 const emits = defineEmits(['update:count'])
+
+const inputDialogRef = ref()
 
 const addHandle = () => {
   let count = props.count + 1
@@ -33,17 +33,14 @@ const desHandle = () => {
   emits('update:count', count)
 }
 
-const countDisplay = computed({
-  get() {
-    return props.count
-  },
-  set(val) {
-    val = Number(val)
-    if (val >= 0) {
-      emits('update:count', val)
-    }
-  }
-})
+const clickHandle = async () => {
+  const ret = await inputDialogRef.value.getVal(props.count, {title: '修改数量', validFn: (str) => {
+    if (!/^\d+$/.test(str)) return '请输入数字'
+    const val = Number(str)
+  }})
+  const count = Number(ret)
+  emits('update:count', count)
+}
 
 </script>
 
@@ -66,6 +63,8 @@ const countDisplay = computed({
   }
   .count {
     font-size: 12px;
+    width: 30px;
+    text-align: center;
   }
 }
 </style>

@@ -114,6 +114,18 @@ const router = createRouter({
           name: 'banner-cfg',
           component: () => import('@/views/banner-cfg/index.vue'),
           meta: {title: '轮播图设置'}
+        },
+        {
+          path: 'spec-edit',
+          name: 'spec-edit',
+          component: () => import('@/views/spec-edit/index.vue'),
+          meta: {title: '规格设置'}
+        },
+        {
+          path: 'mul-spec-price',
+          name: 'mul-spec-price',
+          component: () => import('@/views/spec-edit/MulSpecPrice.vue'),
+          meta: {title: '价格设置'}
         }
       ]
     },

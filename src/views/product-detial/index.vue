@@ -5,7 +5,7 @@
     </div>
     <div class="swipe-wrap">
       <ImgSwipe :list="imgList" />
-      <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/>
+      <!-- <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/> -->
     </div>
     <div class="content">
       <div class="content__head">
@@ -19,7 +19,7 @@
           <VanButton @click="shareHandle" size="small" icon="share-o" icon-position="right">分享</VanButton>
         </div>
       </div>
-      <div class="content__specs" v-if="info.isSpec === 1">
+      <div class="content__specs" v-if="specsDisplay.length">
         <div class="specs-left">
           <div class="spec__content">
             <div
@@ -27,13 +27,14 @@
               :class="{active: index === selectedSpecIdx}"
               v-for="(item, index) in specsDisplay"
               :key="item.name"
-              @click="selectedSpecIdx = index"
+              @click="specItemClickHandle(index)"
             >
-              {{ item.name }}
+              <VanImage fit="cover" :src="getImageUrl(item.url)" v-if="isShowSpecImg(item)" />
+              <span>{{ item.name }}</span>
             </div>
           </div>
         </div>
-        <div @click="isShowAction=true" class="specs-right">{{specsDisplay.length}}款可选<VanIcon name="arrow"/></div>
+        <div @click="viewSpecDetialHandle" class="specs-right">{{specsDisplay.length}}款可选<VanIcon name="arrow"/></div>
       </div>
       <div class="content__desc">
         <span v-if="isShowSticky"><VanTag plain type="primary">置顶</VanTag></span>
@@ -46,21 +47,8 @@
         </div>
       </div>
     </div>
-    <ModelDisplay ref="modelDisplayRef" :productInfo="info"/>
+    <!-- <ModelDisplay ref="modelDisplayRef" :productInfo="info"/> -->
     <Setting :runtimeData="info" @update="init" />
-    <VanActionSheet
-      v-model:show="isShowAction"
-      cancel-text="取消"
-      teleport="body"
-    >
-      <VanButton
-        v-for="(actionItem, index) in specsDisplay"
-        class="van-action-sheet__item"
-        @click="selectHandle(actionItem, index)"
-      >
-        {{ actionItem.name }} &nbsp;&nbsp;<span class="action-price">¥{{ actionItem.price }}</span>
-      </VanButton>
-    </VanActionSheet>
     <DetialFooter :productInfo="info"/>
   </div>
   <div v-if="isShowEmpty" class="no-data-wrap">
@@ -71,30 +59,17 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import ModelDisplay from '@/components/model-display/index.vue'
+// import ModelDisplay from '@/components/model-display/index.vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import DetialFooter from './DetialFooter.vue'
+import { getImageUrl } from '@/util'
 
 const {
-  info,
-  imgList,
-  handleView3D,
-  init,
-  modelDisplayRef,
-  shareHandle,
-  displayAttrs,
-  isShowSticky,
-  specsDisplay,
-  selectedSpecIdx,
-  displayPrice,
-  isShowAction,
-  selectHandle,
-  isShowDownTips,
-  goback,
-  isShowEmpty,
-  isShowShare
+  info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
+  displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
+  viewSpecDetialHandle
 } = useProductDetial()
 
 onMounted(init)
@@ -175,9 +150,9 @@ export default {
           box-sizing: border-box;
           display: flex;
           flex-wrap: nowrap;
-          padding-bottom: 10px;
+          padding: 0 10px 10px 0px;
           .spec-item {
-            background: #f5f6f8;
+            background: $bgGrey;
             padding: 0 12px;
             margin-right: 10px;
             display: flex;
@@ -185,8 +160,18 @@ export default {
             border-radius: $bdrM;
             box-sizing: border-box;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            border: 1px solid $bgGrey;
+            .van-image {
+              width: 20px;
+              height: 20px;
+              margin-right: 5px;
+              border-radius: 3px;
+              overflow: hidden;
+            }
             &.active {
-              border: 1px solid $themeColor;
+              border-color: $themeColor;
               background: $bgWhite;
             }
           }

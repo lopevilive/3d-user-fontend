@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import router from '@/router/index.js'
-import { getImageUrl } from '@/util'
+import { getImageUrl, getSelectedItemByIdList, getMulSpecUrl } from '@/util'
 
 /**
  *  localData = {
@@ -18,6 +18,18 @@ import { getImageUrl } from '@/util'
  *  }
  * 
  */
+
+const names2Ids = (name, mulSpecs) => {
+  const names = name.split('｜')
+  const ret = []
+  for (let i = 0; i < names.length; i++) {
+    const cfgItem = mulSpecs[i]
+    for (const item of cfgItem.list) {
+      if (item.name === names[i]) ret.push(item.id)
+    }
+  }
+  return ret
+}
 
 class ShopCarManage {
   constructor() {
@@ -60,11 +72,6 @@ class ShopCarManage {
                 that.toggleAll.value = !that.toggleAll.value // 这里是为了触发依赖更新
                 let data = that.getLocalData()
                 let dataItem = data[id]
-                // if (dataItem?.productInfo && dataItem.productInfo.upd_time !== upd_time) { // 商品被修改过了
-                //   console.log(1)
-                //   dataItem.countMap = {}
-                //   dataItem.productInfo = productInfo
-                // }
                 if (!dataItem) {
                   dataItem = { productInfo, countMap: {} }
                   data[id] = dataItem
@@ -95,19 +102,38 @@ class ShopCarManage {
       let ret = []
       localData = Object.values(localData)
       for (const item of localData) {
-        const {countMap, productInfo: {desc, url, id, isSpec, specs, price, upd_time, modPrice, productType}} = item
+        const {countMap, productInfo: {desc, url, id, isSpec, specDetials, price, upd_time, modPrice, productType}} = item
         const keys = Object.keys(countMap)
-        for (const key of keys) {
-          let count = countMap?.[key]?.count || 0
+        for (const specName of keys) {
+          let count = countMap?.[specName]?.count || 0
           if (count <= 0) continue
           const retItem = { id, count, upd_time, price,url: getImageUrl(url.split(',')[0]), spec: '', desc, productType}
           if (modPrice) retItem.modPrice = modPrice
-          if (isSpec === 1) {
-            let specsList = JSON.parse(specs || '[]')
-            for (const item of specsList) {
-              if (item.name === key) {
-                retItem.price = item.price,
-                retItem.spec = item.name
+          if (isSpec === 1) { // 单级规格
+            const matchedItem = JSON.parse(specDetials || '{}')
+            const singleSpecs = matchedItem.singleSpecs || []
+            const singleUseImg = matchedItem.singleUseImg || 0
+            for (const specItem of singleSpecs) {
+              if (specItem.name === specName) {
+                retItem.price = specItem.price
+                retItem.spec = specName
+                if (singleUseImg && specItem.url) {
+                  retItem.url = getImageUrl(specItem.url)
+                }
+              }
+            }
+          }
+          if (isSpec === 2) { // 多级规格
+            const matchedItem = JSON.parse(specDetials || '{}')
+            const { mulSpecs, mulSpecPriceList, mulUseImg } = matchedItem
+            const idList = names2Ids(specName, mulSpecs)
+            if (idList.length) {
+              const priceItem = getSelectedItemByIdList(idList, mulSpecPriceList)
+              retItem.price = priceItem.price
+              retItem.spec = specName
+              if (mulUseImg === 1) {
+                const ret = getMulSpecUrl(idList, mulSpecs, mulSpecPriceList)
+                if (ret) retItem.url = getImageUrl(ret)
               }
             }
           }

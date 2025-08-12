@@ -6,12 +6,22 @@ import postcsspxtoviewport from 'postcss-px-to-viewport'
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from '@vant/auto-import-resolver';
+import { visualizer } from "rollup-plugin-visualizer";
 
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), AutoImport({resolvers: [VantResolver()],}),
-  Components({resolvers: [VantResolver()]}),],
+  plugins: [
+    vue(), AutoImport({resolvers: [VantResolver()],}),
+    Components({resolvers: [VantResolver()]}),
+    visualizer({
+      gzipSize: true,
+        brotliSize: true,
+        emitFile: false,
+        filename: "test.html", //分析图生成的文件名
+        open: false //如果存在本地服务端口，将在打包后自动展示
+    })
+  ],
   css: {
     postcss: {
       plugins: [postcsspxtoviewport({
@@ -34,10 +44,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // console.log(id, 'dddd')
-          if (/node_modules\/html5-qrcode/.test(id)) return 'html5-qrcode'
+          if (/node_modules\/html5-qrcode/.test(id)) return 'no-use'
+          if (/node_modules\/three\//.test(id)) return 'no-use'
+          // if (/node_modules\/vue/.test(id)) return 'vue'
           // if (/node_modules/.test(id)) return 'node_module'
+          // if (/src\/components/.test(id)) return 'components'
           // if (/src\/views/.test(id)) return 'views'
+          // if (/src/.test(id)) return 'src'
           return 'index' // 目前代码量少，直接打包到一起
         }
       }

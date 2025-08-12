@@ -25,7 +25,7 @@ const route = useRoute()
 const shopId = +route.params.shopId
 
 const gap = getFlexW(24)
-const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.7});
+const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.6});
 
 const shopInfo = ref({})
 

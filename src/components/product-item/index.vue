@@ -13,6 +13,8 @@
             <span class="unit" v-if="priceDisplay">¥</span>
             <span class="num">{{ priceDisplay || '' }}</span>
           </div>
+        </div>
+        <div class="count-content">
           <AddControls :productInfo="data" />
         </div>
       </div>
@@ -167,6 +169,10 @@ const {
     .com-add-controls {
       flex-shrink: 0;
     }
+  }
+  .count-content {
+    display: flex;
+    justify-content: flex-end;
   }
   .setting {
     position: absolute;

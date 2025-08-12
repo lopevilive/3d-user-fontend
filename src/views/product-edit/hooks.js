@@ -2,8 +2,8 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, getSpecPrices,
- handleSpecCfg, toVip, vipInfoManage
+import {
+  commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, toVip, vipInfoManage
 } from '@/util'
 import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
 
@@ -31,7 +31,7 @@ export const useProductEdit = () => {
       name: '',
       price: '',
       isSpec: 0,
-      specs: '',
+      specDetials: '',
       productType: '',
       desc: '',
       type3D: 0,
@@ -80,20 +80,6 @@ export const useProductEdit = () => {
       return true
     })
     payload.attr = JSON.stringify(attr)
-    if (payload.isSpec === 1) {
-      const {min} = getSpecPrices(JSON.parse(payload.specs))
-      payload.price = `${min}`
-    } else {
-      payload.specs = ''
-    }
-    if (payload.specs) {
-      let tmp = JSON.parse(payload.specs)
-      payload.specs = []
-      for (const item of tmp) {
-        if (item.name && item.price) payload.specs.push(item)
-      }
-      payload.specs = JSON.stringify(payload.specs)
-    }
     return payload
   }
 
@@ -105,7 +91,7 @@ export const useProductEdit = () => {
     }
     await formRef.value.validate()
     const payload = getPayload()
-    handleSpecCfg(payload, shopId) // 更新多规格的配置
+    // handleSpecCfg(payload, shopId) // 更新多规格的配置 todo
     const res = await commonFetch(productMod, payload)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)
@@ -229,7 +215,10 @@ export const useProductEdit = () => {
     const ret = await vipInfoManage.getData(shopId)
     vipInfo.value = ret[0]
   }
-  
+
+  const handleResetValidation = () => {
+    formRef.value.resetValidation()
+  }
   
   const init = () => {
     getProductInfo()
@@ -238,26 +227,8 @@ export const useProductEdit = () => {
   }
 
   return {
-    data,
-    formRef,
-    saveHandle,
-    init,
-    model3DDisplay,
-    showModel3d,
-    model3dOpts,
-    validUrl,
-    qrcodeScannerRef,
-    scanClickHandle,
-    scanHandle,
-    type3DOpts,
-    preview3D,
-    modelDisplayRef,
-    uploadImgsRef,
-    busiCfg,
-    maxCount,
-    imgCount,
-    maxSize,
-    dialogVipRef,
-    goVip
+    data, formRef, saveHandle, init, model3DDisplay, showModel3d, model3dOpts, validUrl, qrcodeScannerRef,
+    scanClickHandle, scanHandle, type3DOpts, preview3D, modelDisplayRef, uploadImgsRef, busiCfg, maxCount,
+    imgCount, maxSize, dialogVipRef, goVip, handleResetValidation
   }
 }
