@@ -8,7 +8,7 @@
     />
     <div class="tit-wrap">
       <span>规格列表：</span>
-      <VanCheckbox v-model="singleUseImgDisplay" v-if="isSpec === 1">规格图片</VanCheckbox>
+      <VanCheckbox v-model="singleUseImgDisplay" v-if="isSpec === 1">图片</VanCheckbox>
     </div>
     <!-- 单级规格 -->
     <div class="spec-list" v-if="isSpec === 1">

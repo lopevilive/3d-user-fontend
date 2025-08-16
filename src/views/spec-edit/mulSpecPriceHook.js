@@ -1,8 +1,11 @@
 import { computed, ref } from 'vue'
-import { specManageInstance, priceReg, getMulSpecName, getSpecPrices, getMulSpecUrl } from '@/util'
+import {
+  specManageInstance, priceReg, getMulSpecName, getSpecPrices, getMulSpecUrl, shopInfoManage,
+  isVip, toVip
+} from '@/util'
 import { globalData } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
-import { showToast } from 'vant'
+import { showToast, showConfirmDialog } from 'vant'
 
 
 export const useMulSpecPrice = () => {
@@ -10,6 +13,7 @@ export const useMulSpecPrice = () => {
   const route = useRoute()
 
   const shopId = +route.params.shopId
+  const shopInfo = ref()
 
   const mulUseImg = ref(0)
   const mulSpecs = ref([])
@@ -53,12 +57,25 @@ export const useMulSpecPrice = () => {
     router.go(-2)
   }
 
+  const modMulUseImg = async (val) => {
+    if (!isVip(shopInfo.value)) {
+      await showConfirmDialog({
+        message: '开通会员后可使用图片功能。\n(注：会员99/年)',
+        confirmButtonText: '前往开通',
+        cancelButtonText: '好的'
+      })
+      toVip(shopId)
+      return 
+    }
+    mulUseImg.value = val ? 1: 0
+  }
+  
   const mulUseImgDisplay = computed({
     get() {
       return mulUseImg.value === 1
     },
     set(val) {
-      mulUseImg.value = val ? 1: 0
+      modMulUseImg(val)
     }
   })
 
@@ -154,6 +171,8 @@ export const useMulSpecPrice = () => {
   }
 
   const init = async () => {
+    const info = await shopInfoManage.getData(shopId)
+    shopInfo.value = info[0]
     const ret = specManageInstance.getRawData()
     const specDetials = JSON.parse(ret.specDetials || '{}')
     mulUseImg.value = specDetials.mulUseImg || 0

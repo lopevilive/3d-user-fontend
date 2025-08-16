@@ -49,6 +49,8 @@ init()
     display: flex;
     flex-wrap: wrap;
     margin-bottom: -10px;
+    max-height: 80px;
+    overflow: auto;
     .list-item {
       margin-bottom: 10px;
       margin-right: 10px;

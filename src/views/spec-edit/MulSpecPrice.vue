@@ -7,7 +7,7 @@
     <div class="spec-content">
       <div class="head-wrap">
         <div>规格列表：</div>
-        <VanCheckbox v-model="mulUseImgDisplay">规格图片</VanCheckbox>
+        <VanCheckbox v-model="mulUseImgDisplay">图片</VanCheckbox>
       </div>
       <div class="spec-list">
         <div class="spec-item" v-for="(item, idx) in mulSpecPriceList">

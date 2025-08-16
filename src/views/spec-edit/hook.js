@@ -1,4 +1,4 @@
-import { specManageInstance, sleep, priceReg, getSpecPrices, rand } from '@/util'
+import { specManageInstance, sleep, priceReg, getSpecPrices, rand, isVip, shopInfoManage, toVip } from '@/util'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { globalData } from '@/store'
@@ -10,6 +10,8 @@ export const useSpecEdit = () => {
   const route = useRoute()
 
   const shopId = +route.params.shopId
+
+  const shopInfo = ref()
 
   const singleSpecs = ref([]) // 单级规格
   const singleUseImg = ref(0) // 单级规格是否使用图片
@@ -127,13 +129,26 @@ export const useSpecEdit = () => {
     }, 300);
   }
 
+  const modSingUseImg = async (val) => {
+    if (!isVip(shopInfo.value)) {
+      await showConfirmDialog({
+        message: '开通会员后可使用图片功能。\n(注：会员99/年)',
+        confirmButtonText: '前往开通',
+        cancelButtonText: '好的'
+      })
+      toVip(shopId)
+      return 
+    }
+    singleUseImg.value = val ? 1 : 0
+  }
+  
   const singleUseImgDisplay = computed({
     get(){
       if (singleUseImg.value === 1) return true
       return false
     },
     set(val) {
-      singleUseImg.value = val ? 1 : 0
+      modSingUseImg(val)
     }
   })
 
@@ -310,7 +325,16 @@ export const useSpecEdit = () => {
     }
   }
 
-  const mulImgClickHandle = (idx) => {
+  const mulImgClickHandle = async (idx) => {
+    if (!isVip(shopInfo.value)) {
+      await showConfirmDialog({
+        message: '开通会员后可使用图片功能。\n(注：会员99/年)',
+        confirmButtonText: '前往开通',
+        cancelButtonText: '好的'
+      })
+      toVip(shopId)
+      return 
+    }
     const matchedItem = mulSpecs.value[idx]
     if (matchedItem.useImg === 1) {
       matchedItem.useImg = 0
@@ -359,6 +383,8 @@ export const useSpecEdit = () => {
   
   
   const init = async () => {
+    const info = await shopInfoManage.getData(shopId)
+    shopInfo.value = info[0]
     const ret = specManageInstance.getRawData()
     isSpec.value = ret.isSpec
     const rawData = JSON.parse(ret.specDetials || '{}')
