@@ -28,7 +28,6 @@ export const useProductEdit = () => {
       id: id ? id : 0,
       shopId,
       url: '',
-      name: '',
       price: '',
       isSpec: 0,
       specDetials: '',
@@ -91,7 +90,6 @@ export const useProductEdit = () => {
     }
     await formRef.value.validate()
     const payload = getPayload()
-    // handleSpecCfg(payload, shopId) // 更新多规格的配置 todo
     const res = await commonFetch(productMod, payload)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)

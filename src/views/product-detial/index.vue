@@ -29,7 +29,7 @@
               :key="item.name"
               @click="specItemClickHandle(index)"
             >
-              <VanImage fit="cover" :src="getImageUrl(item.url)" v-if="isShowSpecImg(item)" />
+              <VanImage fit="cover" :src="getImageUrl(item.url)" v-if="isShowSpecImg(item)" lazy-load />
               <span>{{ item.name }}</span>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { showToast } from 'vant';
 export const useProductPriceDialog = () => {
   const price = ref('')
   const isSpec = ref(0)
-  const specs = ref('')
+  const specDetials = ref('')
   const show = ref(false)
 
   let resolve
@@ -15,7 +15,7 @@ export const useProductPriceDialog = () => {
     show.value = true
     price.value = ''
     isSpec.value = 0
-    specs.value = ''
+    specDetials.value = ''
     setTimeout(() => {
       try {
         priceModRef.value.init()
@@ -43,13 +43,13 @@ export const useProductPriceDialog = () => {
     resolve({
       price: price.value,
       isSpec: isSpec.value,
-      specs: specs.value
+      specDetials: specDetials.value
     })
     return true
   }
 
   return {
-    getPrice, price, show, beforeClose, isSpec, specs, priceModRef
+    getPrice, price, show, beforeClose, isSpec, priceModRef, specDetials
   }
 
 }

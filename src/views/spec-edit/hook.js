@@ -1,12 +1,15 @@
-import { specManageInstance, sleep, priceReg, getSpecPrices } from '@/util'
+import { specManageInstance, sleep, priceReg, getSpecPrices, rand } from '@/util'
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { globalData } from '@/store'
 import { showToast, showConfirmDialog } from 'vant';
 
 
 export const useSpecEdit = () => {
   const router = useRouter()
+  const route = useRoute()
+
+  const shopId = +route.params.shopId
 
   const singleSpecs = ref([]) // 单级规格
   const singleUseImg = ref(0) // 单级规格是否使用图片
@@ -23,7 +26,9 @@ export const useSpecEdit = () => {
   }
 
   const getMulSpecIncId = () => {
-    return Math.floor(Date.now() / 1000)
+    const a = Math.floor(Date.now() / 1000)
+    const b = rand(100, 999)
+    return `${a}${b}`
   }
 
   const addSpecHandle = async () => {
@@ -106,8 +111,7 @@ export const useSpecEdit = () => {
       specDetials: JSON.stringify(specDetials),
       price: min
     }
-    
-    await specManageInstance.saveHandle(payload)
+    await specManageInstance.saveHandle(payload, shopId)
     router.go(-1)
   }
 
@@ -328,6 +332,30 @@ export const useSpecEdit = () => {
     const ret = await imgModDialogRef.value.getImgs(matchedItem)
     matchedItem.list = ret
   }
+
+  const addHandle = (data) => {
+    if (isSpec.value === 1) {
+      const len = singleSpecs.value.length
+      if (len === 0) return
+      const tmpItem = singleSpecs.value[len - 1]
+      if (!tmpItem) return
+      if (!tmpItem.name) {
+        tmpItem.name = data.name
+      } else {
+        const defaut = getSingleDefault()
+        singleSpecs.value.push({...defaut, name : data.name})
+      }
+    }
+    if (isSpec.value === 2) {
+      const list = data.list.map((d) => {
+        return {name: d, url: '', id: getMulSpecIncId()}
+      })
+      const obj = {
+        name: data.name, useImg: 0, id: getMulSpecIncId(), list
+      }
+      mulSpecs.value.push(obj)
+    }
+  }
   
   
   const init = async () => {
@@ -350,7 +378,7 @@ export const useSpecEdit = () => {
     isShowMoveDown, isShowInsert, isShowDel, moveTopHandle, moveDownHandle, insertHandle, delHandle,
     cancelHandle, disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveTopHandle,
     mulMoveDownHandle, mulDelHandle, specActionRef, subItemClickHandle, mulImgClickHandle, toEditImg,
-    imgModDialogRef
+    imgModDialogRef, addHandle
   }
   
 }

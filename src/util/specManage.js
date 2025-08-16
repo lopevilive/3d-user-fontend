@@ -1,3 +1,6 @@
+import { shopInfoManage, commonFetch } from '@/util'
+import { modShopStatus } from '@/http'
+
 
 class SpecManage {
   constructor() {
@@ -25,7 +28,55 @@ class SpecManage {
     return { isSpec: this.isSpec || 1, specDetials: this.specDetials }
   }
 
-  async saveHandle (payload) {
+  async syncSpecsCfg (payload, shopId) {
+    if (!shopId) return
+    let shopInfo = await shopInfoManage.getData(shopId)
+    shopInfo = shopInfo?.[0]
+    if (!shopInfo) return
+    const rawStr = shopInfo.specsCfg || ''
+    const cfgs = JSON.parse(rawStr || '{}')
+    if (!cfgs?.singleCfg) cfgs.singleCfg = []
+    if (!cfgs?.mulCfg) cfgs.mulCfg = []
+
+    const specDetials = JSON.parse(payload.specDetials)
+    if (this.isSpec === 1) { // 处理单级规格
+      const {singleSpecs} = specDetials
+      let newList = singleSpecs.map((item) => {
+        return {name: item.name}
+      })
+      for (const item of cfgs.singleCfg) {
+        const idx = newList.findIndex((a) => a.name === item.name)
+        if (!item.name) continue
+        if (idx !== -1) continue
+        newList.push(item)
+      }
+      newList = newList.splice(0, 9)
+      cfgs.singleCfg = newList
+    }
+    if (this.isSpec === 2) { // 多级规格
+      const mulSpecs = specDetials.mulSpecs || []
+      let newList = mulSpecs.map((item) => {
+        console.log(item)
+        const subList = item.list.map((a) => a.name)
+        return {name: item.name, list: subList}
+      })
+      for (const item of cfgs.mulCfg) {
+        const idx = newList.findIndex((a) => a.name === item.name)
+        if (!item.name) continue
+        if (idx !== -1) continue
+        newList.push(item)
+      }
+      newList = newList.splice(0, 9)
+      cfgs.mulCfg = newList
+    }
+    const newStr = JSON.stringify(cfgs)
+    if (newStr === rawStr) return
+    await commonFetch(modShopStatus, {shopId, specsCfg: newStr})
+    shopInfoManage.dirty(shopId)
+  }
+  
+  async saveHandle (payload, shopId) {
+    await this.syncSpecsCfg(payload ,shopId)
     if (this.resolve) {
       this.resolve(payload)
     }

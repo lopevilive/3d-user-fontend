@@ -1,5 +1,11 @@
 <template>
   <div class="view-sepc-edit">
+    <CommonUseSpecs
+      :isSpec="isSpec"
+      :singleSpecs="singleSpecs"
+      :mulSpecs="mulSpecs"
+      @add="addHandle"
+    />
     <div class="tit-wrap">
       <span>规格列表：</span>
       <VanCheckbox v-model="singleUseImgDisplay" v-if="isSpec === 1">规格图片</VanCheckbox>
@@ -76,6 +82,7 @@ import InputDialog from '@/components/input-dialog/index.vue'
 import SpecAction from './SpecAction.vue'
 import ImgModDialog from './ImgModDialog.vue'
 import { getImageUrl } from '@/util'
+import CommonUseSpecs from './CommonUseSpecs.vue'
 
 const { 
   singleSpecs, addSpecHandle, init, saveHandle, beforeDestory, singleUseImgDisplay, isSpec,
@@ -83,7 +90,7 @@ const {
   isShowMoveDown, isShowInsert, isShowDel, moveTopHandle, moveDownHandle, insertHandle, delHandle,
   cancelHandle, disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveDownHandle,
   mulMoveTopHandle, mulDelHandle, specActionRef, subItemClickHandle, mulImgClickHandle, toEditImg,
-  imgModDialogRef
+  imgModDialogRef, addHandle
  } = useSpecEdit()
 
  init()
@@ -207,8 +214,8 @@ export default {
     display: flex;
     padding-top: 10px;
     border-top: 1px solid $bgGrey3;
-    :deep(.van-button:first-child) {
-      margin-right: 20px;
+    :deep(.van-button) {
+      margin: 0 10px;
     }
   }
 }

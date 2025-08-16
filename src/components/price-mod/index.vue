@@ -1,10 +1,10 @@
 <template>
-  <VanField class="com-price-mod__type" label="产品规格">
+  <VanField class="com-price-mod__type" label="产品规格" v-if="[0,1].includes(mode)">
     <template #input>
       <VanRadioGroup v-model="specType">
         <VanRadio :name="0">无</VanRadio>
-        <VanRadio :name="1">单级规格</VanRadio>
-        <VanRadio :name="2">多级规格</VanRadio>
+        <VanRadio :name="1">单级{{mode === 0 ? '规格': ''}}</VanRadio>
+        <VanRadio :name="2">多级{{mode === 0 ? '规格': ''}}</VanRadio>
       </VanRadioGroup>
     </template>
   </VanField>
@@ -36,7 +36,7 @@ const props = defineProps({
   isSpec: {type: Number},
   specDetials: {type: String},
   isDialog: {type: Boolean, default: false},
-  noSpecs: {type: Boolean, default: false}
+  mode: {type: Number, default: 0} // 1 隐藏规格两个字、 2 仅支持修改价格
 })
 
 const emits = defineEmits(['update:price', 'update:isSpec', 'update:specDetials', 'resetValidation'])

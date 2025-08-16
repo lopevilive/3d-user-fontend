@@ -6,7 +6,7 @@
       :autoplay="autoplay"
     >
       <VanSwipeItem v-for="(item, idx) in list" >
-        <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getImageUrl(item)" @click="clickHandle(idx)"/>
+        <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getImageUrl(item)" @click="clickHandle(idx)" lazy-load/>
       </VanSwipeItem>
     </VanSwipe>
     <div class="control-item control-left" @click="prevHandle" v-if="isShowControl">

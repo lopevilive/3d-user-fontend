@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import router from '@/router/index.js'
-import { getImageUrl, getSelectedItemByIdList, getMulSpecUrl } from '@/util'
+import { getImageUrl, getSelectedItemByIdList, getMulSpecUrl, mulSpecName2Ids } from '@/util'
 
 /**
  *  localData = {
@@ -18,19 +18,6 @@ import { getImageUrl, getSelectedItemByIdList, getMulSpecUrl } from '@/util'
  *  }
  * 
  */
-
-const names2Ids = (name, mulSpecs) => {
-  const names = name.split('｜')
-  const ret = []
-  for (let i = 0; i < names.length; i++) {
-    const cfgItem = mulSpecs[i]
-    for (const item of cfgItem.list) {
-      if (item.name === names[i]) ret.push(item.id)
-    }
-  }
-  return ret
-}
-
 class ShopCarManage {
   constructor() {
     this.toggleMap = ref({})
@@ -113,20 +100,19 @@ class ShopCarManage {
             const matchedItem = JSON.parse(specDetials || '{}')
             const singleSpecs = matchedItem.singleSpecs || []
             const singleUseImg = matchedItem.singleUseImg || 0
-            for (const specItem of singleSpecs) {
-              if (specItem.name === specName) {
-                retItem.price = specItem.price
-                retItem.spec = specName
-                if (singleUseImg && specItem.url) {
-                  retItem.url = getImageUrl(specItem.url)
-                }
+            const singleItem = singleSpecs?.find((item) => item.name === specName)
+            if (singleItem) {
+              retItem.price = singleItem.price
+              retItem.spec = specName
+              if (singleUseImg && singleItem.url) {
+                retItem.url = getImageUrl(singleItem.url)
               }
             }
           }
           if (isSpec === 2) { // 多级规格
             const matchedItem = JSON.parse(specDetials || '{}')
             const { mulSpecs, mulSpecPriceList, mulUseImg } = matchedItem
-            const idList = names2Ids(specName, mulSpecs)
+            const idList = mulSpecName2Ids(specName, mulSpecs)
             if (idList.length) {
               const priceItem = getSelectedItemByIdList(idList, mulSpecPriceList)
               retItem.price = priceItem.price
@@ -156,20 +142,30 @@ class ShopCarManage {
     this.toggleAll.value = !this.toggleAll.value
   }
 
-  updatePrice(id, spec, price) { // 手动更新价格
+  updatePrice(id, specName, price) { // 手动更新价格
     let localData = this.getLocalData()
     const data = localData[id]
-    if (!spec) {
+    if (!specName) {
       data.productInfo.price = price
     } else {
-      let {specs} = data.productInfo
-      specs = JSON.parse(specs)
-      for (const item of specs) {
-        if (item.name === spec) {
-          item.price = price
-        }
+      const {isSpec} = data.productInfo
+      const specDetials = JSON.parse(data.productInfo.specDetials || '{}')
+      if (isSpec === 1) {
+        const singleSpecs = specDetials.singleSpecs || []
+        const singleItem = singleSpecs.find((item) => item.name === specName)
+        if (!singleItem) return
+        singleItem.price = price
       }
-      data.productInfo.specs = JSON.stringify(specs)
+      if (isSpec === 2) {
+        const mulSpecs = specDetials.mulSpecs || []
+        const mulSpecPriceList = specDetials.mulSpecPriceList || []
+        const idList = mulSpecName2Ids(specName, mulSpecs)
+        if (!idList.length) return
+        const priceItem = getSelectedItemByIdList(idList, mulSpecPriceList)
+        if (!priceItem) return
+        priceItem.price = price
+      }
+      data.productInfo.specDetials = JSON.stringify(specDetials)
     }
     data.productInfo.modPrice = 1
 

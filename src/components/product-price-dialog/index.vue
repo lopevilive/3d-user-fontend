@@ -10,8 +10,8 @@
       <PriceMod
         v-model:price="price"
         v-model:isSpec="isSpec"
-        v-model:specDetials="specs"
-        :noSpecs="noSpecs"
+        v-model:specDetials="specDetials"
+        :mode="mode"
         ref="priceModRef"
       />
     </div>
@@ -24,11 +24,11 @@ import PriceMod from '@/components/price-mod/index.vue'
 
 const props = defineProps({
   title: {type: String, default: '产品价格'},
-  noSpecs: {type: Boolean, default: false}
+  mode: {type: Number, default: 1}
 })
 
 const {
-  price, show, getPrice, beforeClose, isSpec, specs, priceModRef
+  price, show, getPrice, beforeClose, isSpec, priceModRef, specDetials
 } = useProductPriceDialog()
 
 defineExpose({getPrice})

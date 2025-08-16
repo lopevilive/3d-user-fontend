@@ -80,7 +80,7 @@
       <VanEmpty description="暂无产品" />
       <VanButton text="返回" block @click="goBack"/>
     </div>
-    <ProductPriceDialog ref="priceDialogRef" :noSpecs="true" title="修改价格" />
+    <ProductPriceDialog ref="priceDialogRef" title="修改价格" :mode="2" />
     <RecordFloat />
   </div>
 </template>

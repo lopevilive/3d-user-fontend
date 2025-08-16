@@ -1,12 +1,15 @@
 import { computed, ref } from 'vue'
 import { specManageInstance, priceReg, getMulSpecName, getSpecPrices, getMulSpecUrl } from '@/util'
 import { globalData } from '@/store'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { showToast } from 'vant'
 
 
 export const useMulSpecPrice = () => {
   const router = useRouter()
+  const route = useRoute()
+
+  const shopId = +route.params.shopId
 
   const mulUseImg = ref(0)
   const mulSpecs = ref([])
@@ -46,7 +49,7 @@ export const useMulSpecPrice = () => {
       price: min,
       specDetials: JSON.stringify(specDetials)
     }
-    await specManageInstance.saveHandle(payload)
+    await specManageInstance.saveHandle(payload, shopId)
     router.go(-2)
   }
 

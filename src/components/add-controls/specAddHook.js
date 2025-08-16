@@ -14,7 +14,8 @@ export const useSpecAddHook = (props) => {
 
   const displaySpecList = computed(() => {
     const {isSpec} = props.productInfo
-    const {singleSpecs, mulSpecs} = specDetials.value
+    const singleSpecs = specDetials.value.singleSpecs || []
+    const mulSpecs = specDetials.value.mulSpecs ||[]
     if (isSpec === 1) { // 单级规格
       const specItem = {name: '规格', list: []}
       for (const item of singleSpecs) {
@@ -136,7 +137,7 @@ export const useSpecAddHook = (props) => {
 
   const getSingPrice = () => {
     const val = selectedInfo.value[0]
-    const { singleSpecs } = specDetials.value
+    const singleSpecs = specDetials.value.singleSpecs || []
     if ([undefined, null].includes(val)) {
       const {min, max} = getSpecPrices(singleSpecs)
       if (min === '') return ''

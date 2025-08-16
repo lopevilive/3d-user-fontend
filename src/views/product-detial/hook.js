@@ -85,7 +85,7 @@ export const useProductDetial = () => {
     const {isSpec} = info.value
     if (isSpec === 0) return []
     if (isSpec === 1) {
-      const {singleSpecs} = specDetials.value
+      const singleSpecs = specDetials.value.singleSpecs || []
       return singleSpecs
     }
     if (isSpec === 2) {
@@ -105,7 +105,7 @@ export const useProductDetial = () => {
   })
 
   const getSingPrice = () => {
-    const {singleSpecs} = specDetials.value
+    const singleSpecs = specDetials.value.singleSpecs || []
     if (selectedSpecIdx.value === -1) {
       const {min, max} = getSpecPrices(singleSpecs)
       if (min === '') return ''

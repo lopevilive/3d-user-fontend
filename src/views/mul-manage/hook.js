@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { commonFetch, sleep, getImageUrl, shopInfoManage } from '@/util'
+import { commonFetch, sleep, getImageUrl, shopInfoManage, mulSpecName2Ids, getSelectedItemByIdList } from '@/util'
 import { getInventory, getProduct } from '@/http'
 
 export const useMulManage = () => {
@@ -80,9 +80,9 @@ export const useMulManage = () => {
     let ret = await commonFetch(getInventory, { id, type: 1 })
     if (!ret.length) return
     ret = ret[0]
-    const data = JSON.parse(ret.data)
+    const inventoryProds = JSON.parse(ret.data)
     let s = new Set()
-    for (const item of data.list) {
+    for (const item of inventoryProds.list) {
       s.add(item.id)
     }
     const productId = [...s]
@@ -90,21 +90,33 @@ export const useMulManage = () => {
     let productData = await commonFetch(getProduct, {shopId, productId, pageSize: 500})
     const { list } = productData
     try {
-      for (const item of data.list) {
-        if (!item.modPrice) continue
-        for (const matchItem of list) {
-          if (matchItem.id !== item.id) continue
-          if (!item.spec) {
-            matchItem.price = item.price
-          } else {
-            let specs = JSON.parse(matchItem.specs)
-            for (const specItem of specs) {
-              if (specItem.name === item.spec) {
-                specItem.price = item.price
-              }
-            }
-            matchItem.specs = JSON.stringify(specs)
-          }
+      for (const inventoryItem of inventoryProds.list) {
+        if (!inventoryItem.modPrice) continue
+        const matchedItem = list.find((item) => item.id === inventoryItem.id)
+        if (!matchedItem) continue
+        if (matchedItem.isSpec === 0) { // 新的产品无规格
+          if (inventoryItem.spec) continue // 旧的有规格，此时丢弃这条数据
+          matchedItem.price = inventoryItem.price
+        }
+        if (matchedItem.isSpec === 1) { // 新产品是单级规格
+          const specDetials = JSON.parse(matchedItem.specDetials || '{}')
+          const singleSpecs = specDetials.singleSpecs || []
+          const specItem = singleSpecs.find((item) => item.name === inventoryItem.spec)
+          if (!specItem) continue
+          specItem.price = inventoryItem.price
+          matchedItem.specDetials = JSON.stringify(specDetials)
+        }
+        if (matchedItem.isSpec === 2) {
+          const specDetials = JSON.parse(matchedItem.specDetials || '{}')
+          const mulSpecs = specDetials.mulSpecs || []
+          const mulSpecPriceList = specDetials.mulSpecPriceList || []
+          const idList = mulSpecName2Ids(inventoryItem.spec, mulSpecs)
+          if (!idList.length) continue
+          const priceItem = getSelectedItemByIdList(idList, mulSpecPriceList)
+          if (!priceItem) continue
+          priceItem.price = inventoryItem.price
+          console.log(inventoryItem.price)
+          matchedItem.specDetials = JSON.stringify(specDetials)
         }
       }
     } catch(e) {

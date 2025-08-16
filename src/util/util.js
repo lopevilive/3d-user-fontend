@@ -423,33 +423,6 @@ export const isVip = (shopInfo, valiTime = true) => {
   return ret
 }
 
-export const handleSpecCfg = async (payload, shopId) => { // todo
-  try {
-    if (payload.isSpec !== 1) return
-    let shopInfo = await shopInfoManage.getData(shopId)
-    shopInfo = shopInfo[0]
-    let specCfg = shopInfo?.specCfg || '[]'
-    specCfg = JSON.parse(specCfg)
-    let specList = JSON.parse(payload.specs)
-    let newList = []
-    for (const item of specList) {
-      if (!item.name || !item.price) continue
-      newList.push(item.name)
-    }
-    for (const item of specCfg) {
-      if (newList.includes(item)) continue
-      newList.push(item)
-    }
-    newList = newList.splice(0, 6)
-    newList = JSON.stringify(newList)
-    if (newList === shopInfo?.specCfg) return
-    await modShopStatus({specCfg: newList, shopId})
-    shopInfoManage.dirty(shopId)
-  } catch(e) {
-    console.error(e)
-  }
-}
-
 export const valiIllegalStr = (str) => {
   if (!str) return
   for (const item of E_illegal_reg) {
@@ -525,4 +498,21 @@ export const getMulSpecUrl = (idList, mulSpecs, mulSpecPriceList) => {
   if (matchedUrl === 'none') return ''
   if (matchedUrl) return matchedUrl
   return cfgUrl || ''
+}
+
+// name: a｜b｜c
+export const mulSpecName2Ids = (name, mulSpecs) => {
+  const names = name.split('｜')
+  const ret = []
+  for (let i = 0; i < names.length; i++) {
+    const cfgItem = mulSpecs[i]
+    for (const item of cfgItem.list) {
+      if (item.name === names[i]) ret.push(item.id)
+    }
+  }
+  return ret
+}
+
+export const rand = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
 }

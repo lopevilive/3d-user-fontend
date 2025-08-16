@@ -26,7 +26,6 @@ const selectHandle = (actionItem) => {
 }
 
 const cancelHandle = () => {
-  console.log(999999)
   reject(null)
 }
 

@@ -3,7 +3,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod, getInventory } from '@/http'
 import {
   commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil,
-  getSpecPrices, handleSpecCfg, productTypesManage
+  productTypesManage
 } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
@@ -443,20 +443,7 @@ export const useProductManage = () => {
   const mulPriceRef = ref()
   const handleMulPrice = async () => {
     const priceInfo = await mulPriceRef.value.getPrice()
-    if (priceInfo.isSpec === 1) {
-      const {min} = getSpecPrices(JSON.parse(priceInfo.specs))
-      priceInfo.price = `${min}`
-      let tmp = JSON.parse(priceInfo.specs)
-      priceInfo.specs = []
-      for (const item of tmp) {
-        if (item.name && item.price) priceInfo.specs.push(item)
-      }
-      priceInfo.specs = JSON.stringify(priceInfo.specs)
-    } else {
-      priceInfo.specs = ''
-    }
     await commonFetch(productMod, {...priceInfo, id: selectedList.value, shopId})
-    handleSpecCfg(priceInfo, shopId)
     updateProd(selectedList.value)
     removeAllSelected()
   }
