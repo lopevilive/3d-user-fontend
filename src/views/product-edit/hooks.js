@@ -26,6 +26,7 @@ export const useProductEdit = () => {
   const getDefaultData = () => {
     return {
       id: id ? id : 0,
+      name: '', // 弃用
       shopId,
       url: '',
       price: '',
