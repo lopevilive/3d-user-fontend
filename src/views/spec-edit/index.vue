@@ -138,7 +138,7 @@ export default {
   }
   .add-spec {
     padding: 0 20px;
-    margin-top: 20px;
+    margin: 20px 0;
   }
   .contorl-list {
     display: flex;

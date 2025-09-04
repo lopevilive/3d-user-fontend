@@ -34,10 +34,6 @@ export const getProduct = (...args) => {
   return post(`${album}GetProduct`, ...args);
 };
 
-export const countProduct = (payload) => {
-  return post(`${album}CountProduct`, payload);
-}
-
 export const getProductTypes = (payload) => {
   return post(`${album}GetProductTypes`, payload);
 };

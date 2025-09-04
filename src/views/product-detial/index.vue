@@ -47,6 +47,20 @@
         </div>
       </div>
     </div>
+    <!-- 产品分类展示 -->
+    <template v-if="displayType">
+      <div class="item-tit">产品分类</div>
+      <div class="item-desc">{{ displayType }}</div>
+    </template>
+
+    <!-- 产品详情展示 -->
+    <template v-if="descUrlDisplay.length">
+      <div class="item-tit">产品详情</div>
+      <div class="desc-img-wrap">
+        <VanImage v-for="item in descUrlDisplay" :src="getImageUrl(item)" @click="showImagePreview([item])"/>
+      </div>
+    </template>
+    
     <!-- <ModelDisplay ref="modelDisplayRef" :productInfo="info"/> -->
     <Setting :runtimeData="info" @update="init" />
     <DetialFooter :productInfo="info"/>
@@ -65,11 +79,12 @@ import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import DetialFooter from './DetialFooter.vue'
 import { getImageUrl } from '@/util'
+import { showImagePreview } from 'vant';
 
 const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-  viewSpecDetialHandle
+  viewSpecDetialHandle, descUrlDisplay, displayType
 } = useProductDetial()
 
 onMounted(init)
@@ -87,6 +102,9 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  padding-bottom: 100px;
+  box-sizing: border-box;
+  background: $bgWhite;
   .down-product-tips {
     position: fixed;
     background: rgba(0,0,0,.7);
@@ -108,9 +126,8 @@ export default {
     }
   }
   .content {
-    background: $bgWhite;
     padding: $pdM;
-    padding-bottom: 100px;
+    // padding-bottom: 40px;
     .content__head {
       display: flex;
       justify-content: space-between;
@@ -213,6 +230,23 @@ export default {
           color: $grey8;
         }
       }
+    }
+  }
+  .item-tit {
+    padding: $pdL $pdM;
+    font-weight: bold;
+  }
+  .item-desc {
+    padding: 0 $pdM;
+    color: $grey8;
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+  .desc-img-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    .van-image {
+      width: 100%;
     }
   }
 }

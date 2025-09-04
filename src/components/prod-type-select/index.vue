@@ -1,13 +1,27 @@
 <template>
-  <VanField label="产品分类" readonly>
+  <VanField readonly>
+    <template #label>
+      <slot name="label">
+        产品分类
+      </slot>
+    </template>
     <template #input>
       <div class="com-type-select-wrap">
         <div class="type-select">
-          <div class="text" @click="showTypePicker = true">
+          <div class="text" @click="textClickHandle">
             <div :class="{'none': !modelValue}">{{ productTypeDisplay }}</div>
             <div class="line">|</div>
           </div>
-          <VanButton size="mini" type="primary" icon="plus" @click="showProductTypeDialog">新增</VanButton>
+          <VanButton
+            size="mini" type="primary" icon="plus" @click="showProductTypeDialog"
+            v-if="!mulTypeDisplay"
+          >新增</VanButton>
+          <div class="line" v-if="isShowMul && !mulTypeDisplay">|</div>
+          <div v-if="isShowMul">
+            <VanCheckbox shape="square" v-model="mulTypeDisplay" >多分类</VanCheckbox>
+          </div>
+          <div class="line" v-if="showDel">|</div>
+          <VanIcon name="delete-o" class="del-btn" v-if="showDel" @click="delHandle" />
         </div>
         <div class="type-select sub-type-wrap" v-if="isShowSub">
           <div class="text" @click="showSubTypePicker = true">
@@ -16,6 +30,13 @@
           </div>
           <VanButton size="mini" type="primary" icon="plus" @click="showSubProductTypeDialog">二级分类</VanButton>
         </div>
+      </div>
+    </template>
+  </VanField>
+  <VanField label=" " readonly is-link v-if="mulTypeDisplay">
+    <template #input>
+      <div class="desc-txt" @click="toEditMulHandle">
+        {{ displayMulTxt }}
       </div>
     </template>
   </VanField>
@@ -30,13 +51,17 @@ import Select from '@/components/select/index.vue'
 import { useProdTypeSelect } from './hook'
 
 const props = defineProps({
-  modelValue: {type: [Number, String]}
+  modelValue: {type: [Number, String]},
+  isMulType: {type: Number, default: 0},
+  mode: {type: Number, default: 0},
+  showDel: {type: Boolean, default: false}
 })
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'update:isMulType', 'del'])
 
 const {
   val, productTypeDialogRef, showTypePicker, productTypeDisplay, productTypes, showProductTypeDialog,
-  isShowSub, subTypeOpts, showSubTypePicker, subTypeDisplay, showSubProductTypeDialog
+  isShowSub, subTypeOpts, showSubTypePicker, subTypeDisplay, showSubProductTypeDialog, mulTypeDisplay,
+  toEditMulHandle, isShowMul, delHandle, displayMulTxt, textClickHandle
 } = useProdTypeSelect(props, emits)
 
 </script>
@@ -51,22 +76,32 @@ const {
   }
 }
 .type-select {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  .text {
+    flex: 1;
     display: flex;
-    width: 100%;
     justify-content: space-between;
-    .text {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-right: 10px;
-      .none {
-        color: $greyPlaceholder;
-      }
-      .line {
-        color: $greyPlaceholder;
-      }
+    align-items: center;
+    .none {
+      color: $greyPlaceholder;
     }
   }
+  .line {
+    color: $greyPlaceholder;
+    margin: 0 8px
+  }
+  .del-btn {
+    font-size: 20px;
+    color: red;
+  }
+}
+.desc-txt {
+  width: 100%;
+  text-align: right;
+  color: $grey8;
+}
 
 </style>

@@ -40,8 +40,9 @@ const valDisplay = computed({
 })
 
 const validDesc = () => {
-  if (!props.modelValue) return '产品描述不能为空'
-  const ret = valiIllegalStr(props.modelValue)
+  let str = props.modelValue?.trim()
+  if (!str) return '产品描述不能为空'
+  const ret = valiIllegalStr(str)
   if (ret) return `不能包含【${ret}】等敏感词。`
 }
 

@@ -49,7 +49,7 @@ export const useUploadImages = (props, emits) => {
         return true
       })
       const uri = `//${url}`
-      let list = props.modelValue.split(',')
+      let list = props.modelValue ?  props.modelValue.split(',') : []
       list.push(uri)
       list = [...new Set(list)]
       list = list.filter((item) => Boolean(item))

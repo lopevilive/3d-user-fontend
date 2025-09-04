@@ -2,10 +2,8 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct } from '@/http'
-import {
-  commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage, toVip, vipInfoManage
-} from '@/util'
-import { showConfirmDialog, showToast, showSuccessToast } from 'vant';
+import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage } from '@/util'
+import { showConfirmDialog, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
   const route = useRoute()
@@ -15,7 +13,6 @@ export const useProductEdit = () => {
   const shopId = +route.params.shopId
 
   const shopInfo = ref({})
-  const vipInfo = ref()
 
   const busiCfg = computed(() => {
     const {business} = shopInfo.value
@@ -37,7 +34,9 @@ export const useProductEdit = () => {
       type3D: 0,
       model3D: 1,
       modelUrl: '',
-      status: 0
+      status: 0,
+      descUrl: '',
+      isMulType: 0
     }
   }
 
@@ -83,12 +82,7 @@ export const useProductEdit = () => {
     return payload
   }
 
-  const uploadImgsRef = ref()
   const saveHandle = async () => {
-    if (uploadImgsRef.value.isLoading) {
-      showToast('请等待图片上传完成再保存～')
-      return
-    }
     await formRef.value.validate()
     const payload = getPayload()
     const res = await commonFetch(productMod, payload)
@@ -138,11 +132,6 @@ export const useProductEdit = () => {
     return res
   })
 
-  const validUrl = async (value, rule) => {
-    if (!data.value.url) return false
-    return true
-  }
-
   const qrcodeScannerRef = ref()
   const scanClickHandle = () => {
     qrcodeScannerRef.value.show()
@@ -188,32 +177,6 @@ export const useProductEdit = () => {
     return data.value.url?.split?.(',')?.length || 0
   })
 
-  const maxCount = computed(() => {
-    const cfg = vipInfo.value?.cfg
-    const level = vipInfo.value?.level
-    if (!cfg) return 6
-    const matchItem = cfg.find((item) => item.level === level)
-    return matchItem.imgC
-  })
-
-  const maxSize = computed(() => {
-    if ([516].includes(shopId)) return 40 // 特殊逻辑
-    const cfg = vipInfo.value?.cfg
-    const level = vipInfo.value?.level
-    if (!cfg) return 10
-    const matchItem = cfg.find((item) => item.level === level)
-    if (!matchItem) return 10
-    return matchItem.imgS;
-  })
-
-  const goVip = () => {
-    toVip(shopId)
-  }
-
-  const getVipInfo = async () => {
-    const ret = await vipInfoManage.getData(shopId)
-    vipInfo.value = ret[0]
-  }
 
   const handleResetValidation = () => {
     formRef.value.resetValidation()
@@ -222,12 +185,11 @@ export const useProductEdit = () => {
   const init = () => {
     getProductInfo()
     getShopInfo()
-    getVipInfo()
   }
 
   return {
-    data, formRef, saveHandle, init, model3DDisplay, showModel3d, model3dOpts, validUrl, qrcodeScannerRef,
-    scanClickHandle, scanHandle, type3DOpts, preview3D, modelDisplayRef, uploadImgsRef, busiCfg, maxCount,
-    imgCount, maxSize, dialogVipRef, goVip, handleResetValidation
+    data, formRef, saveHandle, init, model3DDisplay, showModel3d, model3dOpts, qrcodeScannerRef,
+    scanClickHandle, scanHandle, type3DOpts, preview3D, modelDisplayRef, busiCfg, imgCount,
+    dialogVipRef, handleResetValidation
   }
 }

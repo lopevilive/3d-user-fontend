@@ -4,7 +4,7 @@
       <div>{{ label }}<VanIcon name="info-o" v-if="tips" @click="tipsHandle"/></div>
     </div>
   </div>
-  <VanDialog v-model:show="show" teleport="body">
+  <VanDialog v-model:show="show" teleport="body" :closeOnClickOverlay="true">
     <div class="form-label-dialog">
       <slot>
         <p class="tips-content">{{ tips }}</p>

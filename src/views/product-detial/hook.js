@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/http'
 import {
   commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName, formatAttrs, getMulSpecName,
-  getMulSpecUrl, getSpecPrices
+  getMulSpecUrl, getSpecPrices, formatPoint
 } from '@/util'
 import { globalData } from '@/store'
 
@@ -42,12 +42,21 @@ export const useProductDetial = () => {
     return JSON.parse(info.value.specDetials || '{}')
   })
 
+  const displayType = computed(() => {
+    let ret = ''
+    if (!info.value.productType) return ret
+    const list = formatPoint(info.value.productType)
+    for (const item of list) {
+      const name = getTypeName(item)
+      if (!name) continue
+      if (ret) ret += '、'
+      ret += name
+    }
+    return ret
+  })
+  
   const displayAttrs = computed(() => {
     let attr = formatAttrs(info.value?.attr, shopInfo.value)
-    if (info.value.productType) {
-      const ret = getTypeName(info.value.productType)
-      if (ret) attr.splice(0,0 , {name: '分类', val: ret})
-    }
     return attr
   })
 
@@ -172,6 +181,13 @@ export const useProductDetial = () => {
     const ret = document.querySelector(`button[name=add-controls-spec]`)
     if (ret) ret.click()
   }
+
+  const descUrlDisplay = computed(() => {
+    const { descUrl } = info.value
+    if (!descUrl)  return []
+    let ret = descUrl.split(',')
+    return ret
+  })
   
   const init = async () => {
     if (!productId) return
@@ -187,6 +203,6 @@ export const useProductDetial = () => {
   return {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-    viewSpecDetialHandle
+    viewSpecDetialHandle, descUrlDisplay, displayType
   }
 }

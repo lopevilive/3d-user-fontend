@@ -3,31 +3,15 @@
     <VanForm label-align="left" ref="formRef">
       <VanCellGroup>
         <!-- 产品图片 -->
-        <VanField
-          v-model="data.url"
-          :required="true"
-          :rules="[{validator: validUrl, message: '图片不能为空'}]"
-          readonly
-        >
-          <template #label>
-            <FormLabel label="产品图片" tips="tmp">
-              <template #default>
-                <div class="img-tips-wrap">
-                  首张图片作为产品封面，可以拖动调整图片顺序。会员支持上传更多图片，
-                  <span class="to-vip" @click="goVip">前往了解</span>。
-                </div>
-              </template>
-            </FormLabel>
-            ({{imgCount}}/{{ maxCount }})
-          </template>
-          <template #input>
-            <UploadImgs v-model="data.url" :maxCount="maxCount" :maxSize="maxSize" ref="uploadImgsRef"/>
-          </template>
-        </VanField>
+         <MainImage v-model="data.url" />
         <!-- 产品描述 -->
         <Desc  v-model="data.desc"/>
+      </VanCellGroup>
+      <VanCellGroup>
         <!-- 产品分类 -->
-        <ProdTypeSelect v-model="data.productType" />
+        <ProdTypeSelect v-model="data.productType" v-model:isMulType="data.isMulType" />
+      </VanCellGroup>
+      <VanCellGroup>
         <!-- 产品价格 -->
         <PriceMod
           v-model:price="data.price"
@@ -35,11 +19,15 @@
           v-model:specDetials="data.specDetials"
           @resetValidation="handleResetValidation"
         />
+      </VanCellGroup>
+      <VanCellGroup>
         <!-- 上/下架 -->
         <StatusSelect v-model="data.status"/>
+        <!-- 详情图 -->
+        <DescImage v-model="data.descUrl" />
       </VanCellGroup>
 
-      <VanCellGroup v-if="type3DOpts.length">
+      <!-- <VanCellGroup v-if="type3DOpts.length">
         <VanField>
           <template #label>
             <FormLabel label="720°全景" tips="tmp">
@@ -96,7 +84,7 @@
             </template>
           </VanField>
         </template>
-      </VanCellGroup>
+      </VanCellGroup> -->
 
       <VanCellGroup>
         <AttrCfg v-model="data.attr" :attr-cfg="busiCfg.attrCfg"/>
@@ -112,7 +100,6 @@
 </template>
 
 <script setup>
-import UploadImgs from '@/components/uploadImgs/index.vue'
 import Select from '@/components/select/index.vue'
 import {useProductEdit} from './hooks'
 import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
@@ -124,11 +111,13 @@ import Desc from './Desc.vue'
 import AttrCfg from './AttrCfg.vue'
 import PriceMod from '@/components/price-mod/index.vue'
 import DialogVip from '@/components/dialog-vip/index.vue'
+import MainImage from './MainImage.vue'
+import DescImage from './DescImage.vue'
 
 const {
-  formRef, data, saveHandle, init, model3DDisplay, model3dOpts, showModel3d, validUrl, scanClickHandle,
-  qrcodeScannerRef, scanHandle, type3DOpts, modelDisplayRef, preview3D, uploadImgsRef, busiCfg, maxCount,
-  imgCount, maxSize, dialogVipRef, goVip, handleResetValidation
+  data, formRef, saveHandle, init, model3DDisplay, showModel3d, model3dOpts, qrcodeScannerRef,
+  scanClickHandle, scanHandle, type3DOpts, preview3D, modelDisplayRef, busiCfg, imgCount,
+  dialogVipRef, handleResetValidation
 } = useProductEdit()
 
 init()
@@ -188,15 +177,6 @@ export default {
     padding-top: 8px;
     box-sizing: border-box;
     background: $bgWhite;
-  }
-}
-
-.img-tips-wrap {
-  padding: 20px 10px;
-  color: $grey7;
-  font-size: $fsM;
-  .to-vip {
-    color: #3d8bf2;
   }
 }
 

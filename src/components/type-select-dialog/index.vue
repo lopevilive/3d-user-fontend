@@ -3,7 +3,7 @@
     :title="dialogTit" v-model:show="show" show-cancel-button
     :beforeClose="beforeClose"
   >
-    <ProdTypeSelect v-model="prodType"/>
+    <ProdTypeSelect v-model="prodType" :mode="1"/>
   </VanDialog>
 </template>
 

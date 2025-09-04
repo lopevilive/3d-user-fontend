@@ -212,9 +212,12 @@ export const useProductManage = () => {
     }
   }
 
-  const formatType = () => {
+  const formatType = () => { // todo
     let ret = `${activeTab.value}`
-    if (subTypesList.value.length) ret += `-${subActiveTab.value}`
+    if (subActiveTab.value) {
+      ret += `-${subActiveTab.value}`
+    }
+    // if (subTypesList.value.length) ret += `-${subActiveTab.value}`
     return ret
   }
   

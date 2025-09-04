@@ -126,6 +126,12 @@ const router = createRouter({
           name: 'mul-spec-price',
           component: () => import('@/views/spec-edit/MulSpecPrice.vue'),
           meta: {title: '价格设置'}
+        },
+        {
+          path: 'mul-type-manage',
+          name: 'mul-type-manage',
+          component: () => import('@/views/mul-type-manage/index.vue'),
+          meta: {title: '分类设置'}
         }
       ]
     },

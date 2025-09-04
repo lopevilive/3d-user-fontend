@@ -40,7 +40,7 @@
         <div class="list" @scroll="scrollHandle" ref="listRef">
           <ImgSwipe
             v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale"
-            :autoplay="3000" :width="typeMod === 1 ? 275 : 375"
+            :autoplay="3000" :width="typeMod === 1 ? 285 : 375"
             :key="bannerKey"
           />
           <VanSticky :offset-top="stickyPos" class="sticky-wrap">
@@ -271,11 +271,13 @@ export default {
     margin-bottom: $footerBarH;
     display: flex;
     .left-wrap {
-      width: 100px;
+      width: 90px;
       flex-shrink: 0;
       height: 100%;
       overflow: auto;
       background: $bgWhite;
+      padding-top: 5px;
+      box-sizing: border-box;
     }
     .wrap {
       // width: 100%;

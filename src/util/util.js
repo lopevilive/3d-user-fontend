@@ -6,8 +6,8 @@ import { EventEmitter } from 'eventemitter3'
 import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
-import { setViewLogs, modShopStatus } from '@/http'
-import { getBusinessCfg, E_vip_map, vipInfoManage, shopInfoManage, E_illegal_reg } from '@/util'
+import { setViewLogs } from '@/http'
+import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg } from '@/util'
 
 
 class LoadingManage {
@@ -174,17 +174,17 @@ export const toLogin = (fullPath)  => {
 export const toVip = async (shopId) => {
   const inApp = isInApp()
   if (!inApp) return showToast('请在小程序内打开')
-  let vipInfo = await vipInfoManage.getData(shopId)
-  vipInfo = vipInfo[0]
+  // let vipInfo = await vipInfoManage.getData(shopId)
+  // vipInfo = vipInfo[0]
   let shopInfo = await shopInfoManage.getData(shopId)
   shopInfo = shopInfo[0]
   const shopData = {
     shopId, name: shopInfo.name,
     url: getImageUrl(shopInfo.url.split(',')[0])
   }
-  const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
+  // const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
   const shopStr = encodeURIComponent(JSON.stringify(shopData))
-  wx.miniProgram.navigateTo({url: `../vip/vip?payload=${payloadStr}&shopInfo=${shopStr}`})
+  wx.miniProgram.navigateTo({url: `../vip/vip?shopInfo=${shopStr}`})
 }
 
 export const copyStr = (str) => {
@@ -352,13 +352,28 @@ export const getSpecPrices = (list) => {
     min: min === -1 ? '' : min,
     max: max === -1 ? '' : max
   }
-  
+}
+
+// 把 ,a,b, 转成 [a,b]
+export const formatPoint = (str) => {
+  let ret = []
+  if (!str) return ret
+  let s = String(str)
+  let sArr = s.split(',')
+  for (const item of sArr) {
+    if (!item) continue
+    ret.push(item)
+  }
+  return ret
 }
 
 export const formatType = (val) => {
   const ret = { type1: null, type2: null }
   if (!val) return ret
   let str = String(val)
+  const arr = formatPoint(str)
+  str = arr[0]
+  if (!str) return ret
   let [val1, val2] = str.split('-')
   if (val1) ret.type1 = Number(val1)
   if (val2) ret.type2 = Number(val2)
