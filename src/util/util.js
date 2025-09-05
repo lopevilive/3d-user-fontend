@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
-import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg } from '@/util'
+import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage } from '@/util'
 
 
 class LoadingManage {
@@ -174,17 +174,17 @@ export const toLogin = (fullPath)  => {
 export const toVip = async (shopId) => {
   const inApp = isInApp()
   if (!inApp) return showToast('请在小程序内打开')
-  // let vipInfo = await vipInfoManage.getData(shopId)
-  // vipInfo = vipInfo[0]
+  let vipInfo = await vipInfoManage.getData(shopId)
+  vipInfo = vipInfo[0]
   let shopInfo = await shopInfoManage.getData(shopId)
   shopInfo = shopInfo[0]
   const shopData = {
     shopId, name: shopInfo.name,
     url: getImageUrl(shopInfo.url.split(',')[0])
   }
-  // const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
+  const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
   const shopStr = encodeURIComponent(JSON.stringify(shopData))
-  wx.miniProgram.navigateTo({url: `../vip/vip?shopInfo=${shopStr}`})
+  wx.miniProgram.navigateTo({url: `../vip/vip?shopInfo=${shopStr}&payload=${payloadStr}`})
 }
 
 export const copyStr = (str) => {
