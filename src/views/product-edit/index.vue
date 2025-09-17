@@ -20,13 +20,6 @@
           @resetValidation="handleResetValidation"
         />
       </VanCellGroup>
-      <VanCellGroup>
-        <!-- 上/下架 -->
-        <StatusSelect v-model="data.status"/>
-        <!-- 详情图 -->
-        <DescImage v-model="data.descUrl" />
-      </VanCellGroup>
-
       <!-- <VanCellGroup v-if="type3DOpts.length">
         <VanField>
           <template #label>
@@ -88,6 +81,12 @@
 
       <VanCellGroup>
         <AttrCfg v-model="data.attr" :attr-cfg="busiCfg.attrCfg"/>
+      </VanCellGroup>
+      <VanCellGroup>
+        <!-- 上/下架 -->
+        <StatusSelect v-model="data.status"/>
+        <!-- 详情图 -->
+        <DescImage v-model="data.descUrl" />
       </VanCellGroup>
     </VanForm>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
@@ -177,6 +176,7 @@ export default {
     padding-top: 8px;
     box-sizing: border-box;
     background: $bgWhite;
+    z-index: 10;
   }
 }
 
