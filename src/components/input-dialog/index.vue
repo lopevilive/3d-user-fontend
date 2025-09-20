@@ -1,7 +1,11 @@
 <template>
-  <VanDialog v-model:show="show" class="com-input-dialog" :title="title" show-cancel-button :beforeClose="beforeClose">
+  <VanDialog
+    v-model:show="show" class="com-input-dialog"
+    :title="title" show-cancel-button :beforeClose="beforeClose"
+    :z-index="3000"
+  >
     <div class="dialog-content">
-      <VanField placeholder="请输入" v-model="modelValue" input-align="center" :maxlength="maxlength" />
+      <VanField :placeholder="placeholder" v-model="modelValue" input-align="center" :maxlength="maxlength" />
     </div>
   </VanDialog>
 </template>
@@ -15,6 +19,7 @@ const title = ref('')
 const modelValue = ref('')
 const maxlength = ref(12)
 const nullAble = ref(false)
+const placeholder = ref('')
 let resolve = null
 let reject = null
 let validFn = null
@@ -22,6 +27,7 @@ let validFn = null
 const getVal = async (rawVal, cfg) => {
   modelValue.value = rawVal || ''
   title.value = cfg.title || ''
+  placeholder.value = cfg.placeholder || '请输入'
   maxlength.value = cfg.maxlength || 12
   validFn = cfg.validFn || null // 校验函数
   nullAble.value = cfg.nullAble || false // 能否为空

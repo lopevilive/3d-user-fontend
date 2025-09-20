@@ -1,5 +1,15 @@
 <template>
-  <VanField class="com-price-mod__type" label="产品规格" v-if="[0,1].includes(mode)">
+  <VanField class="com-price-mod__type" v-if="[0,1].includes(mode)">
+    <template #label>
+      <FormLabel #default label="产品规格" tips="tmp">
+        <div class="common-label-tips">
+          <div>1.产品只有“大小”一个选项，这个时候选择【单级规格】</div>
+          <br>
+          <div>2.产品有“颜色”和“尺码”两个选项，这个时候选择【多级规格】</div>
+        </div>
+
+      </FormLabel>
+    </template>
     <template #input>
       <VanRadioGroup v-model="specType">
         <VanRadio :name="0">无</VanRadio>

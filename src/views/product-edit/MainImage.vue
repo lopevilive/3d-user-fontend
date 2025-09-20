@@ -59,7 +59,7 @@ const maxCount = computed(() => {
 })
 
 const maxSize = computed(() => {
-  if ([516].includes(shopId)) return 40 // 特殊逻辑
+  if ([516, 1028].includes(shopId)) return 40 // 特殊逻辑
   const cfg = vipInfo.value?.cfg
   const level = vipInfo.value?.level
   if (!cfg) return 10

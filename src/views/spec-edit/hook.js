@@ -38,7 +38,7 @@ export const useSpecEdit = () => {
       singleSpecs.value.push(getSingleDefault())
     }
     if (isSpec.value === 2) { // 添加多级规格分类
-      const ret = await inputDialogRef.value.getVal('', {title: '添加规格分类', validFn: (str) => {
+      const ret = await inputDialogRef.value.getVal('', {title: '添加规格分类', placeholder: '规格分类 (如：颜色、尺码)', validFn: (str) => {
         for (const item of mulSpecs.value) {
           if (item.name === str) {
             return '已存在该规格分类！'

@@ -13,7 +13,7 @@
     <!-- 单级规格 -->
     <div class="spec-list" v-if="isSpec === 1">
       <div class="spec-item" v-for="(item, itemIdx) in singleSpecs">
-        <VanField :label="`${itemIdx+1}.名称`" placeholder="请输入名称" v-model="item.name" :maxlength="12"></VanField>
+        <VanField :label="`${itemIdx+1}.名称`" placeholder="请输入名称(如：大、小)" v-model="item.name" :maxlength="12"></VanField>
         <VanField label="价格" placeholder="请输入价格 (选填)" v-model="item.price" :maxlength="10"></VanField>
         <VanField label="图片" v-if="singleUseImgDisplay">
           <template #input>
