@@ -3,6 +3,7 @@
     v-model:show="show" class="com-input-dialog"
     :title="title" show-cancel-button :beforeClose="beforeClose"
     :z-index="3000"
+    teleport="body"
   >
     <div class="dialog-content">
       <VanField :placeholder="placeholder" v-model="modelValue" input-align="center" :maxlength="maxlength" />
