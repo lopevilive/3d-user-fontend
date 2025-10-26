@@ -43,11 +43,10 @@ const shopInfo = ref()
 const displayPreviewList = computed(() => {
   let ret = []
   for (const item of props.list) {
-    if (shopInfo.value && isVip(shopInfo.value)) {
-      // ret.push(item)
-      ret.push(getImageUrl(item, 95))
-      continue
-    }
+    // if (shopInfo.value && isVip(shopInfo.value)) {
+    //   ret.push(getImageUrl(item, 95))
+    //   continue
+    // }
     ret.push(getImageUrl(item))
   }
   return ret

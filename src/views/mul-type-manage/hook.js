@@ -25,11 +25,12 @@ export const useMulTypeManage = () => {
     const s = new Set()
     for (const item of list.value) {
       if (!item.val) continue
-      if (s.has(item.val)) continue
-      s.add(item.val)
-      if (ret) ret += ','
-      ret = `${ret}${item.val}`
+      const val = item.val.replaceAll(',','')
+      if (s.has(val)) continue
+      s.add(val)
     }
+    const tmpList = [...s]
+    ret = tmpList.join(',')
     if (ret) {
       ret = `,${ret},`
     }

@@ -6,7 +6,7 @@
     </div>
     <div class="item" :class="{active: status === 2}" @click="toContact">
       <VanIcon name="user-o"/>
-      <div>联系</div>
+      <div>{{ displayTxt }}</div>
     </div>
     <div class="item" v-if="isShowCart" @click="toInventoryList">
       <VanIcon v-if="totalCount > 0" name="cart-o" :badge="totalCount" />
@@ -18,13 +18,15 @@
 
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import { shopCarInstance, globalData } from '@/store'
+import { shopInfoManage } from '@/util'
 
 const route = useRoute()
 const router = useRouter()
-const {shopId} = route.params
+const shopId = +route.params.shopId
+const shopInfo = ref()
 
 const isShow = computed(() => {
   if (['product-manage', 'contact', 'mul-manage'].includes(route.name)) return true
@@ -85,6 +87,17 @@ const isShowCart = computed(() => {
   return false
 })
 
+const displayTxt = computed(() => {
+  if (shopInfo.value?.showContact === 0) return '联系'
+  return '简介'
+})
+
+const init = async () => {
+  const res = await shopInfoManage.getData(shopId)
+  shopInfo.value = res[0]
+}
+
+init()
 
 </script>
 

@@ -3,7 +3,7 @@
     <ImgSwipe :list="imgList" :mode="2"/>
     <VanCellGroup>
       <VanCell :title="shopInfo.name" :label="shopInfo.desc"></VanCell>
-      <VanCell v-if="addressDisplay" title="联系地址" :label="addressDisplay">
+      <VanCell v-if="isShowAddress" title="联系地址" :label="addressDisplay">
         <template #value>
           <VanButton size="small" text="复制地址" @click="copyStr(addressDisplay)" />
         </template>
@@ -42,7 +42,8 @@ const {
   toViewQr,
   isShowConcat,
   isShowToEdit,
-  toEdit
+  toEdit,
+  isShowAddress
 } = useContact()
 
 const loading = globalLoading.getRef()

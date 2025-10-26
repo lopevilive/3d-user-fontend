@@ -23,7 +23,8 @@ export const useAlbumMod = () => {
     address: '',
     phone: '',
     qrcodeUrl: '',
-    business: ''
+    business: '',
+    showContact: 0
   })
 
   const formRef = ref()
@@ -49,14 +50,16 @@ export const useAlbumMod = () => {
     shopInfoManage.dirty(data.value.id)
     globalData.value.userInfo = {} // 需要重新获取登录信息
     router.replace({
-      name: 'contact', params: {shopId: res}, query: {
+      name: 'product-manage', params: {shopId: res}, query: {
         title: data.value?.name || '',
         imageUrl: getImageUrl(data.value?.url?.split?.(',')?.[0]|| '' )
       }
     })
     await sleep(1)
     console.log('8888888')
-    if (window.history.state.back === window.history.state.current) router.go(-1)
+    if (window.history.state.back === window.history.state.current) {
+      router.go(-1)
+    }
   }
 
   const businessOpts = keyReplace(E_business,  {key: 'value', val: 'text'})
@@ -98,6 +101,20 @@ export const useAlbumMod = () => {
     const ret = valiIllegalStr(data.value.desc)
     if (ret) return `不能包含【${ret}】等敏感词。`
   }
+
+  const showContactDisplay = computed({
+    get() {
+      if (data.value.showContact === 1) return false
+      return true
+    },
+    set(val) {
+      if (val === false) {
+        data.value.showContact = 1
+      } else {
+        data.value.showContact = 0
+      }
+    }
+  })
   
   const init = async () => {
     if (!isEdit) return
@@ -107,22 +124,7 @@ export const useAlbumMod = () => {
 
 
   return {
-    data,
-    formRef,
-    saveHandle,
-    init,
-    areaSelectRef,
-    areaClick,
-    businessOpts,
-    showBusinessPicker,
-    businessDisplay,
-    isEdit,
-    businessTips,
-    businessClick,
-    uploadImgsRef,
-    uploadImgsRef2,
-    loading,
-    valiName,
-    valiDesc
+    data, formRef, saveHandle, init, areaSelectRef, areaClick, businessOpts, showBusinessPicker, businessDisplay,
+    isEdit, businessTips, businessClick, uploadImgsRef, uploadImgsRef2, loading, valiName, valiDesc, showContactDisplay
   }
 }

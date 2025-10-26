@@ -1,8 +1,6 @@
 import { ref, computed } from 'vue'
 import { shopInfoManage } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
-import copy from 'copy-to-clipboard';
-import { showSuccessToast } from 'vant';
 import {globalData} from '@/store'
 
 export const useContact = () => {
@@ -42,12 +40,14 @@ export const useContact = () => {
   }
 
   const isShowConcat = computed(() => {
+    if (shopInfo.value.showContact === 1) return false
     if (shopInfo.value.phone) return true
     if (shopInfo.value.qrcodeUrl) return true
     return false
   })
 
   const isShowToEdit = computed(() => {
+    if (shopInfo.value.showContact === 1) return false
     if (isShowConcat.value) return false
     const {rid} = globalData.value
     if ([2,3,99].includes(rid)) return true
@@ -58,6 +58,12 @@ export const useContact = () => {
     router.push({name: 'album-mod', params: {shopId}})
   }
 
+  const isShowAddress = computed(() => {
+    if (isShowConcat.value === false) return false
+    if (!addressDisplay.value) return false
+    return true
+  })
+
   return {
     shopInfo,
     init,
@@ -66,6 +72,7 @@ export const useContact = () => {
     toViewQr,
     isShowConcat,
     isShowToEdit,
-    toEdit
+    toEdit,
+    isShowAddress
   }
 }

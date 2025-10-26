@@ -62,13 +62,16 @@
       </VanCellGroup>
 
       <VanCellGroup v-if="isEdit">
-        <VanField v-model="data.address" placeholder="请输入详细地址" :maxlength="200">
+        <VanCell title='显示联系方式' class="cell-label-width-200">
+          <VanSwitch v-model="showContactDisplay" />
+        </VanCell>
+        <VanField v-model="data.address" placeholder="请输入详细地址" :maxlength="200" :disabled="!showContactDisplay">
           <template #label>
             <FormLabel label="详细地址" tips="填写详细地址，以便客户能够方便地上门联系您"/>
           </template>
         </VanField>
 
-        <VanField v-model="data.phone" placeholder="请输入联系电话" :maxlength="20">
+        <VanField v-model="data.phone" placeholder="请输入联系电话" :maxlength="20" :disabled="!showContactDisplay">
           <template #label>
             <FormLabel label="联系电话" tips="填写联系电话，以便客户与您顺利联系"/>
           </template>
@@ -100,23 +103,9 @@ import FormLabel from '@/components/form-label/index.vue'
 import Select from '@/components/select/index.vue'
 
 const {
-  data,
-  formRef,
-  saveHandle,
-  init,
-  areaSelectRef,
-  areaClick,
-  businessOpts,
-  showBusinessPicker,
-  businessDisplay,
-  isEdit,
-  businessTips,
-  businessClick,
-  uploadImgsRef,
-  uploadImgsRef2,
-  loading,
-  valiName,
-  valiDesc
+  data, formRef, saveHandle, init, areaSelectRef, areaClick, businessOpts, showBusinessPicker,
+  businessDisplay, isEdit, businessTips, businessClick, uploadImgsRef, uploadImgsRef2, loading,
+  valiName, valiDesc, showContactDisplay
 } = useAlbumMod()
 
 
