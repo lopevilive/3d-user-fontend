@@ -6,7 +6,7 @@
       :autoplay="autoplay"
     >
       <VanSwipeItem v-for="(item, idx) in list" >
-        <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getImageUrl(item)" @click="clickHandle(idx)" lazy-load/>
+        <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getUrl(item)" @click="clickHandle(idx)" lazy-load/>
       </VanSwipeItem>
     </VanSwipe>
     <div class="control-item control-left" @click="prevHandle" v-if="isShowControl">
@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getImageUrl, getFlexW, isVip, shopInfoManage } from '@/util'
+import { getImageUrl, getFlexW, isVip, shopInfoManage, E_img_qua_map } from '@/util'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
 import { useRoute } from 'vue-router'
@@ -40,6 +40,13 @@ const shopId = + route.params.shopId
 const swipeRef = ref()
 const shopInfo = ref()
 
+const getUrl = (url) => {
+  if (!shopId) return getImageUrl(url)
+  const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
+  if (!cfgItem) return getImageUrl(url)
+  return getImageUrl(url, cfgItem.qua)
+}
+
 const displayPreviewList = computed(() => {
   let ret = []
   for (const item of props.list) {
@@ -47,7 +54,7 @@ const displayPreviewList = computed(() => {
     //   ret.push(getImageUrl(item, 95))
     //   continue
     // }
-    ret.push(getImageUrl(item))
+    ret.push(getUrl(item))
   }
   return ret
 })

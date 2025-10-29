@@ -145,3 +145,8 @@ export const E_illegal_reg = [
   ['辟','除','邪','气']
 ]
 
+// 对部分图册修改图片压缩质量
+export const E_img_qua_map = [
+  // {shopId: 5, qua: 65},
+  {shopId: 1504, qua: 65},
+]
