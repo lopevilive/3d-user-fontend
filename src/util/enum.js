@@ -149,4 +149,5 @@ export const E_illegal_reg = [
 export const E_img_qua_map = [
   // {shopId: 5, qua: 65},
   {shopId: 1504, qua: 65},
+  {shopId: 1441, qua: 65},
 ]
