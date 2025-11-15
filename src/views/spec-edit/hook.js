@@ -382,6 +382,40 @@ export const useSpecEdit = () => {
   }
   
   
+  const setExample = () => {
+    let specsCfg = shopInfo.value.specsCfg || '{}'
+    specsCfg = JSON.parse(specsCfg)
+    if (isSpec.value === 1) {
+      const singleCfg = specsCfg.singleCfg || []
+      if (singleSpecs.value.length === 0) {
+        if (singleCfg.length === 0) {
+          singleSpecs.value = [
+            {name: '大 (示例)', price: '', url: ''},
+            {name: '小 (示例)', price: '', url: ''},
+          ]
+        } else {
+          addSpecHandle()
+        }
+      }
+    }
+    if (isSpec.value === 2) {
+      const mulCfg = specsCfg.mulCfg || []
+      if (mulSpecs.value.length === 0 && mulCfg.length === 0) {
+        mulSpecs.value = [
+          {name: '颜色 (示例)', useImg: 0, id: getMulSpecIncId(), list: [
+            {name: '黑', url: '', id: getMulSpecIncId()},
+            {name: '白', url: '', id: getMulSpecIncId()},
+          ]},
+          {name: '尺码 (示例)', useImg: 0, id: getMulSpecIncId(), list: [
+            {name: 'S', url: '', id: getMulSpecIncId()},
+            {name: 'M', url: '', id: getMulSpecIncId()},
+            {name: 'L', url: '', id: getMulSpecIncId()},
+          ]},
+        ]
+      }
+    }
+  }
+  
   const init = async () => {
     const info = await shopInfoManage.getData(shopId)
     shopInfo.value = info[0]
@@ -393,9 +427,7 @@ export const useSpecEdit = () => {
     singleUseImg.value = rawData.singleUseImg || 0
     mulUseImg.value = rawData.mulUseImg || 0
     mulSpecPriceList.value = rawData.mulSpecPriceList || []
-    if (isSpec.value === 1 && singleSpecs.value.length === 0) {
-      addSpecHandle()
-    }
+    setExample() // 设置示例
   }
 
   return {

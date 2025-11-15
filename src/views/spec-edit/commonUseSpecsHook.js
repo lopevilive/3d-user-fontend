@@ -1,7 +1,6 @@
 import {ref, computed} from 'vue'
-import { shopInfoManage } from '@/util'
+import { shopInfoManage, specManageInstance } from '@/util'
 import { useRoute } from 'vue-router'
-
 
 
 export const useCommonUseSpecs = (props, emits) => {
@@ -41,12 +40,53 @@ export const useCommonUseSpecs = (props, emits) => {
     emits('add', data)
   }
   
+  const isShow = ref(false)
+  const dialogList = ref([])
+  const handleHistory = async () => {
+    dialogList.value = []
+    for (const item of specsCfg.value) {
+      dialogList.value.push(item.name)
+    }
+    isShow.value = true
+  }
+
+  const delHandle = async (name) => {
+    const idx = dialogList.value.findIndex((item) => item === name)
+    if (idx === -1) return
+    dialogList.value.splice(idx, 1)
+  }
+  
+  const beforeClose = async (action) => {
+    if (action === 'cancel') {
+      return true
+    }
+    let specsCfg = shopInfo.value.specsCfg
+    if (!specsCfg) {
+      specsCfg = {singleCfg: [], mulCfg: []}
+    } else{
+      specsCfg = JSON.parse(specsCfg)
+    }
+    const list = []
+    const tmpList = props.isSpec === 1 ? specsCfg.singleCfg : specsCfg.mulCfg
+    for  (const item of tmpList) {
+      if (dialogList.value.includes(item.name)) list.push(item)
+    }
+    if (props.isSpec === 1) {
+      specsCfg.singleCfg = list
+    } else {
+      specsCfg.mulCfg = list
+    }
+    await specManageInstance.updateSpecsCfg(JSON.stringify(specsCfg), shopId)
+    await init()
+    return true
+  }
+  
   const init = async () => {
     const ret = await shopInfoManage.getData(shopId)
     shopInfo.value = ret?.[0] || {}
   }
 
   return {
-    init, specsCfg, clickHandle
+    init, specsCfg, clickHandle, isShow, handleHistory, dialogList, delHandle, beforeClose
   }
 }

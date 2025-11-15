@@ -41,9 +41,11 @@ class SpecManage {
     const specDetials = JSON.parse(payload.specDetials)
     if (this.isSpec === 1) { // 处理单级规格
       const {singleSpecs} = specDetials
-      let newList = singleSpecs.map((item) => {
-        return {name: item.name}
-      })
+      let newList = []
+      for (const item of singleSpecs) {
+        if (['大 (示例)', '小 (示例)'].includes(item.name)) continue
+        newList.push({name: item.name})
+      }
       for (const item of cfgs.singleCfg) {
         const idx = newList.findIndex((a) => a.name === item.name)
         if (!item.name) continue
@@ -55,11 +57,12 @@ class SpecManage {
     }
     if (this.isSpec === 2) { // 多级规格
       const mulSpecs = specDetials.mulSpecs || []
-      let newList = mulSpecs.map((item) => {
-        console.log(item)
+      let newList = []
+      for  (const item of mulSpecs) {
+        if (['颜色 (示例)', '尺码 (示例)'].includes(item.name)) continue
         const subList = item.list.map((a) => a.name)
-        return {name: item.name, list: subList}
-      })
+        newList.push({name: item.name, list: subList})
+      }
       for (const item of cfgs.mulCfg) {
         const idx = newList.findIndex((a) => a.name === item.name)
         if (!item.name) continue
@@ -71,7 +74,11 @@ class SpecManage {
     }
     const newStr = JSON.stringify(cfgs)
     if (newStr === rawStr) return
-    await commonFetch(modShopStatus, {shopId, specsCfg: newStr})
+    await this.updateSpecsCfg(newStr, shopId)
+  }
+
+  async updateSpecsCfg (cfgStr, shopId){
+    await commonFetch(modShopStatus, {shopId, specsCfg: cfgStr})
     shopInfoManage.dirty(shopId)
   }
   

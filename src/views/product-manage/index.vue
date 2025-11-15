@@ -102,6 +102,7 @@
     <GoTop :listRef="listRef" :scrollT="scrollT" />
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
     <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
+    <ExpiredTips />
   </div>
 </template>
 
@@ -119,6 +120,7 @@ import SortControl from '@/components/sort-control/index.vue'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import TypePop from './TypePop.vue'
 import LeftTypeMod from './LeftTypeMod.vue'
+import ExpiredTips from './ExpiredTips.vue'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
