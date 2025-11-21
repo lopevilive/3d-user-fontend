@@ -35,6 +35,13 @@ class ReportManage {
     localStorage.setItem(this.localKey, JSON.stringify(data))
   }
   async toReport(payload) {
+    const ownerList = globalData.value.userInfo?.ownerList || []
+    const adminList = globalData.value.userInfo?.adminList || []
+    if ([...ownerList, ...adminList].includes(payload.shopId)) {
+      payload.isAdmin = true
+    } else {
+      payload.isAdmin = false
+    }
     await reportCgi(payload)
     console.log('report', payload)
   }
@@ -46,27 +53,18 @@ class ReportManage {
     if (ret) return // 今天已经上报过了
     shopData['member'] = Date.now()
     this.setLocalData(localData)
-    await this.toReport({
-      field: 'member', shopId,
-      isAdmin: [2,3].includes(globalData.value.rid)
-    })
+    await this.toReport({ field: 'member', shopId })
   }
 
   async handleOpenTims({shopId}) { // 统计打开次数，每次打开都统计一次
     if (this.openTimesCache[shopId]) return
     this.openTimesCache[shopId] = true
-    await this.toReport({
-      field: 'openTimes',  shopId,
-      isAdmin: [2,3].includes(globalData.value.rid)
-    })
+    await this.toReport({  field: 'openTimes',  shopId })
   }
 
   async handleViewDetial({to, shopId}) { // 统计打开产品详情页数量，每次打开统计一次
     if (to.name !== 'product-detial') return
-    await this.toReport({
-      field: 'viewDetial', shopId,
-      isAdmin: [2,3].includes(globalData.value.rid)
-    })
+    await this.toReport({ field: 'viewDetial', shopId})
   }
 
   async report(payload) {
