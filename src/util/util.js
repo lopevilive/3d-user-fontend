@@ -531,3 +531,15 @@ export const mulSpecName2Ids = (name, mulSpecs) => {
 export const rand = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+// 判断是否今天
+export const isToday = (date) => {
+  const today = new Date();
+  const givenDate = new Date(date); // 确保参数转换为Date对象
+
+  return (
+    givenDate.getFullYear() === today.getFullYear() &&
+    givenDate.getMonth() === today.getMonth() &&
+    givenDate.getDate() === today.getDate()
+  );
+}

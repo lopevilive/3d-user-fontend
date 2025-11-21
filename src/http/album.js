@@ -145,3 +145,7 @@ export const modProductPos = (payload) => {
 export const getVipInfo = (payload) => {
   return post(`${album}GetVipInfo`, payload)
 }
+
+export const reportCgi = (payload) => {
+  return post(`${album}Report`, payload)
+}

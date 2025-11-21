@@ -32,6 +32,7 @@ const responseSuccess = (response) => {
     }
     return Promise.reject(data);
   }
+  if (/Report/.test(url)) return Promise.reject(data); // 上报出错不提示
   showNotify({message: data.msg || '未知出错，请联系开发员～', type: 'danger'});
   return Promise.reject(data);
 };

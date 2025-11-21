@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -186,7 +186,7 @@ const toPhone = (to) => {
 const handleLogin = async (to) => {
   const inApp = isInApp()
   const { userId } = globalData.value.userInfo
-  if (userId) return 
+  if (userId) return // 已经登录
   const token = getToken(to.query)
   if (token) {
     try {
@@ -264,6 +264,10 @@ const handleLog = (to, shopId) => {
   viewLog.setlog(shopId)
 }
 
+const handleReport = (payload) => {
+  reportInstance.report(payload) // 处理上报
+}
+
 const forwardObj = {}
 const handleForwardPermi = async (shopId) => {
   if (!shopId) return
@@ -305,6 +309,8 @@ const init = async (to, from) => {
   if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
   
   handleLog(to, shopId) // 写入浏览记录
+  handleReport({to, shopId}) // 处理上报
+  
 
   pass = await handleEncry(shopId, to) // 判断是否加密画册
   if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
