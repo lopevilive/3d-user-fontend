@@ -40,9 +40,9 @@ export const useHome = () => {
   // 获取案例图册
   const getDemoList = async () => {
     const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
-    if (globalData.value.rid !== 99) {
-      if (adminList.length || ownerList.length) return
-    }
+    // if (globalData.value.rid !== 99) {
+      // if (adminList.length || ownerList.length) return
+    // }
     if (demoShops.length) {
       const data = await shopInfoManage.getData(demoShops)
       demoList.value = data
