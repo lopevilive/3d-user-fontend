@@ -15,7 +15,7 @@
       ({{imgCount}}/{{maxCount}})
     </template>
     <template #input>
-      <UploadImgs v-model="displayUrl" :maxCount="maxCount" ref="uploadImgsRef"/>
+      <UploadImgs v-model="displayUrl" :maxCount="maxCount" :maxSize="maxSize" ref="uploadImgsRef"/>
     </template>
   </VanField>
 </template>
@@ -65,6 +65,7 @@ const imgCount = computed(() => {
 })
 
 const maxSize = computed(() => {
+  if ([516, 1028, 1757].includes(shopId)) return 60 // 特殊逻辑
   const cfg = vipInfo.value?.cfg
   const level = vipInfo.value?.level
   if (!cfg) return 10
