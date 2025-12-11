@@ -117,10 +117,10 @@ export const useSpecEdit = () => {
     router.go(-1)
   }
 
-  const cancelHandle = () => {
-    specManageInstance.cancelHandle()
-    router.go(-1)
-  }
+  // const cancelHandle = () => {
+  //   specManageInstance.cancelHandle()
+  //   router.go(-1)
+  // }
 
   const beforeDestory = async () => {
     specManageInstance.destory()
@@ -415,6 +415,17 @@ export const useSpecEdit = () => {
       }
     }
   }
+
+  const modSinglePrice = async () => {
+    const ret = await inputDialogRef.value.getVal('', {title: '批量设置价格', nullAble: true, validFn: (str) => {
+      if (str) {
+        if (!priceReg.test(str)) return '请输入正确价格'
+      }
+    }})
+    for (const item of singleSpecs.value) {
+      item.price = ret
+    }
+  }
   
   const init = async () => {
     const info = await shopInfoManage.getData(shopId)
@@ -434,9 +445,9 @@ export const useSpecEdit = () => {
     singleSpecs, addSpecHandle, init, saveHandle, beforeDestory, singleUseImgDisplay, isSpec,
     addBtnText, inputDialogRef, mulSpecs, modMulName, addSubSpecHandle, nextStepHandle, isShowMoveTop,
     isShowMoveDown, isShowInsert, isShowDel, moveTopHandle, moveDownHandle, insertHandle, delHandle,
-    cancelHandle, disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveTopHandle,
+    disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveTopHandle,
     mulMoveDownHandle, mulDelHandle, specActionRef, subItemClickHandle, mulImgClickHandle, toEditImg,
-    imgModDialogRef, addHandle
+    imgModDialogRef, addHandle, modSinglePrice
   }
   
 }

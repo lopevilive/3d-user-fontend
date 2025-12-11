@@ -17,9 +17,10 @@ export const useMulSpecPrice = () => {
 
   const mulUseImg = ref(0)
   const mulSpecs = ref([])
-  const mulSpecPriceList = ref([])
+  const specInfoList = ref([])
   const uploadImgsRef = ref([])
   let rawMulSpecPriceList = []
+  const filterIds = ref([])
 
   const beforeDestory = async () => {
     setTimeout(() => {
@@ -31,7 +32,7 @@ export const useMulSpecPrice = () => {
     const rawData = specManageInstance.getRawData()
     const specDetials = JSON.parse(rawData.specDetials || '{}')
     specDetials.mulUseImg = mulUseImg.value
-    specDetials.mulSpecPriceList = mulSpecPriceList.value
+    specDetials.mulSpecPriceList = specInfoList.value
     return specDetials
   }
   
@@ -122,7 +123,7 @@ export const useMulSpecPrice = () => {
           if (rawItem.url) data.url = rawItem.url
         }
       }
-      mulSpecPriceList.value.push(data)
+      specInfoList.value.push(data)
     }
   }
 
@@ -153,7 +154,8 @@ export const useMulSpecPrice = () => {
         if (!priceReg.test(str)) return '请输入正确价格'
       }
     }})
-    for (const item of mulSpecPriceList.value) {
+    for (const item of specInfoList.value) {
+      if (!dispyalSpecInfoList.value.includes(item)) continue
       item.price = ret
     }
   }
@@ -167,7 +169,34 @@ export const useMulSpecPrice = () => {
   }
 
   const getDisplayUrl = (item) => {
-    return getMulSpecUrl(item.list, mulSpecs.value, mulSpecPriceList.value)
+    return getMulSpecUrl(item.list, mulSpecs.value, specInfoList.value)
+  }
+  
+  const filterSpecsRef = ref()
+  const filterHandle = async () => {
+    const ret = await filterSpecsRef.value.getData(JSON.parse(JSON.stringify(filterIds.value)))
+    filterIds.value = ret
+  }
+
+  const dispyalSpecInfoList = computed(() => {
+    let ret = []
+    for (const item of specInfoList.value) {
+      let pass = true
+      for (let i = 0; i < item.list.length; i ++){
+        const id = item.list[i]
+        const idList = filterIds.value[i] || []
+        if (idList.length === 0) continue
+        if (idList.includes(id)) continue
+        pass = false
+        break
+      }
+      if (pass) ret.push(item)
+    }
+    return ret
+  })
+
+  const isShowItem = (itemData) => {
+    return dispyalSpecInfoList.value.includes(itemData)
   }
 
   const init = async () => {
@@ -183,7 +212,8 @@ export const useMulSpecPrice = () => {
   }
 
   return {
-    beforeDestory, saveHandle, init, mulUseImgDisplay, displayItemTit, mulSpecPriceList, getDisplayName,
-    specStatusHandle, uploadImgsRef, inputDialogRef, mulPirceMod, updateImgHandle, getDisplayUrl
+    beforeDestory, saveHandle, init, mulUseImgDisplay, displayItemTit, specInfoList, getDisplayName,
+    specStatusHandle, uploadImgsRef, inputDialogRef, mulPirceMod, updateImgHandle, getDisplayUrl, filterSpecsRef,
+    filterHandle, mulSpecs, isShowItem, dispyalSpecInfoList
   }
 }

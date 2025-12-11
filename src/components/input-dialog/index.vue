@@ -54,7 +54,11 @@ const beforeClose = async (action) => {
   if (validFn) {
     const errMsg = await validFn(val)
     if (errMsg) {
-      showToast(errMsg)
+      showToast({
+        message: errMsg,
+        position: 'top',
+        'z-index': 4000
+      });
       return false
     }
   }

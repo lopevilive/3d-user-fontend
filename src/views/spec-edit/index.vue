@@ -61,7 +61,7 @@
     </div>
     <div class="bottom-btn">
       <template v-if="isSpec === 1">
-        <VanButton text="取消" block @click="cancelHandle"/>
+        <VanButton text="批量改价" block @click="modSinglePrice" />
         <VanButton text="保存" @click="saveHandle" block type="primary" />
       </template>
       <template v-if="isSpec === 2">
@@ -88,9 +88,9 @@ const {
   singleSpecs, addSpecHandle, init, saveHandle, beforeDestory, singleUseImgDisplay, isSpec,
   addBtnText, inputDialogRef, mulSpecs, modMulName, addSubSpecHandle, nextStepHandle, isShowMoveTop,
   isShowMoveDown, isShowInsert, isShowDel, moveTopHandle, moveDownHandle, insertHandle, delHandle,
-  cancelHandle, disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveDownHandle,
+  disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveDownHandle,
   mulMoveTopHandle, mulDelHandle, specActionRef, subItemClickHandle, mulImgClickHandle, toEditImg,
-  imgModDialogRef, addHandle
+  imgModDialogRef, addHandle, modSinglePrice
  } = useSpecEdit()
 
  init()

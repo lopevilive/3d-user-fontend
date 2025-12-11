@@ -1,8 +1,13 @@
 <template>
   <div class="view-mul-spec-price">
     <div class="spec-summary">
-      <div class="tit">共<span class="count"> {{ mulSpecPriceList.length }} </span>个规格：</div>
-      <div class="summary-list">{{ displayItemTit }}</div>
+      <div class="head-left">
+        <div class="tit">共<span class="count"> {{ dispyalSpecInfoList.length }} </span>个规格：</div>
+        <div class="summary-list">{{ displayItemTit }}</div>
+      </div>
+      <div class="head-right">
+        <div @click="filterHandle">筛选<VanIcon name="arrow-down"/></div>
+      </div>
     </div>
     <div class="spec-content">
       <div class="head-wrap">
@@ -10,30 +15,34 @@
         <VanCheckbox v-model="mulUseImgDisplay">图片</VanCheckbox>
       </div>
       <div class="spec-list">
-        <div class="spec-item" v-for="(item, idx) in mulSpecPriceList">
-          <div class="item-tit">{{idx + 1}}. {{ getDisplayName(item.list) }}</div>
-          <div class="price-wrap">
-            <VanField label="价格" placeholder="请输入价格（选填）"  :maxlength="10" v-model="item.price"></VanField>
-            <VanCheckbox :modelValue="item.specStatus === 1" @click="specStatusHandle(item)">上架</VanCheckbox>
+        <template v-for="(item, idx) in specInfoList">
+          <div class="spec-item"  v-if="isShowItem(item)">
+            <div class="item-tit">{{ getDisplayName(item.list) }}</div>
+            <div class="price-wrap">
+              <VanField label="价格" placeholder="请输入价格（选填）"  :maxlength="10" v-model="item.price"></VanField>
+              <VanCheckbox :modelValue="item.specStatus === 1" @click="specStatusHandle(item)">上架</VanCheckbox>
+            </div>
+            <VanField label="图片" v-if="mulUseImgDisplay" class="img-wrap">
+              <template #input>
+                <UploadImgs :maxCount="1" :ref="(el) => {
+                  uploadImgsRef[idx] = el
+                }" :modelValue="getDisplayUrl(item)" @update:modelValue="(url) => {
+                  updateImgHandle(url, item)
+                }" />
+              </template>
+            </VanField>
           </div>
-          <VanField label="图片" v-if="mulUseImgDisplay" class="img-wrap">
-            <template #input>
-              <UploadImgs :maxCount="1" :ref="(el) => {
-                uploadImgsRef[idx] = el
-              }" :modelValue="getDisplayUrl(item)" @update:modelValue="(url) => {
-                updateImgHandle(url, item)
-              }" />
-            </template>
-          </VanField>
-        </div>
+        </template>
+        
       </div>
     </div>
     <div class="bottom-btn">
-      <VanButton text="批量设置" block @click="mulPirceMod"/>
+      <VanButton text="批量改价" block @click="mulPirceMod"/>
       <VanButton text="保存" @click="saveHandle" block type="primary" />
     </div>
   </div>
   <InputDialog ref="inputDialogRef" />
+  <FilterSpecs ref="filterSpecsRef" :mulSpecs="mulSpecs" />
 </template>
 
 <script setup>
@@ -41,10 +50,12 @@ import { onUnmounted } from 'vue'
 import { useMulSpecPrice } from './mulSpecPriceHook'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import InputDialog from '@/components/input-dialog/index.vue'
+import FilterSpecs from './FilterSpecs.vue'
 
 const {
-  saveHandle, beforeDestory, init, mulUseImgDisplay, displayItemTit, getDisplayName, mulSpecPriceList,
-  specStatusHandle, uploadImgsRef, inputDialogRef, mulPirceMod, updateImgHandle, getDisplayUrl
+  saveHandle, beforeDestory, init, mulUseImgDisplay, displayItemTit, getDisplayName, specInfoList,
+  specStatusHandle, uploadImgsRef, inputDialogRef, mulPirceMod, updateImgHandle, getDisplayUrl, filterSpecsRef,
+  filterHandle, mulSpecs, isShowItem, dispyalSpecInfoList
 } = useMulSpecPrice()
 
 init()
@@ -66,11 +77,24 @@ onUnmounted(beforeDestory)
     padding: $pdM;
     background: $bgWhite;
     border-bottom: 1px solid $bgGrey;
-    .tit {
-      flex-shrink: 0;
+    justify-content: space-between;
+    .head-left {
+      display: flex;
+      .tit {
+        flex-shrink: 0;
+      }
+      .count {
+        color: $themeColor;
+      }
     }
-    .count {
-      color: $themeColor;
+    
+    .head-right {
+      flex-shrink: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      color: $btnText;
+      margin-left: 5px;
     }
   }
   .spec-content {
