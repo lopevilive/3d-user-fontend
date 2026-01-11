@@ -75,7 +75,7 @@ export const useProductManage = () => {
         allName += `(${total.value}/${limit.value})`
       }
     }
-    if (shopInfo.value.typeStatus === 0) {
+    if (shopInfo.value.typeStatus === 0 || globalData.value.editStatus === 1) {
       ret.splice(0,0, {name: allName, id: 0})
     }
     if ([2,3,99].includes(rid)) {
@@ -326,7 +326,7 @@ export const useProductManage = () => {
     removeAllSelected()
     await nextTick()
     globalData.value.editStatus = 0
-    // tabKey.value = Math.floor(Math.random() * 100)
+    tabKey.value = Math.floor(Math.random() * 100)
     // if (activeTab.value < 0) {
     //   activeTab.value = 0
     //   refresh()

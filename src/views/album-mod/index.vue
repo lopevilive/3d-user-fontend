@@ -33,18 +33,6 @@
         </VanField>
         <Select v-model="data.business" :columns="businessOpts" v-model:show="showBusinessPicker" /> -->
 
-        <VanField is-link>
-          <template #label>
-            <FormLabel label="所在地区" tips="选择所在地区，以便客户了解贵司位置和服务范围"/>
-          </template>
-          <template #input>
-            <div class="flex1" >
-              <VanField class="pd0" readonly placeholder="请选择业务所在地域" v-model="data.area" @click="areaClick"/>
-            </div>
-          </template>
-        </VanField>
-        <AreaSelect ref="areaSelectRef" v-model="data.area"/>
-
         <VanField
           v-model="data.desc"
           placeholder="请输入介绍"
@@ -59,6 +47,18 @@
             <FormLabel label="业务介绍" tips="填写业务介绍以便更好地展示贵司的服务和产品，帮助客户快速了解您的专业领域"/>
           </template>
         </VanField>
+
+        <VanField is-link>
+          <template #label>
+            <FormLabel label="所在地区" tips="选择所在地区，以便客户了解贵司位置和服务范围"/>
+          </template>
+          <template #input>
+            <div class="flex1" >
+              <VanField class="pd0" readonly placeholder="请选择业务所在地域" v-model="data.area" @click="areaClick"/>
+            </div>
+          </template>
+        </VanField>
+        <AreaSelect ref="areaSelectRef" v-model="data.area"/>
       </VanCellGroup>
 
       <VanCellGroup v-if="isEdit">
