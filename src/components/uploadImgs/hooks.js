@@ -1,13 +1,13 @@
 import {computed, ref} from 'vue'
-import { uploadFile, shopInfoManage, watermarkManage, auditingImg } from '@/util'
+import { uploadFile, shopInfoManage, watermarkManage } from '@/util'
 import { useRoute } from 'vue-router'
 import { showImagePreview} from 'vant'
 import { globalData } from '@/store'
+import { auditingImg } from '@/http'
 
 export const useUploadImages = (props, emits) => {
   const route = useRoute()
-  const {shopId} = route.params
-
+  const shopId = Number(route.params.shopId) || 0
   const uploadings = ref([])
 
   const getWaterCfg = async () => {
@@ -41,8 +41,8 @@ export const useUploadImages = (props, emits) => {
       file.status = 'uploading'
       const uploadRet = await uploadFile(file.file, shopId, watermarkCfg, props.noJPG)
       const {Location: url, UploadResult: {OriginalInfo: {Key: fileName}}} = uploadRet
-      const res = await auditingImg(fileName, shopId) // 等待审核
-      if (res !== 0) throw new Error('系统繁忙，请重启小程序～')
+      const res = await auditingImg({fileName, shopId}) // 等待审核
+      if (res.data !== 0) throw new Error('系统繁忙，请重启小程序～')
       if (!url) return
       uploadings.value = uploadings.value.filter((item) => {
         if (item === file) return false

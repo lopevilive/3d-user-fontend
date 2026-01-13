@@ -126,7 +126,7 @@ export const saveWatermarkCfg = (payload) => {
   return post(`${album}SaveWatermarkCfg`, payload)
 }
 
-export const auditingImgCgi = (payload) => {
+export const auditingImg = (payload) => {
   return post(`${album}AuditingImg`, payload)
 }
 
