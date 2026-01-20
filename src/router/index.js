@@ -191,7 +191,7 @@ const handleLogin = async (to) => {
   if (token) {
     try {
       globalData.value.isShowSke = true
-      const {data} = await getUserInfo()
+      const {data} = await getUserInfo({wxEnv: globalData.value.wxEnv})
       globalData.value.userInfo = data
     } catch(e) {
       // localStorage.setItem('token', '')

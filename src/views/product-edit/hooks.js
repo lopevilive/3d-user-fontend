@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productMod, getProduct } from '@/http'
-import { commonFetch, E_model3D, getBusinessCfg, E_type3D, shopInfoManage } from '@/util'
+import { commonFetch, getBusinessCfg, shopInfoManage } from '@/util'
 import { showConfirmDialog, showSuccessToast } from 'vant';
 
 export const useProductEdit = () => {
@@ -42,7 +42,6 @@ export const useProductEdit = () => {
 
   const data = ref(getDefaultData())
 
-  const showModel3d = ref(false)
   const formRef = ref()
 
   const getContinue = async () => {
@@ -83,8 +82,12 @@ export const useProductEdit = () => {
   }
 
   const saveHandle = async () => {
-    await formRef.value.validate()
+    await formRef.value.validate() // 前端校验
     const payload = getPayload()
+    if (['develop', 'trial'].includes(globalData.value.wxEnv)) { // 只需在开发/体验环境需要主动调审核接口，方便审核人员查看
+      const ret = await secCheckRef.value.check(payload)
+      if (ret === false) return
+    }
     const res = await commonFetch(productMod, payload)
     if (res && Object.prototype.toString.call(res) === '[object Object]') {
       handleOverCount(res)
@@ -114,24 +117,6 @@ export const useProductEdit = () => {
     }, 0);
   }
 
-  const model3DDisplay = computed(() => {
-    if (!data.value.model3D) return ''
-    for (const item of E_model3D) {
-      if (item.key === data.value.model3D) return item.val
-    }
-    return ''
-  })
-
-  const model3dOpts = computed(() => {
-    const {model3D} = busiCfg.value
-    if (!model3D?.length) return []
-    let res = E_model3D.filter((item) => model3D.includes(item.key))
-    res = res.map((item) => {
-      return {text: item.val,value: item.key}
-    })
-    return res
-  })
-
   const qrcodeScannerRef = ref()
   const scanClickHandle = () => {
     qrcodeScannerRef.value.show()
@@ -140,19 +125,6 @@ export const useProductEdit = () => {
   const scanHandle = (url) => {
     data.value.modelUrl = url
   }
-
-  const type3DOpts = computed(() => {
-    const {type3D} = busiCfg.value
-    if (!type3D) return []
-    const res = E_type3D.filter((item) => {
-      if (item.key === 0) return true
-      if (type3D.includes(item.key)) return true
-      return false
-    })
-    if (res.length === 1) return []
-    return res
-
-  })
 
   const getProductInfo = async () => {
     if (!id) return
@@ -167,20 +139,11 @@ export const useProductEdit = () => {
     shopInfo.value = res[0]
   }
 
-  const modelDisplayRef = ref()
-  const preview3D = async () => {
-    modelDisplayRef.value.showModelDisplay()
-  }
-
-  const imgCount = computed(() => {
-    if (!data.value.url) return 0
-    return data.value.url?.split?.(',')?.length || 0
-  })
-
-
   const handleResetValidation = () => {
     formRef.value.resetValidation()
   }
+
+  const secCheckRef = ref()
   
   const init = () => {
     getProductInfo()
@@ -188,8 +151,7 @@ export const useProductEdit = () => {
   }
 
   return {
-    data, formRef, saveHandle, init, model3DDisplay, showModel3d, model3dOpts, qrcodeScannerRef,
-    scanClickHandle, scanHandle, type3DOpts, preview3D, modelDisplayRef, busiCfg, imgCount,
-    dialogVipRef, handleResetValidation
+    data, formRef, saveHandle, init, qrcodeScannerRef, scanClickHandle, scanHandle,
+    busiCfg, dialogVipRef, handleResetValidation, secCheckRef
   }
 }

@@ -20,65 +20,6 @@
           @resetValidation="handleResetValidation"
         />
       </VanCellGroup>
-      <!-- <VanCellGroup v-if="type3DOpts.length">
-        <VanField>
-          <template #label>
-            <FormLabel label="720°全景" tips="tmp">
-              <template #default>
-                <div class="tips-content">
-                  <div><span class="item">默认</span> - 系统将自动选择第一张图片，动态生成720°全景图像</div><br/>
-                  <div><span class="item">扫二维码</span> - 如果您已经在酷家乐等软件中完成了720°全景图，可以通过扫描分享二维码在小程序内轻松打开</div>
-                </div>
-              </template>
-            </FormLabel>
-
-          </template>
-          <template #input>
-            <VanRadioGroup direction="horizontal" v-model="data.type3D">
-              <vanRadio v-for="item in type3DOpts" :name="item.key">{{ item.val }}</vanRadio>
-            </VanRadioGroup>
-          </template>
-        </VanField>
-        <template v-if="data.type3D === 1 && type3DOpts.length">
-          <VanField
-            v-model="model3DDisplay"
-            label="场景类型"
-            readonly
-            :required="true"
-            :rules="[{required: true, message: '不能为空'}]"
-          >
-            <template #input>
-              <div class="model-default">
-                <VanField
-                  class="pd0 flex1"
-                  placeholder="点击选择场景"
-                  @click="showModel3d = true"
-                  readonly
-                  v-model="model3DDisplay"
-                  :border="false"
-                />
-                <div class="line">|</div>
-                <VanButton v-if="model3DDisplay" @click="preview3D" text="预览" icon="eye-o" size="mini" type="primary"/>
-              </div>
-            </template>
-          </VanField>
-          <Select v-model="data.model3D" :columns="model3dOpts" v-model:show="showModel3d"  />
-        </template>
-        <template v-if="data.type3D === 2 && type3DOpts.length">
-          <VanField label="场景地址" :required="true" :rules="[{required: true, message: '地址不能为空'}]" v-model="data.modelUrl" readonly>
-            <template #input>
-              <div class="model-url">
-                <VanField class="pd0 flex1" placeholder="请扫描二维码或输入地址" v-model="data.modelUrl" :border="false"/>
-                <div class="line">|</div>
-                <VanIcon name="scan" class="iconBtn" @click="scanClickHandle" />
-                <VanIcon name="delete-o" class="iconBtn" @click="data.modelUrl = ''" />
-                <VanButton v-if="data.modelUrl" @click="preview3D" class="preview" text="预览" icon="eye-o" size="mini" type="primary"/>
-              </div>
-            </template>
-          </VanField>
-        </template>
-      </VanCellGroup> -->
-
       <VanCellGroup>
         <AttrCfg v-model="data.attr" :attr-cfg="busiCfg.attrCfg"/>
       </VanCellGroup>
@@ -90,8 +31,8 @@
       </VanCellGroup>
     </VanForm>
     <QrcodeScanner ref="qrcodeScannerRef" @scan="scanHandle"/>
-    <ModelDisplay ref="modelDisplayRef" :productInfo="data" />
     <DialogVip ref="dialogVipRef" title="产品数量已达上限" />
+    <SecCheck ref="secCheckRef" />
     <div class="bottom">
       <VanButton block type="primary" native-type="submit" @click="saveHandle">保存</VanButton>
     </div>
@@ -99,24 +40,21 @@
 </template>
 
 <script setup>
-import Select from '@/components/select/index.vue'
 import {useProductEdit} from './hooks'
 import QrcodeScanner from '@/components/qrcode-scanner/index.vue'
-import FormLabel from '@/components/form-label/index.vue'
 import ProdTypeSelect from '@/components/prod-type-select/index.vue'
 import StatusSelect from './StatusSelect.vue'
-import ModelDisplay from '@/components/model-display/index.vue'
 import Desc from './Desc.vue'
 import AttrCfg from './AttrCfg.vue'
 import PriceMod from '@/components/price-mod/index.vue'
 import DialogVip from '@/components/dialog-vip/index.vue'
 import MainImage from './MainImage.vue'
 import DescImage from './DescImage.vue'
+import SecCheck from './SecCheck.vue'
 
 const {
-  data, formRef, saveHandle, init, model3DDisplay, showModel3d, model3dOpts, qrcodeScannerRef,
-  scanClickHandle, scanHandle, type3DOpts, preview3D, modelDisplayRef, busiCfg, imgCount,
-  dialogVipRef, handleResetValidation
+  data, formRef, saveHandle, init, qrcodeScannerRef, scanClickHandle, scanHandle,
+  busiCfg, dialogVipRef, handleResetValidation, secCheckRef
 } = useProductEdit()
 
 init()

@@ -72,11 +72,12 @@ export const md5File = async (file) => {
 }
 
 export const getSuffix = (str) => {
-  let reg = /.*\.(.*)$/
-  if (reg.test(str)) {
-    return RegExp.$1 || ''
+  const reg = /.*\.(.*)$/;
+  const matchResult = reg.exec(str);
+  if (matchResult) {
+    return matchResult[1] || '';
   }
-  return ''
+  return '';
 }
 
 export const getImageUrl = (url, quality = 40) => {

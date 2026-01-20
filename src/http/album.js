@@ -149,3 +149,7 @@ export const getVipInfo = (payload) => {
 export const reportCgi = (payload) => {
   return post(`${album}Report`, payload)
 }
+
+export const textImgCheck = (payload) => {
+  return post(`${album}TextImgCheck`, payload)
+}
