@@ -1,7 +1,7 @@
 <template>
   <div class="view-sys-setting">
     <van-cell-group inset title="账号">
-      <VanCell title="编辑图册" is-link @click="toModAlbum" />
+      <VanCell title="编辑图册信息" is-link @click="toModAlbum" />
       <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
       <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
@@ -43,7 +43,15 @@
           <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
         </template>
       </VanCell>
-      <VanCell title="图片水印" class="cell__switch">
+      <VanCell title="图片水印" class="cell__switch cell-label-width-200">
+        <template #label>
+          <CellLabel txt="开启后，新上传的图片都会自动添加水印。"
+            :url="[
+              `//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_19a302d6f831268825df5f881abf9b95.png?imageMogr2/quality/40`, 
+              `//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_24fd435bee5b919a4c0db50415bf6b97.png?imageMogr2/quality/40`
+            ]"
+          />
+        </template>
         <template #value>
           <VanSwitch v-model="isWaterMark"/>
         </template>
@@ -74,12 +82,15 @@
     </van-cell-group>
 
     <van-cell-group inset title="图册设置">
-      <VanCell title="首页轮播图"  class="cell-label-width-200" label="店铺置顶信息与活动，支持自动轮播切换">
+      <VanCell title="产品页轮播图"  class="cell-label-width-200">
+        <template #label>
+          <CellLabel txt="店铺置顶信息与活动，支持自动轮播切换。" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_f0fb6556d51a4f1da626a6d92064ac1c.png?imageMogr2/quality/40`]" />
+        </template>
         <template #value>
           <VanSwitch v-model="bannerStatus"/>
         </template>
       </VanCell>
-      <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
+      <VanCell title="- 轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
       <VanCell title="隐藏“全部”标签页"  class="cell-label-width-200" label="开启后，产品分类导航栏中的‘全部’标签页将被隐藏">
         <template #value>
           <VanSwitch v-model="typeStatus"/>
@@ -108,6 +119,7 @@ import { useSysSetting } from './hook'
 import { copyStr, isVip } from '@/util'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 import TypeSideSelect from './TypeSideSelect.vue'
+import CellLabel from '@/components/cell-label/index.vue'
 
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,

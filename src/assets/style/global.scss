@@ -72,6 +72,8 @@ $footerBarH: 80px;
 .cell-label-width-200 {
   .van-cell__label {
     width: 200%;
+    min-height: 20px;
+    position: relative;
   }
 }
 
