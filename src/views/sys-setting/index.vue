@@ -1,7 +1,7 @@
 <template>
   <div class="view-sys-setting">
     <van-cell-group inset title="账号">
-      <VanCell title="编辑图册信息" is-link @click="toModAlbum" />
+      <VanCell title="图册信息管理" is-link @click="toModAlbum" />
       <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
       <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
@@ -25,27 +25,39 @@
       <VanCell title="联系客服" is-link @click="toContactSys"/>
     </van-cell-group>
     
+    <van-cell-group inset title="图册设置">
+      <!-- <VanCell title="首页装修" class="cell-label-width-200" is-link @click="toFeedback">
+
+      </VanCell> -->
+      <VanCell title="产品页轮播图展示"  class="cell-label-width-200">
+        <template #label>
+          <CellLabel txt="展示店铺置顶信息，支持自动轮播" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_f0fb6556d51a4f1da626a6d92064ac1c.png?imageMogr2/quality/40`]" />
+        </template>
+        <template #value>
+          <VanSwitch v-model="bannerStatus"/>
+        </template>
+      </VanCell>
+      <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
+      <VanCell title="分类栏展示位置"  class="cell-label-width-200" @click="handleTypeSideClick">
+        <template #value>
+          <div>{{ displayTypeSideMod }}</div>
+        </template>
+      </VanCell>
+      <VanCell title="隐藏 “全部” 分类标签"  class="cell-label-width-200">
+        <template #label>
+          <CellLabel txt="隐藏导航栏的 “全部” 分类标签" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_02225db8cae27bf98ff647e691e1b2a3.png?imageMogr2/quality/40`]" />
+        </template>
+        <template #value>
+          <VanSwitch v-model="typeStatus"/>
+        </template>
+      </VanCell>
+    </van-cell-group>
+    
     <!-- 隐私设置 -->
     <van-cell-group inset title="隐私设置">
-      <VanCell title="限制转发" class="cell-label-width-200" label="开启后，仅管理员可转发分享图册" v-if="isShowForward">
-        <template #value>
-          <VanSwitch v-model="isForwardPermi"/>
-        </template>
-      </VanCell>
-      <VanCell title="图册加密" class="cell__switch">
-        <template #value>
-          <VanSwitch v-model="isEncry"/>
-        </template>
-      </VanCell>
-      <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="图册密码" :label="encryCode">
-        <template #value>
-          <VanButton text="刷新密码" size="small" @click="refreshCode" />
-          <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
-        </template>
-      </VanCell>
-      <VanCell title="图片水印" class="cell__switch cell-label-width-200">
+      <VanCell title="图片水印自动添加" class="cell__switch cell-label-width-200">
         <template #label>
-          <CellLabel txt="开启后，新上传的图片都会自动添加水印。"
+          <CellLabel txt="新上传图片自动添加水印"
             :url="[
               `//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_19a302d6f831268825df5f881abf9b95.png?imageMogr2/quality/40`, 
               `//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_24fd435bee5b919a4c0db50415bf6b97.png?imageMogr2/quality/40`
@@ -56,8 +68,24 @@
           <VanSwitch v-model="isWaterMark"/>
         </template>
       </VanCell>
-      <VanCell title="水印设置" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
-      <VanCell title="限制导出 Excel"  class="cell-label-width-200" label="开启后，仅管理员可导出清单 Excel">
+      <VanCell title="水印样式管理" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
+      <VanCell title="分享权限控制" class="cell-label-width-200" label="仅管理员可分享图册" v-if="isShowForward">
+        <template #value>
+          <VanSwitch v-model="isForwardPermi"/>
+        </template>
+      </VanCell>
+      <VanCell title="图册访问密码保护" class="cell__switch">
+        <template #value>
+          <VanSwitch v-model="isEncry"/>
+        </template>
+      </VanCell>
+      <VanCell v-if="shopInfo.encry === 1 && encryCode"  title="图册密码" :label="encryCode">
+        <template #value>
+          <VanButton text="刷新密码" size="small" @click="refreshCode" />
+          <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
+        </template>
+      </VanCell>
+      <VanCell title="Excel 清单导出权限"  class="cell-label-width-200" label="仅管理员可导出 Excel 清单">
         <template #value>
           <VanSwitch v-model="inveExportStatus"/>
         </template>
@@ -65,14 +93,14 @@
     </van-cell-group>
 
     <van-cell-group inset title="购物清单设置">
-      <VanCell title="收货信息必填"  class="cell-label-width-200" label="开启后，客户需要填写收货信息才能提交清单">
+      <VanCell title="收货信息必填"  class="cell-label-width-200" label="提交清单需填写收货信息">
         <template #value>
             <VanSwitch v-model="needAddress"/>
         </template>
       </VanCell>
       <VanCell
-        title="必选分类" class="cell-label-width-200"
-        label="客户必须选择指定分类下的产品方可提交清单（如：口味、是否需要餐具等。）"
+        title="提交清单必选分类" class="cell-label-width-200"
+        label="提交清单需选择指定分类产品（如：口味、是否需要餐具等。）"
         @click="handleRequiredType"
       >
         <template #value>
@@ -81,33 +109,11 @@
       </VanCell>
     </van-cell-group>
 
-    <van-cell-group inset title="图册设置">
-      <VanCell title="产品页轮播图"  class="cell-label-width-200">
-        <template #label>
-          <CellLabel txt="店铺置顶信息与活动，支持自动轮播切换。" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_f0fb6556d51a4f1da626a6d92064ac1c.png?imageMogr2/quality/40`]" />
-        </template>
-        <template #value>
-          <VanSwitch v-model="bannerStatus"/>
-        </template>
-      </VanCell>
-      <VanCell title="- 轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
-      <VanCell title="隐藏“全部”标签页"  class="cell-label-width-200" label="开启后，产品分类导航栏中的‘全部’标签页将被隐藏">
-        <template #value>
-          <VanSwitch v-model="typeStatus"/>
-        </template>
-      </VanCell>
-      <VanCell title="分类栏位置"  class="cell-label-width-200" @click="handleTypeSideClick">
-        <template #value>
-          <div>{{ displayTypeSideMod }}</div>
-        </template>
-      </VanCell>
-    </van-cell-group>
-
 
     <!-- 其他 -->
     <van-cell-group inset title="其他">
-      <VanCell title="反馈建议" is-link @click="toFeedback"/>
-      <VanCell title="用户协议" is-link @click="toViewProtocol"/>
+      <VanCell title="意见反馈" is-link @click="toFeedback"/>
+      <VanCell title="用户服务协议" is-link @click="toViewProtocol"/>
     </van-cell-group>
     <TypeSelectDialog  ref="typeSelectDialogRef" />
   </div>

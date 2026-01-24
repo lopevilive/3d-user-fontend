@@ -36,9 +36,10 @@ const viewHandle = async () => {
   left: 0;
   top: 0;
   z-index: 10;
+  flex-wrap: wrap;
   .btn-view-demo {
     color: $btnText;
-    padding: 5px 10px 5px 0;
+    padding: 0  10px;
     flex-shrink: 0;
   }
 }
