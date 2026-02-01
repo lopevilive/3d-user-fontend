@@ -93,7 +93,7 @@ export const useSpecEdit = () => {
   }
   
   const saveHandle = async () => {
-    const msg =  await validSpec()
+    const msg = await validSpec()
     if (msg) return showToast(msg)
     const specDetials = getData()
     // 这里是清空多级规格的数据

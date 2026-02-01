@@ -28,6 +28,16 @@ export const useMulSpecPrice = () => {
     }, 300);
   }
 
+  const validSpec = async (data) => {
+    const { mulSpecPriceList } = data;
+    for(const item of mulSpecPriceList) {
+      if (!item.price) continue
+      if (!priceReg.test(item.price)) {
+        return `价格请输入数字`
+      }
+    }
+  }
+  
   const getData = () => {
     const rawData = specManageInstance.getRawData()
     const specDetials = JSON.parse(rawData.specDetials || '{}')
@@ -45,6 +55,8 @@ export const useMulSpecPrice = () => {
       }
     }
     const specDetials = getData()
+    const msg = await validSpec(specDetials)
+    if (msg) return showToast(msg)
     specDetials.singleSpecs = []
     specDetials.singleUseImg = 0
 
