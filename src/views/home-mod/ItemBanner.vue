@@ -5,10 +5,10 @@
         <VanField :border="false">
           <template #label>
             <FormLabel label="轮播内容" :tips="tipsDisplay"/>
-            (1/5)
+            ({{ data.urlList.filter(item => item.url).length }}/{{ MAX_UPLOAD_COUNT }})
           </template>
           <template #input>
-            <UploadImgs :maxCount="5" v-model="displayUrl" />
+            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" />
           </template>
         </VanField>
         <VanField label="内容高度" readonly is-link @click="isShowScale = true" v-model="scaleDisplay" :border="false" />
@@ -30,7 +30,7 @@ import { useItemBanner } from './itemBannerHook'
 import Select from '@/components/select/index.vue'
 
 const {
-  data, displayUrl, tipsDisplay, isShowScale, scaleDisplay, scaleColumns
+  data, displayUrl, tipsDisplay, isShowScale, scaleDisplay, scaleColumns, MAX_UPLOAD_COUNT
 } = useItemBanner()
 
 

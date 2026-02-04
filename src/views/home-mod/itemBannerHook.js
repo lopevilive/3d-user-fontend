@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { globalData } from '@/store'
 
 export const useItemBanner = () => {
+  const MAX_UPLOAD_COUNT = 5
 
   const scaleColumns = [
     {text: '4:1', value: '0.25'},
@@ -52,7 +53,7 @@ export const useItemBanner = () => {
   
 
   return {
-    data, displayUrl, tipsDisplay, isShowScale, scaleColumns, scaleDisplay
+    data, displayUrl, tipsDisplay, isShowScale, scaleColumns, scaleDisplay, MAX_UPLOAD_COUNT
   }
 
 }

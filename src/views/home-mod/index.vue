@@ -10,6 +10,9 @@
       <div class="cfg-item">
         <ItemCustomProduct />
       </div>
+      <div class="cfg-item">
+        <ItemHomeDesc />
+      </div>
     </div>
     <div class="bottom-wrap">
       <div class="bottom-left">
@@ -27,6 +30,7 @@
 import ItemBanner from './ItemBanner.vue';
 import ItemProductType from './ItemProductType.vue'
 import ItemCustomProduct from './ItemCustomProduct.vue'
+import ItemHomeDesc from './ItemHomeDesc.vue'
 
 
 </script>
