@@ -50,6 +50,7 @@ export const useProdTypeSelect = (props, emits) => {
 
   const isShowSub = computed(() => {
     if (!props.modelValue) return false
+    if (props.mode === 2) return false
     if (mulTypeDisplay.value) return false
     const {type1, type2} = formatType(props.modelValue)
     if (type2) return true
@@ -133,7 +134,7 @@ export const useProdTypeSelect = (props, emits) => {
   }
 
   const isShowMul = computed(() => {
-    if (props.mode === 1) return false
+    if ([1,2].includes(props.mode)) return false
     return true
   })
 

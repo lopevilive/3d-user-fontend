@@ -132,6 +132,12 @@ const router = createRouter({
           name: 'mul-type-manage',
           component: () => import('@/views/mul-type-manage/index.vue'),
           meta: {title: '分类设置'}
+        },
+        {
+          path: 'home-mod',
+          name: 'home-mod',
+          component: () => import('@/views/home-mod/index.vue'),
+          meta: {title: '首页装修'}
         }
       ]
     },

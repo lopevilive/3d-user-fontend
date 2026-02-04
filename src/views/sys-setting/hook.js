@@ -168,6 +168,10 @@ export const useSysSetting = () => {
     encryCode.value = res
   }
 
+   const toHomeMod = ()  => {
+    router.push({name: 'home-mod', params: {shopId}})
+  }
+
   const toFeedback = ()  => {
     router.push({name: 'feedback', params: {shopId}})
   }
@@ -330,7 +334,8 @@ export const useSysSetting = () => {
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
-    isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick
+    isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
+    toHomeMod
   }
 
 }

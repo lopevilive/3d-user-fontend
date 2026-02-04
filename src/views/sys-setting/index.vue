@@ -26,9 +26,9 @@
     </van-cell-group>
     
     <van-cell-group inset title="图册设置">
-      <!-- <VanCell title="首页装修" class="cell-label-width-200" is-link @click="toFeedback">
+      <VanCell title="首页装修" class="cell-label-width-200" is-link @click="toHomeMod">
 
-      </VanCell> -->
+      </VanCell>
       <VanCell title="产品页轮播图展示"  class="cell-label-width-200">
         <template #label>
           <CellLabel txt="展示店铺置顶信息，支持自动轮播" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_f0fb6556d51a4f1da626a6d92064ac1c.png?imageMogr2/quality/40`]" />
@@ -132,7 +132,8 @@ const {
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
-  isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick
+  isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
+  toHomeMod
 } = useSysSetting()
 
 init()

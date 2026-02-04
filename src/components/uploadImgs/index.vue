@@ -61,8 +61,9 @@ defineExpose({isLoading, chooseFile})
 <style scoped lang="scss">
 .com-upload-imgs {
   width: 100%;
-  height: 70px;
+  height: 65px;
   position: relative;
+  box-sizing: border-box;
   :deep(.smooth-dnd-container) {
     min-width: 0;
   }

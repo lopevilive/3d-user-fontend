@@ -53,7 +53,7 @@ import { useProdTypeSelect } from './hook'
 const props = defineProps({
   modelValue: {type: [Number, String]},
   isMulType: {type: Number, default: 0},
-  mode: {type: Number, default: 0},
+  mode: {type: Number, default: 0}, // 0/1/2
   showDel: {type: Boolean, default: false}
 })
 const emits = defineEmits(['update:modelValue', 'update:isMulType', 'del'])

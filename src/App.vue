@@ -22,7 +22,7 @@
       <component :is="Component" />
     </keep-alive>
   </router-view>
-  <VanOverlay :show="loading" :z-index="1000">
+  <VanOverlay :show="loading" :z-index="10000">
     <VanLoading class="global-loading"  />
   </VanOverlay>
   <!-- 这里的目的是加载样式  s-->

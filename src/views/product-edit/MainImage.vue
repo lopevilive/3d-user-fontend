@@ -9,7 +9,7 @@
       <FormLabel label="产品图片" tips="tmp">
         <template #default>
           <div class="img-tips-wrap">
-            首张图片作为产品封面，可以拖动调整图片顺序。会员支持上传更多图片，
+            首张图片作为产品封面，{{displayTips}}。会员支持上传更多图片，
             <span class="to-vip" @click="goVip">前往了解</span>。
           </div>
         </template>
@@ -28,6 +28,7 @@ import { useRoute } from 'vue-router'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import { showToast } from 'vant'
 import { toVip, vipInfoManage } from '@/util'
+import { globalData } from '@/store'
 
 const props = defineProps({
   modelValue: {type: String, default: ''},
@@ -86,6 +87,14 @@ const validUrl = async (value, rule) => {
 const goVip = () => {
   toVip(shopId)
 }
+
+const displayTips = computed(() => {
+  if (globalData.value.isPC) {
+    '可以双击调整图片顺序'
+  } else {
+    return '可以长按调整图片顺序'
+  }
+})
 
 const init = async () => {
   const ret = await vipInfoManage.getData(shopId)
