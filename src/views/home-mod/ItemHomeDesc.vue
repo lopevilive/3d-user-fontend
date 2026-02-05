@@ -1,6 +1,6 @@
 <template>
   <div class="view-com-item-home-desc">
-    <ItemWrap title="店铺详情">
+    <ItemWrap title="店铺详情" @delete="$emit('delete')">
       <div class="content">
         <VanField :border="false">
           <template #label>
@@ -20,6 +20,8 @@
 import ItemWrap from './ItemWrap.vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import { useItemHomeDesc } from './itemHomeDescHook'
+
+defineEmits(['delete'])
 
 const {
   data, displayUrl, MAX_UPLOAD_COUNT

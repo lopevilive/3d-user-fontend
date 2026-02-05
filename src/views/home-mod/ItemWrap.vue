@@ -5,17 +5,33 @@
       <slot></slot>
     </div>
     <div class="btn-wrap">
-      <!-- <span class="control-item">上移</span>
-      <span class="control-item">下移</span> -->
-      <span class="control-item">删除</span>
+      <span class="control-item" @click="handleDelete">
+        删除
+      </span>
     </div>
   </div>
 </template>
 
 <script setup>
+import { showConfirmDialog } from 'vant';
+
 const props = defineProps({
   title: {type: String, default: ''}
 })
+
+const emit = defineEmits(['delete'])
+
+const handleDelete = async () => {
+  try {
+    await showConfirmDialog({
+      title: '确认删除',
+      message: '确定要删除这个模块吗？'
+    })
+    emit('delete')
+  } catch {
+    // 用户取消
+  }
+}
 
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="view-com-item-product-type">
-    <ItemWrap title="产品分类模块">
+    <ItemWrap title="产品分类模块" @delete="$emit('delete')">
       <div class="content">
         <div class="item-list">
           <div class="item" v-for="(item, index) in data.list" :key="item.typeId">
@@ -54,6 +54,8 @@ import ItemWrap from './ItemWrap.vue'
 import { useItemProductType } from './itemProductTypeHook'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import ProductTypeSelectDialog from './ProductTypeSelectDialog.vue'
+
+defineEmits(['delete'])
 
 const {
   data, addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle 

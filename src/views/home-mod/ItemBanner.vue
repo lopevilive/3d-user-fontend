@@ -1,6 +1,6 @@
 <template>
   <div class="view-com-banner-item">
-    <ItemWrap title="轮播图模块">
+    <ItemWrap title="轮播图模块" @delete="$emit('delete')">
       <div class="content">
         <VanField :border="false">
           <template #label>
@@ -28,6 +28,8 @@ import ItemWrap from './ItemWrap.vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import { useItemBanner } from './itemBannerHook'
 import Select from '@/components/select/index.vue'
+
+defineEmits(['delete'])
 
 const {
   data, displayUrl, tipsDisplay, isShowScale, scaleDisplay, scaleColumns, MAX_UPLOAD_COUNT

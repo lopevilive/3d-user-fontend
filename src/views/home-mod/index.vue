@@ -1,37 +1,63 @@
 <template>
   <div class="view-home-mod">
+    <ModuleConfigDialog ref="moduleConfigDialogRef" />
     <div class="cfg-list-list">
-      <div class="cfg-item">
-        <ItemBanner />
-      </div>
-      <div class="cfg-item">
-        <ItemProductType />
-      </div>
-      <div class="cfg-item">
-        <ItemCustomProduct />
-      </div>
-      <div class="cfg-item">
-        <ItemHomeDesc />
+      <div
+        class="cfg-item"
+        v-for="(item, index) in enabledModules"
+        :key="index"
+      >
+        <component
+          :is="getComByName(item.comName)"
+          @delete="data.cfg.find(m => m.comName === item.comName).status = 2"
+        />
       </div>
     </div>
     <div class="bottom-wrap">
       <div class="bottom-left">
-        <div class="label-txt">是否启用</div> <VanSwitch />
+        <div class="switch-wrap">
+          <div class="label-txt">启用</div>
+          <VanSwitch />
+        </div>
       </div>
       <div class="bottom-right">
-        <VanButton text="预览" size="small" />
-        <VanButton text="保存配置" type="primary" size="small" />
+        <div class="btn-group">
+          <VanButton
+            text="配置模块"
+            size="small"
+            plain
+            @click="handleConfigModules"
+          />
+          <VanButton
+            text="预览"
+            size="small"
+            plain
+            type="primary"
+          />
+        </div>
+        <VanButton
+          text="保存配置"
+          type="primary"
+          size="small"
+          class="save-btn"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import ItemBanner from './ItemBanner.vue';
-import ItemProductType from './ItemProductType.vue'
-import ItemCustomProduct from './ItemCustomProduct.vue'
-import ItemHomeDesc from './ItemHomeDesc.vue'
+import { ref } from 'vue'
+import { useHomeMod } from './hook'
+import ModuleConfigDialog from './ModuleConfigDialog.vue'
 
+const {
+  data,
+  getComByName,
+  enabledModules,
+  moduleConfigDialogRef,
+  handleConfigModules
+} = useHomeMod()
 
 </script>
 
@@ -59,16 +85,28 @@ import ItemHomeDesc from './ItemHomeDesc.vue'
     .bottom-left {
       display: flex;
       align-items: center;
-      width: 40%;
-      .label-txt {
-        margin-right: 5px;
+      width: 30%;
+      flex-shrink: 0;
+      .switch-wrap {
+        display: flex;
+        align-items: center;
+        .label-txt {
+          margin-right: 10px;
+        }
       }
     }
     .bottom-right {
       display: flex;
-      justify-content:flex-end;
-      width: 60%;
-      .van-button {
+      align-items: center;
+      justify-content: flex-end;
+      width: 70%;
+      .btn-group {
+        display: flex;
+        .van-button {
+          margin-left: 10px;
+        }
+      }
+      .save-btn {
         margin-left: 15px;
       }
     }

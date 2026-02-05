@@ -1,6 +1,6 @@
 <template>
   <div class="view-com-item-custom-product">
-    <ItemWrap title="热门产品模块">
+    <ItemWrap title="热门产品模块" @delete="$emit('delete')">
       <div class="content">
         <TransitionGroup name="list" tag="div" class="prod-list">
           <div class="item" v-for="(item, index) in data.list" :key="item.id">
@@ -35,6 +35,8 @@ import ItemWrap from './ItemWrap.vue'
 import { useItemCustomProduct } from './itemCustomProductHook'
 import CustomProductSelectDialog from './CustomProductSelectDialog.vue'
 import ProductLineDisplay from '@/components/product-line-display/index.vue'
+
+defineEmits(['delete'])
 
 const {
   data, addHandle, moveUp, moveDown, deleteHandle, customProductSelectDialogRef, MAX_PRODUCTS
