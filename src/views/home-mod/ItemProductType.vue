@@ -2,7 +2,7 @@
   <div class="view-com-item-product-type">
     <ItemWrap title="产品分类模块" @delete="$emit('delete')">
       <div class="content">
-        <div class="item-list">
+        <TransitionGroup name="list" tag="div" class="item-list">
           <div class="item" v-for="(item, index) in data.list" :key="item.typeId">
             <div class="item-left">
               <VanField label="1.分类名称" :border="false" class="type-name">
@@ -18,28 +18,28 @@
             </div>
             <div class="item-right">
               <!-- 上移：非第一个显示 -->
-              <VanIcon 
-                name="down" 
-                class="move-top move" 
+              <VanIcon
+                name="down"
+                class="move-top move"
                 v-show="index !== 0"
                 @click="moveUp(index)"
               />
               <!-- 下移：非最后一个显示 -->
-              <VanIcon 
-                name="down" 
-                class="move" 
+              <VanIcon
+                name="down"
+                class="move"
                 v-show="index !== data.list.length - 1"
                 @click="moveDown(index)"
               />
               <!-- 删除按钮：绑定删除事件并传递当前索引 -->
-              <VanIcon 
-                name="delete-o" 
-                class="del" 
+              <VanIcon
+                name="delete-o"
+                class="del"
                 @click="deleteHandle(index)"
               />
             </div>
           </div>
-        </div>
+        </TransitionGroup>
         <div class="bottom-wrap">
           <VanButton text="新增一项" icon="plus" size="small" @click="addHandle" />
         </div>
@@ -58,7 +58,7 @@ import ProductTypeSelectDialog from './ProductTypeSelectDialog.vue'
 defineEmits(['delete'])
 
 const {
-  data, addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle 
+  data, addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle
 } = useItemProductType()
 </script>
 
@@ -128,5 +128,21 @@ const {
       margin-top: 10px;
     }
   }
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-leave-active {
+  position: absolute;
 }
 </style>
