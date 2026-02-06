@@ -1,17 +1,33 @@
-import { ref, computed } from 'vue'
-import ItemBanner from './ItemBanner.vue';
-import ItemProductType from './ItemProductType.vue'
-import ItemCustomProduct from './ItemCustomProduct.vue'
-import ItemHomeDesc from './ItemHomeDesc.vue'
+import { ref, computed, defineAsyncComponent } from 'vue'
+import { useRoute } from 'vue-router'
+import { shopInfoManage } from '@/util'
+
 
 const COMPONENT_MAP = {
-  ItemBanner,
-  ItemProductType,
-  ItemCustomProduct,
-  ItemHomeDesc
+  ItemBanner: defineAsyncComponent({
+    loader: () => import('./ItemBanner.vue'),
+    delay: 200, // 延迟200ms显示加载状态，避免闪屏
+  }),
+  ItemProductType: defineAsyncComponent({
+    loader: () => import('./ItemProductType.vue'),
+    delay: 200,
+  }),
+  ItemCustomProduct: defineAsyncComponent({
+    loader: () => import('./ItemCustomProduct.vue'),
+    delay: 200,
+  }),
+  ItemHomeDesc: defineAsyncComponent({
+    loader: () => import('./ItemHomeDesc.vue'),
+    delay: 200,
+  }),
 }
 
 export const useHomeMod = () => {
+
+  const route = useRoute()
+  const shopId = + route.params.shopId
+  const shopInfo = ref({})
+
   const data = ref({
     cfg: [
       { comName: 'ItemBanner', info: {}, status: 1 },
@@ -20,10 +36,6 @@ export const useHomeMod = () => {
       { comName: 'ItemHomeDesc', info: {}, status: 1 }
     ]
   })
-
-  const getComByName = (name) => {
-    return COMPONENT_MAP[name]
-  }
 
   const enabledModules = computed(() => {
     return data.value.cfg.filter(item => item.status === 1)
@@ -40,11 +52,18 @@ export const useHomeMod = () => {
     }
   }
 
+  const init = async () => {
+    shopInfo.value = (await shopInfoManage.getData(shopId))[0]
+    console.log(shopInfo.value)
+  }
+
+  init()
+
   return {
     data,
-    getComByName,
     enabledModules,
     moduleConfigDialogRef,
-    handleConfigModules
+    handleConfigModules,
+    COMPONENT_MAP
   }
 }

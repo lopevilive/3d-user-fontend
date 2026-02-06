@@ -8,7 +8,7 @@
         :key="index"
       >
         <component
-          :is="getComByName(item.comName)"
+          :is="COMPONENT_MAP[item.comName]"
           @delete="data.cfg.find(m => m.comName === item.comName).status = 2"
         />
       </div>
@@ -16,9 +16,10 @@
     <div class="bottom-wrap">
       <div class="bottom-left">
         <div class="switch-wrap">
-          <div class="label-txt">启用</div>
+          <div class="label-txt">是否启用</div>
           <VanSwitch />
         </div>
+        <div class="tips">(需启用后才生效)</div>
       </div>
       <div class="bottom-right">
         <div class="btn-group">
@@ -34,29 +35,28 @@
             plain
             type="primary"
           />
+          <VanButton
+            text="保存配置"
+            type="primary"
+            size="small"
+          />
         </div>
-        <VanButton
-          text="保存配置"
-          type="primary"
-          size="small"
-          class="save-btn"
-        />
+        <div class="space"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useHomeMod } from './hook'
 import ModuleConfigDialog from './ModuleConfigDialog.vue'
 
 const {
   data,
-  getComByName,
   enabledModules,
   moduleConfigDialogRef,
-  handleConfigModules
+  handleConfigModules,
+  COMPONENT_MAP
 } = useHomeMod()
 
 </script>
@@ -84,9 +84,9 @@ const {
     border-top: 1px solid $bgGrey;
     .bottom-left {
       display: flex;
-      align-items: center;
-      width: 30%;
+      flex: 1;
       flex-shrink: 0;
+      flex-direction: column;
       .switch-wrap {
         display: flex;
         align-items: center;
@@ -94,20 +94,26 @@ const {
           margin-right: 10px;
         }
       }
+      .tips {
+        font-size: 12px;
+        padding: 3px 0px 10px 0px;
+        color: $grey9;
+      }
     }
     .bottom-right {
       display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      width: 70%;
+      width: 60%;
+      flex-direction: column;
       .btn-group {
+        flex: 1;
         display: flex;
-        .van-button {
+        justify-content: flex-end;
+        .van-button:not(:first-child) {
           margin-left: 10px;
         }
       }
-      .save-btn {
-        margin-left: 15px;
+      .space {
+        height: 29.5px;
       }
     }
   }
