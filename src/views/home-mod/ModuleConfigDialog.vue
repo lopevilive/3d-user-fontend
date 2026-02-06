@@ -1,20 +1,22 @@
 <template>
-  <VanDialog 
-    title="配置首页模块" 
-    v-model:show="isShow" 
+  <VanDialog
+    title=""
+    v-model:show="isShow"
     show-cancel-button
     :beforeClose="beforeClose"
+    class="module-config-dialog-wrapper"
   >
     <div class="module-config-dialog">
       <div class="module-list">
-        <div 
-          class="module-item" 
-          v-for="module in allModules" 
+        <div
+          class="module-item"
+          v-for="module in allModules"
           :key="module.id"
           @click="toggleModule(module)"
         >
-          <VanCheckbox :model-value="isSelected(module)" />
+          <VanIcon :name="module.icon" size="20px" />
           <span>{{ module.name }}</span>
+          <VanCheckbox :model-value="isSelected(module)" />
         </div>
       </div>
     </div>
@@ -28,10 +30,10 @@ import { showToast } from 'vant';
 const isShow = ref(false)
 const tempCfg = ref([])
 const allModules = ref([
-  { id: 'banner', name: '轮播图模块', comName: 'ItemBanner' },
-  { id: 'productType', name: '产品分类模块', comName: 'ItemProductType' },
-  { id: 'customProduct', name: '热门产品模块', comName: 'ItemCustomProduct' },
-  { id: 'homeDesc', name: '店铺详情模块', comName: 'ItemHomeDesc' }
+  { id: 'banner', name: '轮播图模块', comName: 'ItemBanner', icon: 'photo' },
+  { id: 'productType', name: '产品分类模块', comName: 'ItemProductType', icon: 'apps-o' },
+  { id: 'customProduct', name: '热门产品模块', comName: 'ItemCustomProduct', icon: 'fire' },
+  { id: 'homeDesc', name: '店铺详情模块', comName: 'ItemHomeDesc', icon: 'manager' }
 ])
 
 const isSelected = (module) => {
@@ -81,6 +83,11 @@ defineExpose({ show })
 </script>
 
 <style lang="scss" scoped>
+.module-config-dialog-wrapper :deep(.van-dialog__header) {
+  padding: 16px 16px 0 16px;
+  display: none;
+}
+
 .module-config-dialog {
   padding: 16px;
   
@@ -88,14 +95,41 @@ defineExpose({ show })
     .module-item {
       display: flex;
       align-items: center;
-      padding: 12px 0;
+      padding: 16px 0;
       border-bottom: 1px solid #f5f5f5;
       cursor: pointer;
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background-color: #f8f8f8;
+      }
+      
+      .van-icon {
+        color: #1989fa;
+        margin-right: 12px;
+        flex-shrink: 0;
+      }
+      
+      span {
+        flex: 1;
+        color: #333;
+        font-size: 16px;
+      }
       
       .van-checkbox {
-        margin-right: 12px;
+        margin-left: 12px;
       }
     }
+    
+    .module-item:last-child {
+      border-bottom: none;
+    }
   }
+}
+
+/* 为对话框添加圆角和阴影效果 */
+.module-config-dialog-wrapper :deep(.van-dialog) {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 </style>
