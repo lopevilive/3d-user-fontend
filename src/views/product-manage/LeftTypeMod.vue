@@ -69,53 +69,84 @@ onActivated(() => {
 
 <style lang="scss" scoped>
 .view-com-left-type-mod {
+  // 一级分类项
   .type-item {
+    overflow: hidden; // 确保子元素圆角生效
+    transition: background-color 0.2s ease-in-out; // 背景色过渡
+
+    &:hover {
+      background-color: rgba($themeColor, 0.05); // 保留悬停背景
+    }
+
     .type1-content {
-      padding: 10px 0;
+      padding: 10px 0; // 恢复原始内边距
       box-sizing: border-box;
       position: relative;
       width: 100%;
+      cursor: pointer; // 手型光标
+
       .txt {
         width: 100%;
-        color: $grey7;
-        font-size: 14px;
-        padding: 0 10px;
+        color: $grey7; // 恢复原始颜色
+        font-size: 14px; // 恢复原始字体大小
+        padding: 0 10px; // 恢复原始内边距
         box-sizing: border-box;
+        transition: color 0.2s ease-in-out, font-weight 0.2s ease-in-out;
       }
     }
+    // 激活状态的左侧指示线
     .active-line {
       position: absolute;
-      height: 50%;
-      border-left: 4px solid $themeColor;
-      top:50%;
-      left: 0;
+      height: 50%; // 恢复原始高度
+      border-left: 4px solid $themeColor; // 恢复原始粗细
+      top: 50%;
+      left: 0; // 恢复原始位置
       transform: translate(0, -50%);
     }
   }
+
+  // 一级分类激活状态
   .type1-item__active {
+
     .type1-content {
       .txt {
-        font-weight: bold;
-        color: #000;
+        font-weight: bold; // 恢复原始加粗
+        color: #000; // 深色文字
       }
     }
-    
   }
+  
+  // 二级分类列表容器
   .type2-list {
-    background: $bgGrey3;
+    background-color: $bgGrey3; // 恢复原始背景色
+
     .type2-item {
-      padding: 8px;
-      padding-left: 15px;
-      color: $grey6;
+      padding: 8px; // 恢复原始内边距
+      padding-left: 15px; // 恢复原始左侧内边距
+      color: $grey6; // 恢复原始文字颜色
+      cursor: pointer; // 手型光标
+      transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: rgba($themeColor, 0.05); // 保留悬停背景
+      }
+
       .txt {
-        font-size: 13px;
+        font-size: 13px; // 恢复原始二级分类字体大小
       }
     }
+
+    // 二级分类激活状态
     .type2-item__active {
-      color: $themeColor;
-      font-weight: bold;
+      color: $themeColor; // 主题色
+      font-weight: bold; // 恢复原始加粗
+      background-color: rgba($themeColor, 0.1); // 保留激活背景
+      padding-left: 12px; // 调整内边距以配合边框
+
+      &:hover {
+        background-color: rgba($themeColor, 0.15); // 保留激活状态悬停背景
+      }
     }
   }
 }
-
 </style>
