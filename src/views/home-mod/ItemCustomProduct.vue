@@ -36,11 +36,17 @@ import { useItemCustomProduct } from './itemCustomProductHook'
 import CustomProductSelectDialog from './CustomProductSelectDialog.vue'
 import ProductLineDisplay from '@/components/product-line-display/index.vue'
 
-defineEmits(['delete'])
+const emits = defineEmits(['delete', 'update:config'])
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => ({})
+  }
+})
 
 const {
   data, addHandle, moveUp, moveDown, deleteHandle, customProductSelectDialogRef, MAX_PRODUCTS
-} = useItemCustomProduct()
+} = useItemCustomProduct(props, emits)
 
 </script>
 

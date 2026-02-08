@@ -4,8 +4,8 @@
       <div class="content">
         <VanField :border="false">
           <template #label>
-            <FormLabel label="店铺图片" />
-            ({{ data.urlList.filter(item => item.url).length }}/{{ MAX_UPLOAD_COUNT }})
+            <FormLabel label="店铺图片" :tips="tipsDisplay"/>
+            ({{ urlLen }}/{{ MAX_UPLOAD_COUNT }})
           </template>
           <template #input>
             <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" />
@@ -21,11 +21,17 @@ import ItemWrap from './ItemWrap.vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import { useItemHomeDesc } from './itemHomeDescHook'
 
-defineEmits(['delete'])
+const emits = defineEmits(['delete', 'update:config'])
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => ({})
+  }
+})
 
 const {
-  data, displayUrl, MAX_UPLOAD_COUNT
-} = useItemHomeDesc()
+  displayUrl, MAX_UPLOAD_COUNT, urlLen, tipsDisplay
+} = useItemHomeDesc(props, emits)
 
 </script>
 

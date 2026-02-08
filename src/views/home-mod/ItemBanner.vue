@@ -5,21 +5,21 @@
         <VanField :border="false">
           <template #label>
             <FormLabel label="轮播内容" :tips="tipsDisplay"/>
-            ({{ data.urlList.filter(item => item.url).length }}/{{ MAX_UPLOAD_COUNT }})
+            ({{ urlLen }}/{{ MAX_UPLOAD_COUNT }})
           </template>
           <template #input>
             <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" />
           </template>
         </VanField>
-        <VanField label="内容高度" readonly is-link @click="isShowScale = true" v-model="scaleDisplay" :border="false" />
+        <VanField label="内容高度" readonly is-link @click="isShowScale = true" v-model="scaleTxt" :border="false" />
         <VanField label="自动轮播">
           <template #input>
-            <VanSwitch v-model="data.autoPlay" />
+            <VanSwitch v-model="autoPlayDisplay" />
           </template>
         </VanField>
       </div>
     </ItemWrap>
-    <Select v-model="data.scale" :columns="scaleColumns" v-model:show="isShowScale" />
+    <Select :columns="scaleColumns" v-model:show="isShowScale" v-model="scaleDisplay" />
   </div>
 </template>
 
@@ -29,11 +29,18 @@ import UploadImgs from '@/components/uploadImgs/index.vue'
 import { useItemBanner } from './itemBannerHook'
 import Select from '@/components/select/index.vue'
 
-defineEmits(['delete'])
+const emits = defineEmits(['delete', 'update:config'])
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => ({})
+  }
+})
 
 const {
-  data, displayUrl, tipsDisplay, isShowScale, scaleDisplay, scaleColumns, MAX_UPLOAD_COUNT
-} = useItemBanner()
+  displayUrl, tipsDisplay, isShowScale, scaleTxt, scaleColumns, MAX_UPLOAD_COUNT, urlLen,
+  scaleDisplay, autoPlayDisplay
+} = useItemBanner(props, emits)
 
 
 

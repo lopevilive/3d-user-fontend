@@ -3,7 +3,7 @@
     <ItemWrap title="产品分类模块" @delete="$emit('delete')">
       <div class="content">
         <TransitionGroup name="list" tag="div" class="item-list">
-          <div class="item" v-for="(item, index) in data.list" :key="item.typeId">
+          <div class="item" v-for="(item, index) in listDisplay" :key="item.typeId">
             <div class="item-left">
               <VanField label="1.分类名称" :border="false" class="type-name">
                 <template #input>
@@ -28,7 +28,7 @@
               <VanIcon
                 name="down"
                 class="move"
-                v-show="index !== data.list.length - 1"
+                v-show="index !== listDisplay.length - 1"
                 @click="moveDown(index)"
               />
               <!-- 删除按钮：绑定删除事件并传递当前索引 -->
@@ -55,11 +55,17 @@ import { useItemProductType } from './itemProductTypeHook'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import ProductTypeSelectDialog from './ProductTypeSelectDialog.vue'
 
-defineEmits(['delete'])
+const emits = defineEmits(['delete', 'update:config'])
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => ({})
+  }
+})
 
 const {
-  data, addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle
-} = useItemProductType()
+  addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle, listDisplay
+} = useItemProductType(props, emits)
 </script>
 
 <style lang="scss" scoped>

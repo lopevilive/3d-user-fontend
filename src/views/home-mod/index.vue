@@ -4,12 +4,14 @@
     <div class="cfg-list-list">
       <div
         class="cfg-item"
-        v-for="(item, index) in enabledModules"
+        v-for="(item, index) in data.cfg"
         :key="index"
+        v-show="item.status ===  1"
       >
         <component
           :is="COMPONENT_MAP[item.comName]"
           @delete="data.cfg.find(m => m.comName === item.comName).status = 2"
+          v-model:config="item.info"
         />
       </div>
     </div>
@@ -17,7 +19,7 @@
       <div class="bottom-left">
         <div class="switch-wrap">
           <div class="label-txt">是否启用</div>
-          <VanSwitch />
+          <VanSwitch v-model="enAbledDisplay" />
         </div>
         <div class="tips">(需启用后才生效)</div>
       </div>
@@ -53,10 +55,10 @@ import ModuleConfigDialog from './ModuleConfigDialog.vue'
 
 const {
   data,
-  enabledModules,
   moduleConfigDialogRef,
   handleConfigModules,
-  COMPONENT_MAP
+  COMPONENT_MAP,
+  enAbledDisplay
 } = useHomeMod()
 
 </script>

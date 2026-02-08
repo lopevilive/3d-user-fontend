@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { globalData } from '@/store'
 
-export const useItemBanner = () => {
+export const useItemBanner = (props, emits) => {
   const MAX_UPLOAD_COUNT = 5
 
   const scaleColumns = [
@@ -10,30 +10,25 @@ export const useItemBanner = () => {
     {text: '2:1', value: '0.5'},
     {text: '1:1', value: '1'}
   ]
-  
-  const data = ref({
-    urlList: [{url: ''}],
-    scale: '0.33',
-    autoPlay: true
-  })
+
 
   const displayUrl = computed({
     get() {
-      let str = ''
-      for (const item of data.value.urlList) {
-        if (!item.url) continue
-        if (str) str += ',';
-        str += item.url
-      }
-      return str
+      return props.config.url
     },
-    set(val) {
-      const arr = val.split(',')
-      const urlList = arr.map((url) => {
-        return {url}
-      })
-      data.value.urlList = urlList
+    set(url) {
+      const obj = {...props.config, url}
+      emits('update:config', obj)
     }
+  })
+
+  const urlLen = computed(() => {
+    const list = props.config.url.split(',')
+    let ret = 0
+    for (const item of list) {
+      if (item) ret += 1
+    }
+    return ret
   })
 
   const tipsDisplay = computed(() => {
@@ -43,17 +38,39 @@ export const useItemBanner = () => {
 
   const isShowScale = ref(false)
 
-  const scaleDisplay = computed(() => {
+  const scaleTxt = computed(() => {
     for (const item of scaleColumns) {
-      if (item.value === data.value.scale) return item.text
+      if (item.value === props.config.scale) return item.text
     }
     return ''
   })
 
-  
+  const scaleDisplay = computed({
+    get() {
+      return props.config.scale
+    },
+    set(scale) {
+      const obj = {...props.config, scale}
+      emits('update:config', obj)
+    }
+  })
+
+  const autoPlayDisplay = computed({
+    get() {
+      if (props.config.autoPlay === 1) return true
+      return false
+    },
+    set(val) {
+      const autoPlay = val ? 1 : 2
+      const obj = {...props.config, autoPlay}
+      emits('update:config', obj)
+    }
+  })
+
 
   return {
-    data, displayUrl, tipsDisplay, isShowScale, scaleColumns, scaleDisplay, MAX_UPLOAD_COUNT
+    displayUrl, tipsDisplay, isShowScale, scaleColumns, scaleTxt, MAX_UPLOAD_COUNT, urlLen,
+    scaleDisplay, autoPlayDisplay
   }
 
 }
