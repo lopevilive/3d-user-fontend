@@ -1,7 +1,11 @@
 <template>
   <div class="view-sys-setting">
     <van-cell-group inset title="账号">
-      <VanCell title="图册信息管理" is-link @click="toModAlbum" />
+      <VanCell
+        title="图册信息管理" is-link @click="toModAlbum" class="cell-label-width-200"
+        label="图册名称/封面/联系方式等"
+      >
+      </VanCell>
       <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
       <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
@@ -69,7 +73,7 @@
         </template>
       </VanCell>
       <VanCell title="水印样式管理" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
-      <VanCell title="分享权限控制" class="cell-label-width-200" label="仅管理员可分享图册" v-if="isShowForward">
+      <VanCell title="分享权限控制" class="cell-label-width-200" label="开启后，仅管理员可分享图册" v-if="isShowForward">
         <template #value>
           <VanSwitch v-model="isForwardPermi"/>
         </template>
