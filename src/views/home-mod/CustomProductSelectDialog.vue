@@ -109,7 +109,7 @@ const beforeClose = async (action) => {
   const selected = products.value.filter(p => 
     selectedProducts.value.includes(p.id)
   )
-  resolve(selected)
+  resolve(JSON.parse(JSON.stringify(selected)))
   return true
 }
 

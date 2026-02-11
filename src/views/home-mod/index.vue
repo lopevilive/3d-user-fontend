@@ -41,6 +41,7 @@
             text="保存配置"
             type="primary"
             size="small"
+            @click="saveHandle"
           />
         </div>
         <div class="space"></div>
@@ -54,11 +55,7 @@ import { useHomeMod } from './hook'
 import ModuleConfigDialog from './ModuleConfigDialog.vue'
 
 const {
-  data,
-  moduleConfigDialogRef,
-  handleConfigModules,
-  COMPONENT_MAP,
-  enAbledDisplay
+  data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle
 } = useHomeMod()
 
 </script>
@@ -75,6 +72,8 @@ const {
   .bottom-wrap {
     height: $footerBarH;
     position: fixed;
+    background: $bgWhite;
+    z-index: 10;
     bottom: 0;
     left: 0;
     width: 100%;

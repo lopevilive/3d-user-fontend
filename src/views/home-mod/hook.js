@@ -1,7 +1,8 @@
 import { ref, computed, defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { shopInfoManage, productTypesManage } from '@/util'
+import { shopInfoManage, productTypesManage, commonFetch } from '@/util'
 import { showConfirmDialog } from 'vant'
+import { getProduct } from '@/http'
 
 
 const COMPONENT_MAP = {
@@ -125,6 +126,12 @@ export const useHomeMod = () => {
     
   })
 
+
+  const saveHandle = async () => {
+    console.log(data.value.cfg)
+  }
+  
+  
   const init = async () => {
     shopInfo.value = (await shopInfoManage.getData(shopId))[0]
     const homePageCfg = JSON.parse(shopInfo.value.homePageCfg || '{}')
@@ -150,18 +157,38 @@ export const useHomeMod = () => {
     } else { // 还没配置过，根据图册信息默认生成一份
       const productTypesData = await productTypesManage.getData(shopId)
       const bannerCfg = data.value.cfg.find((item) => item.comName === 'ItemBanner')
-      bannerCfg.info.url = shopInfo.value.url
-      console.log(data.value, 99)
+      const descCfg = data.value.cfg.find((item) => item.comName === 'ItemHomeDesc')
+      // 兼容 url 为空或超过5个的情况
+      if (shopInfo.value.url) {
+        const urlList = shopInfo.value.url.split(',').filter(url => url.trim())
+        bannerCfg.info.url = urlList.slice(0, 5).join(',')
+        descCfg.info.url = urlList.slice(0, 5).join(',')
+      } else {
+        bannerCfg.info.url = ''
+      }
+      if (productTypesData?.[0]?.list?.length) {
+        const typeCfg =  data.value.cfg.find((item) => item.comName === 'ItemProductType')
+        let len = 0
+        for (const item of productTypesData[0].list) {
+          if (item.parentId) continue
+          if (len >= 4) continue
+          len += 1
+          typeCfg.info.list.push({ url: '', typeId: `,${item.id},`})
+        }
+      }
+      const prodRes = await commonFetch(getProduct, {shopId, pageSize: 4, currPage: 0, status: 0})
+      if (prodRes?.list?.length) {
+         const prodCfg = data.value.cfg.find((item) => item.comName === 'ItemCustomProduct')
+         for (const item of prodRes.list) {
+          prodCfg.info.list.push({id: item.id})
+         }
+      }
     }
   }
 
   init()
 
   return {
-    data,
-    moduleConfigDialogRef,
-    handleConfigModules,
-    COMPONENT_MAP,
-    enAbledDisplay
+    data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle
   }
 }

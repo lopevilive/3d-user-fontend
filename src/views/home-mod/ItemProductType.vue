@@ -5,7 +5,7 @@
         <TransitionGroup name="list" tag="div" class="item-list">
           <div class="item" v-for="(item, index) in listDisplay" :key="item.typeId">
             <div class="item-left">
-              <VanField label="1.分类名称" :border="false" class="type-name">
+              <VanField :label="`${index + 1 }.分类名称`" :border="false" class="type-name">
                 <template #input>
                   <div class="ellipsis">{{ getTypeName(item.typeId) }}</div>
                 </template>

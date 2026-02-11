@@ -3,14 +3,14 @@
     <ItemWrap title="热门产品模块" @delete="$emit('delete')">
       <div class="content">
         <TransitionGroup name="list" tag="div" class="prod-list">
-          <div class="item" v-for="(item, index) in data.list" :key="item.id">
+          <div class="item" v-for="(item, index) in prodInfoDisplay" :key="item.id">
             <div class="item-left">
               <div class="count">{{ index + 1 }}.</div>
               <ProductLineDisplay :product="item" />
             </div>
             <div class="item-right">
               <VanIcon name="down" class="move-top move" v-if="index !== 0" @click="moveUp(index)" />
-              <VanIcon name="down" class="move" v-if="index !== data.list.length - 1" @click="moveDown(index)" />
+              <VanIcon name="down" class="move" v-if="index !== prodInfoDisplay.length - 1" @click="moveDown(index)" />
               <VanIcon name="delete-o" class="del" @click="deleteHandle(index)" />
             </div>
           </div>
@@ -20,7 +20,7 @@
             text="新增一项"
             icon="plus"
             size="small"
-            :disabled="data.list.length >= MAX_PRODUCTS"
+            :disabled="prodInfoDisplay.length >= MAX_PRODUCTS"
             @click="addHandle"
           />
         </div>
@@ -45,7 +45,8 @@ const props = defineProps({
 })
 
 const {
-  data, addHandle, moveUp, moveDown, deleteHandle, customProductSelectDialogRef, MAX_PRODUCTS
+  addHandle, moveUp, moveDown, deleteHandle, customProductSelectDialogRef, MAX_PRODUCTS,
+  prodInfoDisplay
 } = useItemCustomProduct(props, emits)
 
 </script>
