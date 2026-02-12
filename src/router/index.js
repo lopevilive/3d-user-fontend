@@ -138,6 +138,12 @@ const router = createRouter({
           name: 'home-mod',
           component: () => import('@/views/home-mod/index.vue'),
           meta: {title: '首页装修'}
+        },
+        {
+          path: 'custom-home',
+          name: 'custom-home',
+          component: () => import('@/views/custom-home/index.vue'),
+          meta: {title: '首页'}
         }
       ]
     },

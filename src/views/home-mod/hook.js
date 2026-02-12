@@ -1,8 +1,8 @@
 import { ref, computed, defineAsyncComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { shopInfoManage, productTypesManage, commonFetch } from '@/util'
-import { showConfirmDialog } from 'vant'
-import { getProduct } from '@/http'
+import { showConfirmDialog, showToast } from 'vant'
+import { getProduct, modShopStatus } from '@/http'
 
 
 const COMPONENT_MAP = {
@@ -70,6 +70,7 @@ const tmpD = {
 export const useHomeMod = () => {
 
   const route = useRoute()
+  const router = useRouter()
   const shopId = + route.params.shopId
   const shopInfo = ref({})
 
@@ -128,7 +129,14 @@ export const useHomeMod = () => {
 
 
   const saveHandle = async () => {
-    console.log(data.value.cfg)
+    const homePageCfg = JSON.stringify(data.value)
+    await commonFetch(modShopStatus, {shopId, homePageCfg})
+    shopInfoManage.dirty(shopId)
+    showToast('保存成功～')
+  }
+
+  const toPreview = async () => {
+    router.push({name: 'custom-home'})
   }
   
   
@@ -140,16 +148,17 @@ export const useHomeMod = () => {
     if (homePageCfg.isEnabled) {
       data.value.isEnabled = homePageCfg.isEnabled
     }
-    if (homePageCfg.modules && homePageCfg.modules.length > 0) { // 已经配置过了
+    if (homePageCfg.cfg && homePageCfg.cfg.length > 0) { // 已经配置过了
       // 遍历默认配置
       data.value.cfg.forEach(defaultModule => {
         // 在 homePageCfg 中查找对应的模块
-        const configModule = homePageCfg.modules.find(
+        const configModule = homePageCfg.cfg.find(
           module => module.comName === defaultModule.comName
         )
         
         // 如果找到对应的配置，则更新默认配置
         if (configModule) {
+          console.log(configModule)
           defaultModule.info = configModule.info || {}
           defaultModule.status = configModule.status || 1
         }
@@ -189,6 +198,7 @@ export const useHomeMod = () => {
   init()
 
   return {
-    data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle
+    data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle,
+    toPreview
   }
 }

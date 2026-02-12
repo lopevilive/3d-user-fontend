@@ -25,24 +25,9 @@
       </div>
       <div class="bottom-right">
         <div class="btn-group">
-          <VanButton
-            text="配置模块"
-            size="small"
-            plain
-            @click="handleConfigModules"
-          />
-          <VanButton
-            text="预览"
-            size="small"
-            plain
-            type="primary"
-          />
-          <VanButton
-            text="保存配置"
-            type="primary"
-            size="small"
-            @click="saveHandle"
-          />
+          <VanButton text="配置模块" size="small" plain @click="handleConfigModules" />
+          <VanButton text="预览" size="small" plain type="primary" @click="toPreview" />
+          <VanButton text="保存配置" type="primary" size="small" @click="saveHandle" />
         </div>
         <div class="space"></div>
       </div>
@@ -55,7 +40,8 @@ import { useHomeMod } from './hook'
 import ModuleConfigDialog from './ModuleConfigDialog.vue'
 
 const {
-  data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle
+  data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle,
+  toPreview
 } = useHomeMod()
 
 </script>
