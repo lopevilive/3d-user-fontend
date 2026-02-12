@@ -1,20 +1,22 @@
 <template>
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content">
-      <div class="img" @click="handleClick"><VanImage fit="contain" :src="urlDisplay" /></div>
+      <div @click="handleClick" :class="{'img': true, 'img-fixed-height': mode & 1<<1}">
+        <VanImage :fit="mode & 1<< 1? 'cover': 'contain'" :src="urlDisplay" />
+      </div>
       <div class="info-content">
-        <div class="desc" @click="handleClick">
+        <div :class="{'desc': true, 'desc-line1': mode & 1<<1}" @click="handleClick">
           <span v-if="isShowSticky"><VanTag plain type="primary">置顶</VanTag></span>
           {{ data.desc }}
         </div>
-        <div class="attr" v-if="displayAttrs"> {{ displayAttrs }}</div>
+        <div :class="{'attr': true, 'attr-line1': mode & 1<<1}" v-if="displayAttrs"> {{ displayAttrs }}</div>
         <div class="price-content">
           <div class="price" >
             <span class="unit" v-if="priceDisplay">¥</span>
             <span class="num">{{ priceDisplay || '' }}</span>
           </div>
         </div>
-        <div class="count-content">
+        <div class="count-content" v-if="isShowControls">
           <AddControls :productInfo="data" />
         </div>
       </div>
@@ -70,14 +72,15 @@ const props = defineProps({
   data: {type: Object},
   productType: {type: String, default: ''},
   isShowSort: {type: Boolean, default: true},
-  shopInfo: {type: Object, default: () => {}}
+  shopInfo: {type: Object, default: () => {}},
+  mode: {type: Number, default: 1} // 1-默认、1<<1-固定高度、1<<2-不展示添加按钮
 })
 
 const emits = defineEmits(['update','selected'])
 
 const {
   actions, settingClickHandle, selectHandle, handleClick, urlDisplay, checked, changeHandle,
-  displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle
+  displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls
 } = useProductItem(props,emits)
 
 </script>
@@ -130,6 +133,9 @@ const {
       max-height: 250px;
     }
   }
+  .img-fixed-height {
+    height: 175px;
+  }
   .desc {
     line-height: 20px;
     color: $grey;
@@ -143,11 +149,24 @@ const {
     -webkit-box-orient: vertical;
     line-clamp: 2;
   }
+  .desc-line1 {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
   .attr {
     font-size: 12px;
     width: 100%;
     color: $grey8;
     margin-top: 4px;
+  }
+  .attr-line1 {
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 1;
   }
   .price-content {
     width: 100%;

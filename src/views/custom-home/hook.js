@@ -1,7 +1,8 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { shopInfoManage, formatType } from '@/util'
+import { shopInfoManage, formatType, commonFetch } from '@/util'
 import { globalData } from '@/store'
+import { getProduct } from '@/http'
 
 export const useCustomHome = () => {
   const route = useRoute()
@@ -21,6 +22,16 @@ export const useCustomHome = () => {
       if (homePageCfg.isEnabled === 1) {
         data.value.isEnabled = homePageCfg.isEnabled
         data.value.cfg = homePageCfg.cfg || []
+        
+        // 获取自定义产品列表
+        const itemCustomProduct = data.value.cfg.find(item => item.comName === 'ItemCustomProduct')
+        if (itemCustomProduct && itemCustomProduct.info && itemCustomProduct.info.list && itemCustomProduct.info.list.length > 0) {
+          const productIds = itemCustomProduct.info.list.map(item => item.id)
+          const products = await getProductList(productIds)
+          console.log(products)
+          // 将产品详情存储在data中
+          data.value.customProducts = products
+        }
       }
     } catch (error) {
       console.error('获取图册信息失败:', error)
@@ -42,11 +53,33 @@ export const useCustomHome = () => {
     return ''
   }
 
+  // 获取产品列表
+  const getProductList = async (productIds) => {
+    if (!productIds || productIds.length === 0) return []
+    try {
+      const res = await commonFetch(getProduct, {shopId, productId: productIds})
+      return res.list || []
+    } catch (error) {
+      console.error('获取产品列表失败:', error)
+      return []
+    }
+  }
+
+  // 计算属性，用于获取ItemCustomProduct的产品列表
+  const customProductList = computed(() => {
+    const itemCustomProduct = data.value.cfg.find(item => item.comName === 'ItemCustomProduct')
+    if (!itemCustomProduct || !itemCustomProduct.info || !itemCustomProduct.info.list) {
+      return []
+    }
+    return itemCustomProduct.info.list
+  })
+
   init()
 
   return {
     data,
     getBannerList,
-    getTypeName
+    getTypeName,
+    shopInfo
   }
 }

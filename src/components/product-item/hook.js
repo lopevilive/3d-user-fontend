@@ -177,6 +177,7 @@ export const useProductItem = (props, emits) => {
   const isShowSticky = computed(() => {
     const {rid} = globalData.value
     if (![2,3,99].includes(rid)) return false
+    if (props.mode & 1<<1) return false
     if (props.data?.sort > 0) return true
     return false
   })
@@ -197,10 +198,15 @@ export const useProductItem = (props, emits) => {
     const preId = await commonFetch(modProductPos, {shopId, id: props.data.id, step, type, productType: props.productType })
     emits('update', {type: 'pos', data: {id: props.data.id, preId, type}})
   }
+
+  const isShowControls = computed(() => {
+    if (props.mode & 1<<1) return false
+    return true
+  })
   
 
   return {
     actions, selectHandle, settingClickHandle, handleClick, urlDisplay, checked, changeHandle,
-    displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle
+    displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls
   }
 }

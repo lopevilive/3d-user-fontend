@@ -33,6 +33,25 @@
             </div>
           </div>
         </div>
+        <!-- 自定义产品模块 -->
+        <div v-if="item.comName === 'ItemCustomProduct'" class="custom-product-wrap">
+          <div class="tit-wrap">
+            <div class="tit">精选推荐</div>
+            <div class="view-more">查看更多<VanIcon name="arrow" /></div>
+          </div>
+          <div class="prod-list">
+            <div class="product-grid" v-for="(product, productIndex) in data.customProducts">
+              <ProductItem
+                :key="product.id"
+                :data="product"
+                :shopInfo="shopInfo || {}"
+                :isShowSort="false",
+                :mode="1<<1"
+              />
+            </div>
+          </div>
+          
+        </div>
       </div>
     </div>
     <div v-if="data.cfg.length === 0 || data.cfg.filter(item => item.status === 1).length === 0" class="empty-wrap">
@@ -43,11 +62,12 @@
 
 <script setup>
 import ImgSwipe from '@/components/img-swipe/index.vue'
+import ProductItem from '@/components/product-item/index.vue'
 import { useCustomHome } from './hook'
 import { getImageUrl } from '@/util'
 
 const {
-  data, getBannerList, getTypeName
+  data, getBannerList, getTypeName, shopInfo
 } = useCustomHome()
 
 </script>
@@ -67,7 +87,7 @@ const {
   }
   .product-type-wrap {
     background: #fff;
-    padding: 15px 10px;
+    padding: 15px 10px 0 10px;
     .type-grid {
       display: flex;
       flex-wrap: wrap;
@@ -120,6 +140,32 @@ const {
     .empty-text {
       color: $grey9;
       font-size: 14px;
+    }
+  }
+  .custom-product-wrap {
+    background: #fff;
+    .tit-wrap {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+      margin-bottom: 10px;
+      .view-more {
+        color: $grey8;
+      }
+    }
+    .tit {
+      font-weight: bold;
+    }
+    .prod-list {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0 5px;
+    }
+    .product-grid {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      box-sizing: border-box;
     }
   }
 }
