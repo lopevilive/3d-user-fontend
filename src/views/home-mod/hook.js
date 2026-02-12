@@ -26,13 +26,13 @@ const COMPONENT_MAP = {
 
 const tmpD = {
   "isEnabled": 1,  // 1-启用、2-不启用
-  "modules": [
+  "cfg": [
     {
       "comName": "ItemBanner", 
       "status": 2, // 1-启用、2-不启用
       "info": {
         "url": '',
-        "scale": "0.33", 
+        "scale": "0.5", 
         "autoPlay": 1 // 1-自动播放、2-不自动播放
       }
     },
@@ -78,7 +78,7 @@ export const useHomeMod = () => {
     isEnabled: 2,
     cfg: [
       { comName: 'ItemBanner', info: {
-        url: '', scale: '0.33', autoPlay: 1
+        url: '', scale: '0.5', autoPlay: 1
       }, status: 1 },
       { comName: 'ItemProductType', info: {
         list: []
