@@ -1,5 +1,5 @@
 <template>
-  <div class="view-custom-home">
+  <div class="view-custom-home" @scroll="scrollHandle" ref="domRef">
     <div class="cfg-list-list">
       <div
         class="cfg-item"
@@ -52,30 +52,62 @@
           </div>
           
         </div>
+        <!-- 首页描述模块 -->
+        <div v-if="item.comName === 'ItemHomeDesc'" class="home-desc-wrap">
+          <template v-if="getBannerList(item.info.url).length">
+            <!-- <div class="item-tit">关于我们</div> -->
+            <div class="desc-img-wrap">
+              <VanImage
+                v-for="(img, imgIndex) in getBannerList(item.info.url)"
+                :key="imgIndex"
+                :src="getImageUrl(img)"
+                @click="showImagePreview([img])"
+              />
+            </div>
+          </template>
+        </div>
       </div>
     </div>
     <div v-if="data.cfg.length === 0 || data.cfg.filter(item => item.status === 1).length === 0" class="empty-wrap">
       <div class="empty-text">暂无首页配置</div>
     </div>
   </div>
+  <Setting />
 </template>
 
 <script setup>
+import { onActivated } from 'vue'
 import ImgSwipe from '@/components/img-swipe/index.vue'
 import ProductItem from '@/components/product-item/index.vue'
 import { useCustomHome } from './hook'
 import { getImageUrl } from '@/util'
+import { showImagePreview } from 'vant'
+import Setting from '@/components/setting/index.vue'
 
 const {
-  data, getBannerList, getTypeName, shopInfo
+  data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef
 } = useCustomHome()
 
+onActivated(() => {
+  activeHandle()
+})
+
+</script>
+
+<script>
+export default {
+  name: 'CustomHome'
+}
 </script>
 
 <style lang="scss" scoped>
 .view-custom-home {
   background: $bgWhite;
-  min-height: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  padding-bottom: $footerBarH;
+  box-sizing: border-box;
   .cfg-list-list {
     .cfg-item:not(:first-child) {
       margin-top: 10px;
@@ -129,6 +161,20 @@ const {
           white-space: nowrap;
           width: 100%;
         }
+      }
+    }
+  }
+  .home-desc-wrap {
+    background: #fff;
+    .item-tit {
+      padding: $pdL $pdM;
+      font-weight: bold;
+    }
+    .desc-img-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      :deep(.van-image) {
+        width: 100%;
       }
     }
   }

@@ -239,6 +239,30 @@ const handleEncry = async (shopId, to) => {
   if (ret === false) return {name: 'home'}
 }
 
+const handleHomePage = async (to, from) => {
+  let {shopId} = to.params
+  let { toDetial } = to.query
+  if (toDetial || from.name === 'custom-home') { // 这种情况不需要再跳转自定义首页
+    globalData.value.homePageStatus[shopId] = true
+    return true
+  }
+  if (!shopId) return true
+  let shopInfo = await shopInfoManage.getData(shopId)
+  let {homePageCfg} = shopInfo[0] || '{}'
+  homePageCfg = JSON.parse(homePageCfg)
+  if (to.name === 'custom-home') {
+    if (homePageCfg.isEnabled !== 1) { // 没有启用，这个时候重定向到产品列表
+      return {name : 'product-manage', params: {shopId}, query: to.query}
+    }
+  }
+  shopId = Number(shopId)
+  if (to.name !== 'product-manage') return true
+  if (globalData.value.homePageStatus[shopId]) return true // 已经展示过首页了
+  if (homePageCfg.isEnabled !== 1) return true
+  globalData.value.homePageStatus[shopId] = true
+  return {name: 'custom-home', params: {shopId}, query: to.query}
+}
+
 const handleQuery = (to) => {
   const {isPC, wxEnv} = to.query
   if (isPC) {
@@ -319,13 +343,15 @@ const init = async (to, from) => {
 
   pass = await handleIllegal(shopId) // 判断是否封禁画册
   if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
-  
-  handleLog(to, shopId) // 写入浏览记录
-  handleReport({to, shopId}) // 处理上报
-  
 
   pass = await handleEncry(shopId, to) // 判断是否加密画册
   if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+
+  pass = await handleHomePage(to, from) // 判断是否需要跳转自定义首页
+  if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+  
+  handleLog(to, shopId) // 写入浏览记录
+  handleReport({to, shopId}) // 处理上报
 
   handleForwardPermi(shopId) // 处理转发权限
   // 这里是把当前页面信息传给小程序

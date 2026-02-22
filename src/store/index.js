@@ -79,6 +79,9 @@ export const globalData = ref({
   prodManageNeedUpdate: false,
   prodEditNeedAlive: false, // 编辑产品页面是否需要 alive
   specEditNeedAlive: false, // 编辑规格页是否需要 alive
+  homePageStatus: {}, // 用来记录是否已经展示了首页
+  getFooterBarRef: () => {},
+  customHomeNeedUpdate: false
 })
 
 

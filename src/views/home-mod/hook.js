@@ -3,6 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { shopInfoManage, productTypesManage, commonFetch } from '@/util'
 import { showConfirmDialog, showToast } from 'vant'
 import { getProduct, modShopStatus } from '@/http'
+import { globalData } from '@/store'
 
 
 const COMPONENT_MAP = {
@@ -105,11 +106,7 @@ export const useHomeMod = () => {
 
   const modEnabled = async (val) => {
     if (val) {
-      await  showConfirmDialog({
-        message: '开启后当前配置将立即生效，且会自动保存，确认开启吗？',
-        confirmButtonText: '确认',
-        cancelButtonText: '取消'
-      })
+      shopInfoManage.dirty(shopId)
       data.value.isEnabled = 1
     } else {
       data.value.isEnabled = 2
@@ -129,10 +126,27 @@ export const useHomeMod = () => {
 
 
   const saveHandle = async () => {
+    await showConfirmDialog({
+        message: '确认保存当前配置？',
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      })
     const homePageCfg = JSON.stringify(data.value)
     await commonFetch(modShopStatus, {shopId, homePageCfg})
     shopInfoManage.dirty(shopId)
     showToast('保存成功～')
+    globalData.value.customHomeNeedUpdate = true
+    try {
+      const footerBarRef = globalData.value.getFooterBarRef()
+      footerBarRef.value.init()
+    } finally {
+      if (data.value.isEnabled === 1) {
+        router.replace({name: 'custom-home', params: {shopId: shopId}, query: route.query})
+      } else {
+        router.replace({name: 'product-manage', params: {shopId: shopId}, query: route.query})
+      }
+    }
+    
   }
 
   const toPreview = async () => {

@@ -625,12 +625,6 @@ export const useProductManage = () => {
     const ret = await type2PopRef.value.show()
     beforeSubChange(ret)
   }
-
-  const preHandle = async () => {
-    formatInventory()
-    await productTypesManage.getData(shopId)
-    prodTypeFetchDone.value = true
-  }
   
   const setFirstType = async () => {
     const ret = await productTypesManage.getData(shopId)
@@ -648,8 +642,11 @@ export const useProductManage = () => {
     return 0 // 在上方
   })
   
-  const init = async () => {
+  const clearNeedExec = () => {
     globalData.value.productNeedExec = []
+  }
+
+  const handle2Detial = async () => {
     const {toDetial, title, imageUrl} = route.query
     if (toDetial) {
       updateTitStatus += 1
@@ -657,11 +654,26 @@ export const useProductManage = () => {
       await sleep(300)
       router.push({name: 'product-detial', params: {id: toDetial}, query: {title, imageUrl}})
     }
-    preHandle()
-    await fetchShop()
-    if (shopInfo.value.typeStatus === 1) {
+  }
+  
+  const handleTypeStatus = async () => {
+    if (shopInfo.value.typeStatus === 1) { // 隐藏“全部”
       await setFirstType()
     }
+  }
+
+  const fetchProductType = async () => {
+    await productTypesManage.getData(shopId)
+    prodTypeFetchDone.value = true
+  }
+  
+  const init = async () => {
+    clearNeedExec()
+    formatInventory() // 看这个用户有没有生成过清单，有的话把 历史清单 入口展示
+    await fetchShop() // 获取图册信息
+    await handle2Detial() // 看是否需要跳转产品详情
+    await handleTypeStatus() // 判断是否隐藏“全部”
+    await fetchProductType() // 主动获取产品分类
     await loadHandle()
     inited = true
   }

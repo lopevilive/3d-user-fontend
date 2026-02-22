@@ -19,7 +19,6 @@
     </template>
   </div>
   <Setting />
-  <!-- <EditFloat v-if="isShowCreate"/> -->
 </template>
 
 
@@ -27,7 +26,6 @@
 import Card from '@/components/card/index.vue'
 import { useHome } from './hook'
 import Setting from '@/components/setting/index.vue'
-import EditFloat from './EditFloat.vue'
 
 const {
   loading,

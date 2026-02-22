@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { shopInfoManage, formatType, commonFetch } from '@/util'
 import { globalData } from '@/store'
@@ -13,30 +13,6 @@ export const useCustomHome = () => {
     cfg: []
   })
 
-  const init = async () => {
-    try {
-      shopInfo.value = (await shopInfoManage.getData(shopId))[0]
-      const homePageCfg = JSON.parse(shopInfo.value.homePageCfg || '{}')
-      console.log(homePageCfg)
-      // 检查是否启用自定义首页
-      if (homePageCfg.isEnabled === 1) {
-        data.value.isEnabled = homePageCfg.isEnabled
-        data.value.cfg = homePageCfg.cfg || []
-        
-        // 获取自定义产品列表
-        const itemCustomProduct = data.value.cfg.find(item => item.comName === 'ItemCustomProduct')
-        if (itemCustomProduct && itemCustomProduct.info && itemCustomProduct.info.list && itemCustomProduct.info.list.length > 0) {
-          const productIds = itemCustomProduct.info.list.map(item => item.id)
-          const products = await getProductList(productIds)
-          console.log(products)
-          // 将产品详情存储在data中
-          data.value.customProducts = products
-        }
-      }
-    } catch (error) {
-      console.error('获取图册信息失败:', error)
-    }
-  }
 
   // 将逗号分隔的URL字符串转换为数组
   const getBannerList = (urlStr) => {
@@ -65,21 +41,49 @@ export const useCustomHome = () => {
     }
   }
 
-  // 计算属性，用于获取ItemCustomProduct的产品列表
-  const customProductList = computed(() => {
-    const itemCustomProduct = data.value.cfg.find(item => item.comName === 'ItemCustomProduct')
-    if (!itemCustomProduct || !itemCustomProduct.info || !itemCustomProduct.info.list) {
-      return []
+  const scrollT = ref(0)
+  const scrollHandle = (e) => {
+     const {scrollTop} = e.target
+      scrollT.value = scrollTop
+  }
+
+  const domRef = ref()
+  const activeHandle = async () => {
+    if (scrollT.value) { // 这里让页面滚动到上次的位置
+      domRef.value.scrollTop = scrollT.value
     }
-    return itemCustomProduct.info.list
-  })
+    if (globalData.value.customHomeNeedUpdate) {
+      globalData.value.customHomeNeedUpdate = false
+      init()
+    }
+  }
+
+  const init = async () => {
+    try {
+      shopInfo.value = (await shopInfoManage.getData(shopId))[0]
+      const homePageCfg = JSON.parse(shopInfo.value.homePageCfg || '{}')
+      // 检查是否启用自定义首页
+      if (homePageCfg.isEnabled === 1) {
+        data.value.isEnabled = homePageCfg.isEnabled
+        data.value.cfg = homePageCfg.cfg || []
+        
+        // 获取自定义产品列表
+        const itemCustomProduct = data.value.cfg.find(item => item.comName === 'ItemCustomProduct')
+        if (itemCustomProduct && itemCustomProduct.info && itemCustomProduct.info.list && itemCustomProduct.info.list.length > 0) {
+          const productIds = itemCustomProduct.info.list.map(item => item.id)
+          const products = await getProductList(productIds)
+          // 将产品详情存储在data中
+          data.value.customProducts = products
+        }
+      }
+    } catch (error) {
+      console.error('获取图册信息失败:', error)
+    }
+  }
 
   init()
 
   return {
-    data,
-    getBannerList,
-    getTypeName,
-    shopInfo
+    data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef
   }
 }
