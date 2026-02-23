@@ -42,10 +42,10 @@ const beforeClose = async (action) => {
     showToast('请等待图片上传')
     return false
   }
-  if (!url.value) {
-    showToast('请上传 logo')
-    return false
-  }
+  // if (!url.value) {
+  //   showToast('请上传 logo')
+  //   return false
+  // }
   resolve({ url: url.value, typeId: typeId.value })
   return true
 }

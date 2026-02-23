@@ -19,11 +19,20 @@
         </div>
         <!-- 产品分类模块 -->
         <div v-if="item.comName === 'ItemProductType'" class="product-type-wrap">
-          <div class="type-grid">
+          <div
+            class="type-grid"
+            :class="{
+              'type-grid-center': item.info.list && item.info.list.length === 1,
+              'type-grid-2': item.info.list && item.info.list.length === 2,
+              'type-grid-3': item.info.list && (item.info.list.length === 3 || item.info.list.length === 5 || item.info.list.length === 6),
+              'type-grid-4': item.info.list && (item.info.list.length === 4 || item.info.list.length > 6)
+            }"
+          >
             <div
               class="type-item"
               v-for="(typeItem, typeIndex) in item.info.list"
               :key="typeIndex"
+              @click="prodTypeClickHandle(typeItem)"
             >
               <div class="type-icon">
                 <VanImage v-if="typeItem.url" :src="getImageUrl(typeItem.url)" fit="cover" class="type-logo" />
@@ -37,7 +46,7 @@
         <div v-if="item.comName === 'ItemCustomProduct'" class="custom-product-wrap">
           <div class="tit-wrap">
             <div class="tit">精选推荐</div>
-            <div class="view-more">查看更多<VanIcon name="arrow" /></div>
+            <div class="view-more" @click="viewMoreProd">查看更多<VanIcon name="arrow" /></div>
           </div>
           <div class="prod-list">
             <div class="product-grid" v-for="(product, productIndex) in data.customProducts">
@@ -85,7 +94,8 @@ import { showImagePreview } from 'vant'
 import Setting from '@/components/setting/index.vue'
 
 const {
-  data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef
+  data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef, viewMoreProd,
+  prodTypeClickHandle
 } = useCustomHome()
 
 onActivated(() => {
@@ -160,6 +170,31 @@ export default {
           text-overflow: ellipsis;
           white-space: nowrap;
           width: 100%;
+        }
+      }
+      // 1个分类时居中显示
+      &.type-grid-center {
+        justify-content: center;
+        .type-item {
+          width: auto;
+        }
+      }
+      // 2个分类时一行显示2个
+      &.type-grid-2 {
+        .type-item {
+          width: 50%;
+        }
+      }
+      // 3个、5个、6个分类时一行显示3个
+      &.type-grid-3 {
+        .type-item {
+          width: 33%;
+        }
+      }
+      // 4个或超过6个分类时一行显示4个
+      &.type-grid-4 {
+        .type-item {
+          width: 25%;
         }
       }
     }

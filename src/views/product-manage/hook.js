@@ -133,7 +133,6 @@ export const useProductManage = () => {
     if (!name) return
     updateTitStatus -= 1
     if (updateTitStatus > 0) return
-    // if (route.query?.title) return
     router.replace({name: 'product-manage', params: route.params, query: {
       title: name,
       imageUrl: getImageUrl(url?.split(',')?.[0] || '')
@@ -533,6 +532,7 @@ export const useProductManage = () => {
     const { activeType } = route.query
     if (!activeType) return
     const {type1, type2} = formatTypeUtil(activeType)
+    if (!type1) return
     activeTab.value = type1;
     subActiveTab.value = type2 || 0
     refresh()

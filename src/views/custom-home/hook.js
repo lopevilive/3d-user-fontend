@@ -1,11 +1,12 @@
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { shopInfoManage, formatType, commonFetch } from '@/util'
 import { globalData } from '@/store'
 import { getProduct } from '@/http'
 
 export const useCustomHome = () => {
   const route = useRoute()
+  const router = useRouter()
   const shopId = +route.params.shopId
   const shopInfo = ref({})
   const data = ref({
@@ -58,6 +59,17 @@ export const useCustomHome = () => {
     }
   }
 
+  const viewMoreProd = async () => {
+    router.replace({name: 'product-manage', params: {shopId}, query: route.query})
+  }
+
+  const prodTypeClickHandle = async (itemData) => {
+    const { type1 } = formatType(itemData.typeId)
+    if (!type1) return
+    router.replace({name: 'product-manage', params: {shopId}, query: {...route.query, activeType: type1}})
+    console.log(type1)
+  }
+  
   const init = async () => {
     try {
       shopInfo.value = (await shopInfoManage.getData(shopId))[0]
@@ -84,6 +96,7 @@ export const useCustomHome = () => {
   init()
 
   return {
-    data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef
+    data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef, viewMoreProd,
+    prodTypeClickHandle
   }
 }
