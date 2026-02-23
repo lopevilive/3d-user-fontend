@@ -27,6 +27,9 @@
             :is="COMPONENT_MAP[item.comName]"
             @delete="data.cfg.find(m => m.comName === item.comName).status = 2"
             v-model:config="item.info"
+            :ref="(refItem) => {
+              modlueRefs[item.comName] = refItem
+            }"
           />
         </div>
       </div>
@@ -47,7 +50,7 @@ import ModuleConfigDialog from './ModuleConfigDialog.vue'
 
 const {
   data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle,
-  toPreview
+  toPreview, modlueRefs
 } = useHomeMod()
 
 </script>

@@ -122,10 +122,10 @@ export const useItemCustomProduct = (props, emits) => {
 
   const deleteHandle = async (index) => {
     try {
-      await showConfirmDialog({
-        title: '提示',
-        message: `确定要删除该产品吗？`
-      })
+      // await showConfirmDialog({
+      //   title: '提示',
+      //   message: `确定要删除该产品吗？`
+      // })
       const newList = [...props.config.list]
       newList.splice(index, 1)
       prodInfoDisplay.value = newList

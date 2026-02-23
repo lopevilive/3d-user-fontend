@@ -8,7 +8,7 @@
             ({{ urlLen }}/{{ MAX_UPLOAD_COUNT }})
           </template>
           <template #input>
-            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" />
+            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" ref="uploadImgsRef" />
           </template>
         </VanField>
         <VanField label="内容高度" readonly is-link @click="isShowScale = true" v-model="scaleTxt" :border="false" />
@@ -39,8 +39,10 @@ const props = defineProps({
 
 const {
   displayUrl, tipsDisplay, isShowScale, scaleTxt, scaleColumns, MAX_UPLOAD_COUNT, urlLen,
-  scaleDisplay, autoPlayDisplay
+  scaleDisplay, autoPlayDisplay, uploadImgsRef, valid
 } = useItemBanner(props, emits)
+
+defineExpose({valid})
 
 
 

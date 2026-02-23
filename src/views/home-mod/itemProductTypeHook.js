@@ -57,10 +57,10 @@ export const useItemProductType = (props, emits) => {
 
   const deleteHandle = async (index) => {
     try {
-      await showConfirmDialog({
-        title: '删除分类',
-        message: `确定删除【${getTypeName(listDisplay.value[index].typeId)}】?`
-      })
+      // await showConfirmDialog({
+      //   title: '删除分类',
+      //   message: `确定删除【${getTypeName(listDisplay.value[index].typeId)}】?`
+      // })
       // 确认后删除对应项，splice保证Vue3响应式更新
       const newList = [...listDisplay.value]
       newList.splice(index, 1)
@@ -70,7 +70,15 @@ export const useItemProductType = (props, emits) => {
     }
   }
 
+  const uploadImgsRefs = ref([])
+  const valid = async () => {
+    for (const item of uploadImgsRefs.value) {
+      if (item && item.isLoading) return '请等待图片上传完成再保存～'
+    }
+  }
+
   return {
-    addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle, listDisplay
+    addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle, listDisplay,
+    uploadImgsRefs, valid
   }
 }

@@ -8,7 +8,7 @@
             ({{ urlLen }}/{{ MAX_UPLOAD_COUNT }})
           </template>
           <template #input>
-            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" />
+            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" ref="uploadImgsRef" />
           </template>
         </VanField>
       </div>
@@ -30,8 +30,10 @@ const props = defineProps({
 })
 
 const {
-  displayUrl, MAX_UPLOAD_COUNT, urlLen, tipsDisplay
+  displayUrl, MAX_UPLOAD_COUNT, urlLen, tipsDisplay, uploadImgsRef, valid
 } = useItemHomeDesc(props, emits)
+
+defineExpose({valid})
 
 </script>
 

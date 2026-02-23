@@ -1,81 +1,80 @@
 <template>
   <div class="view-custom-home" @scroll="scrollHandle" ref="domRef">
     <div class="cfg-list-list">
-      <div
-        class="cfg-item"
+      <template
         v-for="(item, index) in data.cfg"
         :key="index"
-        v-show="item.status === 1"
       >
-        <!-- 轮播图模块 -->
-        <div v-if="item.comName === 'ItemBanner'" class="banner-wrap">
-          <ImgSwipe
-            :mode="2"
-            :list="getBannerList(item.info.url)"
-            :scale="item.info.scale"
-            :autoplay="item.info.autoPlay === 1 ? 3000 : 0"
-            :width="375"
-          />
-        </div>
-        <!-- 产品分类模块 -->
-        <div v-if="item.comName === 'ItemProductType'" class="product-type-wrap">
-          <div
-            class="type-grid"
-            :class="{
-              'type-grid-center': item.info.list && item.info.list.length === 1,
-              'type-grid-2': item.info.list && item.info.list.length === 2,
-              'type-grid-3': item.info.list && (item.info.list.length === 3 || item.info.list.length === 5 || item.info.list.length === 6),
-              'type-grid-4': item.info.list && (item.info.list.length === 4 || item.info.list.length > 6)
-            }"
-          >
+        <template v-if="item.status === 1">
+          <!-- 轮播图模块 -->
+          <div v-if="item.comName === 'ItemBanner'" class="banner-wrap cfg-item">
+            <ImgSwipe
+              :mode="2"
+              :list="getBannerList(item.info.url)"
+              :scale="item.info.scale"
+              :autoplay="item.info.autoPlay === 1 ? 3000 : 0"
+              :width="375"
+            />
+          </div>
+          <!-- 产品分类模块 -->
+          <div v-if="item.comName === 'ItemProductType'" class="product-type-wrap cfg-item">
             <div
-              class="type-item"
-              v-for="(typeItem, typeIndex) in item.info.list"
-              :key="typeIndex"
-              @click="prodTypeClickHandle(typeItem)"
+              class="type-grid"
+              :class="{
+                'type-grid-center': item.info.list && item.info.list.length === 1,
+                'type-grid-2': item.info.list && item.info.list.length === 2,
+                'type-grid-3': item.info.list && (item.info.list.length === 3 || item.info.list.length === 5 || item.info.list.length === 6),
+                'type-grid-4': item.info.list && (item.info.list.length === 4 || item.info.list.length > 6)
+              }"
             >
-              <div class="type-icon">
-                <VanImage v-if="typeItem.url" :src="getImageUrl(typeItem.url)" fit="cover" class="type-logo" />
-                <VanIcon v-else name="apps-o" class="type-default-icon" />
+              <div
+                class="type-item"
+                v-for="(typeItem, typeIndex) in item.info.list"
+                :key="typeIndex"
+                @click="prodTypeClickHandle(typeItem)"
+              >
+                <div class="type-icon">
+                  <VanImage v-if="typeItem.url" :src="getImageUrl(typeItem.url)" fit="cover" class="type-logo" />
+                  <VanIcon v-else name="apps-o" class="type-default-icon" />
+                </div>
+                <div class="type-name">{{ getTypeName(typeItem.typeId) }}</div>
               </div>
-              <div class="type-name">{{ getTypeName(typeItem.typeId) }}</div>
             </div>
           </div>
-        </div>
-        <!-- 自定义产品模块 -->
-        <div v-if="item.comName === 'ItemCustomProduct'" class="custom-product-wrap">
-          <div class="tit-wrap">
-            <div class="tit">精选推荐</div>
-            <div class="view-more" @click="viewMoreProd">查看更多<VanIcon name="arrow" /></div>
-          </div>
-          <div class="prod-list">
-            <div class="product-grid" v-for="(product, productIndex) in data.customProducts">
-              <ProductItem
-                :key="product.id"
-                :data="product"
-                :shopInfo="shopInfo || {}"
-                :isShowSort="false",
-                :mode="1<<1"
-              />
+          <!-- 自定义产品模块 -->
+          <div v-if="item.comName === 'ItemCustomProduct'" class="custom-product-wrap cfg-item">
+            <div class="tit-wrap">
+              <div class="tit">精选推荐</div>
+              <div class="view-more" @click="viewMoreProd">查看更多<VanIcon name="arrow" /></div>
+            </div>
+            <div class="prod-list">
+              <div class="product-grid" v-for="(product, productIndex) in data.customProducts">
+                <ProductItem
+                  :key="product.id"
+                  :data="product"
+                  :shopInfo="shopInfo || {}"
+                  :isShowSort="false",
+                  :mode="1<<1"
+                />
+              </div>
             </div>
           </div>
-          
-        </div>
-        <!-- 首页描述模块 -->
-        <div v-if="item.comName === 'ItemHomeDesc'" class="home-desc-wrap">
-          <template v-if="getBannerList(item.info.url).length">
-            <!-- <div class="item-tit">关于我们</div> -->
-            <div class="desc-img-wrap">
-              <VanImage
-                v-for="(img, imgIndex) in getBannerList(item.info.url)"
-                :key="imgIndex"
-                :src="getImageUrl(img)"
-                @click="showImagePreview([img])"
-              />
-            </div>
-          </template>
-        </div>
-      </div>
+          <!-- 首页描述模块 -->
+          <div v-if="item.comName === 'ItemHomeDesc'" class="home-desc-wrap cfg-item">
+            <template v-if="getBannerList(item.info.url).length">
+              <!-- <div class="item-tit">关于我们</div> -->
+              <div class="desc-img-wrap">
+                <VanImage
+                  v-for="(img, imgIndex) in getBannerList(item.info.url)"
+                  :key="imgIndex"
+                  :src="getImageUrl(img)"
+                  @click="showImagePreview([img])"
+                />
+              </div>
+            </template>
+          </div>
+        </template>
+      </template>
     </div>
     <div v-if="data.cfg.length === 0 || data.cfg.filter(item => item.status === 1).length === 0" class="empty-wrap">
       <div class="empty-text">暂无首页配置</div>
@@ -119,9 +118,7 @@ export default {
   padding-bottom: $footerBarH;
   box-sizing: border-box;
   .cfg-list-list {
-    .cfg-item:not(:first-child) {
-      margin-top: 10px;
-    }
+
   }
   .banner-wrap {
     background: #fff;
@@ -228,8 +225,7 @@ export default {
     .tit-wrap {
       display: flex;
       justify-content: space-between;
-      padding: 0 10px;
-      margin-bottom: 10px;
+      padding: 10px 10px 12px 10px;
       .view-more {
         color: $grey8;
       }

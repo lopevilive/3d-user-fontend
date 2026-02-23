@@ -67,10 +67,18 @@ export const useItemBanner = (props, emits) => {
     }
   })
 
+  const uploadImgsRef = ref()
+
+  const valid = async () => {
+    if (uploadImgsRef.value.isLoading) {
+      return '请等待图片上传完成再保存～'
+    }
+  }
+
 
   return {
     displayUrl, tipsDisplay, isShowScale, scaleColumns, scaleTxt, MAX_UPLOAD_COUNT, urlLen,
-    scaleDisplay, autoPlayDisplay
+    scaleDisplay, autoPlayDisplay, uploadImgsRef, valid
   }
 
 }

@@ -25,7 +25,7 @@ const handleDelete = async () => {
   try {
     await showConfirmDialog({
       title: '确认删除',
-      message: '确定要删除这个模块吗？'
+      message: '确定要删除该模块吗？'
     })
     emit('delete')
   } catch {

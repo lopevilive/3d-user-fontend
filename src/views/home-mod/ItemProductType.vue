@@ -12,7 +12,9 @@
               </VanField>
               <VanField label="分类 logo" :border="false">
                 <template #input>
-                  <UploadImgs  v-model="item.url" />
+                  <UploadImgs  v-model="item.url" :ref="(el) => {
+                    uploadImgsRefs[index] = el ? el : null
+                  }" />
                 </template>
               </VanField>
             </div>
@@ -64,8 +66,12 @@ const props = defineProps({
 })
 
 const {
-  addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle, listDisplay
+  addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle, listDisplay,
+  uploadImgsRefs, valid
 } = useItemProductType(props, emits)
+
+defineExpose({valid})
+
 </script>
 
 <style lang="scss" scoped>

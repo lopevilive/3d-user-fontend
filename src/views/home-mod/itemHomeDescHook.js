@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { globalData } from '@/store'
 
 export const useItemHomeDesc = (props, emits) => {
@@ -29,10 +29,20 @@ export const useItemHomeDesc = (props, emits) => {
     return ret
   })
 
+  const uploadImgsRef = ref()
+
+  const valid = async () => {
+  if (uploadImgsRef.value.isLoading) {
+    return '请等待图片上传完成再保存～'
+    }
+  }
+
   return {
     displayUrl,
     MAX_UPLOAD_COUNT,
     urlLen,
-    tipsDisplay
+    tipsDisplay,
+    uploadImgsRef,
+    valid
   }
 }

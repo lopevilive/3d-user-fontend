@@ -125,7 +125,73 @@ export const useHomeMod = () => {
   })
 
 
+  const modlueRefs = ref({})
+  
+  const validCfg = async () => {
+    // 检查是否至少有一个启用的模块
+    const enabledModules = data.value.cfg.filter(item => item.status === 1)
+    if (enabledModules.length === 0) {
+      showToast('请至少配置一个模块')
+      return false
+    }
+
+    for(const key of ['ItemBanner', 'ItemProductType', 'ItemHomeDesc']) {
+      const moduleItem = enabledModules.find(item => item.comName === key)
+      if (moduleItem) {
+        const msg = await modlueRefs.value[key].valid()
+        if (msg) {
+          showToast(msg)
+          return false
+        }
+      }
+    }
+    
+    // 检查 ItemBanner 模块是否至少上传了1张图片
+    const bannerModule = enabledModules.find(item => item.comName === 'ItemBanner')
+    if (bannerModule) {
+      const urlList = bannerModule.info.url ? bannerModule.info.url.split(',').filter(url => url.trim()) : []
+      if (urlList.length === 0) {
+        showToast('轮播图模块至少需要上传1张图片')
+        return false
+      }
+    }
+    
+    // 检查 ItemProductType 模块是否至少添加了一个分类
+    const productTypeModule = enabledModules.find(item => item.comName === 'ItemProductType')
+    if (productTypeModule) {
+      const typeList = productTypeModule.info.list || []
+      if (typeList.length === 0) {
+        showToast('产品分类模块至少需要添加一个分类')
+        return false
+      }
+    }
+    
+    // 检查 ItemCustomProduct 模块是否至少选择了一个产品
+    const customProductModule = enabledModules.find(item => item.comName === 'ItemCustomProduct')
+    if (customProductModule) {
+      const productList = customProductModule.info.list || []
+      if (productList.length === 0) {
+        showToast('产品模块至少需要选择一个产品')
+        return false
+      }
+    }
+    
+    // 检查 ItemHomeDesc 模块是否至少上传了1张图片
+    const homeDescModule = enabledModules.find(item => item.comName === 'ItemHomeDesc')
+    if (homeDescModule) {
+      const urlList = homeDescModule.info.url ? homeDescModule.info.url.split(',').filter(url => url.trim()) : []
+      if (urlList.length === 0) {
+        showToast('店铺详情模块至少需要上传1张图片')
+        return false
+      }
+    }
+
+    return true
+  }
+  
   const saveHandle = async () => {
+    const pass = await validCfg()
+    if (pass !== true) return
     await showConfirmDialog({
         message: '确认保存当前配置？',
         confirmButtonText: '确认',
@@ -172,7 +238,6 @@ export const useHomeMod = () => {
         
         // 如果找到对应的配置，则更新默认配置
         if (configModule) {
-          console.log(configModule)
           defaultModule.info = configModule.info || {}
           defaultModule.status = configModule.status || 1
         }
@@ -213,6 +278,6 @@ export const useHomeMod = () => {
 
   return {
     data, moduleConfigDialogRef, handleConfigModules, COMPONENT_MAP, enAbledDisplay, saveHandle,
-    toPreview
+    toPreview, modlueRefs
   }
 }
