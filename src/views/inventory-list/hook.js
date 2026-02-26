@@ -231,7 +231,8 @@ export const useInventoryList = () => {
       const rawItem = rawData[id]
       const newInfo = ret.list.find((retItem) => retItem.id === id)
       if (!newInfo) { // 产品被删除/下架
-        shopCarInstance.deleteProd(id)
+        change = true
+        shopCarInstance.deleteItem({id})
         continue
       }
       if (newInfo.upd_time) {
