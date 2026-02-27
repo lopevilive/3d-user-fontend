@@ -17,7 +17,6 @@ export const useProductManage = () => {
   const globalLoadingRef = globalLoading.getRef()
   const scrollT = ref(0)
   const listRef = ref()
-  const finished = ref(false)
 
   const total = ref(0) // 总产品数
   const limit = ref(0) // 产品上限
@@ -32,6 +31,7 @@ export const useProductManage = () => {
   const pageSize = 10
   const currPage = ref(0)
   const searchStr = ref('')
+  const finished = ref(false)
 
   const shopInfo = ref({})
   const activeTab = ref(0)
@@ -545,6 +545,7 @@ export const useProductManage = () => {
   }
   
   const activeHandle = async () => {
+    if (!inited) return
     await fetchShop(false)
     tabKey.value = Math.floor(Math.random() * 100) // 用于更新 tab分类组件
     bannerKey.value = Math.floor(Math.random() * 100)

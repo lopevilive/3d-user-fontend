@@ -47,3 +47,5 @@ class DataBridge {
 
 
 export const mulTypeInstance = new DataBridge()
+
+export const homepageInstance = new DataBridge()

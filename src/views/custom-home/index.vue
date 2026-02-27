@@ -54,7 +54,7 @@
                   :data="product"
                   :shopInfo="shopInfo || {}"
                   :isShowSort="false",
-                  :mode="1<<1"
+                  :mode="productItemMode"
                 />
               </div>
             </div>
@@ -94,7 +94,7 @@ import Setting from '@/components/setting/index.vue'
 
 const {
   data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef, viewMoreProd,
-  prodTypeClickHandle
+  prodTypeClickHandle, productItemMode
 } = useCustomHome()
 
 onActivated(() => {

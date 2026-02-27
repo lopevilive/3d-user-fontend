@@ -1,14 +1,17 @@
 import { ref, computed } from 'vue'
 import { formatType } from '@/util'
 import { globalData } from '@/store'
-import { showToast, showConfirmDialog } from 'vant';
+import { showToast } from 'vant';
 
 export const useItemProductType = (props, emits) => {
   const listDisplay = computed({
     get() {
-      return props.config?.list || []
+      let ret = props.config?.list || []
+      ret = JSON.parse(JSON.stringify(ret))
+      return ret
     },
     set(newList) {
+      console.log('update')
       emits('update:config', { ...props.config, list: newList })
     }
   })
@@ -57,10 +60,6 @@ export const useItemProductType = (props, emits) => {
 
   const deleteHandle = async (index) => {
     try {
-      // await showConfirmDialog({
-      //   title: '删除分类',
-      //   message: `确定删除【${getTypeName(listDisplay.value[index].typeId)}】?`
-      // })
       // 确认后删除对应项，splice保证Vue3响应式更新
       const newList = [...listDisplay.value]
       newList.splice(index, 1)
@@ -77,8 +76,15 @@ export const useItemProductType = (props, emits) => {
     }
   }
 
+  const updateUrl = async (val, index) => {
+    if (!val) val = ''
+    const newList = [...listDisplay.value]
+    newList[index].url = val
+    listDisplay.value = newList
+  }
+
   return {
     addHandle, productTypeSelectDialogRef, getTypeName, moveUp, moveDown, deleteHandle, listDisplay,
-    uploadImgsRefs, valid
+    uploadImgsRefs, valid, updateUrl
   }
 }

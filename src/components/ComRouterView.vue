@@ -17,6 +17,7 @@ const aliveList = computed(() => {
   const ret = ['ProductManage', 'MulManage', 'CusInventory', 'CustomHome']
   if (globalData.value.prodEditNeedAlive) ret.push('ProductEdit')
   if (globalData.value.specEditNeedAlive) ret.push('SpecEdit')
+  if (globalData.value.homeModNeedAlive) ret.push('HomeMod')
   return ret
 })
 

@@ -73,7 +73,7 @@ const props = defineProps({
   productType: {type: String, default: ''},
   isShowSort: {type: Boolean, default: true},
   shopInfo: {type: Object, default: () => {}},
-  mode: {type: Number, default: 1} // 1-默认、1<<1-固定高度、1<<2-不展示添加按钮
+  mode: {type: Number, default: 1} // 1-默认、1<<1-固定高度、1<<2-不展示添加按钮、1<<3-不跳转详情
 })
 
 const emits = defineEmits(['update','selected'])

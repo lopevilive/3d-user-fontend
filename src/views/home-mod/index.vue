@@ -55,6 +55,13 @@ const {
 
 </script>
 
+<script>
+export default {
+  name: 'HomeMod'
+}
+
+</script>
+
 <style lang="scss" scoped>
 .view-home-mod {
   padding-top: 60px; // 为顶部固定区域留出空间

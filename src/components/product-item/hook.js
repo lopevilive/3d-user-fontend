@@ -99,7 +99,7 @@ export const useProductItem = (props, emits) => {
 
   const handleClick = () => {
     const {id, desc} = props.data
-
+    if (props.mode & 1<<3) return // 这种情况不跳转
     if (globalData.value.editStatus === 1) {
       router.push({name: 'product-edit', params: {id}})
     } else {
@@ -200,7 +200,7 @@ export const useProductItem = (props, emits) => {
   }
 
   const isShowControls = computed(() => {
-    if (props.mode & 1<<1) return false
+    if (props.mode & 1<<2) return false
     return true
   })
   

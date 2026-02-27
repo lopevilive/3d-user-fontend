@@ -1,6 +1,6 @@
 import { ref, computed, defineAsyncComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { shopInfoManage, productTypesManage, commonFetch } from '@/util'
+import { shopInfoManage, productTypesManage, commonFetch, homepageInstance } from '@/util'
 import { showConfirmDialog, showToast } from 'vant'
 import { getProduct, modShopStatus } from '@/http'
 import { globalData } from '@/store'
@@ -216,7 +216,11 @@ export const useHomeMod = () => {
   }
 
   const toPreview = async () => {
-    router.push({name: 'custom-home'})
+    const pass = await validCfg()
+    if (pass !== true) return
+    homepageInstance.updateData(JSON.parse(JSON.stringify(data.value)))
+    globalData.value.homeModNeedAlive = true
+    router.push({name: 'custom-home-preview', params: {shopId}, query: route.query})
   }
   
   

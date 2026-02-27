@@ -144,6 +144,12 @@ const router = createRouter({
           name: 'custom-home',
           component: () => import('@/views/custom-home/index.vue'),
           meta: {title: '首页'}
+        },
+        {
+          path: 'custom-home-preview',
+          name: 'custom-home-preview',
+          component: () => import('@/views/custom-home-preview/index.vue'),
+          meta: {title: '首页预览'}
         }
       ]
     },

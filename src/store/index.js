@@ -81,9 +81,10 @@ export const globalData = ref({
   specEditNeedAlive: false, // 编辑规格页是否需要 alive
   homePageStatus: {}, // 用来记录是否已经展示了首页
   getFooterBarRef: () => {},
-  customHomeNeedUpdate: false
+  customHomeNeedUpdate: false,
+  homeModNeedAlive: false, // 首页配置页是否需要 alive
 })
-
+ 
 
 export * from './shopCarManage'
 
