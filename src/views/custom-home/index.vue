@@ -80,7 +80,8 @@
       <div class="empty-text">暂无首页配置</div>
     </div>
   </div>
-  <Setting />
+  <Setting v-if="pageMode === 1" />
+  <ShareFloat />
 </template>
 
 <script setup>
@@ -91,10 +92,11 @@ import { useCustomHome } from './hook'
 import { getImageUrl } from '@/util'
 import { showImagePreview } from 'vant'
 import Setting from '@/components/setting/index.vue'
+import ShareFloat from '@/components/shareFloat/index.vue'
 
 const {
   data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef, viewMoreProd,
-  prodTypeClickHandle, productItemMode
+  prodTypeClickHandle, productItemMode, pageMode
 } = useCustomHome()
 
 onActivated(() => {

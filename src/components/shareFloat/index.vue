@@ -1,6 +1,6 @@
 <template>
   <VanFloatingBubble
-    class="share-float"
+    class="com-share-float"
     axis="xy"
     magnetic="x"
     :gap="gap"
@@ -57,7 +57,7 @@ init()
 </script>
 
 <style lang="scss">
-.share-float {
+.com-share-float {
   width: 30px;
   height: 30px;
   opacity: .8;

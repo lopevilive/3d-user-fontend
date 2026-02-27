@@ -146,6 +146,6 @@ export const useCustomHome = () => {
 
   return {
     data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef, viewMoreProd,
-    prodTypeClickHandle, productItemMode
+    prodTypeClickHandle, productItemMode, pageMode
   }
 }
