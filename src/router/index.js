@@ -364,7 +364,6 @@ const init = async (to, from) => {
   // 这里是把当前页面信息传给小程序
   wx.miniProgram.postMessage({ data: {type: 'router', name: to.name}})
   document.title = to?.query?.title || to?.meta?.title || '小果图册'
-  console.log(document.title)
 }
 
 router.beforeEach(async (to, from) => {
