@@ -253,8 +253,8 @@ const handleHomePage = async (to, from) => {
     return true
   }
   if (!shopId) return true
-  let shopInfo = await shopInfoManage.getData(shopId)
-  let {homePageCfg} = shopInfo[0] || '{}'
+  let shopInfo = await shopInfoManage.getData(shopId);
+  let homePageCfg = shopInfo[0]?.homePageCfg ? shopInfo[0]?.homePageCfg : '{}';
   homePageCfg = JSON.parse(homePageCfg)
   if (!homePageCfg) return true
   if (to.name === 'custom-home') {
