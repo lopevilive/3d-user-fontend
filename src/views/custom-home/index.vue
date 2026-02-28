@@ -53,7 +53,7 @@
                   :key="product.id"
                   :data="product"
                   :shopInfo="shopInfo || {}"
-                  :isShowSort="false",
+                  :isShowSort="false"
                   :mode="productItemMode"
                 />
               </div>
