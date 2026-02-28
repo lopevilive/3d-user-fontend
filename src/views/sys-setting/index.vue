@@ -66,7 +66,13 @@
     
     <!-- 隐私设置 -->
     <van-cell-group inset title="隐私设置">
-      <VanCell title="图片水印自动添加" class="cell__switch cell-label-width-200">
+      <VanCell class="cell__switch cell-label-width-200">
+        <template #title>
+          <div class="vip-item">
+            <div>图片水印自动添加</div>
+            <VanIcon name="gem-o" />
+          </div>
+        </template>
         <template #label>
           <CellLabel txt="新上传图片自动添加水印"
             :url="[
@@ -80,7 +86,13 @@
         </template>
       </VanCell>
       <VanCell title="水印样式管理" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
-      <VanCell title="分享权限控制" class="cell-label-width-200" label="开启后，仅管理员可分享图册" v-if="isShowForward">
+      <VanCell class="cell-label-width-200" label="开启后，仅管理员可分享图册" v-if="isShowForward">
+        <template #title>
+          <div class="vip-item">
+            <div>分享权限控制</div>
+            <VanIcon name="gem-o" />
+          </div>
+        </template>
         <template #value>
           <VanSwitch v-model="isForwardPermi"/>
         </template>
