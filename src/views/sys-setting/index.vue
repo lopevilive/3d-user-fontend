@@ -30,7 +30,7 @@
     </van-cell-group>
     
     <van-cell-group inset title="图册设置">
-      <VanCell title="首页装修" class="cell-label-width-200" is-link @click="toHomeMod">
+      <VanCell title="首页装修" class="cell-label-width-200" is-link @click="toHomeMod" v-if="isShowHomeMod">
 
       </VanCell>
       <VanCell title="产品页轮播图展示"  class="cell-label-width-200">
@@ -137,7 +137,7 @@ const {
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
   isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-  toHomeMod
+  toHomeMod, isShowHomeMod
 } = useSysSetting()
 
 init()

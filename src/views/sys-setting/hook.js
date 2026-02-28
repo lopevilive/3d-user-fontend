@@ -320,6 +320,12 @@ export const useSysSetting = () => {
     initShopInfo()
   }
   
+  const isShowHomeMod = computed(() => {
+    const {rid} = globalData.value
+    if (rid === 99) return true
+    return false
+  })
+  
   const init = async () => {
     const {rid} = globalData.value
     // if (![2,3,99].includes(rid)) {
@@ -335,7 +341,7 @@ export const useSysSetting = () => {
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
     isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-    toHomeMod
+    toHomeMod, isShowHomeMod
   }
 
 }
