@@ -14,6 +14,7 @@
                 <template #input>
                   <UploadImgs
                     :modelValue="item.url"
+                    :noWatermark="1"
                     @update:modelValue="(val) => {
                       updateUrl(val, index)
                     }"

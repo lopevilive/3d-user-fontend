@@ -1,12 +1,13 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { productTypesDel } from '@/http'
-import { commonFetch, productTypesManage } from '@/util'
+import { commonFetch, productTypesManage, shopInfoManage } from '@/util'
 import { showConfirmDialog } from 'vant';
 import { globalData} from '@/store'
 
 export const useTypeManage = () => {
   const route = useRoute()
+  const shopId= +route.params.shopId
 
   const displayTypes = computed(() => {
     let ret = []
@@ -19,7 +20,7 @@ export const useTypeManage = () => {
   const activeNames = ref([])
 
   const dialogEditRef = ref()
-  const shopId= +route.params.shopId
+  
   const currmodItem = ref()
 
   const delHandle = async () => {
@@ -31,6 +32,7 @@ export const useTypeManage = () => {
       await commonFetch(productTypesDel, {id: currmodItem.value.id, shopId})
       globalData.value._productTypes[shopId].done = false
       productTypesManage.dirty(shopId)
+      shopInfoManage.dirty(shopId)
     } catch (error) {}
   }
 

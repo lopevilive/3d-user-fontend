@@ -8,7 +8,7 @@
             ({{ urlLen }}/{{ MAX_UPLOAD_COUNT }})
           </template>
           <template #input>
-            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" ref="uploadImgsRef" />
+            <UploadImgs :maxCount="MAX_UPLOAD_COUNT" v-model="displayUrl" ref="uploadImgsRef" :noWatermark="1"/>
           </template>
         </VanField>
         <VanField label="内容高度" readonly is-link @click="isShowScale = true" v-model="scaleTxt" :border="false" />

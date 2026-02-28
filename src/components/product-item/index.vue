@@ -135,6 +135,9 @@ const {
   }
   .img-fixed-height {
     height: 175px;
+    .van-image {
+      height: 100%;
+    }
   }
   .desc {
     line-height: 20px;

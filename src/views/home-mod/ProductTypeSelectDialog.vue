@@ -8,7 +8,7 @@
       </ProdTypeSelect>
       <VanField label="分类 logo" :border="false">
         <template #input>
-          <UploadImgs v-model="url" ref="uploadImgsRef" />
+          <UploadImgs v-model="url" ref="uploadImgsRef" :noWatermark="1" />
         </template>
       </VanField>
     </div>
