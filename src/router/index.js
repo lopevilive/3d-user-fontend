@@ -250,22 +250,22 @@ const handleHomePage = async (to, from) => {
   let { toDetial } = to.query
   if (toDetial || from.name === 'custom-home') { // 这种情况不需要再跳转自定义首页
     globalData.value.homePageStatus[shopId] = true
-    return true
+    return
   }
-  if (!shopId) return true
+  if (!shopId) return
   let shopInfo = await shopInfoManage.getData(shopId);
   let homePageCfg = shopInfo[0]?.homePageCfg ? shopInfo[0]?.homePageCfg : '{}';
   homePageCfg = JSON.parse(homePageCfg)
-  if (!homePageCfg) return true
+  if (!homePageCfg) return
   if (to.name === 'custom-home') {
     if (homePageCfg?.isEnabled !== 1) { // 没有启用，这个时候重定向到产品列表
       return {name : 'product-manage', params: {shopId}, query: to.query}
     }
   }
   shopId = Number(shopId)
-  if (to.name !== 'product-manage') return true
-  if (globalData.value.homePageStatus[shopId]) return true // 已经展示过首页了
-  if (homePageCfg?.isEnabled !== 1) return true
+  if (to.name !== 'product-manage') return
+  if (globalData.value.homePageStatus[shopId]) return // 已经展示过首页了
+  if (homePageCfg?.isEnabled !== 1) return
   globalData.value.homePageStatus[shopId] = true
   return {name: 'custom-home', params: {shopId}, query: to.query}
 }
@@ -364,6 +364,7 @@ const init = async (to, from) => {
   // 这里是把当前页面信息传给小程序
   wx.miniProgram.postMessage({ data: {type: 'router', name: to.name}})
   document.title = to?.query?.title || to?.meta?.title || '小果图册'
+  console.log(document.title)
 }
 
 router.beforeEach(async (to, from) => {
