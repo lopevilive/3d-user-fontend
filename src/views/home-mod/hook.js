@@ -167,14 +167,14 @@ export const useHomeMod = () => {
     }
     
     // 检查 ItemCustomProduct 模块是否至少选择了一个产品
-    const customProductModule = enabledModules.find(item => item.comName === 'ItemCustomProduct')
-    if (customProductModule) {
-      const productList = customProductModule.info.list || []
-      if (productList.length === 0) {
-        showToast('产品模块至少需要选择一个产品')
-        return false
-      }
-    }
+    // const customProductModule = enabledModules.find(item => item.comName === 'ItemCustomProduct')
+    // if (customProductModule) {
+    //   const productList = customProductModule.info.list || []
+    //   if (productList.length === 0) {
+    //     showToast('产品模块至少需要选择一个产品')
+    //     return false
+    //   }
+    // }
     
     // 检查 ItemHomeDesc 模块是否至少上传了1张图片
     const homeDescModule = enabledModules.find(item => item.comName === 'ItemHomeDesc')
@@ -269,11 +269,11 @@ export const useHomeMod = () => {
         }
       }
       const prodRes = await commonFetch(getProduct, {shopId, pageSize: 4, currPage: 0, status: 0})
+      const prodCfg = data.value.cfg.find((item) => item.comName === 'ItemCustomProduct')
       if (prodRes?.list?.length) {
-         const prodCfg = data.value.cfg.find((item) => item.comName === 'ItemCustomProduct')
-         for (const item of prodRes.list) {
+        for (const item of prodRes.list) {
           prodCfg.info.list.push({id: item.id})
-         }
+        }
       }
     }
   }

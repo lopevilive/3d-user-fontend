@@ -17,7 +17,7 @@
             />
           </div>
           <!-- 产品分类模块 -->
-          <div v-if="item.comName === 'ItemProductType'" class="product-type-wrap cfg-item">
+          <div v-if="item.comName === 'ItemProductType' && item.info.list && item.info.list.length" class="product-type-wrap cfg-item">
             <div
               class="type-grid"
               :class="{
@@ -42,7 +42,7 @@
             </div>
           </div>
           <!-- 自定义产品模块 -->
-          <div v-if="item.comName === 'ItemCustomProduct'" class="custom-product-wrap cfg-item">
+          <div v-if="item.comName === 'ItemCustomProduct' && data.customProducts && data.customProducts.length" class="custom-product-wrap cfg-item">
             <div class="tit-wrap">
               <div class="tit">精选推荐</div>
               <div class="view-more" @click="viewMoreProd">查看更多<VanIcon name="arrow" /></div>

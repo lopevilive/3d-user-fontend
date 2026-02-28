@@ -256,15 +256,16 @@ const handleHomePage = async (to, from) => {
   let shopInfo = await shopInfoManage.getData(shopId)
   let {homePageCfg} = shopInfo[0] || '{}'
   homePageCfg = JSON.parse(homePageCfg)
+  if (!homePageCfg) return true
   if (to.name === 'custom-home') {
-    if (homePageCfg.isEnabled !== 1) { // 没有启用，这个时候重定向到产品列表
+    if (homePageCfg?.isEnabled !== 1) { // 没有启用，这个时候重定向到产品列表
       return {name : 'product-manage', params: {shopId}, query: to.query}
     }
   }
   shopId = Number(shopId)
   if (to.name !== 'product-manage') return true
   if (globalData.value.homePageStatus[shopId]) return true // 已经展示过首页了
-  if (homePageCfg.isEnabled !== 1) return true
+  if (homePageCfg?.isEnabled !== 1) return true
   globalData.value.homePageStatus[shopId] = true
   return {name: 'custom-home', params: {shopId}, query: to.query}
 }
