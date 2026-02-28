@@ -545,8 +545,9 @@ export const useProductManage = () => {
   }
   
   const activeHandle = async () => {
-    if (!inited) return
-    await fetchShop(false)
+    if (inited) {
+      await fetchShop(false)
+    }
     tabKey.value = Math.floor(Math.random() * 100) // 用于更新 tab分类组件
     bannerKey.value = Math.floor(Math.random() * 100)
     if (scrollT.value) { // 这里让页面滚动到上次的位置
