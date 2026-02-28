@@ -30,8 +30,15 @@
     </van-cell-group>
     
     <van-cell-group inset title="图册设置">
-      <VanCell title="首页装修" class="cell-label-width-200" is-link @click="toHomeMod" v-if="isShowHomeMod">
-
+      <VanCell title="首页装修" class="cell-label-width-200">
+        <template #label>
+          <CellLabel txt="自定义首页装饰" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_d9807f1555596ac74f201e1253c12b68.png?imageMogr2/quality/40`]" />
+        </template>
+        <template #value>
+          <div @click="toHomeMod">
+            <VanIcon name="arrow" />
+          </div>
+        </template>
       </VanCell>
       <VanCell title="产品页轮播图展示"  class="cell-label-width-200">
         <template #label>
@@ -137,7 +144,7 @@ const {
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
   isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-  toHomeMod, isShowHomeMod
+  toHomeMod
 } = useSysSetting()
 
 init()
