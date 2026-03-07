@@ -189,6 +189,12 @@ export const useProductDetial = () => {
     return ret
   })
   
+  const isShowNewSwipe = computed(() => {
+    const {rid} = globalData.value
+    if (rid === 99) return true
+    return false
+  })
+  
   const init = async () => {
     if (!productId) return
     const data = await commonFetch(getProduct, {productId})
@@ -203,6 +209,6 @@ export const useProductDetial = () => {
   return {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-    viewSpecDetialHandle, descUrlDisplay, displayType
+    viewSpecDetialHandle, descUrlDisplay, displayType, isShowNewSwipe
   }
 }

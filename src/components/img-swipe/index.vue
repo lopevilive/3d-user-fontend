@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getImageUrl, getFlexW, isVip, shopInfoManage, E_img_qua_map } from '@/util'
+import { getImageUrl, getFlexW, shopInfoManage, E_img_qua_map } from '@/util'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
 import { useRoute } from 'vue-router'
@@ -50,10 +50,6 @@ const getUrl = (url) => {
 const displayPreviewList = computed(() => {
   let ret = []
   for (const item of props.list) {
-    // if (shopInfo.value && isVip(shopInfo.value)) {
-    //   ret.push(getImageUrl(item, 95))
-    //   continue
-    // }
     ret.push(getUrl(item))
   }
   return ret

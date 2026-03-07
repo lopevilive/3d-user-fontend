@@ -4,7 +4,12 @@
       产品已下架～
     </div>
     <div class="swipe-wrap">
-      <ImgSwipe :list="imgList" />
+      <template v-if="isShowNewSwipe">
+        <ImgSwipeV2 :list="imgList" />
+      </template>
+      <template v-else>
+        <ImgSwipe :list="imgList" />
+      </template>
       <!-- <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/> -->
     </div>
     <div class="content">
@@ -77,6 +82,7 @@ import { onMounted } from 'vue'
 import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipe from '@/components/img-swipe/index.vue'
+import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
 import { getImageUrl } from '@/util'
 import { showImagePreview } from 'vant';
@@ -84,7 +90,7 @@ import { showImagePreview } from 'vant';
 const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-  viewSpecDetialHandle, descUrlDisplay, displayType
+  viewSpecDetialHandle, descUrlDisplay, displayType, isShowNewSwipe
 } = useProductDetial()
 
 onMounted(init)
