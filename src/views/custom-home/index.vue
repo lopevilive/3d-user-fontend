@@ -8,7 +8,7 @@
         <template v-if="item.status === 1">
           <!-- 轮播图模块 -->
           <div v-if="item.comName === 'ItemBanner'" class="banner-wrap cfg-item">
-            <ImgSwipe
+            <ImgSwipeV2
               :mode="2"
               :list="getBannerList(item.info.url)"
               :scale="item.info.scale"
@@ -86,7 +86,7 @@
 
 <script setup>
 import { onActivated } from 'vue'
-import ImgSwipe from '@/components/img-swipe/index.vue'
+import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import ProductItem from '@/components/product-item/index.vue'
 import { useCustomHome } from './hook'
 import { getImageUrl } from '@/util'

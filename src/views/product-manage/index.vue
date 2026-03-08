@@ -38,7 +38,7 @@
       </div>
       <div class="wrap">
         <div class="list" @scroll="scrollHandle" ref="listRef">
-          <ImgSwipe
+          <ImgSwipeV2
             v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale"
             :autoplay="3000" :width="typeMod === 1 ? 285 : 375"
             :key="bannerKey"
@@ -117,7 +117,7 @@ import ShareFloat from '@/components/shareFloat/index.vue'
 import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import SortControl from '@/components/sort-control/index.vue'
-import ImgSwipe from '@/components/img-swipe/index.vue'
+import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import TypePop from './TypePop.vue'
 import LeftTypeMod from './LeftTypeMod.vue'
 import ExpiredTips from './ExpiredTips.vue'

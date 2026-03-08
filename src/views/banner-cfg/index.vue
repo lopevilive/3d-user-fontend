@@ -4,7 +4,7 @@
       <div class="no-img" v-if="!data.url">
         暂无内容~
       </div>
-      <ImgSwipe v-else :list="imgList" :scale="data.scale" :mode="2" :autoplay="3000"/>
+      <ImgSwipeV2 v-else :list="imgList" :scale="data.scale" :mode="2" :autoplay="3000"/>
     </div>
     <VanField >
       <template #label>
@@ -30,7 +30,7 @@ import UploadImgs from '@/components/uploadImgs/index.vue'
 import FormLabel from '@/components/form-label/index.vue'
 import Select from '@/components/select/index.vue'
 import { shopInfoManage, commonFetch } from '@/util'
-import ImgSwipe from '@/components/img-swipe/index.vue'
+import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import { showToast } from 'vant'
 import { modShopStatus } from '@/http'
 

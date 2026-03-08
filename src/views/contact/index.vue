@@ -1,6 +1,6 @@
 <template>
   <div class="view-contact" v-if="!loading">
-    <ImgSwipe :list="imgList" :mode="2"/>
+    <ImgSwipeV2 :list="imgList" :mode="2"/>
     <VanCellGroup>
       <VanCell :title="shopInfo.name" :label="shopInfo.desc"></VanCell>
       <VanCell v-if="isShowAddress" title="联系地址" :label="addressDisplay">
@@ -30,7 +30,7 @@
 
 <script setup>
 import {useContact} from './hook'
-import ImgSwipe from '@/components/img-swipe/index.vue'
+import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import Setting from '@/components/setting/index.vue'
 import {globalLoading, copyStr} from '@/util'
 
