@@ -68,7 +68,7 @@
                   v-for="(img, imgIndex) in getBannerList(item.info.url)"
                   :key="imgIndex"
                   :src="getImageUrl(img)"
-                  @click="showImagePreview([img])"
+                  @click="showImagePreview([getImageUrl(img)])"
                 />
               </div>
             </template>
