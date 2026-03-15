@@ -26,6 +26,7 @@
     </VanCellGroup>
     <Setting />
   </div>
+  <ShareFloat/>
 </template>
 
 <script setup>
@@ -33,6 +34,7 @@ import {useContact} from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import Setting from '@/components/setting/index.vue'
 import {globalLoading, copyStr} from '@/util'
+import ShareFloat from '@/components/shareFloat/index.vue'
 
 const {
   shopInfo,

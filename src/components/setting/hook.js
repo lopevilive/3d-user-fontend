@@ -13,7 +13,9 @@ export const useSetting = (props, emits) => {
   const productId = + route.params.id
   const actionsSheetRef = ref()
   const gap = getFlexW(24)
-  const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.8});
+  let num = 2
+  const y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
+  const offset = ref({ x: getFlexW(375 - 24 - 30), y});
 
   const acProdMod = () => {
     if (route.name !== 'product-manage') {
@@ -155,7 +157,7 @@ export const useSetting = (props, emits) => {
       {name: '删除产品', color: '#ee0a24', icon: 'delete-o', action: acProdDel, includes: ['product-detial']},
     ],
     [
-      {name: '分享图册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact', 'custom-home']},
+      // {name: '分享图册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact', 'custom-home']},
       {name: '客户清单', color: '#5794f7', icon: 'orders-o', action: acToCusInventory , includes: ['product-manage', 'contact', 'custom-home']},
       {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'contact', 'custom-home']},
     ],

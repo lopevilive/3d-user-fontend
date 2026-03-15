@@ -25,7 +25,9 @@ const route = useRoute()
 const shopId = +route.params.shopId
 
 const gap = getFlexW(24)
-const offset = ref({ x: getFlexW(375 - 24 - 30), y: window.innerHeight * 0.6});
+let num = 1
+const y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
+const offset = ref({ x: getFlexW(375 - 24 - 30), y});
 
 const shopInfo = ref({})
 
@@ -43,7 +45,9 @@ const clickHandle = async () => {
 
 const isShow = computed(() => {
   if (shopInfo.value.forwardPermi === 1) return false
+  if (globalData.value.editStatus === 1) return false
   if ([0,1,10].includes(globalData.value.rid)) return true
+  if ([2,3,99].includes(globalData.value.rid)) return true
   return false
 })
 
