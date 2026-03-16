@@ -32,23 +32,23 @@ const offset = ref({ x: getFlexW(375 - 24 - 30), y});
 const shopInfo = ref({})
 
 const clickHandle = async () => {
-  const {name, url, desc} = shopInfo.value
+  const {name, url, desc, forwardPermi} = shopInfo.value
   toSharePage({
     src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
     url: url?.split(',')?.[0] || '',
     title: name,
     desc1: [desc || ''],
     desc2: [],
-    scene: {name: 'product-manage', shopId}
+    scene: {name: 'product-manage', shopId},
+    forwardPermi
   })
 }
 
 const isShow = computed(() => {
+  const {rid} = globalData.value
+  if ([2,3,99].includes(rid)) return true
   if (shopInfo.value.forwardPermi === 1) return false
-  if (globalData.value.editStatus === 1) return false
-  if ([0,1,10].includes(globalData.value.rid)) return true
-  if ([2,3,99].includes(globalData.value.rid)) return true
-  return false
+  return true
 })
 
 const init = async () => {

@@ -61,14 +61,15 @@ export const useProductDetial = () => {
   })
 
   const shareHandle = async () => {
-    const {name} = shopInfo.value
+    const {name, forwardPermi} = shopInfo.value
     toSharePage({
       src_path: `/product-manage/${shopId}?toDetial=${info.value.id}&title=${encodeURIComponent(info.value.desc)}&imageUrl=${encodeURIComponent(getImageUrl(info.value.url.split(',')[0]))}`,
       url: info.value.url?.split(',')?.[0] || '',
       title: name,
       desc1: [info.value.desc],
       desc2: [],
-      scene: { name: 'product-detial', shopId, id: info.value.id }
+      scene: { name: 'product-detial', shopId, id: info.value.id },
+      forwardPermi
     })
     
   }
