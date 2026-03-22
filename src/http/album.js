@@ -153,3 +153,8 @@ export const reportCgi = (payload) => {
 export const textImgCheck = (payload) => {
   return post(`${album}TextImgCheck`, payload)
 }
+
+export const exportInventoryV3 = (payload) => {
+  return post(`${album}ExportInventoryV3`, payload)
+}
+
