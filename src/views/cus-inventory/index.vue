@@ -58,7 +58,7 @@
           <div class="selected-nums">已选 {{ selectedItems.size }}/{{ dataList.length }} 项</div>
         </div>
         <div class="mul-action-right">
-          <VanButton text="批量导出" size="mini" v-if="isShowBatchExport" @click="batchExportHandle"/>
+          <VanButton text="批量导出" size="mini" @click="batchExportHandle"/>
           <VanButton text="批量完成" type="success" size="mini" v-if="isShowBatchFinish" @click="batchFinishHandle"/>
           <VanButton text="批量取消" type="warning" size="mini" v-if="isShowBatchCancel" @click="batchCancelHandle"/>
         </div>
@@ -92,8 +92,8 @@ import DatePicker from '@/components/date-picker/index.vue'
 const {
   init, active, dataList, cancelHandle, finishHandle, scrollHandle, listRef, activeHandle, timeS,
   timeE, keyword, tabOptions,statusDisplay, showStatusSelect, searchHandle, resetHandle, isMulEdit,
-  mulHandle, selectedItems, selectAll, handleItemSelect, isShowBatchExport, isShowBatchFinish, 
-  isShowBatchCancel, batchFinishHandle, batchCancelHandle, batchExportHandle
+  mulHandle, selectedItems, selectAll, handleItemSelect, isShowBatchFinish, isShowBatchCancel,
+  batchFinishHandle, batchCancelHandle, batchExportHandle
 } = useCusInventory()
 
 init()

@@ -192,12 +192,6 @@ export const useCusInventory = () => {
     }
   }
 
-  const isShowBatchExport = computed(() => {
-    if (['release'].includes(globalData.value.wxEnv)) return false
-    if (selectedItems.value.size > 0) return true
-    return false
-  })
-
   const isShowBatchFinish = computed(() => {
     if (selectedItems.value.size > 0) return true
     return false
@@ -238,6 +232,10 @@ export const useCusInventory = () => {
   
   const batchExportHandle = async () => {
     const ids = Array.from(selectedItems.value)
+    if (ids.length > 10) {
+      showToast('最多批量导出 10 个清单')
+      return
+    }
     const ret = await commonFetch(exportInventoryV3, {id: ids, shopId})
     const payloadStr = encodeURIComponent(JSON.stringify(ret))
     wx.miniProgram.navigateTo({
@@ -254,7 +252,7 @@ export const useCusInventory = () => {
   return {
     init, active, dataList, cancelHandle, finishHandle, scrollHandle, listRef, activeHandle, timeS,
     timeE, keyword, tabOptions,statusDisplay, showStatusSelect, searchHandle, resetHandle, isMulEdit,
-    mulHandle, selectedItems, selectAll, handleItemSelect, isShowBatchExport, isShowBatchFinish,
-    isShowBatchCancel, batchFinishHandle, batchCancelHandle, batchExportHandle
+    mulHandle, selectedItems, selectAll, handleItemSelect, isShowBatchFinish, isShowBatchCancel,
+    batchFinishHandle, batchCancelHandle, batchExportHandle
   }
 }
