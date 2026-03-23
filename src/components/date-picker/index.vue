@@ -19,7 +19,7 @@ import dayjs from 'dayjs'
 
 const props = defineProps({
   modelValue: {type: String, default: ''},
-  minDate: {type: Object, default: () => new Date([2024, 1, 1])},
+  minDate: {type: Object, default: () => dayjs('2024-01-01').toDate()},
   maxDate: {type: Object, default: () => new Date()}
 })
 
@@ -39,20 +39,17 @@ const dateDisplay = computed({
 const dataValue = computed(() => {
   let t = Number(props.modelValue)
   if (!t) t = dayjs().valueOf()
-  const y = dayjs(t).year()
-  const m = dayjs(t).month() + 1
-  const d = dayjs(t).date()
-  return [y, m, d]
+  return dayjs(t).format('YYYY-MM-DD').split('-')
 })
 
 const cancelHandle = () => {
   isShow.value = false
 }
 
-const confirmHandle = ({selectedValues}) => {
-  const [y, m, d] = selectedValues
-  const date = new Date(y, m - 1, d)
-  const time = date.getTime()
+const confirmHandle = ({ selectedValues }) => {
+  // selectedValues 通常是 ['2024', '01', '01']
+  const dateStr = selectedValues.join('-') // 拼接成 "2024-01-01"
+  const time = dayjs(dateStr).valueOf()    // 获取毫秒级时间戳
   emits('update:modelValue', String(time))
   isShow.value = false
 }

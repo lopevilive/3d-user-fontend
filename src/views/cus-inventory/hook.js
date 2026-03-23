@@ -4,6 +4,7 @@ import { getCusInventory, modInventoryStatus, getInventory, exportInventoryV3 } 
 import { commonFetch } from '@/util'
 import { showConfirmDialog, showToast } from 'vant';
 import { globalData } from '@/store';
+import dayjs from 'dayjs'
 
 
 export const useCusInventory = () => {
@@ -58,24 +59,24 @@ export const useCusInventory = () => {
   })
 
   const getPayload = () => {
-    const ret = {shopId, pageSize, currPage: currPage.value}
+    const ret = { shopId, pageSize, currPage: currPage.value }
     if (active.value === 2) ret.status = 0
     if (active.value === 3) ret.status = 1
     if (active.value === 4) ret.status = 2
+    
     let str = keyword.value.replace(/\s/g, '');
     if (str) ret.keyword = str
+
+    // 使用 dayjs 改造开始时间：设为当天 00:00:00 并转为秒级时间戳
     if (timeS.value) {
-      const date = new Date(Number(timeS.value))
-      date.setHours(0, 0, 0, 0)
-      ret.timeS = Math.floor(date.getTime() / 1000)
-    }
-    if (timeE.value) {
-      const date = new Date(Number(timeE.value))
-      date.setHours(23, 59, 59, 999)
-      ret.timeE = Math.floor(date.getTime() / 1000)
+      ret.timeS = dayjs(Number(timeS.value)).startOf('day').unix()
     }
 
-    // 校验时间范围
+    // 使用 dayjs 改造结束时间：设为当天 23:59:59 并转为秒级时间戳
+    if (timeE.value) {
+      ret.timeE = dayjs(Number(timeE.value)).endOf('day').unix()
+    }
+
     if (ret.timeS && ret.timeE && ret.timeE <= ret.timeS) {
       throw new Error('结束时间必须大于开始时间')
     }
