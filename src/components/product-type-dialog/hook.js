@@ -7,7 +7,7 @@ import { globalData } from '@/store'
 
 export const useDialogEdit = (emits) => {
   const route = useRoute()
-  const {shopId} = route.params
+  const shopId = +route.params.shopId
   const MaxNums = 5
   
   const isShow = ref(false)
@@ -29,6 +29,13 @@ export const useDialogEdit = (emits) => {
     if (parentId.value) return '新增二级分类'
     if (data.value.id) return '编辑分类'
     return '新增分类'
+  })
+
+  const maxLen = computed(() => {
+    if ([5, 2312].includes(shopId)) {
+      return 30
+    }
+    return 10
   })
 
   const getData = () => {
@@ -94,13 +101,6 @@ export const useDialogEdit = (emits) => {
   }
 
   return {
-    show,
-    isShow,
-    data,
-    tit,
-    beforeClose,
-    isMul,
-    dataList,
-    MaxNums
+    show, isShow, data, tit, beforeClose, isMul, dataList, MaxNums, maxLen
   }
 }

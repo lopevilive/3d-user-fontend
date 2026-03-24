@@ -8,11 +8,11 @@
         placeholder="请输入名称"
         v-model="item.name"
         :key="index + 1"
-        :maxlength="8"
+        :maxlength="maxLen"
       />
       <div class="type-mod-dialog__tips">注：单次可新增 {{ MaxNums }} 个分类</div>
     </template>
-    <VanField v-else placeholder="请输入分类名称" v-model="data.name" :maxlength="8" input-align="center"/>
+    <VanField v-else placeholder="请输入分类名称" v-model="data.name" :maxlength="maxLen" input-align="center"/>
   </VanDialog>
 </template>
 
@@ -22,14 +22,7 @@ import {useDialogEdit} from './hook'
 const emits = defineEmits(['update'])
 
 const {
-  show,
-  isShow,
-  tit,
-  data,
-  beforeClose,
-  isMul,
-  dataList,
-  MaxNums
+  show, isShow, tit, data, beforeClose, isMul, dataList, MaxNums, maxLen
 } = useDialogEdit(emits)
 
 defineExpose({show})
