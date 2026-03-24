@@ -67,7 +67,8 @@
         </div>
       </div>
       <div class="right-content">
-        <VanButton text="转发清单" type="primary" icon="share-o" @click="toShare"/>
+        <VanButton text="导出"  type="default" size="small" class="export-btn" v-if="isShowExport" @click="exportHandle"/>
+        <VanButton text="转发清单" type="primary" icon="share-o" size="small" @click="toShare"/>
       </div>
      </div>
   </div>
@@ -79,7 +80,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { toSharePage, shopInfoManage, commonFetch, copyStr } from '@/util'
-import { getInventory, modInventoryStatus } from '@/http'
+import { getInventory, modInventoryStatus, exportInventoryV3 } from '@/http'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { globalData } from '@/store'
@@ -93,38 +94,27 @@ const shopId = +route.params.shopId
 
 const info = ref({})
 const dataList = ref([])
-
-const getExportStatus = (shopInfo) => {
-  if ([2,3,99].includes(globalData.value.rid)) return ''
-  if (shopInfo.inveExportStatus === 1) return '1'
-  if (shopInfo.forwardPermi === 1) return '1'
-  return ''
-}
+const shopInfo = ref({})
 
 const toShare = async () => {
   let src_path = route.fullPath
   src_path = src_path.replace(/(&)?toShare=1/, '')
-  let shopInfo = await shopInfoManage.getData(shopId)
-  shopInfo = shopInfo[0]
   toSharePage({
     src_path,
-    url: shopInfo?.url?.split(',')?.[0] || '',
+    url: shopInfo.value?.url?.split(',')?.[0] || '',
     title: '购物清单',
-    desc1: [shopInfo?.name || ''],
+    desc1: [shopInfo.value?.name || ''],
     desc2: [displayTime.value],
     scene: { name: 'view-inventory', shopId, id},
-    inventoryId: id,
-    noExport: getExportStatus(shopInfo)
+    // inventoryId: id,
   })
 }
 
 const getInventoryData = async () => {
   let ret = await commonFetch(getInventory, {id})
-  let shopInfo = await shopInfoManage.getData(shopId)
-  shopInfo = shopInfo[0]
   ret = ret?.[0]
   if (!ret) return false // 清单不存在了
-  if (shopInfo.forwardPermi === 1) { // 限制转发图册的时候，只有创建者或者管理员能打开清单
+  if (shopInfo.value.forwardPermi === 1) { // 限制转发图册的时候，只有创建者或者管理员能打开清单
     const {rid, userInfo: {userId}} = globalData.value
     if (![2,3,99].includes(rid)) { // 非管理员
       if (ret.userId !== userId) { // 不是本人打开清单
@@ -167,7 +157,22 @@ const goDetial = (id) => {
   router.push({name: 'product-detial', params: {id}})
 }
 
+const isShowExport = computed(() => {
+  if ([2,3,99].includes(globalData.value.rid)) return true
+  if (shopInfo.value.inveExportStatus === 1) return false
+  if (shopInfo.value.forwardPermi === 1) return false
+  return true
+})
+
+const exportHandle = async () => {
+  const ret = await commonFetch(exportInventoryV3, {id: [id], shopId})
+  const payloadStr = encodeURIComponent(JSON.stringify(ret))
+  wx.miniProgram.navigateTo({ url:`../download-page/downloadPage?payload=${payloadStr}`})
+}
+
 const init = async () => {
+  const info = await shopInfoManage.getData(shopId)
+  if (info.length) shopInfo.value = info[0]
   const ret = await getInventoryData()
   if (ret === false) {
     router.replace({name: 'home'})
@@ -302,8 +307,12 @@ init()
     }
     .right-content {
       flex-shrink: 0;
+      .export-btn {
+        min-width: 60px;
+      }
       .van-button {
         margin-left: 5px;
+        min-height: 36px;
       }
     }
   }

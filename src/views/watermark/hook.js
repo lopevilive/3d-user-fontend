@@ -160,18 +160,38 @@ export const useWaterMark = () => {
     // }
   }
   
-  const saveHandle = async() => {
+  const saveHandle = async () => {
     const { type, image } = watermarkCfg.value
     const payload = formatWatermarkPayload(watermarkCfg.value, shopId)
     if (type === 1 && !image) {
       showFailToast('请上传图片水印')
       return
     }
+    await showConfirmDialog({
+      title: '确认保存水印配置？',
+      message: '温馨提示：水印仅对【新上传】的图片生效，不会影响已有的历史图片。',
+      confirmButtonText: '确认保存',
+      cancelButtonText: '取消'
+    })
+
+    // 3. 用户点击确认后才执行保存
     await commonFetch(saveWatermarkCfg, payload, '保存成功～')
     watermarkManage.dirty(shopId)
     router.go(-1)
 
   }
+  
+  // const saveHandle = async() => {
+  //   const { type, image } = watermarkCfg.value
+  //   const payload = formatWatermarkPayload(watermarkCfg.value, shopId)
+  //   if (type === 1 && !image) {
+  //     showFailToast('请上传图片水印')
+  //     return
+  //   }
+  //   await commonFetch(saveWatermarkCfg, payload, '保存成功～')
+  //   watermarkManage.dirty(shopId)
+  //   router.go(-1)
+  // }
   
   const handlePreview = () => {
     if (!watermarkCfg.value.previewUrl) return

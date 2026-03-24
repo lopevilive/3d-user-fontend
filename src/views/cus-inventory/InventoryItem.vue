@@ -31,7 +31,8 @@
       <div class="order-bottom">
         <div class="time">{{ dayjs(data.add_time * 1000).format('YYYY/MM/DD HH:mm') }}</div>
         <div class="btn-wrap" v-if="!isMul">
-          <VanButton v-if="[0,1].includes(data.status)" text="取消清单" size="small" @click="cancelHandle" type="default"/>
+          <VanButton v-if="[0,1].includes(data.status)" text="导出"  class="export-btn" size="small" @click="exportHandle" type="default" />
+          <VanButton v-if="[0,1].includes(data.status)" text="取消清单" size="small" @click="cancelHandle" type="warning"/>
           <VanButton v-if="[0,2].includes(data.status)" text="完成清单" size="small" @click="finishHandle" type="success"/>
         </div>
       </div>
@@ -51,7 +52,7 @@ const props = defineProps({
   selectedItems: {type: Set, default: () => new Set()}, // 选中的项目集合
 })
 
-const emits = defineEmits(['cancel', 'finish', 'select'])
+const emits = defineEmits(['cancel', 'finish', 'select', 'export'])
 
 const router = useRouter()
 
@@ -80,6 +81,10 @@ const clickHandle = (e) => {
     if (e.target.type === 'button') return
     router.push({name: 'view-inventory', params: {id: props.data.id}})
   }
+}
+
+const exportHandle = async () => {
+  emits('export', props.data.id)
 }
 
 </script>
@@ -154,6 +159,9 @@ const clickHandle = (e) => {
     .btn-wrap {
       .van-button {
         margin-left: 10px;
+      }
+      .export-btn {
+        min-width: 60px;
       }
     }
   }

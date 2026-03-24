@@ -192,6 +192,11 @@ export const useCusInventory = () => {
     }
   }
 
+  const isShowBatchExport = computed(() => {
+    if (selectedItems.value.size > 0) return true
+    return false
+  })
+
   const isShowBatchFinish = computed(() => {
     if (selectedItems.value.size > 0) return true
     return false
@@ -238,10 +243,13 @@ export const useCusInventory = () => {
     }
     const ret = await commonFetch(exportInventoryV3, {id: ids, shopId})
     const payloadStr = encodeURIComponent(JSON.stringify(ret))
-    wx.miniProgram.navigateTo({
-      url:`../download-page/downloadPage?payload=${payloadStr}`
-    })
-    console.log(ret)
+    wx.miniProgram.navigateTo({ url:`../download-page/downloadPage?payload=${payloadStr}`})
+  }
+
+  const exportHandle = async (id) => {
+    const ret = await commonFetch(exportInventoryV3, {id: [id], shopId})
+    const payloadStr = encodeURIComponent(JSON.stringify(ret))
+    wx.miniProgram.navigateTo({ url:`../download-page/downloadPage?payload=${payloadStr}`})
   }
   
   const init = async () => {
@@ -253,6 +261,6 @@ export const useCusInventory = () => {
     init, active, dataList, cancelHandle, finishHandle, scrollHandle, listRef, activeHandle, timeS,
     timeE, keyword, tabOptions,statusDisplay, showStatusSelect, searchHandle, resetHandle, isMulEdit,
     mulHandle, selectedItems, selectAll, handleItemSelect, isShowBatchFinish, isShowBatchCancel,
-    batchFinishHandle, batchCancelHandle, batchExportHandle
+    batchFinishHandle, batchCancelHandle, batchExportHandle, isShowBatchExport, exportHandle
   }
 }

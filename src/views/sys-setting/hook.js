@@ -88,8 +88,10 @@ export const useSysSetting = () => {
         return
       }
       await showConfirmDialog({
-        message: `后续新上传的图片都会自动添加水印`,
-        confirmButtonText: '确认开启'
+        title: '开启自动水印',
+        message: '开启后，<span style="color: #ec6443; font-weight: bold;">新上传</span>图片会自动添加水印',
+        confirmButtonText: '确认开启',
+        allowHtml: true // 确保你的弹窗组件开启了 HTML 解析
       })
       setWatermarkCfg() // 设置默认水印配置
     } else {
