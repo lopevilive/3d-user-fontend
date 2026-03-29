@@ -126,11 +126,6 @@ onActivated(() => {
       color: $grey6; // 恢复原始文字颜色
       cursor: pointer; // 手型光标
       transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-
-      &:hover {
-        background-color: rgba($themeColor, 0.05); // 保留悬停背景
-      }
-
       .txt {
         font-size: 13px; // 恢复原始二级分类字体大小
       }

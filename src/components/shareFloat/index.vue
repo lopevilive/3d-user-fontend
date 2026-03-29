@@ -45,7 +45,8 @@ const clickHandle = async () => {
 }
 
 const isShow = computed(() => {
-  const {rid} = globalData.value
+  const {rid, editStatus} = globalData.value
+  if (editStatus === 1) return false
   if ([2,3,99].includes(rid)) return true
   if (shopInfo.value.forwardPermi === 1) return false
   return true

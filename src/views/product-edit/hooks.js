@@ -21,22 +21,8 @@ export const useProductEdit = () => {
   })
 
   const getDefaultData = () => {
-    return {
-      id: id ? id : 0,
-      name: '', // 弃用
-      shopId,
-      url: '',
-      price: '',
-      isSpec: 0,
-      specDetials: '',
-      productType: '',
-      desc: '',
-      type3D: 0,
-      model3D: 1,
-      modelUrl: '',
-      status: 0,
-      descUrl: '',
-      isMulType: 0
+    return { id: id ? id : 0, shopId, url: '', price: '', isSpec: 0, specDetials: '', productType: '', desc: '',
+      status: 0, descUrl: '', isMulType: 0, specs: ''
     }
   }
 
@@ -78,6 +64,18 @@ export const useProductEdit = () => {
       return true
     })
     payload.attr = JSON.stringify(attr)
+
+    let specs = payload.specs || '[]'
+    specs = JSON.parse(specs)
+    const newSpecs = []
+    for (const item of specs) {
+      let {key, value, _id} = item
+      key = key.trim()
+      value = value.trim()
+      if (!key || !value) continue
+      newSpecs.push({key, value, _id})
+    }
+    payload.specs = JSON.stringify(newSpecs)
     return payload
   }
 
@@ -128,7 +126,7 @@ export const useProductEdit = () => {
 
   const getProductInfo = async () => {
     if (!id) return
-    const res = await commonFetch(getProduct, {productId: id})
+    const res = await commonFetch(getProduct, {productId: id, shopId})
     if (res.list.length) {
       data.value = res.list[0]
     }

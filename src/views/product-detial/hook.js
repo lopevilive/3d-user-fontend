@@ -189,10 +189,23 @@ export const useProductDetial = () => {
     let ret = descUrl.split(',')
     return ret
   })
+
+  const displayInnerParams = computed(() => {
+    const {rid} = globalData.value
+    if (![2,3,99].includes(rid)) return []
+    const {specs} = info.value
+    return specs ? JSON.parse(specs) : []
+  })
+
+  const keyValueDialogRef = ref()
+
+  const showKeyValueHandle = async () => {
+    keyValueDialogRef.value.show(displayInnerParams.value)
+  }
   
   const init = async () => {
     if (!productId) return
-    const data = await commonFetch(getProduct, {productId})
+    const data = await commonFetch(getProduct, {productId, shopId})
     const ret = await shopInfoManage.getData(shopId)
     shopInfo.value = ret[0]
     done.value = true
@@ -204,6 +217,6 @@ export const useProductDetial = () => {
   return {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-    viewSpecDetialHandle, descUrlDisplay, displayType
+    viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle
   }
 }

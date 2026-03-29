@@ -40,7 +40,11 @@
         <span v-if="isShowSticky"><VanTag plain type="primary">置顶</VanTag></span>
         {{ info.desc }}
       </div>
-      <div class="content_attr" v-if="displayAttrs.length">
+      <div class="content_attr" v-if="displayAttrs.length || displayInnerParams.length">
+        <div class="attr-item" v-if="displayInnerParams.length" @click="showKeyValueHandle">
+          <div class="name">内部备注</div>
+          <div class="val val-btn">查看</div>
+        </div>
         <div class="attr-item" v-for="item in displayAttrs">
           <div class="name" >{{ item.name }}</div>
           <div class="val">{{ item.val }}</div>
@@ -64,6 +68,7 @@
     <!-- <ModelDisplay ref="modelDisplayRef" :productInfo="info"/> -->
     <Setting :runtimeData="info" @update="init" />
     <DetialFooter :productInfo="info"/>
+    <KeyValueDialog ref="keyValueDialogRef" />
   </div>
   <div v-if="isShowEmpty" class="no-data-wrap">
     <VanEmpty description="暂无数据～" />
@@ -80,11 +85,12 @@ import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
 import { getImageUrl } from '@/util'
 import { showImagePreview } from 'vant';
+import KeyValueDialog from '@/components/key-value-dialog/index.vue'
 
 const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-  viewSpecDetialHandle, descUrlDisplay, displayType
+  viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle
 } = useProductDetial()
 
 onMounted(init)
@@ -228,6 +234,10 @@ export default {
           margin-top: 4px;
           line-height: 14px;
           color: $grey8;
+        }
+        .val-btn {
+          color: $btnText;
+          text-align: center;
         }
       }
     }

@@ -23,6 +23,10 @@
       <VanCellGroup>
         <AttrCfg v-model="data.attr" :attr-cfg="busiCfg.attrCfg"/>
       </VanCellGroup>
+      <!-- 内部参数 -->
+      <VanCellGroup>
+        <InnerParams v-model="data.specs" @resetValidation="handleResetValidation" />
+      </VanCellGroup>
       <VanCellGroup>
         <!-- 上/下架 -->
         <StatusSelect v-model="data.status"/>
@@ -51,6 +55,7 @@ import DialogVip from '@/components/dialog-vip/index.vue'
 import MainImage from './MainImage.vue'
 import DescImage from './DescImage.vue'
 import SecCheck from './SecCheck.vue'
+import InnerParams from './InnerParams.vue'
 
 const {
   data, formRef, saveHandle, init, qrcodeScannerRef, scanClickHandle, scanHandle,

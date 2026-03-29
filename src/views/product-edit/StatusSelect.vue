@@ -5,7 +5,6 @@
     v-model="valDisplay"
     @click="show = true"
     is-link
-    :required="true"
     readonly
   />
   <Select v-model="val" :columns="columns"  v-model:show="show"/>
