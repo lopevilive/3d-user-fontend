@@ -73,18 +73,12 @@ onActivated(() => {
   .type-item {
     overflow: hidden; // 确保子元素圆角生效
     transition: background-color 0.2s ease-in-out; // 背景色过渡
-
-    &:hover {
-      background-color: rgba($themeColor, 0.05); // 保留悬停背景
-    }
-
     .type1-content {
       padding: 10px 0; // 恢复原始内边距
       box-sizing: border-box;
       position: relative;
       width: 100%;
       cursor: pointer; // 手型光标
-
       .txt {
         width: 100%;
         color: $grey7; // 恢复原始颜色
@@ -110,7 +104,6 @@ onActivated(() => {
 
     .type1-content {
       .txt {
-        font-weight: bold; // 恢复原始加粗
         color: #000; // 深色文字
       }
     }
@@ -137,10 +130,7 @@ onActivated(() => {
       font-weight: bold; // 恢复原始加粗
       background-color: rgba($themeColor, 0.1); // 保留激活背景
       padding-left: 12px; // 调整内边距以配合边框
-
-      &:hover {
-        background-color: rgba($themeColor, 0.15); // 保留激活状态悬停背景
-      }
+      background-color: rgba($themeColor, 0.15); // 保留激活状态悬停背景
     }
   }
 }
