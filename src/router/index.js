@@ -150,6 +150,12 @@ const router = createRouter({
           name: 'custom-home-preview',
           component: () => import('@/views/custom-home-preview/index.vue'),
           meta: {title: '首页预览'}
+        },
+        {
+          path: 'vip-concat',
+          name: 'vip-concat',
+          component: () => import('@/views/vip-concat/index.vue'),
+          meta: {title: '会员权益'}
         }
       ]
     },

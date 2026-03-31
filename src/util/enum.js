@@ -154,3 +154,13 @@ export const E_img_qua_map = [
   {shopId: 2317, qua: 65},
   {shopId: 2361, qua: 65},
 ]
+
+export const E_img_url_map = {
+  adminConcat: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_29b2bda2e6e0ad0c116103b827a2983d.jpg?imageMogr2/quality/40', // 管理员微信
+  homePageDemo: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_d9807f1555596ac74f201e1253c12b68.png?imageMogr2/quality/40', // 首页装饰demo
+  bannerDemo: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_f0fb6556d51a4f1da626a6d92064ac1c.png?imageMogr2/quality/40', // 轮播图demo
+  hideAllTypeDemo: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_02225db8cae27bf98ff647e691e1b2a3.png?imageMogr2/quality/40', // 隐藏全部分类demo
+  waterImgDemo1: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_19a302d6f831268825df5f881abf9b95.png?imageMogr2/quality/40',
+  waterImgDemo2: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_24fd435bee5b919a4c0db50415bf6b97.png?imageMogr2/quality/40'
+
+}

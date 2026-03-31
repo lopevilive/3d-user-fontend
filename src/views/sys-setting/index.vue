@@ -32,7 +32,7 @@
     <van-cell-group inset title="图册设置">
       <VanCell title="首页装修" class="cell-label-width-200">
         <template #label>
-          <CellLabel txt="自定义首页装饰" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_d9807f1555596ac74f201e1253c12b68.png?imageMogr2/quality/40`]" />
+          <CellLabel txt="自定义首页装饰" :url="[E_img_url_map.homePageDemo]" />
         </template>
         <template #value>
           <div @click="toHomeMod">
@@ -42,7 +42,7 @@
       </VanCell>
       <VanCell title="产品页轮播图展示"  class="cell-label-width-200">
         <template #label>
-          <CellLabel txt="展示店铺置顶信息，支持自动轮播" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_f0fb6556d51a4f1da626a6d92064ac1c.png?imageMogr2/quality/40`]" />
+          <CellLabel txt="展示店铺置顶信息，支持自动轮播" :url="[E_img_url_map.bannerDemo]" />
         </template>
         <template #value>
           <VanSwitch v-model="bannerStatus"/>
@@ -56,7 +56,7 @@
       </VanCell>
       <VanCell title="隐藏 “全部” 分类标签"  class="cell-label-width-200">
         <template #label>
-          <CellLabel txt="隐藏导航栏的 “全部” 分类标签" :url="[`//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_02225db8cae27bf98ff647e691e1b2a3.png?imageMogr2/quality/40`]" />
+          <CellLabel txt="隐藏导航栏的 “全部” 分类标签" :url="[E_img_url_map.hideAllTypeDemo]" />
         </template>
         <template #value>
           <VanSwitch v-model="typeStatus"/>
@@ -75,10 +75,7 @@
         </template>
         <template #label>
           <CellLabel txt="新上传图片自动添加水印"
-            :url="[
-              `//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_19a302d6f831268825df5f881abf9b95.png?imageMogr2/quality/40`, 
-              `//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_24fd435bee5b919a4c0db50415bf6b97.png?imageMogr2/quality/40`
-            ]"
+            :url="[E_img_url_map.waterImgDemo1,E_img_url_map.waterImgDemo2]"
           />
         </template>
         <template #value>
@@ -145,7 +142,7 @@
 
 <script setup>
 import { useSysSetting } from './hook'
-import { copyStr, isVip } from '@/util'
+import { copyStr, isVip, E_img_url_map } from '@/util'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 import TypeSideSelect from './TypeSideSelect.vue'
 import CellLabel from '@/components/cell-label/index.vue'

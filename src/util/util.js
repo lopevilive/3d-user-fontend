@@ -7,7 +7,8 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
-import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage } from '@/util'
+import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage, E_img_url_map } from '@/util'
+import router from '@/router'
 
 
 class LoadingManage {
@@ -162,7 +163,7 @@ export const toContactSys = async () => {
     return
   }
   const payload = {
-    qrcodeUrl: '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/5_3_dda7b2170dac6b8a161f072b4b6a62b9.jpg',
+    qrcodeUrl: E_img_url_map.adminConcat,
     message: `长按识别二维码～`
   }
   let payloadStr = encodeURIComponent(JSON.stringify(payload))
@@ -175,19 +176,21 @@ export const toLogin = (fullPath)  => {
 }
 
 export const toVip = async (shopId) => {
-  const inApp = isInApp()
-  if (!inApp) return showToast('请在小程序内打开')
-  let vipInfo = await vipInfoManage.getData(shopId)
-  vipInfo = vipInfo[0]
-  let shopInfo = await shopInfoManage.getData(shopId)
-  shopInfo = shopInfo[0]
-  const shopData = {
-    shopId, name: shopInfo.name,
-    url: getImageUrl(shopInfo.url.split(',')[0])
-  }
-  const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
-  const shopStr = encodeURIComponent(JSON.stringify(shopData))
-  wx.miniProgram.navigateTo({url: `../vip/vip?shopInfo=${shopStr}&payload=${payloadStr}`})
+  router.push({name: 'vip-concat', params: {shopId}})
+
+  // const inApp = isInApp()
+  // if (!inApp) return showToast('请在小程序内打开')
+  // let vipInfo = await vipInfoManage.getData(shopId)
+  // vipInfo = vipInfo[0]
+  // let shopInfo = await shopInfoManage.getData(shopId)
+  // shopInfo = shopInfo[0]
+  // const shopData = {
+  //   shopId, name: shopInfo.name,
+  //   url: getImageUrl(shopInfo.url.split(',')[0])
+  // }
+  // const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
+  // const shopStr = encodeURIComponent(JSON.stringify(shopData))
+  // wx.miniProgram.navigateTo({url: `../vip/vip?shopInfo=${shopStr}&payload=${payloadStr}`})
 }
 
 export const copyStr = (str) => {
