@@ -89,6 +89,16 @@ export const useHome = () => {
   const toAlbum = () => {
     router.push({name: 'album-mod'})
   }
+
+  const isShowToList = computed(() => {
+    const {rid} = globalData.value
+    if (rid === 99) return true
+    return false
+  })
+
+  const toList = () => {
+    router.push({name: 'album-list'})
+  }
   
   const init = async () => {
     try {
@@ -112,6 +122,8 @@ export const useHome = () => {
     demoList,
     logList,
     isShowCreate,
-    toAlbum
+    toAlbum,
+    isShowToList,
+    toList
   }
 }

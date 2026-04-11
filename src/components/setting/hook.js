@@ -78,10 +78,6 @@ export const useSetting = () => {
     router.push({name: 'sys-setting'})
   }
 
-  const acToAlbumList = () => {
-    router.push({name: 'album-list'})
-  }
-
   const acProdMove = async () => { // 置顶产品
     const shopId = + route.params.shopId
     const productId = + route.params.id
@@ -179,7 +175,6 @@ export const useSetting = () => {
       {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'contact', 'custom-home']},
     ],
     [
-      {name: '图册列表', color: '#5794f7', action: acToAlbumList, includes: ['all'], rids: [99]},
       {name: '升级图册', color: '#5794f7', action: upDateAlbum, includes: ['product-manage'], rids: [99]},
       {name: 'modStatus', color: '#5794f7', action: toModStatus, includes: ['product-manage'], rids: [99]}
     ]
@@ -194,7 +189,7 @@ export const useSetting = () => {
         if (item?.rids?.length) {
           if (!item.rids.includes(rid)) continue
         }
-        if (item.includes.includes('all') || item.includes.includes(route.name)) {
+        if (item.includes.includes(route.name)) {
           if (item.rule) {
             const ret = item.rule()
             if (ret) tmpRet.push(item)
@@ -210,7 +205,7 @@ export const useSetting = () => {
   })
 
   const isShow = computed(() => {
-    if (!['custom-home', 'product-manage', 'contact', 'home', 'product-detial'].includes(route.name)) return false
+    if (!['custom-home', 'product-manage', 'contact', 'product-detial'].includes(route.name)) return false
     const {rid, editStatus} = globalData.value
     if (editStatus === 1) return false
     if ([2,3,99].includes(rid)) return true

@@ -9,6 +9,7 @@
       <h3 class="mrM">我的图册</h3>
       <Card class="mrM" v-for="item in mineList" :data="item" />
     </div>
+    <VanButton v-if="isShowToList" class="btn" size="small" @click="toList">ToList</VanButton>
     <template v-if="logList.length">
       <h3 class="mrM">最近浏览</h3>
       <Card class="mrM" v-for="item in logList" :data="item" />
@@ -32,7 +33,9 @@ const {
   logList,
   demoList,
   isShowCreate,
-  toAlbum
+  toAlbum,
+  isShowToList,
+  toList
 } = useHome()
 
 init()
