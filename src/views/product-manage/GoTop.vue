@@ -4,7 +4,7 @@
     axis="xy"
     magnetic="x"
     :gap="gap"
-    v-model:offset="offset"
+    v-model:offset="offsetDiaplay"
     @click="clickHandle"
     v-if="isShow"
   >
@@ -24,8 +24,35 @@ const props = defineProps({
 })
 
 const gap = getFlexW(24)
-const y =  Math.floor(window.innerHeight / 2)
-const offset = ref({ x: getFlexW(375 - 24 - 30), y});
+
+const _change = ref(false)
+const localKey = 'goTopFloatPos'
+const offsetDiaplay = computed({
+  get() {
+    if (_change.value) {}
+    let x = getFlexW(375 - 24 - 30)
+    let y = Math.floor(window.innerHeight / 2)
+    let localData = localStorage.getItem(localKey)
+    if (localData) {
+      try {
+        localData = JSON.parse(localData)
+        x = localData.x
+        y = localData.y
+      } catch(e) {
+        console.error(e)
+      }
+    }
+    return {x, y}
+  },
+  set(val) {
+    let {x, y} = val
+    x = parseInt(x)
+    y = parseInt(y)
+    const localData = {x, y}
+    localStorage.setItem(localKey, JSON.stringify(localData))
+    _change.value = !_change.value
+  }
+})
 
 const clickHandle = async () => {
   let remain = props.scrollT || 0

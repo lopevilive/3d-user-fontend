@@ -5,7 +5,7 @@
       axis="xy"
       magnetic="x"
       :gap="gap"
-      v-model:offset="offset"
+      v-model:offset="offsetDisPlay"
       @click="bubbleClickHandle"
       v-if="isShow"
     >
@@ -35,12 +35,12 @@ const {
   actionDisplay,
   isShow,
   actionsSheetRef,
-  offset,
   bubbleClickHandle,
   actionHandle,
   gap,
   updateAlbumRef,
-  modShopStatusRef
+  modShopStatusRef,
+  offsetDisPlay
 } = useSetting()
 
 </script>

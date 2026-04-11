@@ -4,7 +4,7 @@
     axis="xy"
     magnetic="x"
     :gap="gap"
-    v-model:offset="offset"
+    v-model:offset="offsetDiaplay"
     @click="clickHandle"
     v-if="isShow"
   >
@@ -23,9 +23,36 @@ import { globalData } from '@/store'
 const route = useRoute()
 
 const gap = getFlexW(24)
-let num = 1
-const y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
-const offset = ref({ x: getFlexW(375 - 24 - 30), y});
+
+const _change = ref(false)
+const localKey = 'shareFloatPos'
+const offsetDiaplay = computed({
+  get() {
+    if (_change.value) {}
+    const num = 1;
+    let y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
+    let x = getFlexW(375 - 24 - 30)
+    let localData = localStorage.getItem(localKey)
+    if (localData) {
+      try {
+        localData = JSON.parse(localData)
+        x = localData.x
+        y = localData.y
+      } catch(e) {
+        console.error(e)
+      }
+    }
+    return {x, y}
+  },
+  set(val) {
+    let {x, y} = val
+    x = parseInt(x)
+    y = parseInt(y)
+    const localData = {x, y}
+    localStorage.setItem(localKey, JSON.stringify(localData))
+    _change.value = !_change.value
+  }
+})
 
 const shopInfo = ref({})
 

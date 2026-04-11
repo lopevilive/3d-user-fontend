@@ -11,9 +11,36 @@ export const useSetting = () => {
 
   const actionsSheetRef = ref()
   const gap = getFlexW(24)
-  let num = 2
-  const y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
-  const offset = ref({ x: getFlexW(375 - 24 - 30), y});
+
+  const _change = ref(false)
+  const localKey = 'settingFloatPos'
+  const offsetDisPlay = computed({
+    get() {
+      if (_change.value) {}
+      const num = 2;
+      let x = getFlexW(375 - 24 - 30)
+      let y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
+      let localData = localStorage.getItem(localKey)
+      if (localData) {
+        try {
+          localData = JSON.parse(localData)
+          x = localData.x
+          y = localData.y
+        } catch(e) {
+          console.error(e)
+        }
+      }
+      return {x, y}
+    },
+    set(val) {
+      let {x, y} = val
+      x = parseInt(x)
+      y = parseInt(y)
+      const localData = {x, y}
+      localStorage.setItem(localKey, JSON.stringify(localData))
+      _change.value = !_change.value
+    }
+  })
 
   const acProdMod = () => {
     const shopId = + route.params.shopId
@@ -203,11 +230,11 @@ export const useSetting = () => {
     isShow,
     actionDisplay,
     actionsSheetRef,
-    offset,
     bubbleClickHandle,
     actionHandle,
     gap,
     updateAlbumRef,
-    modShopStatusRef
+    modShopStatusRef,
+    offsetDisPlay
   }
 }
