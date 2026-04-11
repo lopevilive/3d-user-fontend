@@ -66,7 +66,6 @@
     </template>
     
     <!-- <ModelDisplay ref="modelDisplayRef" :productInfo="info"/> -->
-    <Setting :runtimeData="info" @update="init" />
     <DetialFooter :productInfo="info"/>
     <KeyValueDialog ref="keyValueDialogRef" />
   </div>
@@ -77,15 +76,15 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 // import ModelDisplay from '@/components/model-display/index.vue'
-import Setting from '@/components/setting/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
-import { getImageUrl } from '@/util'
+import { getImageUrl, emitter } from '@/util'
 import { showImagePreview } from 'vant';
 import KeyValueDialog from '@/components/key-value-dialog/index.vue'
+import { globalData } from '@/store'
 
 const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
@@ -94,6 +93,13 @@ const {
 } = useProductDetial()
 
 onMounted(init)
+emitter.on('prodUpdate', () => {
+  init()
+})
+onUnmounted(() => {
+  globalData.value.currViewProd = null
+  emitter.off('prodUpdate')
+})
 
 </script>
 

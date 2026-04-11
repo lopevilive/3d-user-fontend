@@ -6,12 +6,16 @@
     </keep-alive>
   </router-view>
   <FooterBar ref="footerBarRef" />
+  <Setting />
+  <ShareFloat />
 </template>
 
 <script setup>
 import FooterBar from '@/components/footer-bar/index.vue'
 import { computed, ref } from 'vue'
 import { globalData } from '@/store'
+import Setting from '@/components/setting/index.vue'
+import ShareFloat from '@/components/shareFloat/index.vue'
 
 const aliveList = computed(() => {
   const ret = ['ProductManage', 'MulManage', 'CusInventory', 'CustomHome']

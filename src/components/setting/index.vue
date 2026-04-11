@@ -31,12 +31,6 @@ import ActionsSheet from '@/components/actions-sheet/index.vue'
 import UpdateAlbum from './UpdateAlbum.vue'
 import ModShopStatus from './ModShopStatus.vue'
 
-const props = defineProps({
-  runtimeData: {type: Object}
-})
-
-const emits = defineEmits(['update'])
-
 const {
   actionDisplay,
   isShow,
@@ -47,7 +41,7 @@ const {
   gap,
   updateAlbumRef,
   modShopStatusRef
-} = useSetting(props, emits)
+} = useSetting()
 
 </script>
 

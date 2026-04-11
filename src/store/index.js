@@ -83,6 +83,7 @@ export const globalData = ref({
   getFooterBarRef: () => {},
   customHomeNeedUpdate: false,
   homeModNeedAlive: false, // 首页配置页是否需要 alive
+  currViewProd: null, // 当前查看的产品
 })
  
 

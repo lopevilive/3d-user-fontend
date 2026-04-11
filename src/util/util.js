@@ -9,6 +9,7 @@ import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
 import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage, E_img_url_map } from '@/util'
 import router from '@/router'
+import mitt from 'mitt'
 
 
 class LoadingManage {
@@ -549,3 +550,5 @@ export const isToday = (date) => {
     givenDate.getDate() === today.getDate()
   );
 }
+
+export const emitter = mitt()

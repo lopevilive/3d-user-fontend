@@ -95,10 +95,8 @@
         </div>
       </div>
     </div>
-    <Setting />
     <ProductPriceDialog ref="mulPriceRef" title="批量改价" />
     <TypeSelectDialog ref="mulProductTypeRef" />
-    <ShareFloat />
     <GoTop :listRef="listRef" :scrollT="scrollT" />
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
     <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
@@ -108,12 +106,10 @@
 
 <script setup>
 import { onActivated } from 'vue'
-import Setting from '@/components/setting/index.vue'
 import productItem from '@/components/product-item/index.vue'
 import {useProductManage} from './hook'
 import { globalData } from '@/store'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
-import ShareFloat from '@/components/shareFloat/index.vue'
 import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import SortControl from '@/components/sort-control/index.vue'

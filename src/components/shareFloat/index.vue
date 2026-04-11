@@ -22,8 +22,6 @@ import { globalData } from '@/store'
 
 const route = useRoute()
 
-const shopId = +route.params.shopId
-
 const gap = getFlexW(24)
 let num = 1
 const y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
@@ -32,6 +30,7 @@ const offset = ref({ x: getFlexW(375 - 24 - 30), y});
 const shopInfo = ref({})
 
 const clickHandle = async () => {
+  const shopId = +route.params.shopId
   const {name, url, desc, forwardPermi} = shopInfo.value
   toSharePage({
     src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
@@ -45,6 +44,7 @@ const clickHandle = async () => {
 }
 
 const isShow = computed(() => {
+  if (!['custom-home', 'product-manage', 'contact'].includes(route.name)) return false
   const {rid, editStatus} = globalData.value
   if (editStatus === 1) return false
   if ([2,3,99].includes(rid)) return true
@@ -53,6 +53,7 @@ const isShow = computed(() => {
 })
 
 const init = async () => {
+  const shopId = +route.params.shopId
   const tmp = await shopInfoManage.getData(shopId)
   shopInfo.value = tmp[0]
 }

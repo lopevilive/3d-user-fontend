@@ -210,7 +210,9 @@ export const useProductDetial = () => {
     shopInfo.value = ret[0]
     done.value = true
     if (data.list.length) {
-      info.value = data.list[0]
+      const prodInfo = data.list[0]
+      info.value = prodInfo
+      globalData.value.currViewProd = prodInfo
     }
   }
 

@@ -32,7 +32,7 @@
   <VanImagePreview />
   <!-- 这里的目的是加载样式  e-->
 
-   <EncryValiDialog ref="encryDialogRef" />
+  <EncryValiDialog ref="encryDialogRef" />
 </template>
 
 <script setup>

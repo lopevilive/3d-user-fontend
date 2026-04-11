@@ -2,15 +2,13 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
 import { productDel, productMod, moveTopProduct } from '@/http'
-import { commonFetch, toSharePage,  shopInfoManage, getImageUrl, getFlexW} from '@/util'
+import { commonFetch, getFlexW, emitter} from '@/util'
 import { showConfirmDialog } from 'vant';
 
-export const useSetting = (props, emits) => {
+export const useSetting = () => {
   const route = useRoute()
   const router = useRouter()
 
-  const shopId = + route.params.shopId
-  const productId = + route.params.id
   const actionsSheetRef = ref()
   const gap = getFlexW(24)
   let num = 2
@@ -18,6 +16,7 @@ export const useSetting = (props, emits) => {
   const offset = ref({ x: getFlexW(375 - 24 - 30), y});
 
   const acProdMod = () => {
+    const shopId = + route.params.shopId
     if (route.name !== 'product-manage') {
       router.push({name: 'product-manage', params: {shopId}, query: route.query})
     }
@@ -33,10 +32,13 @@ export const useSetting = (props, emits) => {
   }
 
   const acProdEdit = () => {
+    const productId = + route.params.id
     router.push({name: 'product-edit', params: {id: productId}})
   }
 
   const acProdDel = async () => {
+    const productId = + route.params.id
+    const shopId = + route.params.shopId
     await showConfirmDialog({
       message: `确定要删除这个产品吗?`
     })
@@ -53,37 +55,20 @@ export const useSetting = (props, emits) => {
     router.push({name: 'album-list'})
   }
 
-  const acProdMove = async () => {
-    const {runtimeData} = props
-    if (!runtimeData) return
-    const {id, shopId} = props.runtimeData
-    await commonFetch(moveTopProduct, {id, shopId})
-    emits('update')
+  const acProdMove = async () => { // 置顶产品
+    const shopId = + route.params.shopId
+    const productId = + route.params.id
+    await commonFetch(moveTopProduct, {id: productId, shopId})
+    emitter.emit('prodUpdate')
     globalData.value.productNeedExec.push({type: 'sort'})
   }
 
-  const acProdReMove = async () => {
-    const {runtimeData} = props
-    if (!runtimeData) return
-    const {id, shopId} = runtimeData
-    await commonFetch(productMod, {id, shopId, sort: 0})
-    emits('update')
+  const acProdReMove = async () => { //  取消置顶产品
+    const shopId = + route.params.shopId
+    const productId = + route.params.id
+    await commonFetch(productMod, {id: productId, shopId, sort: 0})
+    emitter.emit('prodUpdate')
     globalData.value.productNeedExec.push({type: 'sort'})
-  }
-
-  const acShare = async () => {
-    let shopInfo = await shopInfoManage.getData(shopId)
-    shopInfo = shopInfo[0]
-    const {name, url, desc, forwardPermi} = shopInfo
-    toSharePage({
-      src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
-      url: url?.split(',')?.[0] || '',
-      title: name,
-      desc1: [desc || ''],
-      desc2: [],
-      scene: {name: 'product-manage', shopId},
-      forwardPermi
-    })
   }
 
   const updateAlbumRef = ref()
@@ -97,24 +82,26 @@ export const useSetting = (props, emits) => {
   }
 
   const acDownProduct = async () => {
-    const {runtimeData} = props
+    const shopId = + route.params.shopId
+    const productId = + route.params.id
     await showConfirmDialog({
       title: '下架产品',
       message: '确定下架该产品?'
     })
-    await commonFetch(productMod, {id: runtimeData.id, shopId, status: 1})
-    emits('update')
+    await commonFetch(productMod, {id: productId, shopId, status: 1})
+    emitter.emit('prodUpdate')
     globalData.value.productNeedExec.push({type: 'status'})
   }
 
   const acOnProduct = async () => {
-    const {runtimeData} = props
+    const shopId = + route.params.shopId
+    const productId = + route.params.id
     await showConfirmDialog({
       title: '上架产品',
       message: '确定上架该产品?'
     })
-    await commonFetch(productMod, {id: runtimeData.id, shopId, status:0})
-    emits('update')
+    await commonFetch(productMod, {id: productId, shopId, status:0})
+    emitter.emit('prodUpdate')
     globalData.value.productNeedExec.push({type: 'status'})
   }
   
@@ -131,33 +118,36 @@ export const useSetting = (props, emits) => {
       {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact', 'custom-home']},
     ],
     [
-      {name: '置顶', color: '#5794f7', action: acProdMove, includes: ['product-detial'], rule: (runtimeData) => {
-        if (!runtimeData) return false
-        if (runtimeData?.sort === 0) return true
+      {name: '置顶', color: '#5794f7', action: acProdMove, includes: ['product-detial'], rule: () => {
+        const {currViewProd} = globalData.value
+        if (!currViewProd) return false
+        if (currViewProd?.sort === 0) return true
         return false
       }},
-      {name: '取消置顶', color: '#f29b73', action: acProdReMove, includes:['product-detial'],  rule: (runtimeData) => {
-        if (!runtimeData) return false
-        if (runtimeData?.sort > 0) return true
+      {name: '取消置顶', color: '#f29b73', action: acProdReMove, includes:['product-detial'],  rule: () => {
+        const {currViewProd} = globalData.value
+        if (!currViewProd) return false
+        if (currViewProd?.sort > 0) return true
         return false
       }},
       {name: '编辑产品', color: '#5794f7', action: acProdEdit, includes: ['product-detial']},
     ],
     [
-      {name: '下架产品', color: '#f29b73', action: acDownProduct, includes: ['product-detial'], rule: (runtimeData) => {
-        if (!runtimeData) return false
-        if (runtimeData?.status === 0) return true
+      {name: '下架产品', color: '#f29b73', action: acDownProduct, includes: ['product-detial'], rule: () => {
+        const {currViewProd} = globalData.value
+        if (!currViewProd) return false
+        if (currViewProd?.status === 0) return true
         return false
       }},
-      {name: '上架产品', color: '#64b486', action: acOnProduct, includes: ['product-detial'], rule: (runtimeData) => {
-        if (!runtimeData) return false
-        if (runtimeData?.status === 1) return true
+      {name: '上架产品', color: '#64b486', action: acOnProduct, includes: ['product-detial'], rule: () => {
+        const {currViewProd} = globalData.value
+        if (!currViewProd) return false
+        if (currViewProd?.status === 1) return true
         return false
       }},
       {name: '删除产品', color: '#ee0a24', icon: 'delete-o', action: acProdDel, includes: ['product-detial']},
     ],
     [
-      // {name: '分享图册', color: '#64b486', icon: 'share-o', action: acShare, includes: ['product-manage', 'contact', 'custom-home']},
       {name: '客户清单', color: '#5794f7', icon: 'orders-o', action: acToCusInventory , includes: ['product-manage', 'contact', 'custom-home']},
       {name: '图册设置', color: '#5794f7', action: acToSetSys , includes: ['product-manage', 'contact', 'custom-home']},
     ],
@@ -179,7 +169,7 @@ export const useSetting = (props, emits) => {
         }
         if (item.includes.includes('all') || item.includes.includes(route.name)) {
           if (item.rule) {
-            const ret = item.rule(props.runtimeData)
+            const ret = item.rule()
             if (ret) tmpRet.push(item)
           } else {
             tmpRet.push(item)
@@ -193,8 +183,9 @@ export const useSetting = (props, emits) => {
   })
 
   const isShow = computed(() => {
-    const {rid} = globalData.value
-    if (globalData.value.editStatus === 1) return false
+    if (!['custom-home', 'product-manage', 'contact', 'home', 'product-detial'].includes(route.name)) return false
+    const {rid, editStatus} = globalData.value
+    if (editStatus === 1) return false
     if ([2,3,99].includes(rid)) return true
     return false
   })
