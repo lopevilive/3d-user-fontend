@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { commonFetch, shopInfoManage } from '@/util'
-import { verfiyStaff, acceptStaff } from '@/http'
+import { verfiyStaff, acceptStaff, getInfoStaff } from '@/http'
 import { showDialog } from 'vant';
 import { globalData } from '@/store'
 
@@ -13,6 +13,7 @@ export const useStaffVerify = () => {
   const shopId = +route.params.shopId
   const shopInfo = ref({})
   const show = ref(false)
+  const staffInfo = ref({})
 
   const gohome = () => {
     router.replace({name: 'product-manage', params: {shopId}})
@@ -64,7 +65,7 @@ export const useStaffVerify = () => {
       if (pass) {
         await commonFetch(acceptStaff, {id, shopId})
         showDialog({
-          message: `恭喜！您已成功成为【${shopInfo.value.name}】管理员`,
+          message: `恭喜！您已成功成为【${shopInfo.value.name}】${staffInfo.value.type === 1 ? '管理员' : '分销'}员`,
           confirmButtonText: '返回首页',
           beforeClose: () => {
             globalData.value.userInfo = {}
@@ -81,6 +82,12 @@ export const useStaffVerify = () => {
   }
   
   const init = async () => {
+    const info = await commonFetch(getInfoStaff, {id})
+    if (info.length) {
+      staffInfo.value = info[0]
+    } else {
+      return
+    }
     const status = await verify()
     if (status === false || [2,3,4,5].includes(status)) {
       gohome()
@@ -110,7 +117,8 @@ export const useStaffVerify = () => {
     show,
     shopInfo,
     urlDisplay,
-    beforeCloseHandle
+    beforeCloseHandle,
+    staffInfo
   }
 
 }

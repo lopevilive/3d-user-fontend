@@ -74,7 +74,7 @@ const isShow = computed(() => {
   if (!['custom-home', 'product-manage', 'contact'].includes(route.name)) return false
   const {rid, editStatus} = globalData.value
   if (editStatus === 1) return false
-  if ([2,3,99].includes(rid)) return true
+  if ([2,3,4,99].includes(rid)) return true
   if (shopInfo.value.forwardPermi === 1) return false
   return true
 })

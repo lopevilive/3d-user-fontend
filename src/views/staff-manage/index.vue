@@ -1,10 +1,15 @@
 <template>
   <div class="view-staff-manage">
     <div class="header">
-      <van-tabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true">
+      <van-tabs v-model:active="activeTab" @change="tabChangeHandle">
         <van-tab title="管理员列表" :name="1" />
-        <!-- <van-tab title="分销员" :name="2" /> -->
+        <!-- <van-tab title="分销员列表" :name="2" /> -->
       </van-tabs>
+      <div class="role-tips">
+        <van-icon name="info-o" />
+        <span v-if="activeTab === 1">管理员：可管理产品及分类，拥有全部操作权限</span>
+        <span v-if="activeTab === 2">分销员：不受“隐藏价格”及“分享限制”影响，可看价并转发</span>
+      </div>
     </div>
     <div class="content-wrap">
       <div class="content">
@@ -61,7 +66,7 @@
       close-on-click-action
       cancel-text="取消"
     />
-    <DialogStaff ref="dialogStaffRef" @update="handleUpdate"/>
+    <DialogStaff ref="dialogStaffRef" @update="handleUpdate" :type="activeTab"/>
   </div>
 </template>
 
@@ -70,22 +75,8 @@ import { useStaffManage } from './hook'
 import DialogStaff from './DialogStaff.vue'
 
 const {
-  activeTab,
-  init,
-  tabChangeHandle,
-  dataList,
-  settingClickHandle,
-  actions,
-  showAction,
-  selectHandle,
-  typeName,
-  addHandle,
-  dialogStaffRef,
-  activeNames,
-  invalidList,
-  delAllHandle,
-  handleUpdate,
-  toInvite
+  activeTab, init, tabChangeHandle, dataList, settingClickHandle, actions, showAction, selectHandle, typeName,
+  addHandle, dialogStaffRef, activeNames, invalidList, delAllHandle, handleUpdate, toInvite
 } = useStaffManage()
 
 init()
@@ -98,6 +89,23 @@ init()
   height: 100%;
   display: flex;
   flex-direction: column;
+  .header {
+    background: #fff;
+    
+    .role-tips {
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #ed6a0c; // 警告橘色，或者用 $grey8
+      background-color: #fffbe8; // 浅黄色背景，增加引导感
+      display: flex;
+      align-items: center;
+      
+      .van-icon {
+        margin-right: 6px;
+        font-size: 14px;
+      }
+    }
+  }
   .content-wrap {
     flex: 1;
     flex-shrink: 0;

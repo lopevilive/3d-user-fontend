@@ -552,3 +552,14 @@ export const isToday = (date) => {
 }
 
 export const emitter = mitt()
+
+export const getRidByShopId = (shopId, userInfo) => {
+  const {ownerList, adminList, userId, hasPhone, saleList, isSup} = userInfo
+  if (isSup) return 99
+  if (ownerList?.includes(shopId)) return 3 // 图册创建者
+  if (adminList?.includes(shopId)) return 2 // 图册管理员
+  if (saleList?.includes(shopId)) return 4 // 分销员
+  if (hasPhone) return 10 // 实名手机
+  if (userId) return 1 // 登录状态
+  return 0 // 游客
+}

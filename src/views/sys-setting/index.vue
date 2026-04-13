@@ -6,7 +6,12 @@
         label="图册名称/封面/联系方式等"
       >
       </VanCell>
-      <VanCell title="新增管理员" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)" />
+      <VanCell
+        title="人员管理" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)"
+        class="cell-label-width-200"
+        label="配置管理员"
+      />
+      <!-- label="配置管理员或关联合作伙伴/经销商" -->
       <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
           <div class="vip-item">

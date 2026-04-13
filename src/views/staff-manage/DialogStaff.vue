@@ -1,14 +1,14 @@
 <template>
-  <VanDialog v-model:show="show" show-cancel-button :beforeClose="beforeClose" title="新增管理员">
+  <VanDialog v-model:show="show" show-cancel-button :beforeClose="beforeClose" :title="`新增${type === 1 ? '管理' : '分销'}员 `">
     <VanForm ref="formRef">
       <VanField
         :required="true"
-        placeholder="请输入管理员昵称"
+        :placeholder="`请输入${type === 1 ? '管理' : '分销'}员昵称`"
         v-model="nickName" 
         :rules="[{validator: validNickName}]"
       >
         <template #label>
-          <FormLabel label="昵称" tips="管理员昵称（仅您可见）：为了方便管理，请输入一个简洁易记的昵称"/>
+          <FormLabel label="昵称" :tips="`${type === 1 ? '管理' : '分销'}员备注名（仅您可见），方便您快速识别对方身份`"/>
         </template>
       </VanField>
     </VanForm>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { useDialogStaff } from './hook'
+import { useDialogStaff } from './useDialogStaff'
 import FormLabel from '@/components/form-label/index.vue'
 
 const props = defineProps({

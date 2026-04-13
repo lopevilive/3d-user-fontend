@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { commonFetch, isInApp, getImageUrl, shopInfoManage } from '@/util'
-import { getStaff, delStaff, createStaff } from '@/http'
+import { getStaff, delStaff } from '@/http'
 import { showConfirmDialog, showToast } from 'vant';
 import { useRoute } from 'vue-router'
 
@@ -44,9 +44,10 @@ export const useStaffManage = () => {
     } catch(e) {}
   }
 
-  const actions = [
-    {name: '删除管理员', icon: 'delete-o', color: '#ee0a24', exec: delHandle}
-  ]
+  const actions = computed(() => {
+    const ret = [{name: `删除${activeTab.value === 1? '管理': '分销'}员`, icon: 'delete-o', color: '#ee0a24', exec: delHandle}]
+    return ret
+  })
 
   const selectHandle = (actionItem) => {
     const {exec} = actionItem
@@ -88,7 +89,10 @@ export const useStaffManage = () => {
     let {name: shopName, url} = shopInfo.value
     url = url.split(',')[0]
     url = getImageUrl(url)
-    const obj = {shopName, url, inviteId, nickName, shopId}
+    const obj = {
+      shopName, url, inviteId, nickName, shopId,
+      adminName: activeTab.value === 1 ? '管理员' : '分销员'
+    }
     const payload = encodeURIComponent(JSON.stringify(obj))
     wx.miniProgram.navigateTo({url: `../invite/invite?payload=${payload}`})
   }
@@ -116,74 +120,7 @@ export const useStaffManage = () => {
   }
 
   return {
-    activeTab,
-    init,
-    tabChangeHandle,
-    dataList,
-    invalidList,
-    settingClickHandle,
-    showAction,
-    actions,
-    selectHandle,
-    typeName,
-    addHandle,
-    dialogStaffRef,
-    activeNames,
-    delAllHandle,
-    handleUpdate,
-    toInvite
-  }
-}
-
-
-
-
-
-
-
-
-
-export const useDialogStaff = (props, emits) => {
-  const route = useRoute()
-  const shopId = +route.params.shopId
-  
-  const show = ref(false)
-
-  const nickName = ref('')
-
-  const handleCreate = async () => {
-    const data = await commonFetch(createStaff, {nickName: nickName.value, type: props.type, shopId})
-    emits('update', {id: data.id, nickName: nickName.value})
-  }
-
-  const beforeClose = async (action) => {
-    if (action === 'cancel') return true
-    try {
-      await formRef.value.validate()
-    } catch(e) {
-      return false
-    }
-    handleCreate()
-    return true
-  }
-
-  const open = () => {
-    nickName.value = ''
-    show.value = true
-  }
-  
-  const formRef = ref()
-  const validNickName = async () => {
-    if (!nickName.value) return '请输入昵称'
-    return true
-  }
-
-  return {
-    show,
-    beforeClose,
-    open,
-    nickName,
-    validNickName,
-    formRef,
+    activeTab, init, tabChangeHandle, dataList, invalidList, settingClickHandle, showAction, actions,
+    selectHandle, typeName, addHandle, dialogStaffRef, activeNames, delAllHandle, handleUpdate, toInvite
   }
 }

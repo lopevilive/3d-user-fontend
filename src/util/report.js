@@ -43,7 +43,6 @@ class ReportManage {
       payload.isAdmin = false
     }
     await reportCgi(payload)
-    console.log('report', payload)
   }
   
   async handleMember({shopId}) {  // 统计人数，每天统计一次

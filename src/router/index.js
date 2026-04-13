@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -323,7 +323,8 @@ const handleForwardPermi = async (shopId) => {
   let shopInfo = await shopInfoManage.getData(shopId)
   shopInfo = shopInfo[0];
   const { forwardPermi } = shopInfo
-  const { rid } = globalData.value
+  const { userInfo } = globalData.value
+  const currShopRid = getRidByShopId(shopId, userInfo)
   if (!forwardObj[shopId]) {
     if (forwardPermi !== 1) return
     forwardObj[shopId] = {done:false, forwardPermi}
@@ -335,7 +336,7 @@ const handleForwardPermi = async (shopId) => {
   }
   if (data.done) return
   data.done = true
-  const isAdmin = [2, 3, 99].includes(rid) ? 1: 0;
+  const isAdmin = [2, 3, 4, 99].includes(currShopRid) ? 1: 0;
   wx.miniProgram.postMessage({ data: {type: 'forward', forwardPermi: data.forwardPermi, isAdmin, shopId}})
 }
 
