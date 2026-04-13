@@ -305,6 +305,22 @@ export const useSysSetting = () => {
       modForwardPermi(val)
     }
   })
+
+  const modHidePrice = async (val) => {
+    await commonFetch(modShopStatus, {shopId, hidePrice: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const isHidePirce = computed({
+    get() {
+      if (shopInfo.value?.hidePrice === 1) return true
+      return false
+    },
+    set(val) {
+      modHidePrice(val)
+    }
+  })
   
   const displayTypeSideMod = computed(() => {
     if (shopInfo.value.typeSideMod === 0) return '上方'
@@ -337,7 +353,7 @@ export const useSysSetting = () => {
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
     isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-    toHomeMod
+    toHomeMod, isHidePirce
   }
 
 }

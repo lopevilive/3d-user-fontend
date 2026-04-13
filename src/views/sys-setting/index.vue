@@ -9,9 +9,8 @@
       <VanCell
         title="人员管理" is-link @click="toModStaff" v-if="[3,99].includes(globalData.rid)"
         class="cell-label-width-200"
-        label="配置管理员"
+        label="配置管理员或关联合作伙伴/分销员"
       />
-      <!-- label="配置管理员或关联合作伙伴/经销商" -->
       <VanCell is-link @click="showVip" v-if="isShowVip">
         <template #title>
           <div class="vip-item">
@@ -88,7 +87,7 @@
         </template>
       </VanCell>
       <VanCell title="水印样式管理" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
-      <VanCell class="cell-label-width-200" label="开启后，仅管理员可分享图册" v-if="isShowForward">
+      <VanCell class="cell-label-width-200" label="开启后，仅管理员与分销员可分享图册" v-if="isShowForward">
         <template #title>
           <div class="vip-item">
             <div>分享权限控制</div>
@@ -113,6 +112,16 @@
       <VanCell title="Excel 清单导出权限"  class="cell-label-width-200" label="仅管理员可导出 Excel 清单">
         <template #value>
           <VanSwitch v-model="inveExportStatus"/>
+        </template>
+      </VanCell>
+      <VanCell class="cell-label-width-200 cell-label-mrt" label="开启后，产品价格将对游客隐藏，仅管理员与分销员可见" v-if="isShowForward">
+        <template #title>
+          <div class="vip-item">
+            <div>隐藏价格</div>
+          </div>
+        </template>
+        <template #value>
+          <VanSwitch v-model="isHidePirce"/>
         </template>
       </VanCell>
     </van-cell-group>
@@ -158,7 +167,7 @@ const {
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
   isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-  toHomeMod
+  toHomeMod, isHidePirce
 } = useSysSetting()
 
 init()

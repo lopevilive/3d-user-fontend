@@ -3,7 +3,7 @@
     <div class="header">
       <van-tabs v-model:active="activeTab" @change="tabChangeHandle">
         <van-tab title="管理员列表" :name="1" />
-        <!-- <van-tab title="分销员列表" :name="2" /> -->
+        <van-tab title="分销员列表" :name="2" />
       </van-tabs>
       <div class="role-tips">
         <van-icon name="info-o" />

@@ -74,6 +74,11 @@ $footerBarH: 80px;
     width: 200%;
     min-height: 20px;
     position: relative;
+  }
+}
+
+.cell-label-mrt {
+  .van-cell__label {
     margin-top: 12px;
   }
 }
