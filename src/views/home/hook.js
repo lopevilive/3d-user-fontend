@@ -19,12 +19,13 @@ export const useHome = () => {
   const mineList = ref([])
   // 获取我创建/管理的图册
   const getMineList = async () => {
-    const {ownerList = [], adminList = [], demoShops = []} = globalData.value?.userInfo
-    let list = [...ownerList, ...adminList]
+    const {ownerList = [], adminList = [], demoShops = [], saleList = []} = globalData.value?.userInfo
+    let list = [...ownerList, ...adminList, ...saleList]
     list = list.filter((item) => {
       if (demoShops.includes(item)) return false
       return true
     })
+    list = [...new Set(list)]
     if (list.length) {
       let data = await shopInfoManage.getData(list)
       data = data || []

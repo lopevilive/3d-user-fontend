@@ -137,7 +137,7 @@ class ViewLog {
     let localLogs = localStorage.getItem('viewItem') // 兼容历史数据，后续可删除这个逻辑
     if (!localLogs) localLogs = '[]'
     localLogs = JSON.parse(localLogs)
-    const { viewLogs=[], ownerList=[], adminList=[], demoShops=[] } = globalData.value.userInfo
+    const { viewLogs=[], ownerList=[], adminList=[], demoShops=[], saleList = [] } = globalData.value.userInfo
     let s = new Set([...viewLogs, ...localLogs])
     s = [...s]
     const ret = []
@@ -145,6 +145,7 @@ class ViewLog {
       if (ownerList.includes(item)) continue
       if (adminList.includes(item)) continue
       if (demoShops.includes(item)) continue
+      if (saleList.includes(item)) continue
       ret.push(item)
     }
     return ret.reverse()

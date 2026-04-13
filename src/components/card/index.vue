@@ -15,6 +15,7 @@
             <span class="text">{{ data.name }}</span>
             <VanTag v-if="isOwner" type="primary">我的图册</VanTag>
             <VanTag v-if="isAdmin" type="success">管理员</VanTag>
+            <VanTag v-if="isDistributor" color="#722ed1" plain>分销员</VanTag>
           </div>
           <div class="desc">{{ data.desc }}</div>
         </div>
@@ -59,6 +60,12 @@ const isOwner = computed(() => {
 const isAdmin = computed(() => {
   const {adminList = []} = globalData.value?.userInfo
   if (adminList.includes(props.data.id)) return true
+  return false
+})
+
+const isDistributor = computed(() => {
+  const {saleList = []} = globalData.value?.userInfo
+  if (saleList.includes(props.data.id)) return true
   return false
 })
 
@@ -136,7 +143,9 @@ init()
         .text {
           font-weight: bold;
           font-size: $fsM;
-          margin-right: 5px;
+        }
+        .van-tag {
+          margin-left: 5px;
         }
       }
     }
