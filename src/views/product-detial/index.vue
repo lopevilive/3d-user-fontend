@@ -29,7 +29,7 @@
               :key="item.name"
               @click="specItemClickHandle(index)"
             >
-              <VanImage fit="cover" :src="getImageUrl(item.url)" v-if="isShowSpecImg(item)" lazy-load />
+              <VanImage fit="cover" :src="getUrl(item.url)" v-if="isShowSpecImg(item)" lazy-load />
               <span>{{ item.name }}</span>
             </div>
           </div>
@@ -61,7 +61,7 @@
     <template v-if="descUrlDisplay.length">
       <div class="item-tit">产品详情</div>
       <div class="desc-img-wrap">
-        <VanImage v-for="item in descUrlDisplay" :src="getImageUrl(item)" @click="showImagePreview([item])"/>
+        <VanImage v-for="item in descUrlDisplay" :src="getUrl(item)" @click="showImagePreview([item])"/>
       </div>
     </template>
     
@@ -81,7 +81,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { useProductDetial } from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
-import { getImageUrl, emitter } from '@/util'
+import { emitter } from '@/util'
 import { showImagePreview } from 'vant';
 import KeyValueDialog from '@/components/key-value-dialog/index.vue'
 import { globalData } from '@/store'
@@ -89,7 +89,8 @@ import { globalData } from '@/store'
 const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-  viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle
+  viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
+  getUrl
 } = useProductDetial()
 
 onMounted(init)

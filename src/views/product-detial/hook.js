@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/http'
 import {
   commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName, formatAttrs, getMulSpecName,
-  getMulSpecUrl, getSpecPrices, formatPoint
+  getMulSpecUrl, getSpecPrices, formatPoint, E_img_qua_map
 } from '@/util'
 import { globalData } from '@/store'
 
@@ -202,6 +202,13 @@ export const useProductDetial = () => {
   const showKeyValueHandle = async () => {
     keyValueDialogRef.value.show(displayInnerParams.value)
   }
+
+  const getUrl = (url) => {
+    if (!shopId) return getImageUrl(url)
+    const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
+    if (!cfgItem) return getImageUrl(url)
+    return getImageUrl(url, cfgItem.qua)
+  }
   
   const init = async () => {
     if (!productId) return
@@ -219,6 +226,7 @@ export const useProductDetial = () => {
   return {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
-    viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle
+    viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
+    getUrl
   }
 }
