@@ -17,6 +17,7 @@ export const useProductDetial = () => {
   const info = ref({})
   const done = ref(false)
   const shopInfo = ref()
+  const listRef = ref()
 
   const imgList = computed(() => {
     const {url, isSpec} = info.value
@@ -227,6 +228,6 @@ export const useProductDetial = () => {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
     viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
-    getUrl
+    getUrl, listRef
   }
 }

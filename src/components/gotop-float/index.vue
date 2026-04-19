@@ -15,13 +15,14 @@
 </template>
 
 <script setup>
-import {ref, computed} from 'vue'
-import { sleep, getFlexW } from '@/util'
+import {ref, computed, onUnmounted} from 'vue'
+import { getFlexW, emitter } from '@/util'
+import { useRoute } from 'vue-router'
 
-const props = defineProps({
-  listRef: {type: Object},
-  scrollT: {type: Number}
-})
+
+const route = useRoute()
+
+const dataMap = {}
 
 const gap = getFlexW(24)
 
@@ -55,19 +56,38 @@ const offsetDiaplay = computed({
 })
 
 const clickHandle = async () => {
-  let remain = props.scrollT || 0
-  let unit =Math.floor( props.scrollT / 10)
-  while(remain > 0) {
-    remain -= unit
-    if (remain <= 0) remain = 0
-    await sleep(20)
-    props.listRef.scrollTop = remain
-  }
+  const name = route.name
+  const data = dataMap[name]
+  if (!data) return
+  const {listRef} = data
+  if (!listRef?.value?.scrollTop) return
+  listRef.value.scrollTo({top: 0, behavior: 'smooth'})
 }
 
+const key = ref(false)
 const isShow = computed(() => {
-  if (props.scrollT >= 1000) return true
+  if(key.value) {}
+  const name = route.name
+  const data = dataMap[name]
+  if (!data) return false
+  if (data.listRef?.value?.scrollTop && data.listRef.value.scrollTop >= 1000) return true
   return false
+})
+
+const timer = setInterval(() => {
+  key.value = !key.value
+}, 2000);
+
+
+emitter.on('registerGoTop', (data) => {
+  const name = route.name
+  dataMap[name] = data
+  console.log(dataMap)
+})
+
+onUnmounted(() => {
+  emitter.off('registerGoTop')
+  clearInterval(timer)
 })
 
 

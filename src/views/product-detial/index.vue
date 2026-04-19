@@ -1,5 +1,5 @@
 <template>
-  <div class="view-product-detial" v-if="info.id">
+  <div class="view-product-detial" v-if="info.id" ref="listRef">
     <div class="down-product-tips" v-if="isShowDownTips">
       产品已下架～
     </div>
@@ -90,7 +90,7 @@ const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
   viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
-  getUrl
+  getUrl, listRef
 } = useProductDetial()
 
 onMounted(init)
@@ -102,6 +102,8 @@ onUnmounted(() => {
   emitter.off('prodUpdate')
 })
 
+emitter.emit('registerGoTop', {listRef})
+
 </script>
 
 <script>
@@ -112,12 +114,14 @@ export default {
 
 <style scoped lang="scss">
 .view-product-detial {
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
   min-height: 100%;
   padding-bottom: 100px;
   box-sizing: border-box;
   background: $bgWhite;
+  max-height: 100%;
+  overflow: auto;
   .down-product-tips {
     position: fixed;
     background: rgba(0,0,0,.7);

@@ -87,7 +87,7 @@ import { onActivated } from 'vue'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import ProductItem from '@/components/product-item/index.vue'
 import { useCustomHome } from './hook'
-import { getImageUrl } from '@/util'
+import { getImageUrl, emitter } from '@/util'
 import { showImagePreview } from 'vant'
 
 const {
@@ -98,6 +98,8 @@ const {
 onActivated(() => {
   activeHandle()
 })
+
+emitter.emit('registerGoTop', {listRef: domRef})
 
 </script>
 

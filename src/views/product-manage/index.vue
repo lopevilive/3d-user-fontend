@@ -97,7 +97,6 @@
     </div>
     <ProductPriceDialog ref="mulPriceRef" title="批量改价" />
     <TypeSelectDialog ref="mulProductTypeRef" />
-    <GoTop :listRef="listRef" :scrollT="scrollT" />
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
     <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
     <ExpiredTips />
@@ -110,13 +109,13 @@ import productItem from '@/components/product-item/index.vue'
 import {useProductManage} from './hook'
 import { globalData } from '@/store'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
-import GoTop from './GoTop.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
 import SortControl from '@/components/sort-control/index.vue'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import TypePop from './TypePop.vue'
 import LeftTypeMod from './LeftTypeMod.vue'
 import ExpiredTips from './ExpiredTips.vue'
+import { emitter } from '@/util'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
@@ -133,6 +132,8 @@ onActivated(() => {
 })
 
 init()
+
+emitter.emit('registerGoTop', {listRef})
 
 </script>
 
