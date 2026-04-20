@@ -564,3 +564,39 @@ export const getRidByShopId = (shopId, userInfo) => {
   if (userId) return 1 // 登录状态
   return 0 // 游客
 }
+
+/**
+ * 首尾兼顾的节流函数
+ * @param {Function} fn - 需要执行的逻辑
+ * @param {number} delay - 节流间隔（200ms）
+ */
+export const throttle = (fn, delay = 200) => {
+  let timer = null;
+  let lastTime = 0;
+
+  return function (...args) {
+    const now = Date.now();
+    
+    // 计算距离下次可以执行还有多久
+    const remaining = delay - (now - lastTime);
+
+    // 1. 如果到了时间间隔（首部触发或正常节流点）
+    if (remaining <= 0 || remaining > delay) {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+      lastTime = now;
+      fn.apply(this, args);
+    } 
+    // 2. 如果还在间隔内，设置一个定时器保证“尾部”会被执行一次
+    else if (!timer) {
+      timer = setTimeout(() => {
+        // 更新 lastTime 为当前时间，防止尾部执行完后立即又触发首部执行
+        lastTime = Date.now(); 
+        timer = null;
+        fn.apply(this, args);
+      }, remaining);
+    }
+  };
+};

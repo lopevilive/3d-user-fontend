@@ -92,7 +92,7 @@ import { showImagePreview } from 'vant'
 
 const {
   data, getBannerList, getTypeName, shopInfo, scrollHandle, activeHandle, domRef, viewMoreProd,
-  prodTypeClickHandle, productItemMode, pageMode
+  prodTypeClickHandle, productItemMode
 } = useCustomHome()
 
 onActivated(() => {

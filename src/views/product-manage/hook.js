@@ -3,7 +3,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod, getInventory } from '@/http'
 import {
   commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil,
-  productTypesManage
+  productTypesManage, throttle
 } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
@@ -294,21 +294,25 @@ export const useProductManage = () => {
     refresh()
   }
 
-  const goTopFloatRef = ref()
-  const scrollHandle = (e) => {
-    try {
-      goTopFloatRef.value.change()
-    } catch(e) {}
+  const handleFetchData = async (e) => {
+    if (finished.value) return
+    if (fetchLoadingRaw.value) return
     const {scrollTop, clientHeight, scrollHeight} = e.target
     scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
-    if (Math.abs(b - a) < 100){
-      if (finished.value) return
-      if (fetchLoadingRaw.value) return
+    if (Math.abs(b - a) < 200){
       loadHandle()
     }
   }
+
+  const goTopFloatRef = ref()
+  const scrollHandle = throttle((e) => {
+    handleFetchData(e)
+    try {
+      goTopFloatRef.value.change()
+    } catch(e) {}
+  }, 200)
 
   const selectedHandle = ({id, val}) => {
     const idx = selectedList.value.findIndex((item) => item === id)
@@ -541,6 +545,7 @@ export const useProductManage = () => {
     subActiveTab.value = type2 || 0
     refresh()
     const {name, url} = shopInfo.value
+    if (!name) return
     await sleep(300)
     router.replace({name: 'product-manage', params: {shopId}, query: {
       title: name,
@@ -673,6 +678,15 @@ export const useProductManage = () => {
     prodTypeFetchDone.value = true
   }
   
+  const handleActiveType = async () => {
+    const { activeType } = route.query
+    if (!activeType) return
+    const {type1, type2} = formatTypeUtil(activeType)
+    if (!type1) return
+    activeTab.value = type1;
+    subActiveTab.value = type2 || 0
+  }
+  
   const init = async () => {
     clearNeedExec()
     formatInventory() // 看这个用户有没有生成过清单，有的话把 历史清单 入口展示
@@ -680,6 +694,7 @@ export const useProductManage = () => {
     await handle2Detial() // 看是否需要跳转产品详情
     await handleTypeStatus() // 判断是否隐藏“全部”
     await fetchProductType() // 主动获取产品分类
+    await handleActiveType() // 看看是否跳转指定分类
     await loadHandle()
     inited = true
   }
