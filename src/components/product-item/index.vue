@@ -2,7 +2,7 @@
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content">
       <div @click="handleClick" :class="{'img': true, 'img-fixed-height': mode & 1<<1}">
-        <VanImage :fit="mode & 1<< 1? 'cover': 'contain'" :src="urlDisplay" />
+        <VanImage :fit="mode & 1<< 1? 'cover': 'contain'" :src="urlDisplay"/>
       </div>
       <div class="info-content">
         <div :class="{'desc': true, 'desc-line1': mode & 1<<1}" @click="handleClick">

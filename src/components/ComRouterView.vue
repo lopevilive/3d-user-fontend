@@ -1,6 +1,5 @@
 
 <template>
-  <GoTopFloat />
   <router-view v-slot="{Component}">
     <keep-alive :include="aliveList">
       <component :is="Component" />
@@ -17,7 +16,6 @@ import { computed, ref } from 'vue'
 import { globalData } from '@/store'
 import Setting from '@/components/setting/index.vue'
 import ShareFloat from '@/components/shareFloat/index.vue'
-import GoTopFloat from '@/components/gotop-float/index.vue'
 
 const aliveList = computed(() => {
   const ret = ['ProductManage', 'MulManage', 'CusInventory', 'CustomHome']

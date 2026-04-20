@@ -37,7 +37,7 @@
         />
       </div>
       <div class="wrap">
-        <div class="list" @scroll="scrollHandle" ref="listRef">
+        <div class="list will-change" @scroll="scrollHandle" ref="listRef">
           <ImgSwipeV2
             v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale"
             :autoplay="3000" :width="typeMod === 1 ? 285 : 375"
@@ -100,6 +100,7 @@
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
     <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
     <ExpiredTips />
+    <GoTopFloat :listRef="listRef" ref="goTopFloatRef"/>
   </div>
 </template>
 
@@ -115,7 +116,7 @@ import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import TypePop from './TypePop.vue'
 import LeftTypeMod from './LeftTypeMod.vue'
 import ExpiredTips from './ExpiredTips.vue'
-import { emitter } from '@/util'
+import GoTopFloat from '@/components/gotop-float/index.vue'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
@@ -124,7 +125,8 @@ const {
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef, bannerCfg,
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos, bannerKey, 
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
-  shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod
+  shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod,
+  goTopFloatRef
 } = useProductManage()
 
 onActivated(() => {
@@ -132,8 +134,6 @@ onActivated(() => {
 })
 
 init()
-
-emitter.emit('registerGoTop', {listRef})
 
 </script>
 

@@ -15,14 +15,12 @@
 </template>
 
 <script setup>
-import {ref, computed, onUnmounted} from 'vue'
-import { getFlexW, emitter } from '@/util'
-import { useRoute } from 'vue-router'
+import {ref, computed } from 'vue'
+import { getFlexW } from '@/util'
 
-
-const route = useRoute()
-
-const dataMap = {}
+const props = defineProps({
+  listRef: {type: Object, default: () => {}}
+})
 
 const gap = getFlexW(24)
 
@@ -55,40 +53,69 @@ const offsetDiaplay = computed({
   }
 })
 
+
+const smoothScrollToTop = async (el, duration = 300) => {
+  if (!el) return;
+
+  const startPos = el.scrollTop;
+  const startTime = performance.now();
+  let timeElapsed = 0;
+
+  // 使用 Promise 封装 requestAnimationFrame 作为一个等待器
+  const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+
+  while (timeElapsed < duration) {
+    const currentTime = await nextFrame(); // 等待浏览器准备好画下一帧
+    timeElapsed = currentTime - startTime;
+    
+    const progress = Math.min(timeElapsed / duration, 1);
+    
+    // EaseOutCubic 缓动公式
+    const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+    
+    // 执行滚动赋值
+    el.scrollTop = startPos * (1 - easeOutCubic);
+    
+    // 如果已经滚到了 0，提前跳出循环提高性能
+    if (el.scrollTop <= 0) break;
+  }
+  el.scrollTop = 0; // 最终保底归零
+  scrollTop.value = 0;
+};
+
+
+
 const clickHandle = async () => {
-  const name = route.name
-  const data = dataMap[name]
-  if (!data) return
-  const {listRef} = data
-  if (!listRef?.value?.scrollTop) return
-  listRef.value.scrollTo({top: 0, behavior: 'smooth'})
+  const {listRef} = props
+  if (!listRef?.scrollTop) return
+  smoothScrollToTop(listRef, 300)
 }
 
-const key = ref(false)
+const scrollTop = ref(0);
+let lastScrollTime = 0;
+const getScrollTopThrottled = () => {
+  const now = Date.now();
+  // 1000ms 节流一次
+  if (now - lastScrollTime >= 1000) {
+    if (props?.listRef) {
+      scrollTop.value = props.listRef.scrollTop;
+    }
+    lastScrollTime = now;
+  }
+};
+
+
 const isShow = computed(() => {
-  if(key.value) {}
-  const name = route.name
-  const data = dataMap[name]
-  if (!data) return false
-  if (data.listRef?.value?.scrollTop && data.listRef.value.scrollTop >= 1000) return true
+  if (!props.listRef) return false
+  if (scrollTop.value >= 1000) return true
   return false
 })
 
-const timer = setInterval(() => {
-  key.value = !key.value
-}, 2000);
+const change =  () => {
+  getScrollTopThrottled()
+}
 
-
-emitter.on('registerGoTop', (data) => {
-  const name = route.name
-  dataMap[name] = data
-  console.log(dataMap)
-})
-
-onUnmounted(() => {
-  emitter.off('registerGoTop')
-  clearInterval(timer)
-})
+defineExpose({change})
 
 
 </script>

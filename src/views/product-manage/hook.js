@@ -294,7 +294,11 @@ export const useProductManage = () => {
     refresh()
   }
 
+  const goTopFloatRef = ref()
   const scrollHandle = (e) => {
+    try {
+      goTopFloatRef.value.change()
+    } catch(e) {}
     const {scrollTop, clientHeight, scrollHeight} = e.target
     scrollT.value = scrollTop
     const a = scrollTop + clientHeight
@@ -688,6 +692,6 @@ export const useProductManage = () => {
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
     scrollT, priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
     beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
-    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey
+    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey, goTopFloatRef
   }
 }
