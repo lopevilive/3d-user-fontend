@@ -48,6 +48,12 @@ export const useProductManage = () => {
   let inited = false // 是否初始化完成
 
   const bannerKey = ref(Math.floor(Math.random() * 100))
+  const isShowAll = computed(() => { // 是否显示全部
+    if (shopInfo.value.typeStatus === 0) return true
+    if (globalData.value.editStatus === 1) return true
+    if (searchStr.value.trim()) return true
+    return false
+  })
 
   const productTypes = computed(() => {
     const {rid, productTypes} = globalData.value
@@ -75,7 +81,7 @@ export const useProductManage = () => {
         allName += `(${total.value}/${limit.value})`
       }
     }
-    if (shopInfo.value.typeStatus === 0 || globalData.value.editStatus === 1) {
+    if (isShowAll.value) {
       ret.splice(0,0, {name: allName, id: 0})
     }
     if ([2,3,99].includes(rid)) {
@@ -222,14 +228,14 @@ export const useProductManage = () => {
   
   let preSearchStr = ''
   const getPayload = () => {
-    preSearchStr = searchStr.value
+    preSearchStr = searchStr.value.trim()
     let ret = {
       shopId,
       pageSize,
       currPage: currPage.value,
       productType: formatType(),
       status: 0,
-      searchStr: searchStr.value || '',
+      searchStr: preSearchStr || '',
       priceSort: priceSort.value
     }
     if (activeTab.value === -2) { // 已下架
@@ -285,11 +291,20 @@ export const useProductManage = () => {
     loadHandle()
   }
 
-  const searchBlurHadle = () => {
+  const searchBlurHadle = async () => {
     if (preSearchStr === searchStr.value) return
-    if (searchStr.value && shopInfo.value.typeStatus === 0) {
+    if (searchStr.value) {
       activeTab.value = 0
       subActiveTab.value = 0
+    } else {
+      await sleep(100)
+      if (shopInfo.value.typeStatus === 1 && productTypes.value.length && activeTab.value === 0) {
+        const f = productTypes.value[0]
+        if (f.id) {
+          activeTab.value = f.id
+          subActiveTab.value = 0
+        }
+      }
     }
     refresh()
   }

@@ -102,8 +102,8 @@ $footerBarH: 80px;
   text-align: center;
 }
 
-.will-change {
-  will-change: transform; 
+.list-will-change {
+  will-change: scroll-position;
   -webkit-overflow-scrolling: touch;
 }
 

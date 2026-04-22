@@ -37,7 +37,7 @@
         />
       </div>
       <div class="wrap">
-        <div class="list will-change" @scroll="scrollHandle" ref="listRef">
+        <div class="list list-will-change" @scroll="scrollHandle" ref="listRef">
           <ImgSwipeV2
             v-if="isShowBanner" :mode="2" :list="bannerCfg.imgList" :scale="bannerCfg.scale"
             :autoplay="3000" :width="typeMod === 1 ? 285 : 375"
