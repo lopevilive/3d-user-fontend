@@ -64,7 +64,6 @@ const clearHandle = () => {
 
 const smoothScrollToTop = async (el, duration = 300) => {
   if (!el) return;
-
   el.scrollTo({top: 0, behavior: 'smooth'})
   return
 
@@ -111,7 +110,6 @@ const isShow = computed(() => {
 const scrollChangeHandle = throttle((d, ) => {
   dom.value = d
   scrollTop.value = d.scrollTop
-  console.log(scrollTop.value)
 })
 
 emitter.on('scrollChange', scrollChangeHandle)

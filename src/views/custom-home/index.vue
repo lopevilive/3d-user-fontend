@@ -58,6 +58,12 @@
                 />
               </div>
             </div>
+            <div v-if="data.customProducts.length >= 4" class="footer-more-wrap" @click="viewMoreProd">
+              <div class="footer-more-btn">
+                查看更多产品
+                <VanIcon name="arrow" />
+              </div>
+            </div>
           </div>
           <!-- 首页描述模块 -->
           <div v-if="item.comName === 'ItemHomeDesc'" class="home-desc-wrap cfg-item">
@@ -83,7 +89,7 @@
 </template>
 
 <script setup>
-import { onActivated } from 'vue'
+import { onActivated, onBeforeUnmount, onDeactivated } from 'vue'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import ProductItem from '@/components/product-item/index.vue'
 import { useCustomHome } from './hook'
@@ -99,7 +105,15 @@ onActivated(() => {
   activeHandle()
 })
 
-emitter.emit('registerGoTop', {listRef: domRef})
+onBeforeUnmount(() => {
+  emitter.emit('scrollClearHandle')
+})
+
+onDeactivated(() => {
+  emitter.emit('scrollClearHandle')
+})
+
+
 
 </script>
 
@@ -243,6 +257,24 @@ export default {
       display: flex;
       justify-content: center;
       box-sizing: border-box;
+    }
+    .footer-more-wrap {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 15px;
+      .footer-more-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 20px 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        color: $grey6;
+        .van-icon {
+          margin-left: 6px;
+          font-size: 14px;
+        }
+      }
     }
   }
 }

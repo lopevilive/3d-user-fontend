@@ -1,5 +1,5 @@
 <template>
-  <div class="view-product-detial" v-if="info.id" ref="listRef">
+  <div class="view-product-detial" v-if="info.id" ref="listRef" @scroll="scrollHandle">
     <div class="down-product-tips" v-if="isShowDownTips">
       产品已下架～
     </div>
@@ -76,12 +76,12 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, onBeforeUnmount } from 'vue'
 // import ModelDisplay from '@/components/model-display/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
-import { emitter } from '@/util'
+import { emitter, throttle } from '@/util'
 import { showImagePreview } from 'vant';
 import KeyValueDialog from '@/components/key-value-dialog/index.vue'
 import { globalData } from '@/store'
@@ -102,7 +102,13 @@ onUnmounted(() => {
   emitter.off('prodUpdate')
 })
 
-emitter.emit('registerGoTop', {listRef})
+const scrollHandle = throttle(() => {
+  emitter.emit('scrollChange', listRef.value)
+})
+
+onBeforeUnmount(() => {
+  emitter.emit('scrollClearHandle')
+})
 
 </script>
 

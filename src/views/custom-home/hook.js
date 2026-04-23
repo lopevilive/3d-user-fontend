@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { shopInfoManage, formatType, commonFetch, homepageInstance } from '@/util'
+import { shopInfoManage, formatType, commonFetch, homepageInstance, throttle, emitter } from '@/util'
 import { globalData } from '@/store'
 import { getProduct } from '@/http'
 
@@ -50,10 +50,11 @@ export const useCustomHome = () => {
   }
 
   const scrollT = ref(0)
-  const scrollHandle = (e) => {
-     const {scrollTop} = e.target
-      scrollT.value = scrollTop
-  }
+  const scrollHandle = throttle((e) => {
+    const {scrollTop} = e.target
+    scrollT.value = scrollTop
+    emitter.emit('scrollChange', domRef.value)
+  })
 
   const viewMoreProd = async () => {
     if (pageMode.value === 2) return
