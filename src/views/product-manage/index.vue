@@ -100,12 +100,11 @@
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
     <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
     <ExpiredTips />
-    <GoTopFloat :listRef="listRef" ref="goTopFloatRef"/>
   </div>
 </template>
 
 <script setup>
-import { onActivated } from 'vue'
+import { onActivated, onBeforeUnmount, onDeactivated } from 'vue'
 import productItem from '@/components/product-item/index.vue'
 import {useProductManage} from './hook'
 import { globalData } from '@/store'
@@ -116,7 +115,7 @@ import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import TypePop from './TypePop.vue'
 import LeftTypeMod from './LeftTypeMod.vue'
 import ExpiredTips from './ExpiredTips.vue'
-import GoTopFloat from '@/components/gotop-float/index.vue'
+import { emitter } from '@/util'
 
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
@@ -126,11 +125,18 @@ const {
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos, bannerKey, 
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
   shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod,
-  goTopFloatRef
 } = useProductManage()
 
 onActivated(() => {
   activeHandle()
+})
+
+onBeforeUnmount(() => {
+  emitter.emit('scrollClearHandle')
+})
+
+onDeactivated(() => {
+  emitter.emit('scrollClearHandle')
 })
 
 init()

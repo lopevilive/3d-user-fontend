@@ -16,11 +16,14 @@
 
 <script setup>
 import {ref, computed } from 'vue'
-import { getFlexW } from '@/util'
+import { getFlexW, emitter, throttle } from '@/util'
 
 const props = defineProps({
   listRef: {type: Object, default: () => {}}
 })
+
+const scrollTop = ref(0);
+const dom = ref(null);
 
 const gap = getFlexW(24)
 
@@ -54,8 +57,16 @@ const offsetDiaplay = computed({
 })
 
 
+const clearHandle = () => {
+  dom.value = null
+  scrollTop.value =  0
+}
+
 const smoothScrollToTop = async (el, duration = 300) => {
   if (!el) return;
+
+  el.scrollTo({top: 0, behavior: 'smooth'})
+  return
 
   const startPos = el.scrollTop;
   const startTime = performance.now();
@@ -80,42 +91,32 @@ const smoothScrollToTop = async (el, duration = 300) => {
     if (el.scrollTop <= 0) break;
   }
   el.scrollTop = 0; // 最终保底归零
-  scrollTop.value = 0;
 };
 
 
 
 const clickHandle = async () => {
-  const {listRef} = props
-  if (!listRef?.scrollTop) return
-  smoothScrollToTop(listRef, 300)
+  if (!dom.value) return
+  smoothScrollToTop(dom.value, 1000)
+  clearHandle()
 }
-
-const scrollTop = ref(0);
-let lastScrollTime = 0;
-const getScrollTopThrottled = () => {
-  const now = Date.now();
-  // 1000ms 节流一次
-  if (now - lastScrollTime >= 1000) {
-    if (props?.listRef) {
-      scrollTop.value = props.listRef.scrollTop;
-    }
-    lastScrollTime = now;
-  }
-};
 
 
 const isShow = computed(() => {
-  if (!props.listRef) return false
+  if (!dom.value) return false
   if (scrollTop.value >= 1000) return true
   return false
 })
 
-const change =  () => {
-  getScrollTopThrottled()
-}
+const scrollChangeHandle = throttle((d, ) => {
+  dom.value = d
+  scrollTop.value = d.scrollTop
+  console.log(scrollTop.value)
+})
 
-defineExpose({change})
+emitter.on('scrollChange', scrollChangeHandle)
+emitter.on('scrollClearHandle', clearHandle)
+
 
 
 </script>

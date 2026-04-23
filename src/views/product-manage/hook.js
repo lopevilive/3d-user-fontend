@@ -3,7 +3,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { productDel, getProduct, productMod, getInventory } from '@/http'
 import {
   commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil,
-  productTypesManage, throttle
+  productTypesManage, throttle, emitter
 } from '@/util'
 import { globalData } from '@/store'
 import axios from 'axios';
@@ -321,12 +321,9 @@ export const useProductManage = () => {
     }
   }
 
-  const goTopFloatRef = ref()
   const scrollHandle = throttle((e) => {
     handleFetchData(e)
-    try {
-      goTopFloatRef.value.change()
-    } catch(e) {}
+    emitter.emit('scrollChange', listRef.value)
   }, 200)
 
   const selectedHandle = ({id, val}) => {
@@ -722,6 +719,6 @@ export const useProductManage = () => {
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
     scrollT, priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
     beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
-    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey, goTopFloatRef
+    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey
   }
 }
