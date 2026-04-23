@@ -65,31 +65,6 @@ const clearHandle = () => {
 const smoothScrollToTop = async (el, duration = 300) => {
   if (!el) return;
   el.scrollTo({top: 0, behavior: 'smooth'})
-  return
-
-  const startPos = el.scrollTop;
-  const startTime = performance.now();
-  let timeElapsed = 0;
-
-  // 使用 Promise 封装 requestAnimationFrame 作为一个等待器
-  const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
-
-  while (timeElapsed < duration) {
-    const currentTime = await nextFrame(); // 等待浏览器准备好画下一帧
-    timeElapsed = currentTime - startTime;
-    
-    const progress = Math.min(timeElapsed / duration, 1);
-    
-    // EaseOutCubic 缓动公式
-    const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-    
-    // 执行滚动赋值
-    el.scrollTop = startPos * (1 - easeOutCubic);
-    
-    // 如果已经滚到了 0，提前跳出循环提高性能
-    if (el.scrollTop <= 0) break;
-  }
-  el.scrollTop = 0; // 最终保底归零
 };
 
 

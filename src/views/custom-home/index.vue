@@ -266,10 +266,11 @@ export default {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0 20px 8px 20px;
+        padding: 8px 20px;
+        background: rgba(0, 0, 0, 0.65);
+        color: #ffffff;
         border-radius: 20px;
         font-size: 14px;
-        color: $grey6;
         .van-icon {
           margin-left: 6px;
           font-size: 14px;
