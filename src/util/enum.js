@@ -148,12 +148,12 @@ export const E_illegal_reg = [
 // 对部分图册修改图片压缩质量
 export const E_img_qua_map = [
   // {shopId: 5, qua: 65},
-  {shopId: 1504, qua: 65},
-  {shopId: 1441, qua: 65},
-  {shopId: 2148, qua: 65},
-  {shopId: 2317, qua: 65},
-  {shopId: 2361, qua: 65},
-  {shopId: 2357, qua: 65},
+  // {shopId: 1504, qua: 65},
+  // {shopId: 1441, qua: 65},
+  // {shopId: 2148, qua: 65},
+  // {shopId: 2317, qua: 65},
+  // {shopId: 2361, qua: 65},
+  // {shopId: 2357, qua: 65},
 ]
 
 export const E_img_url_map = {
