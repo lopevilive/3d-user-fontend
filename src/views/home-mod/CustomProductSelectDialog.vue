@@ -105,11 +105,7 @@ const beforeClose = async (action) => {
     showToast(`最多只能选择${maxProducts}个产品`)
     return false
   }
-  
-  const selected = products.value.filter(p => 
-    selectedProducts.value.includes(p.id)
-  )
-  resolve(JSON.parse(JSON.stringify(selected)))
+  resolve([...selectedProducts.value])
   return true
 }
 

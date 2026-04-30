@@ -140,16 +140,16 @@ export const useItemCustomProduct = (props, emits) => {
     const selectedProducts = await customProductSelectDialogRef.value.show(ids, MAX_PRODUCTS)
     const newList = []
     for (const rawItem of props.config.list) {
-      const idx = selectedProducts.findIndex((item) => item.id === rawItem.id)
+      const idx = selectedProducts.findIndex((item) => item === rawItem.id)
       if (idx === -1) continue
       newList.push({ id: rawItem.id })
     }
 
     for (const selectedItem of selectedProducts) {
-      const idx = newList.findIndex((item) => item.id === selectedItem.id)
+      const idx = newList.findIndex((item) => item.id === selectedItem)
       if (idx !== -1) continue
-      newList.push({ id: selectedItem.id })
-      prodInfo.value[selectedItem.id] = { data: selectedItem, status: 2 }
+      newList.push({ id: selectedItem })
+      // prodInfo.value[selectedItem] = { data: selectedItem, status: 2 }
     }
     prodInfoDisplay.value = newList
   }
