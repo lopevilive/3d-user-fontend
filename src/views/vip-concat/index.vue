@@ -3,7 +3,7 @@
     <VanSticky>
       <div class="upgrade-notice">
         <VanIcon name="bullhorn-o" class="notice-icon" />
-        <span class="notice-text">在线支付系统升级中（预计4月完成），开通升级/续费请联系客服~</span>
+        <span class="notice-text">在线支付系统升级中（预计5月中旬完成），开通升级/续费请联系客服~</span>
       </div>
     </VanSticky>
 
@@ -93,7 +93,7 @@
     <div class="footer-action">
       <div class="concat-info">
         <div class="title">咨询开通会员</div>
-        <div class="sub">支付系统预计4月完成升级</div>
+        <div class="sub">支付系统预计5月中旬完成升级</div>
       </div>
       <VanButton 
         type="primary" 

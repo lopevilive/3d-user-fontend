@@ -82,9 +82,9 @@ export const getSuffix = (str) => {
   return '';
 }
 
-export const getImageUrl = (url, quality = 40) => {
+export const getImageUrl = (url, quality = 60) => {
   if (!url) return url
-  let ret = `${url}?imageMogr2/quality/${quality}`
+  let ret = `${url}?imageMogr2/quality/${quality}/thumbnail/800x/strip`
   ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
   return ret
 }
