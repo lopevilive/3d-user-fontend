@@ -67,7 +67,7 @@ const getUrl = (url) => {
 const displayPreviewList = computed(() => {
   let ret = []
   for (const item of props.list) {
-    ret.push(getImageUrl(item, 80, 1080))
+    ret.push(getImageUrl(item, 95, 1080))
   }
   return ret
 })
