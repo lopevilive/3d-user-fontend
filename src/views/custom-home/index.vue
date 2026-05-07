@@ -73,8 +73,8 @@
                 <VanImage
                   v-for="(img, imgIndex) in getBannerList(item.info.url)"
                   :key="imgIndex"
-                  :src="getImageUrl(img)"
-                  @click="showImagePreview([getImageUrl(img)])"
+                  :src="getImageUrl(img, {qua: 80, w: 1080})"
+                  @click="showImagePreview([getImageUrl(img, {qua: 80, w: 1080})])"
                 />
               </div>
             </template>

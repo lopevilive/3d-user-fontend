@@ -24,7 +24,7 @@ import Swiper from 'swiper';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { rand, E_img_qua_map, getImageUrl, getFlexW, sleep } from '@/util'
+import { rand, getImageUrl, getFlexW, sleep } from '@/util'
 import {onMounted, computed, ref, watch} from 'vue'
 import { useRoute } from 'vue-router'
 import { showImagePreview } from 'vant';
@@ -58,16 +58,13 @@ const styleDisplay = computed(() => {
 })
 
 const getUrl = (url) => {
-  if (!shopId) return getImageUrl(url)
-  const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
-  if (!cfgItem) return getImageUrl(url)
-  return getImageUrl(url, cfgItem.qua)
+  return getImageUrl(url, {shopId})
 }
 
 const displayPreviewList = computed(() => {
   let ret = []
   for (const item of props.list) {
-    ret.push(getImageUrl(item, 95, 1080))
+    ret.push(getImageUrl(item, {qua: 95, w: 1080}))
   }
   return ret
 })

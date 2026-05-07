@@ -61,7 +61,7 @@
     <template v-if="descUrlDisplay.length">
       <div class="item-tit">产品详情</div>
       <div class="desc-img-wrap">
-        <VanImage v-for="item in descUrlDisplay" :src="getUrl(item)" @click="showImagePreview([item])"/>
+        <VanImage v-for="(item, index) in descUrlDisplay" :src="getUrl(item)" @click="viewAllDetial(index)"/>
       </div>
     </template>
     
@@ -82,7 +82,6 @@ import { useProductDetial } from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
 import { emitter, throttle } from '@/util'
-import { showImagePreview } from 'vant';
 import KeyValueDialog from '@/components/key-value-dialog/index.vue'
 import { globalData } from '@/store'
 
@@ -90,7 +89,7 @@ const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
   viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
-  getUrl, listRef
+  getUrl, listRef, viewAllDetial
 } = useProductDetial()
 
 onMounted(init)

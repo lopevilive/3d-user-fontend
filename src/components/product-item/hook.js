@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { productDel, moveTopProduct, productMod, modProductPos } from '@/http'
-import { commonFetch, EE, getImageUrl, getSpecPrices, getTypeName, formatAttrs, formatPoint, E_img_qua_map } from '@/util'
+import { commonFetch, EE, getImageUrl, getSpecPrices, getTypeName, formatAttrs, formatPoint } from '@/util'
 import { globalData } from '@/store'
 import { showConfirmDialog } from 'vant';
 
@@ -115,9 +115,7 @@ export const useProductItem = (props, emits) => {
     const {url} = props.data
     if (!url) return ''
     const strUrl = url.split(',')[0]
-    const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
-    if (!cfgItem) return getImageUrl(strUrl)
-    return getImageUrl(strUrl, cfgItem.qua)
+    return getImageUrl(strUrl)
   })
 
   const checked = ref(false)

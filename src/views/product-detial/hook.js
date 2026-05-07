@@ -3,9 +3,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/http'
 import {
   commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName, formatAttrs, getMulSpecName,
-  getMulSpecUrl, getSpecPrices, formatPoint, E_img_qua_map
+  getMulSpecUrl, getSpecPrices, formatPoint
 } from '@/util'
 import { globalData } from '@/store'
+import { showImagePreview } from 'vant';
 
 
 export const useProductDetial = () => {
@@ -205,10 +206,16 @@ export const useProductDetial = () => {
   }
 
   const getUrl = (url) => {
-    if (!shopId) return getImageUrl(url)
-    const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
-    if (!cfgItem) return getImageUrl(url)
-    return getImageUrl(url, cfgItem.qua)
+    return getImageUrl(url, {shopId, qua: 80, w: 1080})
+  }
+  
+  const viewAllDetial = (idx) => {
+    const list = []
+    for (const item of descUrlDisplay.value) {
+      list.push(getUrl(item))
+    }
+    console.log(list)
+    showImagePreview(list, idx)
   }
   
   const init = async () => {
@@ -228,6 +235,6 @@ export const useProductDetial = () => {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
     viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
-    getUrl, listRef
+    getUrl, listRef, viewAllDetial
   }
 }

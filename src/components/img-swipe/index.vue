@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getImageUrl, getFlexW, shopInfoManage, E_img_qua_map } from '@/util'
+import { getImageUrl, getFlexW, shopInfoManage } from '@/util'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
 import { useRoute } from 'vue-router'
@@ -41,10 +41,7 @@ const swipeRef = ref()
 const shopInfo = ref()
 
 const getUrl = (url) => {
-  if (!shopId) return getImageUrl(url)
-  const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
-  if (!cfgItem) return getImageUrl(url)
-  return getImageUrl(url, cfgItem.qua)
+  return getImageUrl(url, {shopId})
 }
 
 const displayPreviewList = computed(() => {

@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
-import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage, E_img_url_map } from '@/util'
+import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage, E_img_url_map, E_img_qua_map } from '@/util'
 import router from '@/router'
 import mitt from 'mitt'
 
@@ -82,7 +82,20 @@ export const getSuffix = (str) => {
   return '';
 }
 
-export const getImageUrl = (url, quality = 70, px = 800) => {
+export const getImageUrl = (url, payload = {}) => {
+  const defauQua = 70
+  const defauPx = 800
+  const {shopId, qua, w} = payload
+  let quality = qua ? qua : defauQua
+  let px = w ? w : defauPx
+  while(shopId) {
+    const cfgItem = E_img_qua_map.find((item) => item.shopId === shopId)
+    if (!cfgItem) break
+    quality = cfgItem.qua || quality
+    px = cfgItem.w || px
+    break
+  }
+
   if (!url) return url
   let ret = `${url}?imageMogr2/quality/${quality}/thumbnail/${px}x/strip`
   ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
