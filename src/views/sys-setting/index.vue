@@ -79,7 +79,10 @@
         </template>
         <template #label>
           <CellLabel txt="新上传图片自动添加水印"
-            :url="[E_img_url_map.waterImgDemo1,E_img_url_map.waterImgDemo2]"
+            :url="[
+              E_img_url_map.waterImgDemo1,E_img_url_map.waterImgDemo2,
+              E_img_url_map.waterImgDemo3, E_img_url_map.waterImgDemo4
+            ]"
           />
         </template>
         <template #value>

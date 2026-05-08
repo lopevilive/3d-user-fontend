@@ -7,23 +7,30 @@
     </div>
     <div v-if="url.length" class="btn-view-demo" @click="viewHandle">查看示例</div>
   </div>
+  <VanDialog
+    confirm-button-text="关闭"
+    v-model:show="isShowDialog"
+    class="com-cell-label_dialog"
+  >
+    <div class="com-cell-label_content">
+      <ImgSwipeV2 :list="props.url" :mode="1"/>
+    </div>
+  </VanDialog>
 </template>
 
 <script setup>
-import { showImagePreview, showToast } from 'vant';
-import { globalData } from '@/store'
+import { ref } from 'vue'
+import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 
 const props = defineProps({
   txt: {type: String, default: ''},
   url: {type: Array, default: () => []}
 })
 
+const isShowDialog = ref(false)
+
 const viewHandle = async () => {
-  if (globalData.value.isPC) {
-    showToast('请用手机查看')
-    return
-  }
-  showImagePreview(props.url)
+  isShowDialog.value = true
 }
 
 </script>
@@ -44,4 +51,16 @@ const viewHandle = async () => {
   }
 }
 
+</style>
+
+<style lang="scss">
+.com-cell-label_dialog {
+  width: 350px;
+  border-radius: 0;
+  .com-cell-label_content {
+    padding: 10px 0px;
+    box-sizing: border-box;
+  }
+
+}
 </style>
