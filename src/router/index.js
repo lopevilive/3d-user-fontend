@@ -309,7 +309,7 @@ const handleIllegal = async (shopId) => {
 
 const handleLog = (to, shopId) => {
   if (!shopId) return
-  if (!['product-manage', 'product-detial'].includes(to.name)) return
+  if (!['product-manage', 'product-detial', 'custom-home'].includes(to.name)) return
   viewLog.setlog(shopId)
 }
 
