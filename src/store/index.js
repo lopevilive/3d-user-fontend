@@ -67,7 +67,7 @@ export const globalData = ref({
   selectedAddress: [],
   invertoryRemark: '',
   isPC: false, // 是否 pc 打开
-  wxEnv: 'release',
+  wxEnv: 'release', // develop trial release
   encryInfo: {},
   hasInventory: {},
   cusInventoryNeedUpdate: false,
