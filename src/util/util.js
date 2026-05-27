@@ -192,20 +192,21 @@ export const toLogin = (fullPath)  => {
 
 export const toVip = async (shopId) => {
   router.push({name: 'vip-concat', params: {shopId}})
+  return
 
-  // const inApp = isInApp()
-  // if (!inApp) return showToast('请在小程序内打开')
-  // let vipInfo = await vipInfoManage.getData(shopId)
-  // vipInfo = vipInfo[0]
-  // let shopInfo = await shopInfoManage.getData(shopId)
-  // shopInfo = shopInfo[0]
-  // const shopData = {
-  //   shopId, name: shopInfo.name,
-  //   url: getImageUrl(shopInfo.url.split(',')[0])
-  // }
-  // const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
-  // const shopStr = encodeURIComponent(JSON.stringify(shopData))
-  // wx.miniProgram.navigateTo({url: `../vip/vip?shopInfo=${shopStr}&payload=${payloadStr}`})
+  const inApp = isInApp()
+  if (!inApp) return showToast('请在小程序内打开')
+  let vipInfo = await vipInfoManage.getData(shopId)
+  vipInfo = vipInfo[0]
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0]
+  const shopData = {
+    shopId, name: shopInfo.name,
+    url: getImageUrl(shopInfo.url.split(',')[0])
+  }
+  const payloadStr = encodeURIComponent(JSON.stringify(vipInfo))
+  const shopStr = encodeURIComponent(JSON.stringify(shopData))
+  wx.miniProgram.navigateTo({url: `../vip-v2/vip-v2?shopInfo=${shopStr}&payload=${payloadStr}`})
 }
 
 export const copyStr = (str) => {
