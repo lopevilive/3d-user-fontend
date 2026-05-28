@@ -191,10 +191,10 @@ export const toLogin = (fullPath)  => {
 }
 
 export const toVip = async (shopId) => {
-  if (![577, 1].includes(shopId)) {
-    router.push({name: 'vip-concat', params: {shopId}})
-    return
-  }
+  // if (![577, 1].includes(shopId)) {
+  //   router.push({name: 'vip-concat', params: {shopId}})
+  //   return
+  // }
 
   const inApp = isInApp()
   if (!inApp) return showToast('请在小程序内打开')
