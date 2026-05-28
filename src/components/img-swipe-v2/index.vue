@@ -25,8 +25,7 @@ import Swiper from 'swiper';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { rand, getImageUrl, getFlexW, sleep } from '@/util'
-import {onMounted, computed, ref, watch} from 'vue'
+import { rand, getImageUrl, getFlexW } from '@/util'
 import { useRoute } from 'vue-router'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
