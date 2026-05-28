@@ -203,7 +203,7 @@ export const useSysSetting = () => {
     if (val) {
       let cfg = shopInfo.value.bannerCfg
       if (!cfg) {
-        cfg = { url: shopInfo.value.url.split(',')[0], scale: '0.33'}
+        cfg = { url: shopInfo.value.url.split(',')[0], scale: '0.5'}
         cfg = JSON.stringify(cfg)
         payload.bannerCfg = cfg
       }

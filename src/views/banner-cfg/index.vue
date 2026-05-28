@@ -39,7 +39,7 @@ const router = useRouter()
 
 const shopId = + route.params.shopId
 
-const data = ref({ url: '', scale: '0.33'})
+const data = ref({ url: '', scale: '0.5'})
 
 const maxCount = 5
 const uploadImgsRef = ref()
