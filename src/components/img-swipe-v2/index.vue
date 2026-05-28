@@ -99,7 +99,7 @@ const createSwipe = async () => {
     domKey.value = rand(10000, 99999)
     swiperInstance.value.destroy(true, true)
     swiperInstance.value = null
-    await sleep(200)
+    await nextTick()
   }
 
   const config = {
@@ -110,6 +110,8 @@ const createSwipe = async () => {
     },
     modules: [Pagination, Navigation],
     preventClicks: true, // 防止点击穿透
+  }
+
   if (globalData.value.isPC) {
     config.allowTouchMove = false
     config.simulateTouch = false
