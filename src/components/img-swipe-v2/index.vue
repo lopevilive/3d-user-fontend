@@ -20,6 +20,7 @@
 </template>
 
 <script setup>
+import {onMounted, computed, ref, watch, defineAsyncComponent, nextTick} from 'vue'
 import Swiper from 'swiper';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -109,6 +110,11 @@ const createSwipe = async () => {
     },
     modules: [Pagination, Navigation],
     preventClicks: true, // 防止点击穿透
+  if (globalData.value.isPC) {
+    config.allowTouchMove = false
+    config.simulateTouch = false
+    config.grabCursor = false
+    config.allowTouchMove = false
   }
 
   // 当 autoplay 大于 0 时才启用自动轮播
@@ -179,7 +185,7 @@ onMounted(init)
     }
     .swiper-no-swiping {
       position: absolute;
-      width: 20%;
+      width: 10%;
       height: 100%;
       // background: red;
       top: 0;
