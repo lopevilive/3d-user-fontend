@@ -143,8 +143,7 @@ const afterRead = async (file) => {
       file: file.file, 
       shopId, 
       onProgress: (progressData) => {
-        // 关键注入：通常云厂商返回的数据里有 percent 属性 (如 0.45 或 45)
-        // 请根据你底层实际打包的 uploadMedia 返回数据格式调整。这里兼容小数和整数
+        // 1. 提取原始进度（兼容小数 0.95 和整数 95）
         let percent = progressData.percent || 0;
         if (percent < 1) {
           percent = Math.floor(percent * 100);
@@ -152,8 +151,15 @@ const afterRead = async (file) => {
           percent = Math.floor(percent);
         }
         
-        // 限制边界值最大为 99，等接口彻底返回完成再变 100 
-        progress.value = Math.min(percent, 99);
+        // 2. 限制边界值最大为 99，等接口彻底返回完成再变成 100 
+        const nextProgress = Math.min(percent, 99);
+
+        // 🌟 核心修复：防倒退安全锁！
+        // 只有当新算出来的进度比之前的大，或者之前是0（刚启动）时，才允许赋值
+        // 这样即使底层 SDK 因为“合并分片”把它重置成了 0 或 1，也会被这行代码直接无视
+        if (nextProgress > progress.value) {
+          progress.value = nextProgress;
+        }
       }
     })
 
