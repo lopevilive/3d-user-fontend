@@ -92,7 +92,7 @@ defineExpose({pause})
 
 <style lang="scss" scoped>
 /* 延续之前 aspect-ratio 的样式方案 */
-$maxH: 350px;
+$maxH: 480px;
 .video-limit-box {
   width: 100%;
 }
