@@ -95,6 +95,8 @@ const {
   position: relative;
   border-radius: 5px;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: 280px;
   :deep(.van-checkbox) {
     position: absolute;
     left: 3px;

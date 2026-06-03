@@ -58,7 +58,7 @@ export const useDialogEdit = (emits) => {
     const payload = isMul.value ? getMulData(): getData()
     await commonFetch(productTypesMod, payload)
     showSuccessToast('保存成功～')
-    globalData.value._productTypes[shopId].done = false
+    globalData.value.dirtyProductTypes(shopId)
     productTypesManage.dirty(shopId)
     emits('update')
   }

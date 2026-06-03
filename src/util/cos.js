@@ -1,5 +1,5 @@
 import COS from 'cos-js-sdk-v5';
-import { getCosTempKeys } from '@/http'
+import { getCosTempKeys, processVideo } from '@/http'
 import { showNotify } from 'vant';
 import { md5File } from './util'
 import { globalData } from '@/store'
@@ -153,6 +153,36 @@ export const watermark = async (payload) => {
     }
   })
   return p
+}
+
+
+export const uploadMedia = async (payload) => {
+  try {
+    const {file, shopId, onProgress} = payload
+    const { userId } = globalData.value.userInfo;
+    if (!userId || !shopId) throw new Error('参数有误，请检查')
+
+    const fileNameRaw = await md5File(file, false);
+    const extension = file.name.split('.').pop().toLowerCase() || 'mp4';
+    const rawKey = `video/raw_${shopId}_${userId}_${fileNameRaw}.${extension}`;
+    await getKey();
+
+    // 1. 上传原文件
+    await cos.uploadFile({
+      Bucket, Region, Key: rawKey, Body: file,
+      SliceSize: 1024 * 1024 * 10,
+      onProgress: function(progressData) {
+        onProgress && onProgress(progressData)
+        console.log('上传进度：', progressData);
+      },
+    });
+
+    const res = await processVideo({shopId, rawKey})
+    return res
+  } catch (e) {
+    console.error('上传失败', e);
+    throw e;
+  }
 }
 
 

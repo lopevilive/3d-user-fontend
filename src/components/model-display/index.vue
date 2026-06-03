@@ -7,8 +7,8 @@
     @closed="destoryModel"
   >
     <div class="content" id="scene" v-if="isShow">
-      <template v-if="productInfo.type3D === 2">
-        <iframe class="iframe-wrap" :src="productInfo.modelUrl"> </iframe>
+      <template v-if="false">
+        <iframe class="iframe-wrap"> </iframe>
       </template>
       <VanLoading v-if="isShowLoading" />
       <div class="close">

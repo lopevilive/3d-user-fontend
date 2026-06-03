@@ -390,8 +390,8 @@ export const useSpecEdit = () => {
       if (singleSpecs.value.length === 0) {
         if (singleCfg.length === 0) {
           singleSpecs.value = [
-            {name: '大 (示例)', price: '', url: ''},
-            {name: '小 (示例)', price: '', url: ''},
+            {name: '大', price: '', url: ''},
+            {name: '小', price: '', url: ''},
           ]
         } else {
           addSpecHandle()
@@ -402,11 +402,11 @@ export const useSpecEdit = () => {
       const mulCfg = specsCfg.mulCfg || []
       if (mulSpecs.value.length === 0 && mulCfg.length === 0) {
         mulSpecs.value = [
-          {name: '颜色 (示例)', useImg: 0, id: getMulSpecIncId(), list: [
+          {name: '颜色', useImg: 0, id: getMulSpecIncId(), list: [
             {name: '黑', url: '', id: getMulSpecIncId()},
             {name: '白', url: '', id: getMulSpecIncId()},
           ]},
-          {name: '尺码 (示例)', useImg: 0, id: getMulSpecIncId(), list: [
+          {name: '尺码', useImg: 0, id: getMulSpecIncId(), list: [
             {name: 'S', url: '', id: getMulSpecIncId()},
             {name: 'M', url: '', id: getMulSpecIncId()},
             {name: 'L', url: '', id: getMulSpecIncId()},

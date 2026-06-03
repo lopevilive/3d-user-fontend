@@ -76,6 +76,10 @@ export const useProductEdit = () => {
       newSpecs.push({key, value, _id})
     }
     payload.specs = JSON.stringify(newSpecs)
+    const {videoUrl} = payload
+    if  (videoUrl && /\.check/.test(videoUrl)) {
+      payload.videoUrl = videoUrl.replace(/\.check/, '.mp4')
+    }
     return payload
   }
 
@@ -91,6 +95,7 @@ export const useProductEdit = () => {
       handleOverCount(res)
       return
     }
+    globalData.value.dirtyUsage(shopId)
     showSuccessToast('保存成功～')
 
     const {editStatus} = globalData.value
@@ -115,15 +120,6 @@ export const useProductEdit = () => {
     }, 0);
   }
 
-  const qrcodeScannerRef = ref()
-  const scanClickHandle = () => {
-    qrcodeScannerRef.value.show()
-  }
-
-  const scanHandle = (url) => {
-    data.value.modelUrl = url
-  }
-
   const getProductInfo = async () => {
     if (!id) return
     const res = await commonFetch(getProduct, {productId: id, shopId})
@@ -142,6 +138,11 @@ export const useProductEdit = () => {
   }
 
   const secCheckRef = ref()
+
+  const isShowVideo = computed(() => {
+    if (['develop', 'trial'].includes(globalData.value.wxEnv)) return true // todo
+    return false
+  })
   
   const init = () => {
     getProductInfo()
@@ -149,7 +150,6 @@ export const useProductEdit = () => {
   }
 
   return {
-    data, formRef, saveHandle, init, qrcodeScannerRef, scanClickHandle, scanHandle,
-    busiCfg, dialogVipRef, handleResetValidation, secCheckRef
+    data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef, isShowVideo
   }
 }

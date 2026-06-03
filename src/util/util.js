@@ -60,14 +60,18 @@ export const commonFetch = async (method, paylaod, msg) => {
   }
 }
 
-export const md5File = async (file) => {
+export const md5File = async (file, withSuf = true) => {
   const suffix = getSuffix(file.name)
   const fileReader = new FileReader()
   fileReader.readAsBinaryString(file);
   const res = await new Promise((resolve) => {
     fileReader.onloadend = (ev) => {
       const md5Str = md5(latin1.parse(ev.target.result)).toString(hex);
-      resolve(`${md5Str}.${suffix}`)
+      if (withSuf) {
+        resolve(`${md5Str}.${suffix}`)
+      } else {
+        resolve(`${md5Str}`)
+      }
     }
   })
   return res

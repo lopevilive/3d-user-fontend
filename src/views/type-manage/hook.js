@@ -30,7 +30,7 @@ export const useTypeManage = () => {
         message: `确定删除【${currmodItem.value.name}】?`
       })
       await commonFetch(productTypesDel, {id: currmodItem.value.id, shopId})
-      globalData.value._productTypes[shopId].done = false
+      globalData.value.dirtyProductTypes(shopId)
       productTypesManage.dirty(shopId)
       shopInfoManage.dirty(shopId)
     } catch (error) {}

@@ -44,15 +44,20 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
+          if (id.includes('.css') || id.includes('vue&type=style')) {
+            return 'index'
+          }
           if (/node_modules\/html5-qrcode/.test(id)) return 'no-use'
           if (/node_modules\/three\//.test(id)) return 'no-use'
+          if (/node_modules\/xgplayer/.test(id)) return 'xgplayer'
+          if (/node_modules\/cos-js-sdk-v5/.test(id)) return 'cos-sdk'
           // if (/node_modules\/vue/.test(id)) return 'vue'
           // if (/node_modules/.test(id)) return 'node_module'
           // if (/src\/components/.test(id)) return 'components'
           // if (/src\/views/.test(id)) return 'views'
           // if (/src/.test(id)) return 'src'
           return 'index' // 目前代码量少，直接打包到一起
-        }
+        },
       }
     }
   }

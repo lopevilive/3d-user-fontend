@@ -78,7 +78,7 @@ const saveHandle = async () => {
     await commonFetch(modProdTypesSort, {shopId, list: data.value}, '保存成功～')
   } finally {
     isShow.value = false
-    globalData.value._productTypes[shopId].done = false
+    globalData.value.dirtyProductTypes(shopId)
     productTypesManage.dirty(shopId)
   }
 }

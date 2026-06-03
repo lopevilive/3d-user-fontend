@@ -27,7 +27,8 @@
     "vue-router": "^4.4.3",
     "vue3-colorpicker": "^2.3.0",
     "vue3-smooth-dnd": "^0.0.6",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "xgplayer": "^3.0.24"
   },
   "devDependencies": {
     "@vant/auto-import-resolver": "^1.2.1",

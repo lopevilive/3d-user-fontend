@@ -106,4 +106,9 @@ $footerBarH: 80px;
   will-change: scroll-position;
   -webkit-overflow-scrolling: touch;
 }
+.vant-field-tit_width50 {
+  .van-cell__title {
+    width: 50% !important;
+  }
+}
 

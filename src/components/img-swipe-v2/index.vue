@@ -2,6 +2,9 @@
   <div class="com-img-swipe-wrap-v2" :key="domKey">
     <div :id="id" class="swiper-container">
       <div class="swiper-wrapper" :style="styleDisplay" >
+        <div class="swiper-slide" v-if="videoUrl">
+          <AsyncVideo :url="videoUrl" ref="videoPlayerRef" :cover="videoCover" />
+        </div>
         <div class="swiper-slide" v-for="(item, idx) in list" :class="{mode1: mode === 1, mode2: mode === 2}">
           <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getUrl(item)" @click="clickHandle(idx)" lazy-load/>
           <div v-if="!globalData.isPC" class="swiper-no-swiping" @click="clickHandle(idx)"></div>
@@ -21,12 +24,12 @@
 
 <script setup>
 import {onMounted, computed, ref, watch, defineAsyncComponent, nextTick} from 'vue'
+import { useRoute } from 'vue-router'
 import Swiper from 'swiper';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { rand, getImageUrl, getFlexW } from '@/util'
-import { useRoute } from 'vue-router'
 import { showImagePreview } from 'vant';
 import { globalData } from '@/store'
 
@@ -36,6 +39,8 @@ const props = defineProps({
   scale: {type: String, default: '0.5'},
   autoplay: {type: Number, default: 0},
   width: {type: Number, default: 375},
+  videoUrl: {type: String, default: ''}, // 视频连接
+  videoCover: {type: String, default: ''}, // 视频封面
 })
 
 const route = useRoute()
@@ -45,6 +50,10 @@ let inited = false
 const id = `swipe-${rand(10000, 99999)}`
 const domKey = ref(rand(10000, 99999))
 const swiperInstance = ref(null)
+
+const AsyncVideo = defineAsyncComponent({
+  loader: () => import('@/components/video-player/index.vue')
+})
 
 const styleDisplay = computed(() => {
   let ret = '';
@@ -92,6 +101,7 @@ const nextHandle = () => {
   }
 }
 
+const videoPlayerRef = ref()
 const createSwipe = async () => {
   // 先销毁旧的 Swiper 实例
   if (swiperInstance.value) {
@@ -109,6 +119,18 @@ const createSwipe = async () => {
     },
     modules: [Pagination, Navigation],
     preventClicks: true, // 防止点击穿透
+    on: {
+      slideChange: (swiper) => {
+        // swiper.realIndex 指的是当前不受 loop 复制影响的、真实的 Slide 索引
+        // 如果有视频的情况下，第一个 Slide (realIndex 为 0) 就是视频页
+        if (props.videoUrl && swiper.realIndex !== 0) {
+          // 用户滑出了视频页，调用播放器子组件的 pause 暂停视频
+          if (videoPlayerRef.value && typeof videoPlayerRef.value.pause === 'function') {
+            videoPlayerRef.value.pause()
+          }
+        }
+      }
+    }
   }
 
   if (globalData.value.isPC) {

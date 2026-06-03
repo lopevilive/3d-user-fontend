@@ -43,7 +43,7 @@ class SpecManage {
       const {singleSpecs} = specDetials
       let newList = []
       for (const item of singleSpecs) {
-        if (['大 (示例)', '小 (示例)'].includes(item.name)) continue
+        // if (['大 (示例)', '小 (示例)'].includes(item.name)) continue
         newList.push({name: item.name})
       }
       for (const item of cfgs.singleCfg) {
@@ -59,7 +59,7 @@ class SpecManage {
       const mulSpecs = specDetials.mulSpecs || []
       let newList = []
       for  (const item of mulSpecs) {
-        if (['颜色 (示例)', '尺码 (示例)'].includes(item.name)) continue
+        // if (['颜色 (示例)', '尺码 (示例)'].includes(item.name)) continue
         const subList = item.list.map((a) => a.name)
         newList.push({name: item.name, list: subList})
       }

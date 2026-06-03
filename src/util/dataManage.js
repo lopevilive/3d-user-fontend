@@ -28,7 +28,13 @@ class DataManage {
           pass = false
           break
         }
-        if (!matchItem.err) ret.push({...matchItem.data})
+
+        if (matchItem.err) {
+          ret.push(null)
+        } else {
+          ret.push({ ...matchItem.data })
+        }
+        // if (!matchItem.err) ret.push({...matchItem.data})
       }
       if (!pass) {
         this.execTasks.push(task)

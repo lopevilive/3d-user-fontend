@@ -58,14 +58,14 @@ const onSave = async (data) => {
   delete data.address
   showAction.value = false
   await commonFetch(addressMod, data)
-  globalData.value._addressList.done = false
+  globalData.value.dirtyAddressList()
 }
 
 const onDelete = async (data) => {
   await showConfirmDialog({message: '确定删除该地址？'})
   showAction.value = false
   await commonFetch(addressDel, {id: data.id})
-  globalData.value._addressList.done = false
+  globalData.value.dirtyAddressList()
 }
 
 const displayList = computed(() => {

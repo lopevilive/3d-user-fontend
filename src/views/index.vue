@@ -7,8 +7,8 @@
         <!-- 产品描述 -->
         <Desc  v-model="data.desc"/>
       </VanCellGroup>
-      <VanCellGroup v-if="isShowVideo" >
-        <VideoCfg v-model:url="data.videoUrl" v-model:cover="data.videoCover" v-model:status="data.videoStatus" />
+      <VanCellGroup>
+        <VideoCfg />
       </VanCellGroup>
       <VanCellGroup>
         <!-- 产品分类 -->
@@ -60,7 +60,7 @@ import InnerParams from './InnerParams.vue'
 import VideoCfg from './VideoCfg.vue'
 
 const {
-  data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef, isShowVideo
+  data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef
 } = useProductEdit()
 
 init()

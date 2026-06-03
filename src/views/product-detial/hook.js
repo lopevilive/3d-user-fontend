@@ -217,6 +217,13 @@ export const useProductDetial = () => {
     console.log(list)
     showImagePreview(list, idx)
   }
+
+  const displayVideoUrl = computed(() => {
+    if (['release'].includes(globalData.value.wxEnv)) return '' // todo
+    if (info.value.videoStatus !== 1) return ''
+    if (/check/.test(info.value.videoUrl)) return ''
+    return info.value.videoUrl || ''
+  })
   
   const init = async () => {
     if (!productId) return
@@ -235,6 +242,6 @@ export const useProductDetial = () => {
     info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
     displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
     viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
-    getUrl, listRef, viewAllDetial
+    getUrl, listRef, viewAllDetial, displayVideoUrl
   }
 }

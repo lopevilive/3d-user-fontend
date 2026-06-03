@@ -162,3 +162,11 @@ export const exportInventoryV3 = (payload) => {
   return post(`${album}ExportInventoryV3`, payload)
 }
 
+export const getUsage = (payload) => {
+  return post(`${album}GetUsage`, payload)
+}
+
+export const processVideo = (payload) => {
+  return post(`${album}ProcessVideo`, payload)
+}
+

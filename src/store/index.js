@@ -1,7 +1,11 @@
 import { ref, computed } from 'vue'
-import { getAddressList } from '@/http'
+import { getAddressList, getUsage } from '@/http'
 import { commonFetch, productTypesManage, getRidByShopId } from '@/util'
 import router from '@/router/index.js'
+
+const _productTypes = ref({})
+const _addressList = ref({done: false, data: null})
+const _usage = ref({})
 
 export const globalData = ref({
   userInfo: {
@@ -17,27 +21,28 @@ export const globalData = ref({
   productNeedExec: [], // 需要更新的产品
   inventoryNeedExec: [], // 需要更新的清单
   isShowSke: false, // 是否展示骨架屏
-  _productTypes: {},
   productTypes: computed(() => {
     const route = router.currentRoute.value
     const shopId = +route.params.shopId
     if (!shopId) return []
-    if (!globalData.value._productTypes?.[shopId]) {
-      globalData.value._productTypes[shopId] = {done: false, data: null}
+    if (!_productTypes.value[shopId]) {
+      _productTypes.value[shopId] = {done: false, data: null}
     }
-    const matched = globalData.value._productTypes?.[shopId]
-    if (!matched.done) {
-      matched.done = true
+    if (!_productTypes.value[shopId].done) {
+      _productTypes.value[shopId].done = true
       productTypesManage.getData(shopId)
         .then((ret) => {
-          matched.data = ret[0]?.list || []
+          _productTypes.value[shopId].data = ret[0]?.list || []
         })
         .catch((err) => {
-          matched.data = []
+          _productTypes.value[shopId].data = []
         })
     }
-    return matched.data || []
+    return _productTypes.value[shopId].data || []
   }),
+  dirtyProductTypes: (shopId) => {
+    _productTypes.value[shopId].done = false
+  },
   rid: computed(() => {
     const route = router.currentRoute.value
     const shopId = +route.params.shopId
@@ -45,25 +50,26 @@ export const globalData = ref({
     const ret = getRidByShopId(shopId, userInfo)
     return ret
   }),
-  _addressList: {done: false, data: null},
   addressList: computed(() => {
-    const {data, done} = globalData.value._addressList
-    if (!done) {
-      globalData.value._addressList.done = true
+    if (!_addressList.value.done) {
+      _addressList.value.done = true
       commonFetch(getAddressList)
         .then((res) => {
-          globalData.value._addressList.data = res.map((item) => {
+          _addressList.value.data = res.map((item) => {
             item.isDefault = !!item.isDefault
             return item
           })
         })
         .catch((err) => {
           console.error(err)
-          globalData.value._addressList.data = null
+          _addressList.value.data = null
         })
     }
-    return data || []
+    return _addressList.value.data || []
   }),
+  dirtyAddressList: () => {
+    _addressList.value.done = false
+  },
   selectedAddress: [],
   invertoryRemark: '',
   isPC: false, // 是否 pc 打开
@@ -79,11 +85,33 @@ export const globalData = ref({
   customHomeNeedUpdate: false,
   homeModNeedAlive: false, // 首页配置页是否需要 alive
   currViewProd: null, // 当前查看的产品
+  usage: computed(() => {
+    const route = router.currentRoute.value
+    const shopId = +route.params.shopId
+    if (!shopId) return {}
+    if (!_usage.value[shopId]) {
+      _usage.value[shopId] = {done: false, data: null}
+    }
+    if (!_usage.value[shopId].done) {
+      _usage.value[shopId].done = true
+      commonFetch(getUsage, {shopId})
+        .then((res) => {
+          _usage.value[shopId].data = res
+        })
+        .catch((err) => {
+          console.error(err)
+          _usage.value[shopId].data = null
+        })
+    }
+    return _usage.value[shopId].data || {}
+  }),
+  dirtyUsage: (shopId) => {
+    _usage.value[shopId].done = false
+  }
 })
  
 
 export * from './shopCarManage'
 
 
-// todo
 window.globalData = globalData

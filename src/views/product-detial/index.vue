@@ -4,8 +4,7 @@
       产品已下架～
     </div>
     <div class="swipe-wrap">
-      <ImgSwipeV2 :list="imgList" />
-      <!-- <VanButton v-if="[1,2].includes(info.type3D)" class="see-3d" icon="eye-o" text="720°全景图" size="mini" @click="handleView3D"/> -->
+      <ImgSwipeV2 :list="imgList" :videoUrl="displayVideoUrl" :videoCover="info.videoCover" />
     </div>
     <div class="content">
       <div class="content__head">
@@ -65,7 +64,6 @@
       </div>
     </template>
     
-    <!-- <ModelDisplay ref="modelDisplayRef" :productInfo="info"/> -->
     <DetialFooter :productInfo="info"/>
     <KeyValueDialog ref="keyValueDialogRef" />
   </div>
@@ -77,7 +75,6 @@
 
 <script setup>
 import { onMounted, onUnmounted, onBeforeUnmount } from 'vue'
-// import ModelDisplay from '@/components/model-display/index.vue'
 import { useProductDetial } from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import DetialFooter from './DetialFooter.vue'
@@ -89,7 +86,7 @@ const {
   info, imgList, init, shareHandle, displayAttrs, isShowSticky, specsDisplay, selectedSpecIdx,
   displayPrice, isShowDownTips, goback, isShowEmpty, isShowShare, isShowSpecImg, specItemClickHandle,
   viewSpecDetialHandle, descUrlDisplay, displayType, displayInnerParams, keyValueDialogRef, showKeyValueHandle,
-  getUrl, listRef, viewAllDetial
+  getUrl, listRef, viewAllDetial, displayVideoUrl
 } = useProductDetial()
 
 onMounted(init)
