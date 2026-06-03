@@ -84,7 +84,9 @@ const clickHandle = (idx) => {
 }
 
 const isShowControl = computed(() => {
-  if (props.list?.length === 1) return false
+  let len = props.list?.length || 0
+  if (props.videoUrl) len += 1
+  if (len === 1) return false
   if (globalData.value.isPC) return true
   return false
 })
@@ -178,6 +180,9 @@ onMounted(init)
 .com-img-swipe-wrap-v2 {
   box-sizing: border-box;
   position: relative;
+  :deep(.swiper-pagination) {
+    pointer-events: none;
+  }
   .swiper-container {
     width: 100%;
     overflow: hidden;

@@ -41,6 +41,7 @@ export const globalData = ref({
     return _productTypes.value[shopId].data || []
   }),
   dirtyProductTypes: (shopId) => {
+    if (! _productTypes.value[shopId])  return
     _productTypes.value[shopId].done = false
   },
   rid: computed(() => {
@@ -106,6 +107,7 @@ export const globalData = ref({
     return _usage.value[shopId].data || {}
   }),
   dirtyUsage: (shopId) => {
+    if (!_usage.value[shopId]) return
     _usage.value[shopId].done = false
   }
 })
