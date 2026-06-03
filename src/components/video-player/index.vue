@@ -1,73 +1,100 @@
 <template>
-  <div class="video-limit-box">
+  <div class="video-limit-box" :style="{ height: containerHeight }">
     <div class="player-container">
-      <!-- 尽量给容器一个 ref，方便清理 -->
-      <div id="mse" ref="playerRef"></div>
+      <video 
+        v-if="!isReady"
+        :src="url" 
+        preload="metadata" 
+        @loadedmetadata="onVideoMetaLoaded"
+        style="width: 1px; height: 1px; opacity: 0; position: absolute;"
+      ></video>
+
+      <div v-if="isReady" id="mse" ref="playerRef"></div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, nextTick } from 'vue'
 import Player from 'xgplayer';
 import 'xgplayer/dist/index.min.css';
 import { sleep } from '@/util'
 
 const props = defineProps({
-  url: {type: String, default: ''},
-  cover: {type: String, default: ''}
+  url: { type: String, default: '' },
+  cover: { type: String, default: '' }
 })
 
 const playerRef = ref(null);
 let player = null;
 
-const init = () => {
-  // 确保如果已经存在实例，先销毁（防止重复初始化）
+// 状态锁：拿到真实比例前绝不乱初始化
+const isReady = ref(false);
+const containerHeight = ref('210px'); // 默认初始保底高
+
+/**
+ * 💥 核心逻辑：当视频元数据在手机端真正加载完成时触发
+ */
+const onVideoMetaLoaded = async (e) => {
+  const videoEl = e.target;
+  if (!videoEl) return;
+  const videoW = videoEl.videoWidth;
+  const videoH = videoEl.videoHeight;
+  // 手机屏幕标准宽度为 375 
+  const screenWidth = window.innerWidth || 375; 
+  // 根据视频真实的宽高比，精准计算出它应该享有的物理高度
+  let calcHeight = (videoH / videoW) * screenWidth;
+  // 严格锁死最大高度上限为 480px，防止超长竖屏视频崩坏画册排版
+  if (calcHeight > 480) {
+    calcHeight = 480;
+  }
+  // 1. 框定好绝对完美的容器高度
+  containerHeight.value = `${Math.floor(calcHeight)}px`;
+  // 2. 放开闸门，允许渲染 DOM
+  isReady.value = true;
+  // 3. 等待 Vue DOM 更新后，立刻精准注入西瓜播放器
+  await nextTick();
+  initPlayer();
+}
+
+const initPlayer = () => {
   destroyPlayer();
+  if (!props.url || !playerRef.value) return;
+
   const cfg = {
-    id: 'mse',
+    el: playerRef.value, // 使用 el 明确指定挂载节点，比 id 更稳
     url: props.url,
     width: '100%',
-    height: '100%',
-    fluid: false, // 配合 CSS 的 aspect-ratio
+    height: '100%',     // 🌟 此时高度已经完全由外层精准撑开，直接 100% 灌满，绝不缩水！
+    fluid: false, 
     videoFillMode: 'contain',
     playsinline: true,
     'x5-video-player-type': 'h5-page',
     'x5-video-player-fullscreen': false,
+    
+    'x5-video-orientation': 'portrait', 
     playbackRate: false,
-    // ====== 核心修改：关闭所有屏幕手势交互 ======
-    // 1. 关闭触摸屏左右滑动调节进度、上下滑动调节音量/亮度的默认行为
-    // 注：不同版本 xgplayer 手势配置有差异，以下组合拳能 100% 覆盖并锁死手势
-    swipeOnPlayer: false, // 禁用播放器区域的滑动行为
-    disableGesture: true, // 彻底禁用手势操作
+    swipeOnPlayer: false, 
+    disableGesture: true, 
   }
+  
   if (props.cover) cfg.poster = props.cover
   player = new Player(cfg);
 }
 
-// 封装一个严谨的销毁方法
 const destroyPlayer = () => {
   if (player) {
     try {
-      // 1. 调用 xgplayer 自带的销毁方法
-      // 它会停止下载视频、清空 video 标签、解绑自身事件
       player.destroy(); 
     } catch (e) {
       console.error('销毁播放器失败:', e);
     } finally {
-      // 2. 将引用设为 null，触发 GC（垃圾回收）
       player = null;
     }
-  }
-  
-  // 3. 彻底清空 DOM 容器的内容（可选，增加安全性）
-  if (playerRef.value) {
-    playerRef.value.innerHTML = '';
   }
 }
 
 const pause = async () => {
-  // 1. xgplayer 实例暂停
   await sleep(300)
   if (player && typeof player.pause === 'function') {
     try {
@@ -78,41 +105,63 @@ const pause = async () => {
   }
 }
 
-onMounted(init);
-
-// Vue 生命周期钩子：组件卸载前执行
+// 极其干净的生命周期
 onBeforeUnmount(() => {
   destroyPlayer();
 });
 
-defineExpose({pause})
-
-
+defineExpose({ pause })
 </script>
 
 <style lang="scss" scoped>
-/* 延续之前 aspect-ratio 的样式方案 */
-$maxH: 480px;
 .video-limit-box {
   width: 100%;
+  transition: height 0.2s ease; // 增添一丝丝高度动态展开的顺滑过渡动画
+  background: #000;
+  overflow: hidden;
 }
 
 .player-container {
   width: 100%;
-  max-height: $maxH;
-  aspect-ratio: 16 / 9;
-  background: #000;
-  overflow: hidden;
+  height: 100%;
+  position: relative;
 
-  &:deep(.xgplayer) {
-    height: 100% !important;
+  #mse {
     width: 100% !important;
+    height: 100% !important;
+  }
+
+  // 彻底接管西瓜内部样式，不允许任何隐形层缩水
+  &:deep(.xgplayer) {
+    width: 100% !important;
+    height: 100% !important;
     padding-top: 0 !important;
+
+    .xg-video-container,
+    .xg-poster,
+    .xg-trigger,
+    .xg-overlay-poster {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  // 确保控制栏牢牢黏在最底部
+  &:deep(.xgplayer-controls) {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 10;
   }
 
   &:deep(video) {
-    object-fit: contain !important;
+    width: 100% !important;
     height: 100% !important;
+    object-fit: contain !important;
   }
 }
 </style>

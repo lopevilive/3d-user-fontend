@@ -33,8 +33,7 @@ const AsyncVideo = defineAsyncComponent({
  */
 const show = (payload) => {
   if (payload && payload.url) {
-    // videoUrl.value = payload.url
-    videoUrl.value = '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/video/trans_5_3_a2b96faeb02581770a4736f61bd3b6b7.mp4'
+    videoUrl.value = payload.url
     visible.value = true
   } else {
     console.warn('show 方法缺少有效的视频 url');
