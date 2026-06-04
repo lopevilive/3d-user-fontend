@@ -15,10 +15,10 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, nextTick } from 'vue'
+import { ref, onBeforeUnmount, nextTick, computed } from 'vue'
 import Player from 'xgplayer';
 import 'xgplayer/dist/index.min.css';
-import { sleep } from '@/util'
+import { sleep, getImageUrl } from '@/util'
 
 const props = defineProps({
   url: { type: String, default: '' },
@@ -57,6 +57,16 @@ const onVideoMetaLoaded = async (e) => {
   initPlayer();
 }
 
+const coverDisplay = computed(() => {
+  let ret = props.cover
+  if (!ret) {
+    ret = props.url.replace(/trans_/,  'cover_')
+    ret = ret.replace(/\.mp4/, '.jpg')
+  }
+  ret = getImageUrl(ret)
+  return ret
+})
+
 const initPlayer = () => {
   destroyPlayer();
   if (!props.url || !playerRef.value) return;
@@ -71,14 +81,15 @@ const initPlayer = () => {
     playsinline: true,
     'x5-video-player-type': 'h5-page',
     'x5-video-player-fullscreen': false,
-    
     'x5-video-orientation': 'portrait', 
     playbackRate: false,
     swipeOnPlayer: false, 
-    disableGesture: true, 
+    disableGesture: true,
+    poster: {
+      poster: coverDisplay.value,         // 封面的图片地址
+      fillMode: 'cover'                   // 强制底层渲染时转为 object-fit: cover 行为（铺满）
+    }
   }
-  
-  if (props.cover) cfg.poster = props.cover
   player = new Player(cfg);
 }
 
