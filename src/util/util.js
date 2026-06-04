@@ -620,3 +620,14 @@ export const throttle = (fn, delay = 200) => {
     }
   };
 };
+
+// 秒转人看的时间
+export const second2ViewTxt = (s) => {
+  if (!s) return '0秒';
+  const minutes = Math.floor(s / 60)
+  const seconds = s % 60
+  if (minutes > 0) {
+    return `${minutes}分钟${seconds > 0 ? seconds + '秒' : ''}`
+  }
+  return `${seconds}秒`
+}

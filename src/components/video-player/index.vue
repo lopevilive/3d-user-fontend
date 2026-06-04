@@ -1,21 +1,13 @@
 <template>
   <div class="video-limit-box" :style="{ height: containerHeight }">
     <div class="player-container">
-      <video 
-        v-if="!isReady"
-        :src="url" 
-        preload="metadata" 
-        @loadedmetadata="onVideoMetaLoaded"
-        style="width: 1px; height: 1px; opacity: 0; position: absolute;"
-      ></video>
-
-      <div v-if="isReady" id="mse" ref="playerRef"></div>
+      <div id="mse" ref="playerRef"></div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, nextTick, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Player from 'xgplayer';
 import 'xgplayer/dist/index.min.css';
 import { sleep, getImageUrl } from '@/util'
@@ -28,34 +20,8 @@ const props = defineProps({
 const playerRef = ref(null);
 let player = null;
 
-// 状态锁：拿到真实比例前绝不乱初始化
-const isReady = ref(false);
-const containerHeight = ref('210px'); // 默认初始保底高
-
-/**
- * 💥 核心逻辑：当视频元数据在手机端真正加载完成时触发
- */
-const onVideoMetaLoaded = async (e) => {
-  const videoEl = e.target;
-  if (!videoEl) return;
-  const videoW = videoEl.videoWidth;
-  const videoH = videoEl.videoHeight;
-  // 手机屏幕标准宽度为 375 
-  const screenWidth = window.innerWidth || 375; 
-  // 根据视频真实的宽高比，精准计算出它应该享有的物理高度
-  let calcHeight = (videoH / videoW) * screenWidth;
-  // 严格锁死最大高度上限为 480px，防止超长竖屏视频崩坏画册排版
-  if (calcHeight > 480) {
-    calcHeight = 480;
-  }
-  // 1. 框定好绝对完美的容器高度
-  containerHeight.value = `${Math.floor(calcHeight)}px`;
-  // 2. 放开闸门，允许渲染 DOM
-  isReady.value = true;
-  // 3. 等待 Vue DOM 更新后，立刻精准注入西瓜播放器
-  await nextTick();
-  initPlayer();
-}
+// 🌟 用响应式高度来接收最终的精准自适应高度，保底 210px
+const containerHeight = ref('210px'); 
 
 const coverDisplay = computed(() => {
   let ret = props.cover
@@ -72,11 +38,12 @@ const initPlayer = () => {
   if (!props.url || !playerRef.value) return;
 
   const cfg = {
-    el: playerRef.value, // 使用 el 明确指定挂载节点，比 id 更稳
+    el: playerRef.value,
     url: props.url,
-    width: '100%',
-    height: '100%',     // 🌟 此时高度已经完全由外层精准撑开，直接 100% 灌满，绝不缩水！
+    // 🌟 核心：关闭 fluid 流式，我们用物理像素直接灌满容器，拒绝 padding-top 导致的不受控
     fluid: false, 
+    width: '100%',
+    height: '100%',     
     videoFillMode: 'contain',
     playsinline: true,
     'x5-video-player-type': 'h5-page',
@@ -86,11 +53,35 @@ const initPlayer = () => {
     swipeOnPlayer: false, 
     disableGesture: true,
     poster: {
-      poster: coverDisplay.value,         // 封面的图片地址
-      fillMode: 'cover'                   // 强制底层渲染时转为 object-fit: cover 行为（铺满）
+      poster: coverDisplay.value,         
+      fillMode: 'cover'                   
     }
   }
+  
   player = new Player(cfg);
+
+  // 🌟 终极绝招：监听西瓜播放器的“解析成功”内核事件（走纯单次管道，不影响 Chrome 性能）
+  player.once('loadedmetadata', () => {
+    if (!player || !player.video) return;
+    
+    // 1. 直接获取西瓜内核里的真实视频尺寸
+    const videoW = player.video.videoWidth;
+    const videoH = player.video.videoHeight;
+    
+    if (!videoW || !videoH) return;
+
+    // 2. 结合手机屏幕宽度等比缩放计算
+    const screenWidth = window.innerWidth || 375; 
+    let calcHeight = (videoH / videoW) * screenWidth;
+
+    // 3. 严格卡死小红书式的最高上限：480px
+    if (calcHeight > 480) {
+      calcHeight = 480;
+    }
+
+    // 4. 赋值！容器高度瞬间丝滑展开
+    containerHeight.value = `${Math.floor(calcHeight)}px`;
+  });
 }
 
 const destroyPlayer = () => {
@@ -116,7 +107,10 @@ const pause = async () => {
   }
 }
 
-// 极其干净的生命周期
+onMounted(() => {
+  initPlayer();
+})
+
 onBeforeUnmount(() => {
   destroyPlayer();
 });
@@ -127,9 +121,9 @@ defineExpose({ pause })
 <style lang="scss" scoped>
 .video-limit-box {
   width: 100%;
-  transition: height 0.2s ease; // 增添一丝丝高度动态展开的顺滑过渡动画
   background: #000;
   overflow: hidden;
+  transition: height 0.15s ease-out; /* 让高度变化稍微有一点点平滑过渡，视觉像小红书展开一样自然 */
 }
 
 .player-container {
@@ -142,11 +136,11 @@ defineExpose({ pause })
     height: 100% !important;
   }
 
-  // 彻底接管西瓜内部样式，不允许任何隐形层缩水
+  // 完美灌满独立沙盒
   &:deep(.xgplayer) {
     width: 100% !important;
     height: 100% !important;
-    padding-top: 0 !important;
+    padding-top: 0 !important; // 彻底清除西瓜 fluid 带来的流氓占位干扰
 
     .xg-video-container,
     .xg-poster,
@@ -160,7 +154,6 @@ defineExpose({ pause })
     }
   }
 
-  // 确保控制栏牢牢黏在最底部
   &:deep(.xgplayer-controls) {
     position: absolute !important;
     bottom: 0 !important;

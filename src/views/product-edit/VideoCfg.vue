@@ -25,7 +25,7 @@
         <!-- 上半部分：左右同行对齐 -->
         <div class="upload-row-container">
           <!-- 左侧：上传组件 -->
-          <UploadVideo v-model="urlDisplay" class="upload-box" ref="uploadVideoRef" />
+          <UploadVideo v-model="urlDisplay" class="upload-box" ref="uploadVideoRef" :disabled="disabled" />
           
           <!-- 右侧：干净的容量与按钮卡片 -->
           <div 
@@ -63,7 +63,7 @@
 
         <div class="bottom-duration-tip">
           <van-icon name="info-o" />
-          <span>当前支持上传最长 {{ maxDurationDisplay }} 视频</span>
+          <span>当前支持上传最长 {{ second2ViewTxt(globalData.usage.videoLimitS) }} 视频</span>
         </div>
       </div>
     </template>
@@ -106,12 +106,13 @@ import UploadVideo from '@/components/upload-video/index.vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import { showToast } from 'vant'
 import { globalData } from '@/store'
-import { toVip } from '@/util'
+import { toVip, second2ViewTxt } from '@/util'
 
 const props = defineProps({
   url: { type: String, default: '' },
   cover: { type: String, default: '' },
   status: { type: Number, default: 0 },
+  disabled: {type: Boolean, default: false}
 })
 
 const emits = defineEmits(['update:status', 'update:url', 'update:cover'])
@@ -197,29 +198,6 @@ const checkParams = () => {
 const isNoLimit = computed(() => { // 是否无限容量
   // return true
   return usageInfo.value.videoLimit === 9999
-})
-
-const maxDurationDisplay = computed(() => {
-  const {videoLimitS} = usageInfo.value
-  // 1. 防御性编程：如果没有拿到值或者不是有效的数字，默认返回空字符串或0秒
-  if (videoLimitS === undefined || videoLimitS === null || isNaN(videoLimitS)) {
-    return '0秒'
-  }
-
-  // 2. 规则一：1分钟以内（不到60秒），直接返回 “xx秒”
-  if (videoLimitS < 60) {
-    return `${videoLimitS}秒`
-  }
-
-  // 3. 规则二：超过一分钟，判断是不是 30 的倍数
-  if (videoLimitS % 30 === 0) {
-    // 转换为分钟数：比如 60秒 -> 1分钟，90秒 -> 1.5分钟
-    const minutes = videoLimitS / 60
-    return `${minutes}分钟`
-  }
-
-  // 4. 规则三：不是 30 的倍数（比如 70秒），直接返回 “xx秒”
-  return `${videoLimitS}秒`
 })
 
 </script>

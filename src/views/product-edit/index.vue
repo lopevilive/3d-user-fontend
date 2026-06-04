@@ -8,7 +8,10 @@
         <Desc  v-model="data.desc"/>
       </VanCellGroup>
       <VanCellGroup v-if="isShowVideo" >
-        <VideoCfg v-model:url="data.videoUrl" v-model:cover="data.videoCover" v-model:status="data.videoStatus" />
+        <VideoCfg
+          v-model:url="data.videoUrl" v-model:cover="data.videoCover"
+          v-model:status="data.videoStatus" :disabled="disabledUploadVideo"
+        />
       </VanCellGroup>
       <VanCellGroup>
         <!-- 产品分类 -->
@@ -60,7 +63,8 @@ import InnerParams from './InnerParams.vue'
 import VideoCfg from './VideoCfg.vue'
 
 const {
-  data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef, isShowVideo
+  data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef, isShowVideo,
+  disabledUploadVideo
 } = useProductEdit()
 
 init()

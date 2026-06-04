@@ -177,8 +177,8 @@ export const uploadMedia = async (payload) => {
       },
     });
 
-    const res = await processVideo({shopId, rawKey})
-    return res
+    const {data} = await processVideo({shopId, rawKey})
+    return data
   } catch (e) {
     console.error('上传失败', e);
     throw e;

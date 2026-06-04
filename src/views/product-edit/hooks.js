@@ -120,11 +120,13 @@ export const useProductEdit = () => {
     }, 0);
   }
 
+  let hasVideo = false // 是否本来就存在视频
   const getProductInfo = async () => {
     if (!id) return
     const res = await commonFetch(getProduct, {productId: id, shopId})
     if (res.list.length) {
       data.value = res.list[0]
+      if (data.value.videoUrl) hasVideo = true
     }
   }
 
@@ -140,7 +142,19 @@ export const useProductEdit = () => {
   const secCheckRef = ref()
 
   const isShowVideo = computed(() => {
-    if (['develop', 'trial'].includes(globalData.value.wxEnv)) return true // todo
+    if (!shopId) return false
+    if ([5,8].includes(shopId)) return true // todo
+    return false
+  })
+
+  
+  const disabledUploadVideo = computed(() => {
+    const {videoNum = 0, videoLimit = 0} = globalData.value.usage
+    if (hasVideo) { // 本来就有视频
+      if (videoNum > videoLimit) return true // 一般是会员过期才会出现这种情况
+      return false
+    }
+    if (videoNum >= videoLimit) return true
     return false
   })
   
@@ -150,6 +164,7 @@ export const useProductEdit = () => {
   }
 
   return {
-    data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef, isShowVideo
+    data, formRef, saveHandle, init, busiCfg, dialogVipRef, handleResetValidation, secCheckRef, isShowVideo,
+    disabledUploadVideo
   }
 }

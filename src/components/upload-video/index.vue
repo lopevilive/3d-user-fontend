@@ -11,7 +11,6 @@
           <VanIcon name="video-o" />
         </div>
         <div class="mask uploading-mask">
-          <!-- 环形进度条：圈住加载状态，显示具体百分比 -->
           <VanCircle
             v-model:current-rate="currentRate"
             :rate="progress"
@@ -29,7 +28,6 @@
       <!-- 2. 上传完成/已有视频状态 -->
       <template v-if="modelValue">
         <div class="icon-content">
-          <!-- 如果是审核中(.check)，换成时钟图标暗示等待，更直观 -->
           <VanIcon :name="isChecking ? 'clock-o' : 'play-circle-o'" />
         </div>
         <div class="mask" @click="viewVideoHandle">
@@ -40,27 +38,68 @@
 
     <!-- 3. 上传触发器 -->
     <VanUploader
+      v-if="iShowUpload"
       accept="video/*"
       :max-count="1"
-      :max-size="50 * 1024 * 1024"
+      :max-size="maxSize"
       :after-read="afterRead"
       @oversize="onOversize"
       preview-size="16vw"
-      v-if="iShowUpload"
+      :disabled="disabled"
     />
     <DialogVideo ref="dialogVideo" />
+
+    <!-- 🌟 统一的会员限制引导弹窗 -->
+    <VanDialog
+      v-model:show="dialogState.show"
+      :title="dialogState.title"
+      show-cancel-button
+      confirm-button-text="前往了解"
+      cancel-button-text="好的"
+      confirm-button-color="#1989fa"
+      @confirm="toVip(shopId)"
+    >
+      <div class="vip-dialog-content">
+        <!-- 场景一：时长超限 -->
+        <template v-if="dialogState.type === 'duration'">
+          <div class="limit-row">
+            <span>视频限长：</span>
+            <span class="highlight-blue">{{ second2ViewTxt(globalData?.usage?.videoLimitS) }}</span>
+          </div>
+          <div class="limit-row">
+            <span>本次上传时长：</span>
+            <span class="highlight-red">{{ dialogState.currentDuration }}秒</span>
+          </div>
+        </template>
+
+        <!-- 场景二：体积超限 -->
+        <template v-else-if="dialogState.type === 'size'">
+          <div class="limit-row">
+            <span>最高支持时限：</span>
+            <span class="highlight-blue">{{ second2ViewTxt(globalData?.usage?.videoLimitS) }}</span>
+          </div>
+          <div class="limit-row">
+            <span>最大体积限制：</span>
+            <span class="highlight-blue">{{ maxSizeText }}</span>
+          </div>
+        </template>
+        <div class="tip-text" v-if="['duration', 'size'].includes(dialogState.type)">提示：升级会员，解锁更长视频上传！</div>
+      </div>
+    </VanDialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { showToast } from 'vant';
-import { uploadMedia, sleep } from '@/util'
+import { ref, computed, reactive } from 'vue';
+import { showToast } from 'vant'; 
 import { useRoute } from 'vue-router'
+import { uploadMedia, sleep, second2ViewTxt, toVip } from '@/util'
 import DialogVideo from '@/components/dialog-video/index.vue'
+import { globalData } from '@/store'
 
 const props = defineProps({
-  modelValue: { type: String, default: '' } 
+  modelValue: { type: String, default: '' },
+  disabled: {type: Boolean, default: false}
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -71,9 +110,17 @@ const shopId = +route.params.shopId
 const dialogVideo = ref()
 const uploadings = ref([])
 
-// 新增：上传进度相关的响应式数据
-const progress = ref(0)      // 目标进度数字 (0-100)
-const currentRate = ref(0)   // Vant 环形进度条内部动画动画绑定的值
+// 上传进度相关的响应式数据
+const progress = ref(0)      
+const currentRate = ref(0)   
+
+// 🌟 新增：统一管理弹窗的有状态响应式对象
+const dialogState = reactive({
+  show: false,
+  type: 'duration', // 'duration' | 'size'
+  title: '',
+  currentDuration: 0
+})
 
 // 判断是否正在审核中
 const isChecking = computed(() => {
@@ -91,101 +138,65 @@ const iShowUpload = computed(() => {
   return true
 })
 
-/**
- * 获取视频完整元数据
- */
-const getVideoMeta = (file) => {
-  return new Promise((resolve) => {
-    const { name, size, type } = file;
-    const url = URL.createObjectURL(file);
-    const video = document.createElement('video');
-
-    video.preload = 'metadata';
-    video.src = url;
-
-    video.onloadedmetadata = () => {
-      URL.revokeObjectURL(url);
-      resolve({
-        name,
-        size,
-        sizeFriendly: (size / 1024 / 1024).toFixed(2) + 'MB',
-        type,
-        duration: Math.floor(video.duration),
-        width: video.videoWidth,
-        height: video.videoHeight
-      });
-    };
-
-    video.onerror = () => {
-      URL.revokeObjectURL(url);
-      resolve({ name, size, type, duration: 0 });
-    };
-  });
-};
-
 // 上传处理逻辑
 const afterRead = async (file) => {
   uploadings.value.push(file)
-  progress.value = 0 // 初始化进度
+  progress.value = 0 
   currentRate.value = 0
 
   file.status = 'uploading';
   file.message = '上传中...';
 
   try {
-    const mediaInfo = await getVideoMeta(file.file)
-    console.log(mediaInfo, 'mediaInfo')
-    // await sleep(5000)
-    // throw new Error(123)
-    
-    // 调用接口，接管 onProgress 钩子
-    const res = await uploadMedia({
-      file: file.file, 
-      shopId, 
+    const uploadRet = await uploadMedia({
+      file: file.file, shopId,
       onProgress: (progressData) => {
-        // 1. 提取原始进度（兼容小数 0.95 和整数 95）
         let percent = progressData.percent || 0;
         if (percent < 1) {
           percent = Math.floor(percent * 100);
         } else {
           percent = Math.floor(percent);
         }
-        
-        // 2. 限制边界值最大为 99，等接口彻底返回完成再变成 100 
         const nextProgress = Math.min(percent, 99);
-
-        // 🌟 核心修复：防倒退安全锁！
-        // 只有当新算出来的进度比之前的大，或者之前是0（刚启动）时，才允许赋值
-        // 这样即使底层 SDK 因为“合并分片”把它重置成了 0 或 1，也会被这行代码直接无视
         if (nextProgress > progress.value) {
           progress.value = nextProgress;
         }
       }
     })
-
+    
+    // 这里的 res 需要和原逻辑统一使用响应结果
+    const { status, key, duration, msg } = uploadRet
+    
+    if (status === 1) { // 视频时长超出
+      uploadings.value = []
+      // 🌟 唤起组件弹窗
+      dialogState.type = 'duration'
+      dialogState.title = '⏰ 视频时长超限'
+      dialogState.currentDuration = duration || 0
+      dialogState.show = true
+      return
+    }
+    
+    if (status !== 0) {
+      throw new Error(msg || '系统繁忙，请联系管理员～')
+    }
+    
     const isEffect = uploadings.value.find((item) => item === file)
     if (!isEffect) return
     
-    // 上传成功，进度拉满
     progress.value = 100
     file.status = 'done'
     file.message = '上传成功'
     
-    emit('update:modelValue', res.data.key)
-    
-    // 小小延迟 300ms 释放进度条，给用户一个满条反馈的时间，视觉更丝滑
-    setTimeout(() => {
-      uploadings.value = []
-    }, 300)
-
-    console.log(res)
+    emit('update:modelValue', key) // 修正之前拼错的 res.data.key 隐患
+    setTimeout(() => { uploadings.value = [] }, 300)
 
   } catch (error) {
     file.status = 'failed';
     file.message = '上传失败';
     emit('update:modelValue', '')
     uploadings.value = []
-    showToast('视频上传失败，请稍后重试');
+    showToast(error.message || '视频上传失败，请稍后重试');
   }
 };
 
@@ -198,8 +209,22 @@ const delHandle = async () => {
   }
 }
 
+const maxSize = computed(() => {
+  const { videoLimitS = 0 } = globalData.value.usage
+  let ret = videoLimitS * 1.5 * 1024 * 1024
+  // return 1024 * 1024 * 1
+  return ret || 50 * 1024 * 1024
+})
+
+const maxSizeText = computed(() => {
+  return `${Math.floor(maxSize.value / (1024 * 1024))} MB`
+})
+
+// 🌟 体积超限拦截：同样统一收拢至弹窗组件
 const onOversize = () => {
-  showToast('视频不能超过 50MB');
+  dialogState.type = 'size'
+  dialogState.title = '视频体积超限'
+  dialogState.show = true
 };
 
 const isShowDel = computed(() => {
@@ -209,25 +234,25 @@ const isShowDel = computed(() => {
 })
 
 const viewVideoHandle = async () => {
-  // 精准正则：如果是正在审核的状态，拦截并提示
   if (isChecking.value) {
     showToast('视频审核中～');
     return
   }
-  // 正常的视频，正则替换后缀为 .mp4 播放 (顺手帮你把之前要的正则也装在这了！)
   const playableUrl = props.modelValue.replace(/\.check$/, '.mp4')
   dialogVideo.value.show({ url: playableUrl })
 }
-
 
 const isLoading = () => {
   if (uploadings.value.length) return true
   return false
 }
 
-defineExpose({isLoading})
+const beforeReadHandle = () => {
+  console.log(999)
+  return false
+}
 
-
+defineExpose({ isLoading })
 </script>
 
 <style lang="scss" scoped>
@@ -235,11 +260,43 @@ defineExpose({isLoading})
   :deep(.van-uploader__upload) {
     margin: 0;
   }
+  
+  // 🌟 优雅紧凑的弹窗自定义类目
+  .vip-dialog-content {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; // 保证横向不对齐拉伸，靠左排布
+    color: #323233;
+    font-size: 14px;
+
+    .limit-row {
+      margin-bottom: 8px;
+      line-height: 1.4;
+      
+      .highlight-blue {
+        color: #1989fa;
+        font-weight: 600;
+      }
+      
+      .highlight-red {
+        color: #ee0a24;
+        font-weight: 600;
+      }
+    }
+
+    .tip-text {
+      color: #969799;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+  }
+
   .video-display {
     width: 60px;
     height: 60px;
     position: relative;
-    border-radius: 8px; // 保持圆角美观
+    border-radius: 8px; 
     overflow: hidden;
 
     .close {
@@ -255,7 +312,7 @@ defineExpose({isLoading})
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 5; // 提高层级防止被遮挡
+      z-index: 5; 
     }
 
     .icon-content {
@@ -281,28 +338,25 @@ defineExpose({isLoading})
     justify-content: center;
     cursor: pointer;
 
-    // 审核中文案设计
     .check-text {
       color: #fff;
       font-size: 10px;
-      background: rgba(237, 106, 12, 0.85); // 温暖的审核橙
+      background: rgba(237, 106, 12, 0.85); 
       padding: 2px 6px;
       border-radius: 10px;
       transform: scale(0.9);
     }
   }
 
-  // 专属上传中蒙版样式
   .uploading-mask {
-    background: rgba(0, 0, 0, 0.7) !important; // 稍微调深，凸显进度圈
+    background: rgba(0, 0, 0, 0.7) !important; 
     
-    // 进度条内部文本
     .progress-text {
       color: #ffffff;
       font-size: 10px;
       font-weight: 500;
       text-align: center;
-      line-height: 48px; // 撑满圆形，保持居中
+      line-height: 48px; 
     }
   }
 }

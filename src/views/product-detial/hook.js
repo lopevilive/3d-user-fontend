@@ -219,7 +219,6 @@ export const useProductDetial = () => {
   }
 
   const displayVideoUrl = computed(() => {
-    if (['release'].includes(globalData.value.wxEnv)) return '' // todo
     if (info.value.videoStatus !== 1) return ''
     if (/check/.test(info.value.videoUrl)) return ''
     return info.value.videoUrl || ''
