@@ -10,7 +10,7 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Player from 'xgplayer';
 import 'xgplayer/dist/index.min.css';
-import { sleep, getImageUrl } from '@/util'
+import { sleep, getImageUrl, getVideoUrl } from '@/util'
 
 const props = defineProps({
   url: { type: String, default: '' },
@@ -35,11 +35,12 @@ const coverDisplay = computed(() => {
 
 const initPlayer = () => {
   destroyPlayer();
-  if (!props.url || !playerRef.value) return;
+  const videoUrl = getVideoUrl(props.url)
+  if (!videoUrl || !playerRef.value) return;
 
   const cfg = {
     el: playerRef.value,
-    url: props.url,
+    url: videoUrl,
     // 🌟 核心：关闭 fluid 流式，我们用物理像素直接灌满容器，拒绝 padding-top 导致的不受控
     fluid: false, 
     width: '100%',

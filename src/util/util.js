@@ -631,3 +631,11 @@ export const second2ViewTxt = (s) => {
   }
   return `${seconds}秒`
 }
+
+export const getVideoUrl = (url) => {
+  if (!url) return '';
+  if (/\.check/.test(url)) return ''; // 视频审核中
+  let ret = url
+  ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
+  return ret
+}
