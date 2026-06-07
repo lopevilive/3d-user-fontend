@@ -34,7 +34,12 @@
             @click="handleLimitClick"
           >
             <div class="limit-text-area">
-              <span class="title">已用容量</span>
+              <!-- 标题增加问号图标，并绑定阻止冒泡的点击事件 -->
+              <div class="title-container" @click.stop="showCapacityTip">
+                <span class="title">视频容量</span>
+                <van-icon name="question-o" class="tip-icon" />
+              </div>
+              
               <div class="num-info">
                 <template v-if="isNoLimit">
                   <span class="num-highlight unlimited">{{ usageInfo.videoNum }}</span>
@@ -97,6 +102,18 @@
     close-on-click-action
     @select="onSelectCoverMode"
   />
+
+  <!-- 🌟 新增：常驻规则说明弹窗 -->
+  <VanDialog
+    v-model:show="isTipDialogShow"
+    title="视频容量说明"
+    confirm-button-text="我知道了"
+    confirm-button-color="#1989fa"
+  >
+    <div class="capacity-dialog-content">
+      该容量为<strong>图册总视频额度</strong>，单个产品最多支持上传 1 个视频。
+    </div>
+  </VanDialog>
 </template>
 
 <script setup>
@@ -157,7 +174,7 @@ const coverModeText = computed(() => {
   return coverActions[0].name
 })
 
-const coverMode = ref('default') // 封面模式，default-视频首贞、custom-自定义
+const coverMode = ref('default') // 封面模式，default-视频首帧、custom-自定义
 const coverModeDisplay = computed(() => {
   if (props.cover) return 'custom'
   return coverMode.value
@@ -174,6 +191,12 @@ const onSelectCoverMode = (action) => {
 
 const handleLimitClick = () => {
 
+}
+
+// 🌟 新增：控制常驻弹窗显隐的变量与方法
+const isTipDialogShow = ref(false)
+const showCapacityTip = () => {
+  isTipDialogShow.value = true
 }
 
 const uploadVideoRef = ref()
@@ -196,7 +219,6 @@ const checkParams = () => {
 }
 
 const isNoLimit = computed(() => { // 是否无限容量
-  // return true
   return usageInfo.value.videoLimit === 9999
 })
 
@@ -243,7 +265,7 @@ export default {
     flex-shrink: 0; 
   }
   
-  // 右侧容量卡片（去掉了时长标签，彻底解脱挤压）
+  // 右侧容量卡片
   .count-limit-inline {
     flex: 1; 
     height: 60px;
@@ -260,10 +282,27 @@ export default {
       display: flex;
       flex-direction: column; 
       
-      .title {
-        font-size: 12px; // 恢复舒适的大小
-        color: #969799; 
-        white-space: nowrap; // 坚决不允许换行
+      // 标题与 Icon 的对齐布局
+      .title-container {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        cursor: pointer;
+        
+        .title {
+          font-size: 12px; 
+          color: #969799; 
+          white-space: nowrap; 
+        }
+
+        .tip-icon {
+          font-size: 13px;
+          color: #c8c9cc;
+          
+          &:active {
+            color: #1989fa;
+          }
+        }
       }
 
       .num-info {
@@ -271,6 +310,7 @@ export default {
         color: #c8c9cc;
         display: flex;
         align-items: baseline; 
+        margin-top: 2px;
         
         .num-highlight {
           color: #323233;
@@ -345,14 +385,22 @@ export default {
   gap: 4px;
   margin-top: 8px;
   font-size: 11px;
-  color: #969799; // Vant标准的次要提示灰色
+  color: #969799; 
   padding-left: 2px;
   line-height: 1.4;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+// 🌟 新增：说明弹窗的排版样式
+.capacity-dialog-content {
+  padding: 26px 24px;
+  font-size: 14px;
+  color: #646566;
+  line-height: 1.5;
+  text-align: center;
+  
+  strong {
+    color: #323233;
+    font-weight: 600;
+  }
 }
 </style>

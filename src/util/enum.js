@@ -125,6 +125,7 @@ export const E_vip_map = [
   {level: 3, name: '1000 容量会员', isVip: true},
   {level: 4, name: '1500 容量会员', isVip: true},
   {level: 5, name: '2000 容量会员', isVip: true},
+  {level: 6, name: '无限容量会员', isVip: true},
 ]
 
 export const E_illegal_reg = [

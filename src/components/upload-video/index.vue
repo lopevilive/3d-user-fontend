@@ -83,7 +83,7 @@
             <span class="highlight-blue">{{ maxSizeText }}</span>
           </div>
         </template>
-        <div class="tip-text" v-if="['duration', 'size'].includes(dialogState.type)">提示：升级会员，解锁更长视频上传！</div>
+        <div class="tip-text" v-if="!isNoLimit">提示：升级会员，解锁更长视频上传！</div>
       </div>
     </VanDialog>
   </div>
@@ -251,6 +251,12 @@ const beforeReadHandle = () => {
   console.log(999)
   return false
 }
+
+const isNoLimit = computed(() => {
+  const { videoLimit } = globalData.value.usage
+  if (videoLimit === 9999) return true
+  return false
+})
 
 defineExpose({ isLoading })
 </script>

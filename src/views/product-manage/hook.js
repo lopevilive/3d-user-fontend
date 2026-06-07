@@ -68,13 +68,17 @@ export const useProductManage = () => {
       }
     }
     let allName = '全部'
-    if (rid === 99) {
-      const {usage: {total = 0, limit = 0}} = globalData.value
-      allName += `(${total}/${limit})`
-    }
+    let isShowCount = false // 是否显示数量
+    if (rid === 99) isShowCount = true
     if ([2,3].includes(rid)) {
       const {usage: {total = 0, limit = 0}} = globalData.value
-      if (total > 25 || limit > 50) {
+      if (total > 25 || limit > 50) isShowCount = true
+    }
+    if (isShowCount) {
+      const {usage: {total = 0, limit = 0}} = globalData.value
+      if (limit === 9999) {
+        allName += `(${total})`
+      } else {
         allName += `(${total}/${limit})`
       }
     }
