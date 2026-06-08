@@ -211,7 +211,7 @@ const delHandle = async () => {
 
 const maxSize = computed(() => {
   const { videoLimitS = 0 } = globalData.value.usage
-  let ret = videoLimitS * 1.5 * 1024 * 1024
+  let ret = videoLimitS * 3 * 1024 * 1024 // 1 秒最多给 4 m
   // return 1024 * 1024 * 1
   return ret || 50 * 1024 * 1024
 })
