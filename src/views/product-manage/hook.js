@@ -310,7 +310,6 @@ export const useProductManage = () => {
     if (finished.value) return
     if (fetchLoadingRaw.value) return
     const {scrollTop, clientHeight, scrollHeight} = e.target
-    scrollT.value = scrollTop
     const a = scrollTop + clientHeight
     const b = scrollHeight
     if (Math.abs(b - a) < 200){
@@ -319,8 +318,12 @@ export const useProductManage = () => {
   }
 
   const scrollHandle = throttle((e) => {
-    handleFetchData(e)
-    emitter.emit('scrollChange', listRef.value)
+    const {scrollTop, clientHeight} = e.target
+    if (clientHeight)  {
+      handleFetchData(e)
+      scrollT.value = scrollTop
+      emitter.emit('scrollChange', listRef.value)
+    }
   }, 200)
 
   const selectedHandle = ({id, val}) => {
