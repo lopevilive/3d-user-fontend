@@ -5,6 +5,7 @@
         <div class="swiper-slide" v-if="videoUrl">
           <AsyncVideo :url="videoUrl" ref="videoPlayerRef" :cover="videoCover" />
           <div v-if="!globalData.isPC" class="swiper-no-swiping no-swiping_video"></div>
+          <div v-if="!globalData.isPC" class="no-swiping-video-bottom"></div>
         </div>
         <div class="swiper-slide" v-for="(item, idx) in list" :class="{mode1: mode === 1, mode2: mode === 2}">
           <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getUrl(item)" @click="clickHandle(idx)" lazy-load/>
@@ -216,13 +217,20 @@ onMounted(init)
       position: absolute;
       width: 10%;
       height: 100%;
-      // background: red;
       top: 0;
       left: 0;
       z-index: 10;
     }
     .no-swiping_video {
       height: calc(100% - 50px);
+    }
+    .no-swiping-video-bottom {
+      position: absolute;
+      width: 18px;
+      height: 50px;
+      bottom: 0;
+      left: 0;
+      z-index: 10;
     }
   }
   .control-item {
