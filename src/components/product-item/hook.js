@@ -201,10 +201,19 @@ export const useProductItem = (props, emits) => {
     if (props.mode & 1<<2) return false
     return true
   })
+
+  const isShowVideo = computed(() => {
+    const videoUrl = props?.data?.videoUrl
+    if (!videoUrl) return false
+    if (/\.check/.test(videoUrl)) return false
+    if (/\.mp4/.test(videoUrl)) return true
+    return false
+  })
   
 
   return {
     actions, selectHandle, settingClickHandle, handleClick, urlDisplay, checked, changeHandle,
-    displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls
+    displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls,
+    isShowVideo
   }
 }

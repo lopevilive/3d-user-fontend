@@ -3,6 +3,9 @@
     <div class="content">
       <div @click="handleClick" :class="{'img': true, 'img-fixed-height': mode & 1<<1}">
         <VanImage :fit="mode & 1<< 1? 'cover': 'contain'" :src="urlDisplay"/>
+        <div class="video-play-badge" v-if="isShowVideo && globalData.editStatus !== 1">
+          <VanIcon name="play" class="play-icon-mini" />
+        </div>
       </div>
       <div class="info-content">
         <div :class="{'desc': true, 'desc-line1': mode & 1<<1}" @click="handleClick">
@@ -80,7 +83,8 @@ const emits = defineEmits(['update','selected'])
 
 const {
   actions, settingClickHandle, selectHandle, handleClick, urlDisplay, checked, changeHandle,
-  displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls
+  displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls,
+  isShowVideo
 } = useProductItem(props,emits)
 
 </script>
@@ -114,7 +118,6 @@ const {
     display: flex;
     flex-direction: column;
     align-items: center;
-    // padding: $pdM;
     box-sizing: border-box;
     padding-bottom: $pdM;
     .info-content {
@@ -131,22 +134,44 @@ const {
     align-items: center;
     justify-content: center;
     min-height: 100px;
+    position: relative; /* 核心：确保微标能相对于图片容器绝对定位 */
     :deep(.van-image__img){
       max-height: 250px;
     }
+
+    .video-play-badge {
+      position: absolute;
+      top: 10px;          /* 距离图片上边界 */
+      right: 10px;        /* 距离图片右边界 */
+      width: 16px;        /* 按钮整体圆形外圈大小 */
+      height: 16px;
+      background: rgba(0, 0, 0, 0.6); /* 经典半透明黑底，在浅色家具背景下极显高级 */
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;           /* 允许点击事件穿透到图片触发 handleClick */
+      .play-icon-mini {
+        margin-left: 1px;
+        font-size: 12px;  /* 实体小箭头字号 */
+        color: #ffffff;
+      }
+    }
   }
+  
   .img-fixed-height {
     height: 175px;
+    position: relative; /* 确保在固定高度容器下定位也不会错位 */
     .van-image {
       height: 100%;
       width: 100%;
     }
   }
+  
   .desc {
     line-height: 20px;
     color: $grey;
     width: 100%;
-    // padding-top: $pdM;
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -242,5 +267,4 @@ const {
     margin-left: 20px;
   }
 }
-
 </style>

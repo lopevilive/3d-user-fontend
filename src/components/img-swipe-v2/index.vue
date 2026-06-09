@@ -4,6 +4,7 @@
       <div class="swiper-wrapper" :style="styleDisplay" >
         <div class="swiper-slide" v-if="videoUrl">
           <AsyncVideo :url="videoUrl" ref="videoPlayerRef" :cover="videoCover" />
+          <div v-if="!globalData.isPC" class="swiper-no-swiping"></div>
         </div>
         <div class="swiper-slide" v-for="(item, idx) in list" :class="{mode1: mode === 1, mode2: mode === 2}">
           <VanImage :fit="mode === 2 ? 'cover' : 'contain'" :src="getUrl(item)" @click="clickHandle(idx)" lazy-load/>
