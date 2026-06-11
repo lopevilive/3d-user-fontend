@@ -15,7 +15,6 @@ export const useProductManage = () => {
   const shopId = +route.params.shopId
   let source = axios.CancelToken.source()
   const globalLoadingRef = globalLoading.getRef()
-  const scrollT = ref(0)
   const listRef = ref()
 
   const fetchLoadingRaw = ref(false)
@@ -320,8 +319,8 @@ export const useProductManage = () => {
   const scrollHandle = throttle((e) => {
     const {scrollTop, clientHeight} = e.target
     if (clientHeight)  {
+      logPos()
       handleFetchData(e)
-      scrollT.value = scrollTop
       emitter.emit('scrollChange', listRef.value)
     }
   }, 200)
@@ -541,15 +540,46 @@ export const useProductManage = () => {
     }})
   }
   
+  let containerBottom = 0
+  let firstVisible = null
+  let minTop = Infinity
+  const logPos = async() => {
+    const items = Array.from(leftListRef.value.querySelectorAll('.com-product-item'))
+    firstVisible = null
+    minTop = Infinity
+    if (!containerBottom) {
+      const containerRect = listRef.value.getBoundingClientRect()
+      containerBottom = containerRect.bottom
+    }
+    for (const item of items) {
+      const rect = item.getBoundingClientRect()
+      if (rect.top >= 0 && rect.top < containerBottom) {
+        if (rect.top < minTop) {
+          minTop = rect.top
+          firstVisible = item
+          break
+        }
+      }
+    }
+    
+  }
+  
+  const formatScroll = async() => {
+    if (!firstVisible) return
+    firstVisible.scrollIntoView()
+    if (!minTop) return
+    const s = listRef.value.scrollTop - minTop
+    listRef.value.scrollTop = s
+  }
+  
   const activeHandle = async () => {
     if (inited) {
       await fetchShop(false)
     }
     tabKey.value = Math.floor(Math.random() * 100) // 用于更新 tab分类组件
     bannerKey.value = Math.floor(Math.random() * 100)
-    if (scrollT.value) { // 这里让页面滚动到上次的位置
-      listRef.value.scrollTop = scrollT.value
-    }
+    formatScroll()
+
     if (globalData.value?.productNeedExec?.length) { // 这里处理编辑产品后，同步产品列表里面产品信息
       let tmpList = globalData.value.productNeedExec
       globalData.value.productNeedExec = []
@@ -674,6 +704,8 @@ export const useProductManage = () => {
     activeTab.value = type1;
     subActiveTab.value = type2 || 0
   }
+
+
   
   const init = async () => {
     clearNeedExec()
@@ -693,7 +725,7 @@ export const useProductManage = () => {
     selectedList, selectedHandle, removeAllSelected, handleEditDone, addProdHandle,
     handleMulOnOff, handleMulDel, handleMulPrice, handleMulChangeType, mulPriceRef,
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
-    scrollT, priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
+    priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
     beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
     type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey
   }

@@ -122,7 +122,7 @@ const {
   rightListRef, scrollHandle, finished, fetchLoading, selectedList, selectedHandle,
   removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef, bannerCfg,
-  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, scrollT, stickyPos, bannerKey, 
+  handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, stickyPos, bannerKey, 
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
   shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod,
 } = useProductManage()
