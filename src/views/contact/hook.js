@@ -40,7 +40,6 @@ export const useContact = () => {
   }
 
   const isShowConcat = computed(() => {
-    if (shopInfo.value.showContact === 1) return false
     if (shopInfo.value.phone) return true
     if (shopInfo.value.qrcodeUrl) return true
     return false
@@ -49,6 +48,7 @@ export const useContact = () => {
   const isShowToEdit = computed(() => {
     if (shopInfo.value.showContact === 1) return false
     if (isShowConcat.value) return false
+    if (isShowAddress.value) return false
     const {rid} = globalData.value
     if ([2,3,99].includes(rid)) return true
     return false
@@ -59,9 +59,8 @@ export const useContact = () => {
   }
 
   const isShowAddress = computed(() => {
-    if (isShowConcat.value === false) return false
-    if (!addressDisplay.value) return false
-    return true
+    if (shopInfo.value.address) return true
+    return false
   })
 
   return {

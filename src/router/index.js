@@ -305,7 +305,10 @@ const handleIllegal = async (shopId) => {
 const handleLog = (to, shopId) => {
   if (!shopId) return
   if (!['product-manage', 'product-detial', 'custom-home'].includes(to.name)) return
-  viewLog.setlog(shopId)
+  const currShopRid = getRidByShopId(shopId, globalData.value.userInfo)
+  if (currShopRid) { // 有登录信息才记录浏览
+    viewLog.setlog(shopId)
+  }
 }
 
 const handleReport = (payload) => {
@@ -315,6 +318,8 @@ const handleReport = (payload) => {
 const forwardObj = {}
 const handleForwardPermi = async (shopId) => {
   if (!shopId) return
+  const inApp = isInApp()
+  if (!inApp) return
   let shopInfo = await shopInfoManage.getData(shopId)
   shopInfo = shopInfo[0];
   const { forwardPermi } = shopInfo
