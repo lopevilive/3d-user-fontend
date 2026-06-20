@@ -80,6 +80,10 @@ export const useProductEdit = () => {
     if  (videoUrl && /\.check/.test(videoUrl)) {
       payload.videoUrl = videoUrl.replace(/\.check/, '.mp4')
     }
+    if (payload.videoStatus === 0) {
+      payload.videoCover = ''
+      payload.videoUrl  = ''
+    }
     return payload
   }
 

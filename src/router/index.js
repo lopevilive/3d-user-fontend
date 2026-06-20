@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId, getDeviceType } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -181,6 +181,11 @@ const router = createRouter({
       component: () => import('@/views/album-illegal/index.vue')
     },
     {
+      path: '/pc-tips',
+      name: 'pc-tips',
+      component: () => import('@/views/pc-tips/index.vue')
+    },
+    {
       path: '/:catchAll(.*)',
       redirect: '/'
     }
@@ -341,28 +346,42 @@ const handleForwardPermi = async (shopId) => {
 }
 
 
+// pc 不允许打开
+const handleDevice = async (to) => {
+  const inApp = isInApp()
+  if (inApp) return // 小程序内允许打开
+  if (to.name === 'pc-tips') return
+  const ret = getDeviceType()
+  if (ret === 'pc') {
+    return {name: 'pc-tips'}
+  }
+  return
+}
+
 const init = async (to, from) => {
   let {shopId} = to.params
   if (shopId) {
     shopId = +shopId
     shopInfoManage.getData(shopId)
   }
+  let pass = await handleDevice(to)
+  if (Object.prototype.toString.call(pass) === '[object Object]') return pass
+  
   handleQuery(to) //  保存小程序传过来的参数
-
-  let pass = await handleLogin(to) // 处理登录
+  pass = await handleLogin(to) // 处理登录
   if (pass === false) return false
 
   pass = handlePhone(to) // 判断是否需要手机验证
   if (pass === false) return false
 
   pass = await handleIllegal(shopId) // 判断是否封禁画册
-  if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+  if (Object.prototype.toString.call(pass) === '[object Object]') return pass
 
   pass = await handleEncry(shopId, to) // 判断是否加密画册
-  if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+  if (Object.prototype.toString.call(pass) === '[object Object]') return pass
 
   pass = await handleHomePage(to, from) // 判断是否需要跳转自定义首页
-  if (pass && Object.prototype.toString(pass) === '[object Object]') return pass
+  if (Object.prototype.toString.call(pass) === '[object Object]') return pass
   
   handleLog(to, shopId) // 写入浏览记录
   handleReport({to, shopId}) // 处理上报

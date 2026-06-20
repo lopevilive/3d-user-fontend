@@ -83,7 +83,7 @@
   />
   <VanField
     readonly
-    v-if="coverModeDisplay === 'custom'"
+    v-if="isShowCustomCover"
   >
     <template #label>
       <FormLabel label="上传封面">
@@ -178,6 +178,12 @@ const coverMode = ref('default') // 封面模式，default-视频首帧、custom
 const coverModeDisplay = computed(() => {
   if (props.cover) return 'custom'
   return coverMode.value
+})
+
+const isShowCustomCover = computed(() =>{
+  if (!videoEnabled.value) return false
+  if (coverModeDisplay.value === 'custom') return true
+  return  false
 })
 
 

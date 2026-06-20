@@ -639,3 +639,14 @@ export const getVideoUrl = (url) => {
   ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
   return ret
 }
+
+/**
+ * 基础版：判断当前是移动端还是PC端
+ * @returns {'mobile'|'pc'} 设备类型
+ */
+export const getDeviceType = () => {
+  const ua = navigator.userAgent;
+  // 覆盖主流移动端设备的UA关键词
+  const mobileRegex = /(Mobile|Android|iPhone|iPod|HarmonyOS|BlackBerry|IEMobile|Windows Phone)/i;
+  return mobileRegex.test(ua) ? 'mobile' : 'pc';
+}

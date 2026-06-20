@@ -203,6 +203,7 @@ export const useProductItem = (props, emits) => {
   })
 
   const isShowVideo = computed(() => {
+    if (props?.data?.videoStatus !==  1) return false
     const videoUrl = props?.data?.videoUrl
     if (!videoUrl) return false
     if (/\.check/.test(videoUrl)) return false
