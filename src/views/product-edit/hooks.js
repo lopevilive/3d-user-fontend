@@ -147,9 +147,8 @@ export const useProductEdit = () => {
 
   const isShowVideo = computed(() => {
     if (!shopId) return false
+    if (shopInfo.value.level === 0) return false // 非会员暂时不支持视频
     return true
-    // if ([5,8].includes(shopId)) return true
-    // return false
   })
 
   
