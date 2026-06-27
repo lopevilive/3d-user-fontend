@@ -216,6 +216,12 @@ const handleLogin = async (to) => {
     try {
       globalData.value.isShowSke = true
       const {data} = await getUserInfo({wxEnv: globalData.value.wxEnv})
+      if (!inApp) {
+        if (![1,3].includes(data.userId)) {
+          localStorage.setItem('token', '')
+          return
+        }
+      }
       globalData.value.userInfo = data
     } catch(e) {
       // localStorage.setItem('token', '')
