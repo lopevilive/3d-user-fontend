@@ -1,14 +1,17 @@
 <template>
   <div class="com-add-controls" v-if="isShow">
     <template v-if="mode === 0">
-      <div class="single" v-if="productInfo.isSpec === 0">
+      <div class="single" v-if="isShowSingle">
         <CountControls v-model:count="carInfo.count.value" />
       </div>
-      <div v-if="[1,2].includes(productInfo.isSpec)" class="select-spec" @click="specClickHandle">选规格</div>
+      <div
+        v-if="[1,2].includes(productInfo.isSpec)" class="select-spec" @click="specClickHandle"
+        name="select-controls-spec"
+      >选规格</div>
     </template>
 
     <template v-if="mode === 1">
-      <!-- 单规格 -->
+      <!-- 无规格 -->
       <template v-if="productInfo.isSpec === 0">
         <VanButton
           v-if="carInfo.count.value === 0"
@@ -41,7 +44,7 @@ const props = defineProps({
 })
 
 const {
-  isShow, carInfo, specAddRef, specClickHandle
+  isShow, carInfo, specAddRef, specClickHandle, isShowSingle
 } = useAddControls(props)
 
 </script>

@@ -42,23 +42,17 @@
       </div>
     </div>
   </div>
+  <DialogImgs ref="dialogImgsRef" />
 </template>
 
 <script setup>
 import {useContact} from './hook'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
+import DialogImgs from '@/components/dialog-imgs/index.vue'
 import {globalLoading, copyStr} from '@/util'
 
 const {
-  shopInfo,
-  init,
-  imgList,
-  addressDisplay,
-  toViewQr,
-  isShowConcat,
-  isShowToEdit,
-  toEdit,
-  isShowAddress
+  shopInfo, init, imgList, addressDisplay, toViewQr, isShowConcat, isShowToEdit, toEdit, isShowAddress, dialogImgsRef
 } = useContact()
 
 const loading = globalLoading.getRef()

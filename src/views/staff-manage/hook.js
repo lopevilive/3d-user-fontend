@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { commonFetch, isInApp, getImageUrl, shopInfoManage } from '@/util'
+import { commonFetch, getImageUrl, shopInfoManage } from '@/util'
 import { getStaff, delStaff } from '@/http'
 import { showConfirmDialog, showToast } from 'vant';
 import { useRoute } from 'vue-router'
@@ -76,11 +76,6 @@ export const useStaffManage = () => {
   }
 
   const toInvite = async (data) => {
-    const inApp = isInApp()
-    if (!inApp) {
-      showToast('请在小程序内邀请~')
-      return
-    }
     if (!shopInfo.value) {
       const ret = await shopInfoManage.getData(shopId)
       shopInfo.value = ret[0]

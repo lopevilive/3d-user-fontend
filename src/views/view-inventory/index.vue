@@ -106,7 +106,6 @@ const toShare = async () => {
     desc1: [shopInfo.value?.name || ''],
     desc2: [displayTime.value],
     scene: { name: 'view-inventory', shopId, id},
-    // inventoryId: id,
   })
 }
 

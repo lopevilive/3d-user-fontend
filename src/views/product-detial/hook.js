@@ -63,16 +63,22 @@ export const useProductDetial = () => {
   })
 
   const shareHandle = async () => {
-    const {name, forwardPermi} = shopInfo.value
-    toSharePage({
+    const {name, forwardPermi, openInH5} = shopInfo.value
+    const sharePayload = {
       src_path: `/product-manage/${shopId}?toDetial=${info.value.id}&title=${encodeURIComponent(info.value.desc)}&imageUrl=${encodeURIComponent(getImageUrl(info.value.url.split(',')[0]))}`,
       url: info.value.url?.split(',')?.[0] || '',
       title: name,
       desc1: [info.value.desc],
       desc2: [],
       scene: { name: 'product-detial', shopId, id: info.value.id },
-      forwardPermi
-    })
+      forwardPermi,
+    }
+    const currShopRid = getRidByShopId(shopId, globalData.value.userInfo)
+    if (openInH5 === 1 &&  [2,3,4,99].includes(currShopRid)) { // 支持 h5 打开
+      sharePayload.h5Url = `https://huace.xiaoguoyun.top/dist/product-manage/${shopId}?toDetial=${info.value.id}`
+    }
+
+    toSharePage(sharePayload)
     
   }
 
@@ -181,7 +187,8 @@ export const useProductDetial = () => {
   }
 
   const viewSpecDetialHandle = () => {
-    const ret = document.querySelector(`button[name=add-controls-spec]`)
+    let ret = document.querySelector(`button[name=add-controls-spec]`)
+    if (!ret) ret = document.querySelector('div[name=select-controls-spec]')
     if (ret) ret.click()
   }
 

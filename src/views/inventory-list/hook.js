@@ -4,7 +4,7 @@ import { showConfirmDialog, showFailToast, showToast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import {add, multiply, bignumber} from 'mathjs'
 import { createInventory, getProduct } from '@/http'
-import { commonFetch, toSharePage, shopInfoManage, emojiReg, formatType } from '@/util'
+import { commonFetch, toSharePage, shopInfoManage, emojiReg, formatType, getImageUrl } from '@/util'
 
 export const useInventoryList = () => {
   const route = useRoute()
@@ -157,7 +157,7 @@ export const useInventoryList = () => {
       toRequiredView()
       return
     }
-    const {addressStatus} = shopInfo.value
+    const {addressStatus, url} = shopInfo.value
     if (addressStatus === 1) {
       if (globalData.value.selectedAddress.length === 0) {
         showFailToast('请填写收货信息~')
@@ -166,7 +166,8 @@ export const useInventoryList = () => {
     }
     const data = await toCreate(0)
     shopCarInstance.clearAll()
-    router.replace({name: 'view-inventory', params: {id: data}, query: {title: '购物清单', toShare: '1'}})
+    const imageUrl = getImageUrl(url.split(',')[0] || '')
+    router.replace({name: 'view-inventory', params: {id: data}, query: {title: '购物清单', toShare: '1', imageUrl}})
   }
 
   const mulShare = async () => {
@@ -175,7 +176,7 @@ export const useInventoryList = () => {
     let src_path = `/product-manage/${shopId}/mul-manage/${data}?title=${encodeURIComponent(name)}`
     toSharePage({
       src_path,
-      url: url?.split(',')?.[0] || '',
+      url: getImageUrl(url?.split(',')?.[0] || ''),
       title: name,
       desc1: [desc || ''],
       desc2: [],

@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
-import { copyStr } from '@/util'
+import { copyStr, shopInfoManage, getImageUrl } from '@/util'
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 
 const props = defineProps({
@@ -54,7 +54,9 @@ const props = defineProps({
 
 const emits = defineEmits(['cancel', 'finish', 'select', 'export'])
 
+const route = useRoute()
 const router = useRouter()
+const shopId = +route.params.shopId
 
 const info = computed(() => {
   return JSON.parse(props.data.data)
@@ -73,13 +75,16 @@ const finishHandle = () => {
   emits('finish', props.data.id)
 }
 
-const clickHandle = (e) => {
+const clickHandle = async (e) => {
   if (props.isMul) {
     const newVal = !isSelected.value
     emits('select', props.data.id, newVal)
   } else {
     if (e.target.type === 'button') return
-    router.push({name: 'view-inventory', params: {id: props.data.id}})
+    let shopInfo = await shopInfoManage.getData(shopId)
+    shopInfo = shopInfo[0]
+    const imageUrl = getImageUrl(shopInfo.url.split(',')[0] || '')
+    router.push({name: 'view-inventory', params: {id: props.data.id}, query: {title: '购物清单', imageUrl}})
   }
 }
 

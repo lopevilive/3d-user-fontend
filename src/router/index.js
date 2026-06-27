@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId, getDeviceType } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -348,14 +348,13 @@ const handleForwardPermi = async (shopId) => {
 
 // pc 不允许打开
 const handleDevice = async (to) => {
-  const inApp = isInApp()
-  if (inApp) return // 小程序内允许打开
   if (to.name === 'pc-tips') return
-  const ret = getDeviceType()
-  if (ret === 'pc') {
-    return {name: 'pc-tips'}
-  }
-  return
+  const inApp = isInApp()
+  if (inApp) return
+  const mobileRegex = /(Mobile|Android|iPhone|iPod|HarmonyOS|BlackBerry|IEMobile|Windows Phone)/i;
+  const ua = navigator.userAgent;
+  if (mobileRegex.test(ua)) return  // 移动端打开
+  return {name: 'pc-tips'}
 }
 
 const init = async (to, from) => {

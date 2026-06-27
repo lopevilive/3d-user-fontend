@@ -70,7 +70,7 @@
     
     <!-- 隐私设置 -->
     <van-cell-group inset title="隐私设置">
-      <VanCell class="cell__switch cell-label-width-200">
+      <VanCell class="cell__switch cell-label-width-200" :class="{'cell-label-mrt': isWaterMark}">
         <template #title>
           <div class="vip-item">
             <div>图片水印自动添加</div>
@@ -86,11 +86,13 @@
           />
         </template>
         <template #value>
-          <VanSwitch v-model="isWaterMark"/>
+          <div class="cell-mul-value">
+            <VanButton text="水印样式" size="small" @click="handleWaterMark" v-if="isWaterMark" />
+            <VanSwitch v-model="isWaterMark"/>
+          </div>
         </template>
       </VanCell>
-      <VanCell title="水印样式管理" is-link v-if="isWaterMark" @click="handleWaterMark"></VanCell>
-      <VanCell class="cell-label-width-200" label="开启后，仅管理员与分销员可分享图册" v-if="isShowForward">
+      <VanCell class="cell-label-width-200" label="开启后，仅管理员与分销员可分享图册">
         <template #title>
           <div class="vip-item">
             <div>分享权限控制</div>
@@ -117,7 +119,7 @@
           <VanSwitch v-model="inveExportStatus"/>
         </template>
       </VanCell>
-      <VanCell class="cell-label-width-200 cell-label-mrt" label="开启后，产品价格将对游客隐藏，仅管理员与分销员可见" v-if="isShowForward">
+      <VanCell class="cell-label-width-200 cell-label-mrt" label="开启后，产品价格将对游客隐藏，仅管理员与分销员可见">
         <template #title>
           <div class="vip-item">
             <div>隐藏价格</div>
@@ -125,6 +127,19 @@
         </template>
         <template #value>
           <VanSwitch v-model="isHidePirce"/>
+        </template>
+      </VanCell>
+      <VanCell class="cell-label-width-200" label="开启后，支持扫码或在浏览器中打开" :class="{'cell-label-mrt': isOpenInH5}" v-if="isShowH5Mode">
+        <template #title>
+          <div class="vip-item">
+            <div>H5 访问权限</div>
+          </div>
+        </template>
+        <template #value>
+          <div class="cell-mul-value">
+            <VanButton text="查看链接" size="small" v-if="isOpenInH5" @click="gotoShare" />
+            <VanSwitch v-model="isOpenInH5"/>
+          </div>
         </template>
       </VanCell>
     </van-cell-group>
@@ -169,8 +184,8 @@ const {
   isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
-  isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-  toHomeMod, isHidePirce
+  isForwardPermi, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
+  toHomeMod, isHidePirce, isOpenInH5, gotoShare, isShowH5Mode
 } = useSysSetting()
 
 init()
@@ -200,6 +215,13 @@ init()
   .vip-desc-wrap {
     display: flex;
     justify-content: space-between;
+  }
+}
+.cell-mul-value {
+  display: flex;
+  justify-content: flex-end;
+  :deep(.van-button) {
+    margin-right: 10px;
   }
 }
 

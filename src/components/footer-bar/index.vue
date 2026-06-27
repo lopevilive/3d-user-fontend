@@ -85,6 +85,7 @@ const totalCount = computed(() => {
 })
 
 const isShowCart = computed(() => {
+  if (!globalData.value.userInfo?.userId) return false
   if (totalCount.value > 0) return true
   if ([2,3,99].includes(globalData.value.rid)) return false
   if (globalData.value.hasInventory[shopId]) return true

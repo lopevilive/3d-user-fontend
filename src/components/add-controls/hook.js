@@ -18,8 +18,14 @@ export const useAddControls = (props) => {
     specAddRef.value.show()
   }
 
+  const isShowSingle = computed(() => {
+    if (!globalData.value.userInfo?.userId) return false
+    if (props.productInfo.isSpec === 0) return true
+    return false
+  })
+
   return {
-    isShow, carInfo, specAddRef, specClickHandle
+    isShow, carInfo, specAddRef, specClickHandle, isShowSingle
   }
 
 }

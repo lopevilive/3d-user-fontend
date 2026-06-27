@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { getImageUrl, getMulSpecName, getSpecPrices, getSelectedItemByIdList, getMulSpecUrl } from '@/util'
 import { showImagePreview, showToast } from 'vant';
-import { shopCarInstance } from '@/store'
+import { shopCarInstance, globalData } from '@/store'
 
 export const useSpecAddHook = (props) => {
   const isShow = ref(false)
@@ -272,6 +272,13 @@ export const useSpecAddHook = (props) => {
     }
   }
   
+  const isShowCount = computed(() => {
+    if (!globalData.value.userInfo?.userId) {
+      return false
+    }
+    return true
+  })
+  
   const show = async () => {
     selectedInfo.value = {}
     isShow.value = true
@@ -279,6 +286,6 @@ export const useSpecAddHook = (props) => {
 
   return {
     isShow, show, displaySpecList, subSpecClickHandle, isActive, displayUrl, viewImg,
-    displaySelectedTxt, priceDisplay, isDisabled, displaySpecCount, addHandle
+    displaySelectedTxt, priceDisplay, isDisabled, displaySpecCount, addHandle, isShowCount
   }
 }

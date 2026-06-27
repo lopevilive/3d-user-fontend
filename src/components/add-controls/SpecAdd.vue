@@ -33,7 +33,7 @@
 
         </div>
       </div>
-      <div class="count-wrap">
+      <div class="count-wrap" v-if="isShowCount">
         <div>数量</div>
         <VanButton
           v-if="displaySpecCount === 0"
@@ -57,7 +57,7 @@ const props = defineProps({
 
 const {
   isShow, show, displaySpecList, subSpecClickHandle, isActive, displayUrl, viewImg,
-  displaySelectedTxt, priceDisplay, isDisabled, displaySpecCount, addHandle
+  displaySelectedTxt, priceDisplay, isDisabled, displaySpecCount, addHandle, isShowCount
 } = useSpecAddHook(props)
 
 defineExpose({show})

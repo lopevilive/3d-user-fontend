@@ -16,7 +16,7 @@
 
 <script setup>
 import {ref, computed} from 'vue'
-import { toSharePage,  shopInfoManage, getImageUrl, getFlexW} from '@/util'
+import { toSharePage, shopInfoManage, getImageUrl, getFlexW, getRidByShopId} from '@/util'
 import { useRoute } from 'vue-router'
 import { globalData } from '@/store'
 
@@ -57,17 +57,23 @@ const offsetDiaplay = computed({
 const shopInfo = ref({})
 
 const clickHandle = async () => {
+  await init()
   const shopId = +route.params.shopId
-  const {name, url, desc, forwardPermi} = shopInfo.value
-  toSharePage({
+  const {name, url, desc, forwardPermi, openInH5} = shopInfo.value
+  const sharePayload = {
     src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
-    url: url?.split(',')?.[0] || '',
+    url: getImageUrl(url?.split(',')?.[0] || ''),
     title: name,
     desc1: [desc || ''],
     desc2: [],
     scene: {name: 'product-manage', shopId},
-    forwardPermi
-  })
+    forwardPermi,
+  }
+  const currShopRid = getRidByShopId(shopId, globalData.value.userInfo)
+  if (openInH5 === 1 && [2,3,4,99].includes(currShopRid)) {
+    sharePayload.h5Url = `https://huace.xiaoguoyun.top/dist/product-manage/${shopId}`
+  }
+  toSharePage(sharePayload)
 }
 
 const isShow = computed(() => {

@@ -3,11 +3,10 @@
     <template #label>
       <FormLabel #default label="产品规格" tips="tmp">
         <div class="common-label-tips">
-          <div>1.产品只有“大小”一个选项，这个时候选择【单级规格】</div>
+          <div>🔹 <strong>只有一个属性</strong>（如：仅“大小”）→ 请选择 <b>【单级规格】</b></div>
           <br>
-          <div>2.产品有“颜色”和“尺码”两个选项，这个时候选择【多级规格】</div>
+          <div class="mt-2">🔹 <strong>有两个及以上属性</strong>（如：颜色 + 尺码）→ 请选择 <b>【多级规格】</b></div>
         </div>
-
       </FormLabel>
     </template>
     <template #input>

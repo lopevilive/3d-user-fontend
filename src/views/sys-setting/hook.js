@@ -4,7 +4,8 @@ import { globalData } from '@/store'
 import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
-  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName
+  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName, toSharePage,
+  getImageUrl
 } from '@/util'
 import { showConfirmDialog } from 'vant';
 import dayjs from 'dayjs'
@@ -186,11 +187,6 @@ export const useSysSetting = () => {
     if (['develop', 'trial', 'release'].includes(globalData.value.wxEnv)) return true
     return false
   })
-
-  const isShowForward = computed(() => {
-    if (['develop', 'trial', 'release'].includes(globalData.value.wxEnv)) return true
-    return false
-  })
   
   const showVip = () => {
     toVip(shopId)
@@ -321,6 +317,33 @@ export const useSysSetting = () => {
       modHidePrice(val)
     }
   })
+
+  const modOpenInH5 = async (val) => {
+    if (val) {
+      if (!isVip(shopInfo.value)) {
+        await showConfirmDialog({
+          message: '开通会员后可开启该功能。\n(注：会员99/年)',
+          confirmButtonText: '前往开通',
+          cancelButtonText: '好的'
+        })
+        toVip(shopId)
+        return
+      }
+    }
+    await commonFetch(modShopStatus, {shopId, openInH5: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const isOpenInH5 = computed({
+    get() {
+      if (shopInfo.value?.openInH5 === 1) return true
+      return false
+    },
+    set(val) {
+      modOpenInH5(val)
+    }
+  })
   
   const displayTypeSideMod = computed(() => {
     if (shopInfo.value.typeSideMod === 0) return '上方'
@@ -337,6 +360,25 @@ export const useSysSetting = () => {
     shopInfoManage.dirty(shopId)
     initShopInfo()
   }
+
+  const gotoShare = () => {
+    const {name, url, desc, forwardPermi} = shopInfo.value
+    toSharePage({
+      src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
+      url: url?.split(',')?.[0] || '',
+      title: name,
+      desc1: [desc || ''],
+      desc2: [],
+      scene: {name: 'product-manage', shopId},
+      forwardPermi,
+      h5Url: `https://huace.xiaoguoyun.top/dist/product-manage/${shopId}`
+    })
+  }
+  
+  const isShowH5Mode = computed(() => { // todo
+    if ([1,5,8].includes(shopId))  return  true
+    return false
+  })
   
   const init = async () => {
     const {rid} = globalData.value
@@ -352,8 +394,8 @@ export const useSysSetting = () => {
     isEncry, encryCode, shopInfo, refreshCode, toFeedback, isWaterMark, handleWaterMark,
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
-    isForwardPermi, isShowForward, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-    toHomeMod, isHidePirce
+    isForwardPermi, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
+    toHomeMod, isHidePirce, isOpenInH5, gotoShare, isShowH5Mode
   }
 
 }

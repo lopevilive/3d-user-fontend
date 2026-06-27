@@ -176,11 +176,6 @@ export const priceReg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/
 export const emojiReg = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig
 
 export const toContactSys = async () => {
-  const inApp = isInApp()
-  if (!inApp) {
-    showToast('请在小程序内打开')
-    return
-  }
   const payload = {
     qrcodeUrl: E_img_url_map.adminConcat,
     message: `长按识别二维码～`
@@ -199,9 +194,6 @@ export const toVip = async (shopId) => {
   //   router.push({name: 'vip-concat', params: {shopId}})
   //   return
   // }
-
-  const inApp = isInApp()
-  if (!inApp) return showToast('请在小程序内打开')
   let vipInfo = await vipInfoManage.getData(shopId)
   vipInfo = vipInfo[0]
   let shopInfo = await shopInfoManage.getData(shopId)
@@ -265,11 +257,6 @@ export const decodeScene = (str) => {
 }
 
 export const toSharePage = (payload = {}) => {
-  // const inApp = isInApp()
-  // if (!inApp) {
-  //   showToast('请在小程序内打开')
-  //   return
-  // }
   let query = ''
   for (const key of Object.keys(payload)) {
     let val = payload[key]
@@ -640,13 +627,3 @@ export const getVideoUrl = (url) => {
   return ret
 }
 
-/**
- * 基础版：判断当前是移动端还是PC端
- * @returns {'mobile'|'pc'} 设备类型
- */
-export const getDeviceType = () => {
-  const ua = navigator.userAgent;
-  // 覆盖主流移动端设备的UA关键词
-  const mobileRegex = /(Mobile|Android|iPhone|iPod|HarmonyOS|BlackBerry|IEMobile|Windows Phone)/i;
-  return mobileRegex.test(ua) ? 'mobile' : 'pc';
-}

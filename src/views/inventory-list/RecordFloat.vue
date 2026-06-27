@@ -26,7 +26,7 @@
 
 <script setup>
 import {ref, computed} from 'vue'
-import { getFlexW, commonFetch } from '@/util'
+import { getFlexW, commonFetch, shopInfoManage, getImageUrl } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import { getInventory } from '@/http'
 import { globalData } from '@/store'
@@ -54,8 +54,11 @@ const isShow = computed(() => {
 
 const isShowDialog = ref(false)
 
-const toViewInventory = (item) => {
-  router.push({name: 'view-inventory', params: {id: item.id}, query: {title: '购物清单'}})
+const toViewInventory = async (item) => {
+  let shopInfo = await shopInfoManage.getData(shopId)
+  shopInfo = shopInfo[0]
+  const imageUrl = getImageUrl(shopInfo.url.split(',')[0] || '')
+  router.push({name: 'view-inventory', params: {id: item.id}, query: {title: '购物清单', imageUrl}})
 }
 
 const init = async () => {

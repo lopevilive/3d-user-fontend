@@ -198,6 +198,9 @@ export const useProductItem = (props, emits) => {
   }
 
   const isShowControls = computed(() => {
+    if (!globalData.value.userInfo?.userId) {
+      if (props.data.isSpec === 0) return false
+    }
     if (props.mode & 1<<2) return false
     return true
   })

@@ -5,14 +5,14 @@
         <VanIcon name="revoke" class="bold" />
         <div class="bold">返回</div>
       </div>
-      <div class="content-item" v-if="totalCount" @click="toInventoryList">
+      <div class="content-item" v-if="isShowCar" @click="toInventoryList">
         <VanIcon name="cart-o" class="bold" />
         <div class="bold">清单</div>
         <div class="count">{{ totalCount }}</div>
       </div>
     </div>
-    <div class="right-content">
-       <AddControls :productInfo="productInfo" :mode="1" />
+    <div class="right-content" v-if="isShowAddBtn">
+       <AddControls :productInfo="productInfo" :mode="AddControlsMode" />
     </div>
   </div>
 
@@ -21,7 +21,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { shopCarInstance } from '@/store'
+import { shopCarInstance, globalData } from '@/store'
 import AddControls from '@/components/add-controls/index.vue'
 
 const props = defineProps({
@@ -46,6 +46,22 @@ const totalCount = computed(() => {
     ret += item.count
   }
   return ret
+})
+
+const isShowCar = computed(() => {
+  if (!globalData.value.userInfo?.userId) return false
+  if (totalCount.value) return true
+  return false
+})
+
+const AddControlsMode = computed(() => {
+  if (globalData.value.userInfo?.userId) return 1
+  return 0
+})
+
+const isShowAddBtn = computed(() => {
+  // if (!globalData.value.userInfo?.userId) return false
+  return true
 })
 
 </script>

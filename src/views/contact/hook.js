@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import { shopInfoManage } from '@/util'
+import { shopInfoManage, isInApp, getImageUrl } from '@/util'
 import { useRoute, useRouter } from 'vue-router'
 import {globalData} from '@/store'
 
@@ -24,19 +24,18 @@ export const useContact = () => {
     return str
   })
 
-  const init = async () => {
-    const res = await shopInfoManage.getData(shopId)
-    shopInfo.value = res[0]
-  }
-
+  const dialogImgsRef = ref()
   const toViewQr = () => {
+    const inApp = isInApp()
     const {qrcodeUrl, name} = shopInfo.value
-    const payload = {
-      qrcodeUrl,
-      message: `长按识别二维码～`
+    const url = getImageUrl(qrcodeUrl)
+    if (inApp) {
+      const payload = { qrcodeUrl: url, message: `长按识别二维码～` }
+      let payloadStr = encodeURIComponent(JSON.stringify(payload))
+      wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
+    } else {
+      dialogImgsRef.value.show([url])
     }
-    let payloadStr = encodeURIComponent(JSON.stringify(payload))
-    wx.miniProgram.navigateTo({url: `../viewQrCode/viewQrCode?payload=${payloadStr}`})
   }
 
   const isShowConcat = computed(() => {
@@ -63,15 +62,12 @@ export const useContact = () => {
     return false
   })
 
+  const init = async () => {
+    const res = await shopInfoManage.getData(shopId)
+    shopInfo.value = res[0]
+  }
+
   return {
-    shopInfo,
-    init,
-    imgList,
-    addressDisplay,
-    toViewQr,
-    isShowConcat,
-    isShowToEdit,
-    toEdit,
-    isShowAddress
+    shopInfo, init, imgList, addressDisplay, toViewQr, isShowConcat, isShowToEdit, toEdit, isShowAddress, dialogImgsRef
   }
 }
