@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/http'
 import {
   commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName, formatAttrs, getMulSpecName,
-  getMulSpecUrl, getSpecPrices, formatPoint
+  getMulSpecUrl, getSpecPrices, formatPoint, getRidByShopId
 } from '@/util'
 import { globalData } from '@/store'
 import { showImagePreview } from 'vant';
@@ -170,6 +170,7 @@ export const useProductDetial = () => {
   const isShowShare = computed(() => {
     const {rid} = globalData.value
     if ([2,3,99].includes(rid)) return true
+    if (!globalData.value.userInfo?.userId) return false
     if (shopInfo.value.forwardPermi === 1) return false
     return true
   })
