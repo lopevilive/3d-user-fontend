@@ -375,7 +375,8 @@ export const useSysSetting = () => {
     })
   }
   
-  const isShowH5Mode = computed(() => { // todo
+  const isShowH5Mode = computed(() => { 
+    return true
     if ([1,5,8].includes(shopId))  return  true
     return false
   })

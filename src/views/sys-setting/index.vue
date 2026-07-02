@@ -133,6 +133,7 @@
         <template #title>
           <div class="vip-item">
             <div>H5 访问权限</div>
+            <VanIcon name="gem-o" />
           </div>
         </template>
         <template #value>

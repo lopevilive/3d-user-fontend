@@ -78,6 +78,7 @@ const clickHandle = async () => {
 
 const isShow = computed(() => {
   if (!['custom-home', 'product-manage', 'contact'].includes(route.name)) return false
+  if (!globalData.value.userInfo?.userId) return false
   const {rid, editStatus} = globalData.value
   if (editStatus === 1) return false
   if ([2,3,4,99].includes(rid)) return true
