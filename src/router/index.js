@@ -210,8 +210,8 @@ const toPhone = (to) => {
 const handleLogin = async (to) => {
   const inApp = isInApp()
   const { userId } = globalData.value.userInfo
-  if (userId) return // 已经登录
   const token = getToken(to.query)
+  if (userId && token) return // 已经登录
   if (token) {
     try {
       globalData.value.isShowSke = true
