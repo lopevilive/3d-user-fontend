@@ -177,10 +177,13 @@ export default {
           font-size: 13px;
           color: $grey6;
           text-align: center;
+          width: 100%;
           overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 100%;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          word-break: break-all;
         }
       }
       // 1个分类时居中显示
