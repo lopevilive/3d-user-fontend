@@ -4,7 +4,6 @@ import latin1 from 'crypto-js/enc-latin1'
 import hex from 'crypto-js/enc-hex'
 import { EventEmitter } from 'eventemitter3'
 import copy from 'copy-to-clipboard';
-import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 import { setViewLogs } from '@/http'
 import { getBusinessCfg, E_vip_map, shopInfoManage, E_illegal_reg, vipInfoManage, E_img_url_map, E_img_qua_map } from '@/util'
@@ -60,6 +59,7 @@ export const commonFetch = async (method, paylaod, msg) => {
   }
 }
 
+// 对文件进行 md5 计算
 export const md5File = async (file, withSuf = true) => {
   const suffix = getSuffix(file.name)
   const fileReader = new FileReader()
@@ -77,6 +77,7 @@ export const md5File = async (file, withSuf = true) => {
   return res
 }
 
+// 获取后缀名
 export const getSuffix = (str) => {
   const reg = /.*\.(.*)$/;
   const matchResult = reg.exec(str);
@@ -300,41 +301,6 @@ export const encryRefManage = new RefManage()
 
 export const getFlexW = (w) => {
   return (window.innerWidth * w) / 375
-}
-
-export const textToPngFile = async (text, options = {}) => {
-  // 创建临时DOM节点
-  const node = document.createElement('div');
-  Object.assign(node.style, {
-    display: 'inline-block',
-    fontSize: options.fontSize || '24px',
-    color: options.color || '#000',
-    whiteSpace: 'nowrap' // 防止文字换行
-  });
-  node.textContent = text;
-
-  // 插入文档流（隐藏）
-  // node.style.position = 'absolute';
-  // node.style.left = '-9999px';
-  document.body.appendChild(node);
-
-  try {
-    // 生成PNG dataURL
-    const dataUrl = await toPng(node, {
-      skipFonts: true, // 跳过字体检测
-      cacheBust: true, // 避免缓存
-    });
-
-    // 转换为File对象
-    const file = await fetch(dataUrl)
-      .then(res => res.blob())
-      .then(blob => new File([blob], 'text.png', { type: 'image/png' }));
-
-    return file;
-  } finally {
-    // 清理临时节点
-    document.body.removeChild(node);
-  }
 }
 
 export const formatWatermarkPayload = (watermarkCfg, shopId) => {
@@ -626,4 +592,23 @@ export const getVideoUrl = (url) => {
   ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
   return ret
 }
+
+
+// 判断是否为数字，包括小数
+export const isRealNumber = (val) => {
+  // 1. 排除掉 null、undefined、布尔值、数组、对象等非字符串非数字的类型
+  if (typeof val !== 'number' && typeof val !== 'string') {
+    return false;
+  }
+  
+  // 2. 排除空字符串或纯空格字符串（因为 Number('') 或 parseFloat('') 的表现不符合直觉）
+  if (typeof val === 'string' && val.trim() === '') {
+    return false;
+  }
+
+  // 3. 利用 parseFloat 解析，并配合 isNaN 判断是否为有效数字
+  // parseFloat(val) 遇到无法解析的会返回 NaN，isNaN 负责捕捉它
+  // isFinite 负责排除掉正负无穷大（Infinity / -Infinity）
+  return !isNaN(parseFloat(val)) && isFinite(val);
+};
 

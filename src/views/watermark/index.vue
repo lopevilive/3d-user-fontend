@@ -54,7 +54,7 @@
     <DialogModText ref="dialogModTextRef"/>
     <PosSelect ref="posSelectRef"/>
     <DialogSize ref="dialogSizeRef" />
-    <DialogColor ref="dialogColorRef" />
+    <AsyncDialogColor ref="dialogColorRef" />
     <FloatCfg
       @changeImg="changeImgHandle"
       @img="switchToImg"
@@ -70,14 +70,18 @@
 </template>
 
 <script setup>
+import { defineAsyncComponent } from 'vue'
 import {getImageUrl} from '@/util'
 import { useWaterMark } from './hook'
 import DialogModText from './DialogModText.vue'
 import PosSelect from './PosSelect.vue'
 import DialogSize from './DialogSize.vue'
-import DialogColor from './DialogColor.vue'
 import FloatCfg from './FloatCfg.vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
+
+const AsyncDialogColor = defineAsyncComponent({
+  loader: () => import('./DialogColor.vue')
+})
 
 const {
   init, watermarkCfg, modText, dialogModTextRef, posDisplay,

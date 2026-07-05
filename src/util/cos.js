@@ -2,6 +2,7 @@ import COS from 'cos-js-sdk-v5';
 import { getCosTempKeys, processVideo } from '@/http'
 import { showNotify } from 'vant';
 import { md5File } from './util'
+import { toPng } from 'html-to-image';
 import { globalData } from '@/store'
 
 const Bucket = 'upload-1259129443'
@@ -182,6 +183,42 @@ export const uploadMedia = async (payload) => {
   } catch (e) {
     console.error('上传失败', e);
     throw e;
+  }
+}
+
+
+export const textToPngFile = async (text, options = {}) => {
+  // 创建临时DOM节点
+  const node = document.createElement('div');
+  Object.assign(node.style, {
+    display: 'inline-block',
+    fontSize: options.fontSize || '24px',
+    color: options.color || '#000',
+    whiteSpace: 'nowrap' // 防止文字换行
+  });
+  node.textContent = text;
+
+  // 插入文档流（隐藏）
+  // node.style.position = 'absolute';
+  // node.style.left = '-9999px';
+  document.body.appendChild(node);
+
+  try {
+    // 生成PNG dataURL
+    const dataUrl = await toPng(node, {
+      skipFonts: true, // 跳过字体检测
+      cacheBust: true, // 避免缓存
+    });
+
+    // 转换为File对象
+    const file = await fetch(dataUrl)
+      .then(res => res.blob())
+      .then(blob => new File([blob], 'text.png', { type: 'image/png' }));
+
+    return file;
+  } finally {
+    // 清理临时节点
+    document.body.removeChild(node);
   }
 }
 

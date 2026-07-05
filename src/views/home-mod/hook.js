@@ -25,47 +25,47 @@ const COMPONENT_MAP = {
   }),
 }
 
-const tmpD = {
-  "isEnabled": 1,  // 1-启用、2-不启用
-  "cfg": [
-    {
-      "comName": "ItemBanner", 
-      "status": 2, // 1-启用、2-不启用
-      "info": {
-        "url": '',
-        "scale": "0.5", 
-        "autoPlay": 1 // 1-自动播放、2-不自动播放
-      }
-    },
-    {
-      "comName": "ItemProductType",
-      "status": 1,
-      "info": {
-        "list": [
-          { "typeId": "1001", "url": "https://example.com/type_logo1.png" },
-          { "typeId": "1002", "url": "https://example.com/type_logo2.png" }
-        ]
-      }
-    },
-    {
-      "comName": "ItemCustomProduct",
-      "status": 1,
-      "info": {
-        "list": [
-          { "id": 99}, 
-          { "id": 88 }
-        ]
-      }
-    },
-    {
-      "comName": "ItemHomeDesc",
-      "status": 1,
-      "info": {
-        "url": '',
-      }
-    }
-  ]
-}
+// const tmpD = {
+//   "isEnabled": 1,  // 1-启用、2-不启用
+//   "cfg": [
+//     {
+//       "comName": "ItemBanner", 
+//       "status": 2, // 1-启用、2-不启用
+//       "info": {
+//         "url": '',
+//         "scale": "0.5", 
+//         "autoPlay": 1 // 1-自动播放、2-不自动播放
+//       }
+//     },
+//     {
+//       "comName": "ItemProductType",
+//       "status": 1,
+//       "info": {
+//         "list": [
+//           { "typeId": "1001", "url": "https://example.com/type_logo1.png" },
+//           { "typeId": "1002", "url": "https://example.com/type_logo2.png" }
+//         ]
+//       }
+//     },
+//     {
+//       "comName": "ItemCustomProduct",
+//       "status": 1,
+//       "info": {
+//         "list": [
+//           { "id": 99}, 
+//           { "id": 88 }
+//         ]
+//       }
+//     },
+//     {
+//       "comName": "ItemHomeDesc",
+//       "status": 1,
+//       "info": {
+//         "url": '',
+//       }
+//     }
+//   ]
+// }
 
 
 export const useHomeMod = () => {

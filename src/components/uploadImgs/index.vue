@@ -1,11 +1,11 @@
 <template>
   <div class="com-upload-imgs">
     <div class="wrap">
-      <Container v-if="uploadings.length === 0" @drop="onDrop" orientation="horizontal" lock-axis="x">
-        <Draggable v-for="(item, idx) in fileList">
+      <AsyncContainer v-if="uploadings.length === 0" @drop="onDrop" orientation="horizontal" lock-axis="x">
+        <AsyncDraggable v-for="(item, idx) in fileList">
           <ImgItem :data="item" @delete="deleteHandle" @view="viewHandle(idx)"/>
-        </Draggable>
-      </Container>
+        </AsyncDraggable>
+      </AsyncContainer>
       <ImgItem v-else v-for="item in fileList" :data="item" @delete="deleteUploading" />
       <VanUploader
         ref="vanUploaderRef"
@@ -23,10 +23,20 @@
 </template>
 
 <script setup>
+import { defineAsyncComponent } from 'vue';
 import { useUploadImages } from './hooks'
 import ImgItem from './imgItem.vue'
 import OverDialog from './OverDialog.vue'
-import { Container, Draggable } from "vue3-smooth-dnd";
+
+const AsyncContainer = defineAsyncComponent(async () => {
+  const smoothModule = await import('vue3-smooth-dnd')
+  return smoothModule.Container
+})
+
+const AsyncDraggable = defineAsyncComponent(async () => {
+  const smoothModule = await import('vue3-smooth-dnd')
+  return smoothModule.Draggable
+})
 
 const props = defineProps({
   modelValue: {type: String, default: ''},

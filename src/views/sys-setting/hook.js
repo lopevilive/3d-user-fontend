@@ -4,7 +4,7 @@ import { globalData } from '@/store'
 import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
-  textToPngFile, uploadFile, globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName, toSharePage,
+  globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName, toSharePage,
   getImageUrl
 } from '@/util'
 import { showConfirmDialog } from 'vant';
@@ -58,6 +58,7 @@ export const useSysSetting = () => {
   const setWatermarkCfg = async () => {
     globalLoading.start()
     try {
+      const { uploadFile, textToPngFile } = await import('@/util/cos')
       let ret = await watermarkManage.getData(shopId)
       if (ret.length) return
       const watermarkCfg = {...watermark_cfg_def}

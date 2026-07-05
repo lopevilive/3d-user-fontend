@@ -48,17 +48,39 @@ export default defineConfig({
             return 'index'
           }
           if (/node_modules\/html5-qrcode/.test(id)) return 'no-use'
-          if (/node_modules\/three\//.test(id)) return 'no-use'
+
+          // 上传相关 --s
+          if (/node_modules\/cos-js-sdk-v5/.test(id)) return 'admin-use';
+          if (/\/util\/cos/.test(id)) return 'admin-use';
+          if (/node_modules\/vue3-smooth-dnd/.test(id)) return 'admin-use'
+          if (/node_modules\/smooth-dnd/.test(id)) return 'admin-use'
+          // 上传相关 --e
+          // 水印相关 --s
+          if (/node_modules\/html-to-image/.test(id)) return 'admin-use' 
+          if (/node_modules\/vue3-colorpicker/.test(id)) return 'admin-use'
+          if (/node_modules\/tinycolor2/.test(id)) return 'admin-use'
+          if (/node_modules\/gradient-parser/.test(id)) return 'admin-use'
+          if (/node_modules\/vue-types/.test(id)) return 'admin-use'
+          if (/node_modules\/lodash-es/.test(id)) return 'admin-use'
+          if (/node_modules\/@aesoper\/normal-utils/.test(id)) return 'admin-use'
+          if (/src\/views\/watermark\/DialogColor/.test(id)) return 'admin-use'
+          // 水印相关 --e
+          // 地区选择相关 --s
+          if (/node_modules\/@vant\/area-data/.test(id)) return 'vendor-lazy'
+          if (/src\/components\/area-select/.test(id)) return 'vendor-lazy'
+          // 地区选择相关 --e
+          
+          
+          // 视频相关 --s
           if (/node_modules\/xgplayer/.test(id)) return 'xgplayer'
-          if (/node_modules\/cos-js-sdk-v5/.test(id)) return 'cos-sdk'
-          // if (/node_modules\/vue/.test(id)) return 'vue'
-          // if (/node_modules/.test(id)) return 'node_module'
-          // if (/src\/components/.test(id)) return 'components'
-          // if (/src\/views/.test(id)) return 'views'
-          // if (/src/.test(id)) return 'src'
-          return 'index' // 目前代码量少，直接打包到一起
+          if (/src\/components\/video-player/.test(id)) return 'xgplayer'
+          // 视频相关 --e
+          
+          if (id.includes('node_modules')) return 'vendor'
+
+          return 'index'
         },
       }
-    }
+    },
   }
 })

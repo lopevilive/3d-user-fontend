@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
-  shopInfoManage, commonFetch, watermarkManage, globalLoading, watermark,
-  uploadFile, textToPngFile, formatWatermarkPayload
+  shopInfoManage, commonFetch, watermarkManage, globalLoading,
+  formatWatermarkPayload
 } from '@/util'
 import { saveWatermarkCfg } from '@/http'
 import { showImagePreview, showFailToast } from 'vant'
@@ -106,6 +106,7 @@ export const useWaterMark = () => {
   
   const textNodeRef = ref()
   const toCreateWatermark = async () => {
+    const { uploadFile, watermark, textToPngFile } = await import('@/util/cos')
     const { text, fill, type, image } = watermarkCfg.value
     if (type === 2) {
       globalLoading.start()

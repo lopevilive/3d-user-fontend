@@ -58,7 +58,7 @@
             </div>
           </template>
         </VanField>
-        <AreaSelect ref="areaSelectRef" v-model="data.area"/>
+        <AsyncAreaSelect ref="areaSelectRef" v-model="data.area"/>
       </VanCellGroup>
 
       <VanCellGroup v-if="isEdit">
@@ -96,11 +96,15 @@
 
 
 <script setup>
+import { defineAsyncComponent } from 'vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import {useAlbumMod} from './hook'
-import AreaSelect from '@/components/area-select/index.vue'
 import FormLabel from '@/components/form-label/index.vue'
 import Select from '@/components/select/index.vue'
+
+const AsyncAreaSelect = defineAsyncComponent({
+  loader: () => import('@/components/area-select/index.vue')
+})
 
 const {
   data, formRef, saveHandle, init, areaSelectRef, areaClick, businessOpts, showBusinessPicker,

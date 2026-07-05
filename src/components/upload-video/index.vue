@@ -93,7 +93,7 @@
 import { ref, computed, reactive } from 'vue';
 import { showToast } from 'vant'; 
 import { useRoute } from 'vue-router'
-import { uploadMedia, sleep, second2ViewTxt, toVip } from '@/util'
+import { sleep, second2ViewTxt, toVip } from '@/util'
 import DialogVideo from '@/components/dialog-video/index.vue'
 import { globalData } from '@/store'
 
@@ -148,6 +148,7 @@ const afterRead = async (file) => {
   file.message = '上传中...';
 
   try {
+    const { uploadMedia } = await import('@/util/cos')
     const uploadRet = await uploadMedia({
       file: file.file, shopId,
       onProgress: (progressData) => {

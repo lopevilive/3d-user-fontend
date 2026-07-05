@@ -3,8 +3,8 @@
     <div class="content">
       <div class="title">调整顺序</div>
       <div class="list-wrap">
-        <Container lock-axis="y" orientation="vertical" @drop="onDrop">
-          <Draggable v-for="(item, index) in data" class="drag-item">
+        <AsyncContainer lock-axis="y" orientation="vertical" @drop="onDrop">
+          <AsyncDraggable v-for="(item, index) in data" class="drag-item">
             <div class="list-item">
               <div class="type-name">{{ item.name }}</div>
               <div class="type-opt">
@@ -12,8 +12,8 @@
                 <VanIcon name="down" v-if="index!==(data.length-1)" @click="downHandle(index)" />
               </div>
             </div>
-          </Draggable>
-        </Container>
+          </AsyncDraggable>
+        </AsyncContainer>
       </div>
       <div class="tips">(注：可拖动调整顺序～)</div>
       <div class="button-wrap">
@@ -25,12 +25,21 @@
 </template>
 
 <script setup>
-import { ref, watch, onBeforeUnmount } from 'vue'
+import { ref, watch, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import { Container, Draggable } from "vue3-smooth-dnd";
 import { modProdTypesSort } from '@/http'
 import { commonFetch, productTypesManage } from '@/util'
 import { globalData } from '@/store'
+
+const AsyncContainer = defineAsyncComponent(async () => {
+  const smoothModule = await import('vue3-smooth-dnd')
+  return smoothModule.Container
+})
+
+const AsyncDraggable = defineAsyncComponent(async () => {
+  const smoothModule = await import('vue3-smooth-dnd')
+  return smoothModule.Draggable
+})
 
 const route = useRoute()
 const shopId = + route.params.shopId

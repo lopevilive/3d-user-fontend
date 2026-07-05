@@ -2,9 +2,9 @@ import { computed, ref } from 'vue'
 import { shopCarInstance, globalData } from '@/store'
 import { showConfirmDialog, showFailToast, showToast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
-import {add, multiply, bignumber} from 'mathjs'
+import Big from 'big.js';
 import { createInventory, getProduct } from '@/http'
-import { commonFetch, toSharePage, shopInfoManage, emojiReg, formatType, getImageUrl } from '@/util'
+import { commonFetch, toSharePage, shopInfoManage, emojiReg, formatType, getImageUrl, isRealNumber } from '@/util'
 
 export const useInventoryList = () => {
   const route = useRoute()
@@ -102,10 +102,11 @@ export const useInventoryList = () => {
     try {
       const list = getAllSelectedData()
       for (const item of list) {
-        let tmp = multiply(bignumber(item.price), bignumber(item.count))
-        ret = add(ret, tmp)
+        if (!isRealNumber(item.price)) throw new Error('非数字')
+        let tmp = new Big(item.price || 0).times(item.count || 0).toNumber();
+        ret = new Big(ret).plus(tmp).toNumber()
       }
-      return ret.toString()
+      return String(ret)
     } catch(e) {
       return '--'
     }
