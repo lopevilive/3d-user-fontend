@@ -24,7 +24,7 @@
             </div>
             <VanField label="图片" v-if="mulUseImgDisplay" class="img-wrap">
               <template #input>
-                <UploadImgs :maxCount="1" :ref="(el) => {
+                <UploadImgs :maxCount="1" :maxSize="maxSize" :ref="(el) => {
                   uploadImgsRef[idx] = el
                 }" :modelValue="getDisplayUrl(item)" @update:modelValue="(url) => {
                   updateImgHandle(url, item)
@@ -55,7 +55,7 @@ import FilterSpecs from './FilterSpecs.vue'
 const {
   saveHandle, beforeDestory, init, mulUseImgDisplay, displayItemTit, getDisplayName, specInfoList,
   specStatusHandle, uploadImgsRef, inputDialogRef, mulPirceMod, updateImgHandle, getDisplayUrl, filterSpecsRef,
-  filterHandle, mulSpecs, isShowItem, dispyalSpecInfoList
+  filterHandle, mulSpecs, isShowItem, dispyalSpecInfoList, maxSize
 } = useMulSpecPrice()
 
 init()

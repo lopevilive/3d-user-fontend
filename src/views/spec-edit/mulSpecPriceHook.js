@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import {
   specManageInstance, priceReg, getMulSpecName, getSpecPrices, getMulSpecUrl, shopInfoManage,
-  isVip, toVip
+  isVip, toVip, vipInfoManage
 } from '@/util'
 import { globalData } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
@@ -14,6 +14,7 @@ export const useMulSpecPrice = () => {
 
   const shopId = +route.params.shopId
   const shopInfo = ref()
+  const vipInfo = ref()
 
   const mulUseImg = ref(0)
   const mulSpecs = ref([])
@@ -211,9 +212,20 @@ export const useMulSpecPrice = () => {
     return dispyalSpecInfoList.value.includes(itemData)
   }
 
+  const maxSize = computed(() => {
+    const cfg = vipInfo.value?.cfg
+    const level = vipInfo.value?.level
+    if (!cfg) return 10
+    const matchItem = cfg.find((item) => item.level === level)
+    if (!matchItem) return 10
+    return matchItem.imgS;
+  })
+  
   const init = async () => {
     const info = await shopInfoManage.getData(shopId)
     shopInfo.value = info[0]
+    const vipRet = await vipInfoManage.getData(shopId)
+    vipInfo.value = vipRet[0]
     const ret = specManageInstance.getRawData()
     const specDetials = JSON.parse(ret.specDetials || '{}')
     mulUseImg.value = specDetials.mulUseImg || 0
@@ -226,6 +238,6 @@ export const useMulSpecPrice = () => {
   return {
     beforeDestory, saveHandle, init, mulUseImgDisplay, displayItemTit, specInfoList, getDisplayName,
     specStatusHandle, uploadImgsRef, inputDialogRef, mulPirceMod, updateImgHandle, getDisplayUrl, filterSpecsRef,
-    filterHandle, mulSpecs, isShowItem, dispyalSpecInfoList
+    filterHandle, mulSpecs, isShowItem, dispyalSpecInfoList, maxSize
   }
 }

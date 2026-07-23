@@ -13,7 +13,7 @@
         <div class="item" v-for="(item, itemIdx) in subList">
           <div class="name ellipsis">{{ item.name }}</div>
           <div class="img-wrap">
-            <UploadImgs v-model="item.url" :maxCount="1" :ref="(el) => {
+            <UploadImgs v-model="item.url" :maxCount="1" :maxSize="maxSize" :ref="(el) => {
               uploadImgsRef[itemIdx] = el
             }" />
           </div>
@@ -27,6 +27,10 @@
 import {ref} from 'vue'
 import UploadImgs from '@/components/uploadImgs/index.vue'
 import { showToast } from 'vant';
+
+const props = defineProps({
+  maxSize: {type: Number, default: 10}
+})
 
 const isShow = ref(false)
 

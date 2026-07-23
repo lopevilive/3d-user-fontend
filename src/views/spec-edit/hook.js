@@ -1,4 +1,4 @@
-import { specManageInstance, sleep, priceReg, getSpecPrices, rand, isVip, shopInfoManage, toVip } from '@/util'
+import { specManageInstance, sleep, priceReg, getSpecPrices, rand, isVip, shopInfoManage, toVip, vipInfoManage } from '@/util'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { globalData } from '@/store'
@@ -12,6 +12,7 @@ export const useSpecEdit = () => {
   const shopId = +route.params.shopId
 
   const shopInfo = ref()
+  const vipInfo = ref()
 
   const singleSpecs = ref([]) // 单级规格
   const singleUseImg = ref(0) // 单级规格是否使用图片
@@ -426,6 +427,15 @@ export const useSpecEdit = () => {
       item.price = ret
     }
   }
+
+  const maxSize = computed(() => {
+    const cfg = vipInfo.value?.cfg
+    const level = vipInfo.value?.level
+    if (!cfg) return 10
+    const matchItem = cfg.find((item) => item.level === level)
+    if (!matchItem) return 10
+    return matchItem.imgS;
+  })
   
   const init = async () => {
     const info = await shopInfoManage.getData(shopId)
@@ -439,6 +449,8 @@ export const useSpecEdit = () => {
     mulUseImg.value = rawData.mulUseImg || 0
     mulSpecPriceList.value = rawData.mulSpecPriceList || []
     setExample() // 设置示例
+    const vipRet = await vipInfoManage.getData(shopId)
+    vipInfo.value = vipRet[0]
   }
 
   return {
@@ -447,7 +459,7 @@ export const useSpecEdit = () => {
     isShowMoveDown, isShowInsert, isShowDel, moveTopHandle, moveDownHandle, insertHandle, delHandle,
     disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveTopHandle,
     mulMoveDownHandle, mulDelHandle, specActionRef, subItemClickHandle, mulImgClickHandle, toEditImg,
-    imgModDialogRef, addHandle, modSinglePrice
+    imgModDialogRef, addHandle, modSinglePrice, maxSize
   }
   
 }

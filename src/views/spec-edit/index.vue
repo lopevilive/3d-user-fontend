@@ -17,7 +17,7 @@
         <VanField label="价格" placeholder="请输入价格 (选填)" v-model="item.price" :maxlength="10"></VanField>
         <VanField label="图片" v-if="singleUseImgDisplay">
           <template #input>
-            <UploadImgs :maxCount="1" :ref="(el) => {
+            <UploadImgs :maxCount="1" :maxSize="maxSize" :ref="(el) => {
               uploadImgsRef[itemIdx] = el
             }" v-model="item.url"/>
           </template>
@@ -71,7 +71,7 @@
   </div>
   <InputDialog ref="inputDialogRef" />
   <SpecAction ref="specActionRef" />
-  <ImgModDialog ref="imgModDialogRef" />
+  <ImgModDialog ref="imgModDialogRef" :maxSize="maxSize" />
 </template>
 
 <script setup>
@@ -90,7 +90,7 @@ const {
   isShowMoveDown, isShowInsert, isShowDel, moveTopHandle, moveDownHandle, insertHandle, delHandle,
   disabledAddBtn, uploadImgsRef, isShowMulMoveTop, isShowMulMoveDown, mulMoveDownHandle,
   mulMoveTopHandle, mulDelHandle, specActionRef, subItemClickHandle, mulImgClickHandle, toEditImg,
-  imgModDialogRef, addHandle, modSinglePrice
+  imgModDialogRef, addHandle, modSinglePrice, maxSize
  } = useSpecEdit()
 
  init()
