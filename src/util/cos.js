@@ -27,11 +27,11 @@ const getWatermarkRule = (data) => {
   let ret = ''
   let imgUrl = ''
 
-  if (type === 1) {
+  if (type === 1) { // 图片水印
     if (!image) return ret
     imgUrl = `http:${image}`
   }
-  if (type === 2) {
+  if (type === 2) { // 文字水印
     if (!textUrl) return ret
     imgUrl = `http:${textUrl}`
   }
@@ -219,6 +219,36 @@ export const textToPngFile = async (text, options = {}) => {
   } finally {
     // 清理临时节点
     document.body.removeChild(node);
+  }
+}
+
+export const uploadZip = async (file, shopId, onProgress) => {
+  try {
+    const { userId } = globalData.value.userInfo
+    if (!userId) throw new Error('缺失用户信息')
+    if (!shopId) throw new Error('缺失图册信息')
+
+    // 生成文件名：shopId_userId_时间戳.zip
+    const prefix = `${shopId}_${userId}`
+    const timestamp = Date.now()
+    const fileName = `zip/${prefix}_${timestamp}.zip`
+    await getKey()
+    await cos.uploadFile({
+      Bucket,
+      Region,
+      Key: fileName,
+      Body: file,
+      SliceSize: 1024 * 1024 * 10,
+      onProgress: (progressData) => {
+        const percent = Math.floor(progressData.percent * 100)
+        onProgress?.(percent)
+      },
+    })
+    return fileName
+  } catch (e) {
+    console.error('ZIP 上传失败', e)
+    showNotify({ message: e?.message || e?.msg || 'ZIP 上传失败，请联系开发员～', type: 'danger' })
+    throw e
   }
 }
 

@@ -245,13 +245,18 @@ const {
   }
 }
 .shake {
-  animation: shake 180ms infinite linear;
+  animation: ios-shake 0.4s infinite;
+  animation-timing-function: cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
-@keyframes shake {
-  10%, 25% { transform: rotate(0.3deg); }
-  25%, 50% { transform: rotate(0deg); }
-  50%, 75% { transform: rotate(-0.3deg); }
-  75%, 100% { transform: rotate(0deg); }
+@keyframes ios-shake {
+  0%   { transform: rotate(0deg) translateY(0); }
+  15%  { transform: rotate(0.5deg) translateY(-0.5px); }
+  30%  { transform: rotate(-0.5deg) translateY(0.5px); }
+  45%  { transform: rotate(0.5deg) translateY(-0.3px); }
+  60%  { transform: rotate(-0.5deg) translateY(0.3px); }
+  75%  { transform: rotate(0.2deg) translateY(-0.2px); }
+  90%  { transform: rotate(-0.5deg) translateY(0.2px); }
+  100% { transform: rotate(0deg) translateY(0); }
 }
 
 .mod-post-wrap {

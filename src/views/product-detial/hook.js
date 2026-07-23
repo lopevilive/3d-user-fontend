@@ -75,7 +75,7 @@ export const useProductDetial = () => {
     }
     const currShopRid = getRidByShopId(shopId, globalData.value.userInfo)
     if (openInH5 === 1 &&  [2,3,4,99].includes(currShopRid)) { // 支持 h5 打开
-      sharePayload.h5Url = `https://huace.xiaoguoyun.top/dist/product-manage/${shopId}?toDetial=${info.value.id}`
+      sharePayload.h5Url = `${location.origin}/dist/product-manage/${shopId}?toDetial=${info.value.id}`
     }
 
     toSharePage(sharePayload)

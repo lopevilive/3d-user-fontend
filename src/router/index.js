@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId, mobileRegex } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -186,6 +186,18 @@ const router = createRouter({
       component: () => import('@/views/pc-tips/index.vue')
     },
     {
+      path: '/pc-view',
+      name: 'pc-view',
+      component: () => import('@/pc-views/pc-main/index.vue'),
+      children: [
+        {
+          path: 'batch-upload',
+          name: 'batch-upload',
+          component: () => import('@/pc-views/batch-upload-product/index.vue')
+        }
+      ]
+    },
+    {
       path: '/:catchAll(.*)',
       redirect: '/'
     }
@@ -357,10 +369,15 @@ const handleDevice = async (to) => {
   if (to.name === 'pc-tips') return
   const inApp = isInApp()
   if (inApp) return
-  const mobileRegex = /(Mobile|Android|iPhone|iPod|HarmonyOS|BlackBerry|IEMobile|Windows Phone)/i;
   const ua = navigator.userAgent;
   if (mobileRegex.test(ua)) return  // 移动端打开
   return {name: 'pc-tips'}
+}
+
+const handlePcViews = async (to) => {
+  const {fullPath} = to
+  if (/pc-view/.test(fullPath)) return true
+  return false
 }
 
 const init = async (to, from) => {
@@ -369,7 +386,10 @@ const init = async (to, from) => {
     shopId = +shopId
     shopInfoManage.getData(shopId)
   }
-  let pass = await handleDevice(to)
+  let pass = await handlePcViews(to) // 这里处理pc页面的情况
+  if (pass === true) return true
+
+  pass = await handleDevice(to)
   if (Object.prototype.toString.call(pass) === '[object Object]') return pass
   
   handleQuery(to) //  保存小程序传过来的参数

@@ -3,7 +3,8 @@
     <div class="header-wrap">
       <div class="mode__edit"  v-if="globalData.editStatus === 1">
         <div class="edit-left">
-          <VanButton text="新增产品" size="small" type="primary" :round="true" icon="plus" @click="addProdHandle"/>
+          <!-- <VanButton text="批量上传" size="small" type="primary" :round="true" icon="plus" @click="handleBatchUpload"/> -->
+          <!-- <VanButton text="新增产品" size="small" type="primary" :round="true" icon="plus" @click="addProdHandle"/> -->
           <VanButton
             text="取消选择"
             size="small"
@@ -100,6 +101,7 @@
     <TypePop ref="type1PopRef" :productTypes="productTypes" :activeId="activeTab" />
     <TypePop ref="type2PopRef" :productTypes="subTypesList" :activeId="subActiveTab" />
     <ExpiredTips />
+    <BatchUploadTips ref="batchUploadTipsRef" />
   </div>
 </template>
 
@@ -110,6 +112,7 @@ import {useProductManage} from './hook'
 import { globalData } from '@/store'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 import ProductPriceDialog from '@/components/product-price-dialog/index.vue'
+import BatchUploadTips from './BatchUploadTips.vue'
 import SortControl from '@/components/sort-control/index.vue'
 import ImgSwipeV2 from '@/components/img-swipe-v2/index.vue'
 import TypePop from './TypePop.vue'
@@ -120,11 +123,12 @@ import { emitter } from '@/util'
 const {
   init, activeTab, productTypes, tabChangeHandle, leftList, rightList, leftListRef,
   rightListRef, scrollHandle, finished, fetchLoading, selectedList, selectedHandle,
-  removeAllSelected, handleEditDone, addProdHandle, handleMulOnOff, handleMulDel,
+  removeAllSelected, handleEditDone, handleMulOnOff, handleMulDel,
   handleMulPrice, handleMulChangeType, mulPriceRef, mulProductTypeRef, listRef, bannerCfg,
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, stickyPos, bannerKey, 
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
   shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod,
+  handleBatchUpload, batchUploadTipsRef
 } = useProductManage()
 
 onActivated(() => {
@@ -132,6 +136,7 @@ onActivated(() => {
 })
 
 onBeforeUnmount(() => {
+  globalData.value.editStatus = 0
   emitter.emit('scrollClearHandle')
 })
 
@@ -183,7 +188,7 @@ export default {
       left: 0;
       height: $footerBarH;
       background: $bgWhite;
-      z-index: 1;
+      z-index: 100;
       width: 100%;
       display: flex;
       justify-content: space-between;

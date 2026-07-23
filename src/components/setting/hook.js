@@ -137,8 +137,8 @@ export const useSetting = () => {
   const actions = [
     [
       {name: '新增产品', color: '#64b486', action: acAddProd, includes: ['product-manage', 'contact', 'custom-home']},
-      {name: '产品管理', color: '#5794f7', action: acProdMod, includes: ['product-manage', 'contact', 'custom-home']},
-      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'contact', 'custom-home']},
+      {name: '产品管理', color: '#5794f7', action: acProdMod, includes: ['product-manage', 'custom-home']},
+      {name: '分类管理', color: '#5794f7', action: acTypesMod, includes: ['product-manage', 'custom-home']},
     ],
     [
       {name: '置顶', color: '#5794f7', action: acProdMove, includes: ['product-detial'], rule: () => {

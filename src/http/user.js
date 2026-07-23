@@ -9,3 +9,11 @@ export const getUserInfo = (payload) => {
 export const setViewLogs = (payload) => {
   return post(`${user}SetViewLogs`, payload);
 }
+
+export const createBatchUploadToken = (payload) => {
+  return post(`${user}CreateBatchUploadToken`, payload);
+}
+
+export const validBatchUploadToken = (payload) => {
+  return post(`${user}ValidBatchUploadToken`, payload);
+}

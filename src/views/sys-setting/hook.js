@@ -372,7 +372,7 @@ export const useSysSetting = () => {
       desc2: [],
       scene: {name: 'product-manage', shopId},
       forwardPermi,
-      h5Url: `https://huace.xiaoguoyun.top/dist/product-manage/${shopId}`
+      h5Url: `${location.origin}/dist/product-manage/${shopId}`
     })
   }
   

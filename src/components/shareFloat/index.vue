@@ -71,13 +71,13 @@ const clickHandle = async () => {
   }
   const currShopRid = getRidByShopId(shopId, globalData.value.userInfo)
   if (openInH5 === 1 && [2,3,4,99].includes(currShopRid)) {
-    sharePayload.h5Url = `https://huace.xiaoguoyun.top/dist/product-manage/${shopId}`
+    sharePayload.h5Url = `${location.origin}/dist/product-manage/${shopId}`
   }
   toSharePage(sharePayload)
 }
 
 const isShow = computed(() => {
-  if (!['custom-home', 'product-manage', 'contact'].includes(route.name)) return false
+  if (!['custom-home', 'product-manage'].includes(route.name)) return false
   if (!globalData.value.userInfo?.userId) return false
   const {rid, editStatus} = globalData.value
   if (editStatus === 1) return false

@@ -24,9 +24,16 @@ export default defineConfig({
   ],
   css: {
     postcss: {
-      plugins: [postcsspxtoviewport({
-        viewportWidth: 375,
-      })]
+      plugins: [
+        postcsspxtoviewport({
+          viewportWidth: 375,
+          exclude: [
+            /pc-views/i,
+            /arco/i, 
+            /batch-upload-product/i,
+          ]
+        })
+      ]
     },
     preprocessorOptions: {
       scss: {
@@ -75,6 +82,13 @@ export default defineConfig({
           if (/node_modules\/xgplayer/.test(id)) return 'xgplayer'
           if (/src\/components\/video-player/.test(id)) return 'xgplayer'
           // 视频相关 --e
+
+          //pc端 --s
+          if (/src\/pc-views/.test(id)) return 'pc-vendor'
+          if (/node_modules\/arco/.test(id)) return 'pc-vendor'
+          if (/node_modules\/@arco/.test(id)) return 'pc-vendor'
+          //pc端 --e
+
           
           if (id.includes('node_modules')) return 'vendor'
 

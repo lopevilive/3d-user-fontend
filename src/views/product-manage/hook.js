@@ -1,6 +1,6 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { productDel, getProduct, productMod, getInventory } from '@/http'
+import { productDel, getProduct, productMod, getInventory, createBatchUploadToken } from '@/http'
 import {
   commonFetch, EE, globalLoading, shopInfoManage, getImageUrl, sleep, getFlexW, formatType as  formatTypeUtil,
   productTypesManage, throttle, emitter
@@ -347,7 +347,7 @@ export const useProductManage = () => {
     tabKey.value = Math.floor(Math.random() * 100)
   }
 
-  const addProdHandle = async () => {
+  const addProdHandle = async () => { // 弃用
     await handleEditDone()
     router.push({name: 'product-edit' })
   }
@@ -705,6 +705,12 @@ export const useProductManage = () => {
     subActiveTab.value = type2 || 0
   }
 
+  const batchUploadTipsRef = ref()
+  const handleBatchUpload = async () => {
+    const token = await commonFetch(createBatchUploadToken, {shopId})
+    batchUploadTipsRef.value.show(token)
+  }
+
 
   
   const init = async () => {
@@ -727,6 +733,7 @@ export const useProductManage = () => {
     mulProductTypeRef, listRef, handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle,
     priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
     beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
-    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey
+    type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey,
+    handleBatchUpload, batchUploadTipsRef
   }
 }

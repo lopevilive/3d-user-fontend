@@ -135,7 +135,7 @@ defineExpose({init})
   border-top: 1px solid #e3e3e3;
   box-sizing: border-box;
   display: flex;
-  z-index: 0;
+  z-index: 10;
   // padding-top: 8px;
   .item {
     flex: 1;

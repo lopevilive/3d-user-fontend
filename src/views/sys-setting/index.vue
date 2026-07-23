@@ -114,7 +114,7 @@
           <VanButton class="btn-copy" text="复制密码" size="small" @click="copyStr(encryCode)" />
         </template>
       </VanCell>
-      <VanCell title="Excel 清单导出权限"  class="cell-label-width-200" label="仅管理员可导出 Excel 清单">
+      <VanCell title="Excel 清单导出权限"  class="cell-label-width-200" label="开启后，仅管理员可导出 Excel 清单">
         <template #value>
           <VanSwitch v-model="inveExportStatus"/>
         </template>
@@ -146,7 +146,7 @@
     </van-cell-group>
 
     <van-cell-group inset title="购物清单设置">
-      <VanCell title="收货信息必填"  class="cell-label-width-200" label="提交清单需填写收货信息">
+      <VanCell title="收货信息必填"  class="cell-label-width-200" label="开启后，提交清单需填写收货信息">
         <template #value>
             <VanSwitch v-model="needAddress"/>
         </template>

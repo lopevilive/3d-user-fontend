@@ -170,3 +170,6 @@ export const processVideo = (payload) => {
   return post(`${album}ProcessVideo`, payload)
 }
 
+export const processBatchZip = (payload) => {
+  return post(`${album}ProcessBatchZip`, payload)
+}
