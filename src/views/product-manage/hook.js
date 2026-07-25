@@ -712,6 +712,7 @@ export const useProductManage = () => {
   }
 
   const isShowBatchUpload =computed(() => {
+    return true
     if ([577, 5].includes(shopId)) return true
     return false
   })
