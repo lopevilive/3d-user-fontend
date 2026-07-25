@@ -711,6 +711,11 @@ export const useProductManage = () => {
     batchUploadTipsRef.value.show(token)
   }
 
+  const isShowBatchUpload =computed(() => {
+    if ([577, 5].includes(shopId)) return true
+    return false
+  })
+
 
   
   const init = async () => {
@@ -734,6 +739,6 @@ export const useProductManage = () => {
     priceSort, priceSortChangeHandle, subTypesList, subActiveTab, bannerCfg,
     beforeSubChange, formatType, isShowSort, shopInfo, stickyPos, isShowBanner, type1PopRef,
     type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod, bannerKey,
-    handleBatchUpload, batchUploadTipsRef
+    handleBatchUpload, batchUploadTipsRef, isShowBatchUpload
   }
 }

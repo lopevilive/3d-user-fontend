@@ -25,7 +25,7 @@
       </div>
       <div class="tips-expiry">
         <VanIcon name="info-o" class="expiry-icon" />
-        链接有效期为 24 小时，到期后需重新复制
+        链接有效期为 90 分钟，到期后需重新复制
       </div>
     </div>
   </VanDialog>

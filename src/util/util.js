@@ -87,6 +87,12 @@ export const getSuffix = (str) => {
   return '';
 }
 
+export const replaceCDN = (str) =>{
+  if (!str) return ''
+  const ret = str.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
+  return ret
+}
+
 export const getImageUrl = (url, payload = {}) => {
   const defauQua = 70
   const defauPx = 800
@@ -103,7 +109,15 @@ export const getImageUrl = (url, payload = {}) => {
 
   if (!url) return url
   let ret = `${url}?imageMogr2/quality/${quality}/thumbnail/${px}x/strip`
-  ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
+  ret = replaceCDN(ret)
+  return ret
+}
+
+export const getVideoUrl = (url) => {
+  if (!url) return '';
+  if (/\.check/.test(url)) return ''; // 视频审核中
+  let ret = url
+  ret = replaceCDN(ret)
   return ret
 }
 
@@ -586,15 +600,6 @@ export const second2ViewTxt = (s) => {
   }
   return `${seconds}秒`
 }
-
-export const getVideoUrl = (url) => {
-  if (!url) return '';
-  if (/\.check/.test(url)) return ''; // 视频审核中
-  let ret = url
-  ret = ret.replace(/upload-\d+\.cos\.ap-guangzhou\.myqcloud\.com/, 'cdn.xiaoguoyun.top')
-  return ret
-}
-
 
 // 判断是否为数字，包括小数
 export const isRealNumber = (val) => {

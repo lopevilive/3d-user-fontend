@@ -173,3 +173,7 @@ export const processVideo = (payload) => {
 export const processBatchZip = (payload) => {
   return post(`${album}ProcessBatchZip`, payload)
 }
+
+export const fetchBatchUploadTask = (payload) => {
+  return post(`${album}FetchBatchUploadTask`, payload)
+}

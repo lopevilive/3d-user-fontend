@@ -88,7 +88,7 @@
               <span class="code">家具/沙发</span>。<br />
               一个产品可属于多个分类，多分类用
               <span class="code">|</span> 分隔，如
-              <span class="code">家具/沙发|</span>
+              <span class="code">家具/沙发|真皮沙发</span>
             </p>
           </div>
 
@@ -190,12 +190,16 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import { IconUpload, IconDownload, IconInfoCircle } from '@arco-design/web-vue/es/icon'
 import { Button as AButton, Upload as AUpload } from '@arco-design/web-vue'
 import { uploadZip } from '@/util/cos'
-import { processBatchZip } from '@/http'
+import { processBatchZip, validBatchUploadToken } from '@/http'
 import { commonFetch } from '@/util'
+
+const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   shopId: { type: Number, default: 0 }
@@ -204,9 +208,15 @@ const props = defineProps({
 const uploading = ref(false)
 const uploadProgress = ref(0)
 
+
+
 const startZipProcess = async (cosFileName) => {
-  const ret = await commonFetch(processBatchZip, {shopId: props.shopId, cosFileName})
-  console.log(ret)
+  const taskId = await commonFetch(processBatchZip, {shopId: props.shopId, cosFileName})
+  // const taskId = '55b0ff6ac84641ab8a9d9a6058040db1';
+  router.replace({ query: { ...route.query, taskId } })
+  setTimeout(() => {
+    location.reload()
+  }, 500);
 }
 
 // Arco Upload 选择了文件后的处理
@@ -223,17 +233,31 @@ const onZipSelected = async (fileList) => {
     Message.warning('文件大小超过 500MB 限制，请重新选择')
     return
   }
+
+  // 校验 token 是否有效
+  try {
+    const {ticket} = route.query
+    if (!ticket) {
+      Message.warning('链接已失效，请重新复制链接')
+      return
+    }
+    await commonFetch(validBatchUploadToken, {ticket})
+  } catch (e) {
+    Message.warning('链接已失效，请重新复制链接')
+    return
+  }
+
   if (!props.shopId) return Message.warning('参数有误，请联系管理员')
 
   uploading.value = true
   uploadProgress.value = 0
 
   try {
-    // const cosFileName = await uploadZip(file, props.shopId , (p) => {
-    //   uploadProgress.value = p
-    // })
+    const cosFileName = await uploadZip(file, props.shopId , (p) => {
+      uploadProgress.value = p
+    })
     // console.log(cosFileName)
-    const cosFileName = 'zip/5_3_1784653580454.zip'
+    // const cosFileName = 'zip/5_3_1784653580454.zip'
     uploadProgress.value = 100
     startZipProcess(cosFileName)
 
@@ -247,8 +271,8 @@ const onZipSelected = async (fileList) => {
 // 下载示例模板
 const downloadTemplate = () => {
   const link = document.createElement('a')
-  link.href = '/templates/batch-upload-template.zip'
-  link.download = 'batch-upload-template.zip'
+  link.href = '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/%E6%89%B9%E9%87%8F%E4%B8%8A%E4%BC%A0%E7%A4%BA%E4%BE%8B.zip'
+  // link.download = '批量上传模版.zip'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

@@ -3,7 +3,7 @@
     <div class="header-wrap">
       <div class="mode__edit"  v-if="globalData.editStatus === 1">
         <div class="edit-left">
-          <!-- <VanButton text="批量上传" size="small" type="primary" :round="true" icon="plus" @click="handleBatchUpload"/> -->
+          <VanButton text="批量上传" v-if="isShowBatchUpload" size="small" type="primary" :round="true" icon="plus" @click="handleBatchUpload"/>
           <!-- <VanButton text="新增产品" size="small" type="primary" :round="true" icon="plus" @click="addProdHandle"/> -->
           <VanButton
             text="取消选择"
@@ -128,7 +128,7 @@ const {
   handleUpdate, tabKey, activeHandle, searchStr, searchBlurHadle, stickyPos, bannerKey, 
   priceSort, priceSortChangeHandle, subTypesList, subActiveTab, beforeSubChange, formatType, isShowSort,
   shopInfo, isShowBanner, type1PopRef, type1PopClickHandle, type2PopRef, type2PopClickHandle, typeMod,
-  handleBatchUpload, batchUploadTipsRef
+  handleBatchUpload, batchUploadTipsRef, isShowBatchUpload
 } = useProductManage()
 
 onActivated(() => {
