@@ -554,8 +554,7 @@ export const getRidByShopId = (shopId, userInfo) => {
   return 0 // 游客
 }
 
-/**
- * 首尾兼顾的节流函数
+/**  * 首尾兼顾的节流函数
  * @param {Function} fn - 需要执行的逻辑
  * @param {number} delay - 节流间隔（200ms）
  */

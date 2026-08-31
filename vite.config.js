@@ -47,6 +47,14 @@ export default defineConfig({
     alias: [{ find: '@', replacement: resolve(__dirname, 'src') }],
   },
   base: '/dist/',
+  server: {
+    port: 5173,          // 显式指定开发服务器端口
+    strictPort: true,    // 端口被占用时直接报错，而不是自动换端口
+    hmr: {
+      port: 5173,        // 显式指定 HMR WebSocket 端口（解决 undefined 报错）
+      host: 'localhost', // 可选：显式指定 host
+    },
+  },
   build: {
     rollupOptions: {
       output: {

@@ -101,17 +101,19 @@ onActivated(() => {
 
   // 一级分类激活状态
   .type1-item__active {
-
+    background: $bgGrey;
+    // border-radius: 0 5px 5px 0;
     .type1-content {
       .txt {
         color: #000; // 深色文字
+        font-weight: bold;
       }
     }
   }
   
   // 二级分类列表容器
   .type2-list {
-    background-color: $bgGrey3; // 恢复原始背景色
+    background-color: $bgGrey; // 恢复原始背景色
 
     .type2-item {
       padding: 8px; // 恢复原始内边距

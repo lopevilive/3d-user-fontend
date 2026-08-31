@@ -1,5 +1,6 @@
 <template>
   <div class="com-product-manage">
+    <!-- 批量管理操作区域 -->
     <div class="header-wrap">
       <div class="mode__edit"  v-if="globalData.editStatus === 1">
         <div class="edit-left">
@@ -28,6 +29,7 @@
       </div>
     </div>
     <div class="product-content">
+      <!-- 分类在左边的情况 -->
       <div class="left-wrap" v-if="typeMod === 1">
         <LeftTypeMod 
           :productTypes="productTypes" :subTypesList="subTypesList"
@@ -57,6 +59,7 @@
                 <SortControl name="价格" v-model="priceSort" @change="priceSortChangeHandle"/>
               </form>
             </div>
+            <!-- 分类在上方的情况 -->
             <div class="tabs" v-if="typeMod === 0">
               <div class="tabs__left">
                 <VanTabs v-model:active="activeTab" @change="tabChangeHandle" :shrink="true" :key="tabKey">
@@ -79,6 +82,7 @@
               </div>
             </div>
           </VanSticky>
+          <!-- 产品列表 -->
           <div ref="leftListRef" class="left-list list-item">
             <productItem v-for="item in leftList" :data="item" :key="item.id"
               @update="handleUpdate" @selected="selectedHandle" :productType="formatType()"
@@ -308,6 +312,7 @@ export default {
         }
         .pd-10 {
           padding-bottom: 10px;
+          padding-left: 0;
         }
         :deep(.van-search) {
           padding: 0;
