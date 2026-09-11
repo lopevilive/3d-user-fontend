@@ -213,11 +213,18 @@ export const useProductItem = (props, emits) => {
     if (/\.mp4/.test(videoUrl)) return true
     return false
   })
+
+  const ratioDisplay = computed(() => {
+    const {imgw, imgh} = props?.data
+    if (!imgw || !imgh) return 1
+    let ret = imgw / imgh
+    return ret <= 0.5 ? 0.5 : ret
+  })
   
 
   return {
     actions, selectHandle, settingClickHandle, handleClick, urlDisplay, checked, changeHandle,
     displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls,
-    isShowVideo
+    isShowVideo, ratioDisplay
   }
 }

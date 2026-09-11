@@ -157,30 +157,16 @@ export const useProductManage = () => {
       this.taskList = []
       this.runing = false
       this.cacheList = []
-      this.leftH = 0
-      this.rightH = 0
     }
 
     async exe () {
       this.runing = true
       while(this.taskList.length) {
-        const prodItem = this.taskList.shift()
-        let {imgw, imgh} = prodItem
-        if (!imgw || !imgh) {
-          imgw = 1
-          imgh = 1
-        }
-        let ratio = imgh / imgw
-        ratio = ratio >= 2 ? 2: ratio
-        ratio = ratio <= 0.75 ? 0.75 : ratio
-        if (this.leftH <= this.rightH) {
-          this.leftH += ratio
-          leftList.value.push(prodItem)
-        } else {
-          this.rightH += ratio
-          rightList.value.push(prodItem)
-        }
-        // console.log(this.leftH, this.rightH)
+        let nums = 2
+        if (leftList.value.length === 0) nums = 7
+        const list = this.taskList.splice(0, nums)
+        handleRes(list)
+        await sleep(200)
       }
       this.runing = false
     }
@@ -196,14 +182,40 @@ export const useProductManage = () => {
     clear() {
       this.taskList = []
       this.cacheList = []
-      this.leftH = 0
-      this.rightH = 0
     }
 
   }
 
   const listManage = new ListManage()
 
+  const handleRes = async (list) => {
+    let leftIdx = 0
+    let rightIdx = 0
+    const lH = parseInt(window.getComputedStyle(leftListRef.value).height) // 左列表高度
+    const rH =  parseInt(window.getComputedStyle(rightListRef.value).height) // 右列表高度
+    const total = leftList.value.length + rightList.value.length
+    const aver = (lH + rH) / total // 平均每个产品的高度
+    const gap = Math.abs(rH - lH) // 左右高度差
+    let num =  gap / aver
+    if (isNaN(num)) num = 0
+    if (num === 1) num = 0
+    num = Math.floor(num)
+    if (!num) num = 0
+    if (lH > rH) {
+      rightIdx += (num + 1)
+    } else {
+      leftIdx += num
+    }
+    for (const item of list) {
+      if (leftIdx >= rightIdx) {
+        leftList.value.push(item)
+        rightIdx += 1
+      } else {
+        rightList.value.push(item)
+        leftIdx += 1
+      }
+    }
+  }
 
   const formatType = () => {
     let ret = `${activeTab.value}`

@@ -1,7 +1,7 @@
 <template>
   <div class="com-product-item" :class="{'shake': globalData.editStatus === 1}">
     <div class="content">
-      <div @click="handleClick" :class="{'img': true, 'img-fixed-height': mode & 1<<1}">
+      <div @click="handleClick" :class="{'img': true, 'img-fixed-height': mode & 1<<1}" :style="`aspect-ratio:${ratioDisplay}`">
         <VanImage :fit="mode & 1<< 1? 'cover': 'contain'" :src="urlDisplay"/>
         <div class="video-play-badge" v-if="isShowVideo && globalData.editStatus !== 1">
           <VanIcon name="play" class="play-icon-mini" />
@@ -84,7 +84,7 @@ const emits = defineEmits(['update','selected'])
 const {
   actions, settingClickHandle, selectHandle, handleClick, urlDisplay, checked, changeHandle,
   displayAttrs, isShowSticky, priceDisplay, actionRef, posTop, posDown, modPosHandle, isShowControls,
-  isShowVideo
+  isShowVideo, ratioDisplay
 } = useProductItem(props,emits)
 
 </script>
