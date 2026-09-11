@@ -135,8 +135,11 @@ const {
     justify-content: center;
     min-height: 100px;
     position: relative; /* 核心：确保微标能相对于图片容器绝对定位 */
+    :deep(.van-image) {
+      height: 100%;
+    }
     :deep(.van-image__img){
-      max-height: 250px;
+      // max-height: 250px;
     }
 
     .video-play-badge {
