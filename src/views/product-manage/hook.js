@@ -180,7 +180,6 @@ export const useProductManage = () => {
           this.rightH += ratio
           rightList.value.push(prodItem)
         }
-        // console.log(this.leftH, this.rightH)
       }
       this.runing = false
     }
