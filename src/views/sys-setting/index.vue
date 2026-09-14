@@ -1,6 +1,6 @@
 <template>
   <div class="view-sys-setting">
-    <van-cell-group inset title="账号">
+    <CollapseCellGroup title="账号" :default-show="4">
       <VanCell
         title="图册信息管理" is-link @click="toModAlbum" class="cell-label-width-200"
         label="图册名称/封面/联系方式等"
@@ -31,9 +31,9 @@
         </template>
       </VanCell>
       <VanCell title="联系客服" is-link @click="toContactSys"/>
-    </van-cell-group>
+    </CollapseCellGroup>
     
-    <van-cell-group inset title="图册设置">
+    <CollapseCellGroup title="图册设置" :default-show="3">
       <VanCell title="首页装修" class="cell-label-width-200">
         <template #label>
           <CellLabel txt="自定义首页装饰" :url="[E_img_url_map.homePageDemo]" />
@@ -66,10 +66,10 @@
           <VanSwitch v-model="typeStatus"/>
         </template>
       </VanCell>
-    </van-cell-group>
+    </CollapseCellGroup>
     
     <!-- 隐私设置 -->
-    <van-cell-group inset title="隐私设置">
+    <CollapseCellGroup title="隐私设置" :default-show="3">
       <VanCell class="cell__switch cell-label-width-200" :class="{'cell-label-mrt': isWaterMark}">
         <template #title>
           <div class="vip-item">
@@ -143,9 +143,9 @@
           </div>
         </template>
       </VanCell>
-    </van-cell-group>
+    </CollapseCellGroup>
 
-    <van-cell-group inset title="购物清单设置">
+    <CollapseCellGroup title="购物清单设置" :default-show="4">
       <VanCell title="收货信息必填"  class="cell-label-width-200" label="开启后，提交清单需填写收货信息">
         <template #value>
             <VanSwitch v-model="needAddress"/>
@@ -160,14 +160,14 @@
           <div>{{ displayRequiredType }}</div>
         </template>
       </VanCell>
-    </van-cell-group>
+    </CollapseCellGroup>
 
 
     <!-- 其他 -->
-    <van-cell-group inset title="其他">
+    <CollapseCellGroup title="其他" :default-show="4">
       <VanCell title="意见反馈" is-link @click="toFeedback"/>
       <VanCell title="用户服务协议" is-link @click="toViewProtocol"/>
-    </van-cell-group>
+    </CollapseCellGroup>
     <TypeSelectDialog  ref="typeSelectDialogRef" />
   </div>
   <TypeSideSelect ref="typeSideSelectRef" />
@@ -179,6 +179,7 @@ import { copyStr, isVip, E_img_url_map } from '@/util'
 import TypeSelectDialog from '@/components/type-select-dialog/index.vue'
 import TypeSideSelect from './TypeSideSelect.vue'
 import CellLabel from '@/components/cell-label/index.vue'
+import CollapseCellGroup from '@/components/collapse-cell-group/index.vue'
 
 const {
   toModAlbum, toModStaff, toViewProtocol, init, globalData, toContactSys,
