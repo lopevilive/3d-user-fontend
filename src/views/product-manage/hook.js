@@ -648,7 +648,8 @@ export const useProductManage = () => {
   const handle2Detial = async () => {
     const {toDetial} = route.query
     if (toDetial) {
-      // await sleep(200)
+      router.replace({name: 'product-manage',  params: {shopId}})
+      await sleep(200)
       router.push({name: 'product-detial', params: {id: toDetial}})
     }
   }
