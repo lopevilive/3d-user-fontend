@@ -207,9 +207,9 @@ export const useHomeMod = () => {
       footerBarRef.value.init()
     } finally {
       if (data.value.isEnabled === 1) {
-        router.replace({name: 'custom-home', params: {shopId: shopId}, query: route.query})
+        router.replace({name: 'custom-home', params: {shopId: shopId}})
       } else {
-        router.replace({name: 'product-manage', params: {shopId: shopId}, query: route.query})
+        router.replace({name: 'product-manage', params: {shopId: shopId}})
       }
     }
     

@@ -44,11 +44,8 @@ const logo = computed(() => {
 })
 
 const handleClick = () => {
-  const {id, name, url} = props.data
-  router.push({ name: 'product-manage', params: {shopId: id}, query: {
-    title: name,
-    imageUrl: getImageUrl(url?.split?.(',')?.[0] || '')
-  }})
+  const {id} = props.data
+  router.push({ name: 'product-manage', params: {shopId: id}})
 }
 
 const isOwner = computed(() => {

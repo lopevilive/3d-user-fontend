@@ -49,12 +49,7 @@ export const useAlbumMod = () => {
     const res =  await commonFetch(api, payload, '保存成功')
     shopInfoManage.dirty(data.value.id)
     globalData.value.userInfo = {} // 需要重新获取登录信息
-    router.replace({
-      name: 'product-manage', params: {shopId: res}, query: {
-        title: data.value?.name || '',
-        imageUrl: getImageUrl(data.value?.url?.split?.(',')?.[0]|| '' )
-      }
-    })
+    router.replace({ name: 'product-manage', params: {shopId: res} })
     await sleep(1)
     console.log('8888888')
     if (window.history.state.back === window.history.state.current) {

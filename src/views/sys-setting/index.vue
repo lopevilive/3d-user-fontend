@@ -33,7 +33,7 @@
       <VanCell title="联系客服" is-link @click="toContactSys"/>
     </CollapseCellGroup>
     
-    <CollapseCellGroup title="图册设置" :default-show="3">
+    <CollapseCellGroup title="图册设置" :default-show="4">
       <VanCell title="首页装修" class="cell-label-width-200">
         <template #label>
           <CellLabel txt="自定义首页装饰" :url="[E_img_url_map.homePageDemo]" />

@@ -109,7 +109,8 @@ export const globalData = ref({
   dirtyUsage: (shopId) => {
     if (!_usage.value[shopId]) return
     _usage.value[shopId].done = false
-  }
+  },
+  mulManageId: 0, // 批量分享的id，0 就不是批量分享
 })
  
 

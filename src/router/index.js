@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalData } from '@/store'
 import { getUserInfo } from '@/http'
-import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId, mobileRegex } from '@/util'
+import { isInApp, viewLog, toLogin, shopInfoManage, encryRefManage, reportInstance, getRidByShopId, mobileRegex, getImageUrl } from '@/util'
 
 const router = createRouter({
   history: createWebHistory('/dist/'),
@@ -25,7 +25,7 @@ const router = createRouter({
           path: '',
           name: 'product-manage',
           component:  () => import('@/views/product-manage/index.vue'),
-          meta: {title: '产品列表'}
+          meta: {title: '产品列表', initTit: true}
         },
         {
           path: 'product-detial/:id',
@@ -48,7 +48,8 @@ const router = createRouter({
         {
           path: 'contact',
           name: 'contact',
-          component: () => import('@/views/contact/index.vue')
+          component: () => import('@/views/contact/index.vue'),
+          meta: {initTit: true}
         },
         {
           path: 'staff-manage',
@@ -89,7 +90,8 @@ const router = createRouter({
         {
           path: 'mul-manage/:id',
           name: 'mul-manage',
-          component: () => import('@/views/mul-manage/index.vue')
+          component: () => import('@/views/mul-manage/index.vue'),
+          meta: {initTit: true}
         },
         {
           path: 'feedback',
@@ -143,7 +145,7 @@ const router = createRouter({
           path: 'custom-home',
           name: 'custom-home',
           component: () => import('@/views/custom-home/index.vue'),
-          meta: {title: '首页'}
+          meta: {title: '首页', initTit: true}
         },
         {
           path: 'custom-home-preview',
@@ -283,7 +285,7 @@ const handleHomePage = async (to, from) => {
   if (!homePageCfg) return
   if (to.name === 'custom-home') {
     if (homePageCfg?.isEnabled !== 1) { // 没有启用，这个时候重定向到产品列表
-      return {name : 'product-manage', params: {shopId}, query: to.query}
+      return {name : 'product-manage', params: {shopId}}
     }
   }
   shopId = Number(shopId)
@@ -291,7 +293,7 @@ const handleHomePage = async (to, from) => {
   if (globalData.value.homePageStatus[shopId]) return // 已经展示过首页了
   if (homePageCfg?.isEnabled !== 1) return
   globalData.value.homePageStatus[shopId] = true
-  return {name: 'custom-home', params: {shopId}, query: to.query}
+  return {name: 'custom-home', params: {shopId}}
 }
 
 const handleQuery = (to) => {
@@ -380,6 +382,36 @@ const handlePcViews = async (to) => {
   return false
 }
 
+const setTitle = async (to, from) => {
+    // 设置页面标题
+  const {meta: {title, initTit}, params: {shopId}} = to
+  let tit = to.query?.title || title || '小果图册'
+  let imageUrl = ''
+  if (to.query.titleDone) {
+    document.title = tit
+    return
+  }
+  while(true) {
+    if (!initTit || !shopId) break
+    let shopInfo = await shopInfoManage.getData(shopId)
+    shopInfo = shopInfo[0];
+    if (!shopInfo) break
+    tit = shopInfo.name
+    imageUrl = getImageUrl(shopInfo.url?.split(',')?.[0] || '')
+    break
+  }
+  document.title = tit
+  const newQuery = {...to.query, titleDone: '1'}
+  if (initTit) {
+    newQuery.title = tit
+    newQuery.imageUrl = imageUrl
+    console.log(to)
+    return {name: to.name, params: {...to.params}, query: newQuery}
+  } else {
+    return true
+  }
+}
+
 const init = async (to, from) => {
   let {shopId} = to.params
   if (shopId) {
@@ -407,6 +439,9 @@ const init = async (to, from) => {
 
   pass = await handleHomePage(to, from) // 判断是否需要跳转自定义首页
   if (Object.prototype.toString.call(pass) === '[object Object]') return pass
+
+  pass = await setTitle(to, from) // 设置页面标题
+  if (Object.prototype.toString.call(pass) === '[object Object]') return pass
   
   handleLog(to, shopId) // 写入浏览记录
   handleReport({to, shopId}) // 处理上报
@@ -414,7 +449,7 @@ const init = async (to, from) => {
   handleForwardPermi(shopId) // 处理转发权限
   // 这里是把当前页面信息传给小程序
   wx.miniProgram.postMessage({ data: {type: 'router', name: to.name}})
-  document.title = to?.query?.title || to?.meta?.title || '小果图册'
+  
 }
 
 router.beforeEach(async (to, from) => {

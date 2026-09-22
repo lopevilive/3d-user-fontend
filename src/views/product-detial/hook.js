@@ -242,6 +242,13 @@ export const useProductDetial = () => {
       const prodInfo = data.list[0]
       info.value = prodInfo
       globalData.value.currViewProd = prodInfo
+
+      const imageUrl = getImageUrl(prodInfo.url.split(',')[0])
+      const title = prodInfo.desc
+      // 只在 query 缺参数时才 replace
+      if (route.query.title !== title || route.query.imageUrl !== imageUrl) {
+        router.replace({name: 'product-detial', params: route.params, query: {title, imageUrl}})
+      }
     }
   }
 

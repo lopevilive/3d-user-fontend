@@ -116,7 +116,7 @@ export const useProductEdit = () => {
       router.replace({name: 'product-manage', params: {shopId}})
       return
     }
-    router.replace({name: 'product-detial', params: {id: id ? id : res}, query: {title: data.value.desc}})
+    router.replace({name: 'product-detial', params: {id: id ? id : res}})
     setTimeout(() => {
       if (/product-detial/.test(window.history.state.back)) {
         router.go(-1)

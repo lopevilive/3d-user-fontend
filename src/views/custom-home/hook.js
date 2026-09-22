@@ -58,14 +58,14 @@ export const useCustomHome = () => {
 
   const viewMoreProd = async () => {
     if (pageMode.value === 2) return
-    router.push({name: 'product-manage', params: {shopId}, query: route.query})
+    router.push({name: 'product-manage', params: {shopId}})
   }
 
   const prodTypeClickHandle = async (itemData) => {
     if (pageMode.value === 2) return // 预览模式不需要跳转
     const { type1 } = formatType(itemData.typeId)
     if (!type1) return
-    router.push({name: 'product-manage', params: {shopId}, query: {...route.query, activeType: type1}})
+    router.push({name: 'product-manage', params: {shopId}, query: { activeType: type1}})
   }
   
   const domRef = ref()

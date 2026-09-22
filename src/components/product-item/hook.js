@@ -106,7 +106,6 @@ export const useProductItem = (props, emits) => {
       router.push({
         name: 'product-detial',
         params: {id},
-        query: {title: desc, imageUrl: urlDisplay.value},
       })
     }
   }

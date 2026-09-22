@@ -133,19 +133,6 @@ export const useProductManage = () => {
     refresh()
   }
 
-  let updateTitStatus = 1 //  0-完成设置title、大于0-未完成
-  const setTitle = () => {
-    if (updateTitStatus === 0) return
-    const {name, url} = shopInfo.value
-    if (!name) return
-    updateTitStatus -= 1
-    if (updateTitStatus > 0) return
-    router.replace({name: 'product-manage', params: route.params, query: {
-      title: name,
-      imageUrl: getImageUrl(url?.split(',')?.[0] || '')
-    }})
-  }
-
   const fetchShop = async () => {
     const res = await shopInfoManage.getData(shopId)
     if (res?.[0]) shopInfo.value = res[0]
@@ -520,10 +507,7 @@ export const useProductManage = () => {
     const {name, url} = shopInfo.value
     if (!name) return
     await sleep(300)
-    router.replace({name: 'product-manage', params: {shopId}, query: {
-      title: name,
-      imageUrl: getImageUrl(url?.split?.(',')?.[0] || '')
-    }})
+    router.replace({name: 'product-manage', params: {shopId}})
   }
   
   let containerBottom = 0
@@ -662,12 +646,10 @@ export const useProductManage = () => {
   }
 
   const handle2Detial = async () => {
-    const {toDetial, title, imageUrl} = route.query
+    const {toDetial} = route.query
     if (toDetial) {
-      updateTitStatus += 1
-      router.replace({name: 'product-manage',  params: {shopId}})
-      await sleep(300)
-      router.push({name: 'product-detial', params: {id: toDetial}, query: {title, imageUrl}})
+      // await sleep(200)
+      router.push({name: 'product-detial', params: {id: toDetial}})
     }
   }
   
@@ -714,7 +696,6 @@ export const useProductManage = () => {
     await fetchProductType() // 主动获取产品分类
     await handleActiveType() // 看看是否跳转指定分类
     await loadHandle()
-    setTitle() // 更新页面标题
     inited = true
   }
 

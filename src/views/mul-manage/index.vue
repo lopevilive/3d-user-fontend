@@ -15,6 +15,8 @@
 <script setup>
 import { useMulManage } from './hook'
 import productItem from '@/components/product-item/index.vue'
+import {onBeforeUnmount} from 'vue'
+import {globalData} from '@/store'
 
 const {
   leftList,
@@ -22,6 +24,10 @@ const {
   leftListRef,
   rightListRef
 } = useMulManage()
+
+onBeforeUnmount(() => {
+  globalData.value.mulManageId = 0
+})
 
 </script>
 

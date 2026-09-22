@@ -4,7 +4,6 @@
 
 <script setup>
 import {useRoute, useRouter} from 'vue-router'
-import { getProduct } from '@/http'
 import { decodeScene, getImageUrl } from '@/util'
 import { globalData } from '@/store'
 
@@ -16,14 +15,7 @@ const data = decodeScene(route.query.scene)
 const toDetial = async () => {
   globalData.value.isShowSke = true
   try {
-    let res = await getProduct({productId: data.id })
-    let productInfo = res.data.list[0]
-    
-    router.replace({name: 'product-manage', params: {shopId: data.shopId}, query: {
-      title: productInfo.desc,
-      toDetial: productInfo.id,
-      imageUrl: getImageUrl(productInfo.url.split(',')[0])
-    }})
+    router.replace({name: 'product-manage', params: {shopId: data.shopId}, query: { toDetial: data.id}})
   } catch(e) {
     console.error(e)
   } finally {

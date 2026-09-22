@@ -4,7 +4,7 @@
       <VanIcon name="wap-home-o"/>
       <div>首页</div>
     </div>
-    <div class="item" :class="{active: [1,3].includes(status)}" @click="toProd">
+    <div class="item" :class="{active: [1].includes(status)}" @click="toProd">
       <VanIcon name="photo-o"/>
       <div>产品</div>
     </div>
@@ -41,33 +41,28 @@ const status = computed(() => {
   if (!isShow) return 0
   if (route.name === 'product-manage') return 1
   if (route.name === 'contact') return 2
-  if (route.name === 'mul-manage') return 3
+  if (route.name === 'mul-manage') return 1
   if (route.name === 'custom-home') return 4
   return 0
 })
 
 const toProd = () => {
-  if ([1, 3].includes(status.value)) return
-  let query = {...route.query}
-  let {preTab, id} = query
-  preTab = +preTab
-  delete query.preTab
-  delete query.id
-  if (preTab === 3) {
-    router.replace({name: 'mul-manage',params:{shopId, id}, query})
+  if ([1].includes(status.value)) return
+  if (globalData.value.mulManageId) {
+    router.replace({name: 'mul-manage',params:{shopId, id: globalData.value.mulManageId}})
   } else {
-    router.replace({name: 'product-manage',params:{shopId}, query})
+    router.replace({name: 'product-manage',params:{shopId}})
   }
-  
 }
 
 const toContact = () => {
   if (status.value === 2) return
-  const query = {...route.query, preTab: status.value}
-  if (status.value === 3) {
-    query.id = route.params.id
-  }
-  router.replace({name: 'contact', params: {shopId}, query})
+  router.replace({name: 'contact', params: {shopId}})
+}
+
+const toHomePage = async () => {
+  if (status.value === 4) return
+  router.replace({name: 'custom-home', params: {shopId}})
 }
 
 const toInventoryList = () => {
@@ -99,19 +94,13 @@ const displayTxt = computed(() => {
 
 const isShowHome = computed(() => {
   if (!shopInfo.value?.homePageCfg) return false
+  if (globalData.value.mulManageId) return false
   const homePageCfg = JSON.parse(shopInfo.value?.homePageCfg)
   if (homePageCfg.isEnabled === 1) return true
   return false
 })
 
-const toHomePage = async () => {
-  if (status.value === 4) return
-  const query = {...route.query, preTab: status.value}
-  if (status.value === 3) {
-    query.id = route.params.id
-  }
-  router.replace({name: 'custom-home', params: {shopId}, query})
-}
+
 
 const init = async () => {
   const res = await shopInfoManage.getData(shopId)
