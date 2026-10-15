@@ -44,15 +44,23 @@
           </div>
         </template>
       </VanCell>
-      <VanCell title="产品页轮播图展示"  class="cell-label-width-200">
+      <VanCell
+        title="产品页轮播图展示"  class="cell-label-width-200"
+        :class="{'cell-label-mrt': shopInfo.bannerStatus === 1}"
+      >
         <template #label>
           <CellLabel txt="展示店铺置顶信息，支持自动轮播" :url="[E_img_url_map.bannerDemo]" />
         </template>
         <template #value>
-          <VanSwitch v-model="bannerStatus"/>
+          <div class="cell-mul-value">
+            <VanButton
+              text="轮播图配置" size="small"
+              @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1"
+            />
+            <VanSwitch v-model="bannerStatus"/>
+          </div>
         </template>
       </VanCell>
-      <VanCell title="轮播图配置" is-link @click="toBannerCfg" v-if="shopInfo.bannerStatus === 1" />
       <VanCell title="分类栏展示位置"  class="cell-label-width-200" @click="handleTypeSideClick">
         <template #value>
           <div>{{ displayTypeSideMod }}</div>

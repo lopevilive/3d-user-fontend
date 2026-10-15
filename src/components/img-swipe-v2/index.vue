@@ -93,8 +93,8 @@ const clickHandle = (idx) => {
 }
 
 const isShowDownloadVideo = computed(() => {
-  if (globalData.value.rid === 99) return true
-  return false
+  // if (globalData.value.rid === 99) return true
+  // return false
 
   if ([2,3,99].includes(globalData.value.rid)) return true
   if (shopInfo.value.downloadVideo === 1) return true
