@@ -129,6 +129,16 @@
           <VanSwitch v-model="isHidePirce"/>
         </template>
       </VanCell>
+      <VanCell class="cell-label-width-200" label="开启后，游客可下载视频" v-if="isVip(shopInfo, false)">
+        <template #title>
+          <div class="vip-item">
+            <div>游客下载视频</div>
+          </div>
+        </template>
+        <template #value>
+          <VanSwitch v-model="isDownloadVideo"/>
+        </template>
+      </VanCell>
       <VanCell class="cell-label-width-200" label="开启后，支持扫码或在浏览器中打开" :class="{'cell-label-mrt': isOpenInH5}" v-if="isShowH5Mode">
         <template #title>
           <div class="vip-item">
@@ -187,7 +197,7 @@ const {
   showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, typeStatus,
   expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
   isForwardPermi, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-  toHomeMod, isHidePirce, isOpenInH5, gotoShare, isShowH5Mode
+  toHomeMod, isHidePirce, isDownloadVideo, isOpenInH5, gotoShare, isShowH5Mode
 } = useSysSetting()
 
 init()

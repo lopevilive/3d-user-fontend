@@ -16,7 +16,10 @@
 
 <script setup>
 import {ref, computed} from 'vue'
-import { toSharePage, shopInfoManage, getImageUrl, getFlexW, getRidByShopId} from '@/util'
+import {
+  toSharePage, shopInfoManage, getImageUrl, getFlexW, getRidByShopId,
+  FLOAT_SIZE, getFloatOffset, saveFloatPos, bindScreenChange
+} from '@/util'
 import { useRoute } from 'vue-router'
 import { globalData } from '@/store'
 
@@ -26,32 +29,32 @@ const gap = getFlexW(24)
 
 const _change = ref(false)
 const localKey = 'shareFloatPos'
+
+// 垂直方向的错开系数（多个悬浮球之间避免重叠）
+const num = 1
+
+// 默认位置：右侧固定位置、垂直方向按系数错开
+const getDefaultOffset = () => ({
+  x: getFlexW(375 - 24 - FLOAT_SIZE),
+  y: Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(FLOAT_SIZE) * num)
+})
+
 const offsetDiaplay = computed({
   get() {
     if (_change.value) {}
-    const num = 1;
-    let y = Math.floor(window.innerHeight / 2 + getFlexW(20 * num) + getFlexW(30) * num)
-    let x = getFlexW(375 - 24 - 30)
-    let localData = localStorage.getItem(localKey)
-    if (localData) {
-      try {
-        localData = JSON.parse(localData)
-        x = localData.x
-        y = localData.y
-      } catch(e) {
-        console.error(e)
-      }
-    }
-    return {x, y}
+    // 换屏（如折叠屏合上使用外屏）时会丢弃失效缓存并回到默认位置
+    return getFloatOffset(localKey, getDefaultOffset(), gap)
   },
   set(val) {
-    let {x, y} = val
-    x = parseInt(x)
-    y = parseInt(y)
-    const localData = {x, y}
-    localStorage.setItem(localKey, JSON.stringify(localData))
+    // 记录位置的同时记录当前屏幕尺寸，供下次进入/换屏时对比
+    saveFloatPos(localKey, val)
     _change.value = !_change.value
   }
+})
+
+// 屏幕尺寸变化（折叠 / 旋转）时重新计算，必要时丢弃缓存
+bindScreenChange(() => {
+  _change.value = !_change.value
 })
 
 const shopInfo = ref({})

@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getProduct } from '@/http'
 import {
   commonFetch,toSharePage, shopInfoManage, getImageUrl, getTypeName, formatAttrs, getMulSpecName,
-  getMulSpecUrl, getSpecPrices, formatPoint, getRidByShopId
+  getMulSpecUrl, getSpecPrices, formatPoint, getRidByShopId, reportInstance
 } from '@/util'
 import { globalData } from '@/store'
 import { showImagePreview } from 'vant';
@@ -249,6 +249,7 @@ export const useProductDetial = () => {
       if (route.query.title !== title || route.query.imageUrl !== imageUrl) {
         router.replace({name: 'product-detial', params: route.params, query: {title, imageUrl}})
       }
+      reportInstance.toReport({shopId, field: `productViewDetial.${productId}`})
     }
   }
 

@@ -34,15 +34,17 @@ class ReportManage {
   setLocalData(data) {
     localStorage.setItem(this.localKey, JSON.stringify(data))
   }
-  async toReport(payload) {
+  async toReport(payload) { // 外部调用
+    if (globalData.value.rid === 99) return //  超级管理员不上报
     const ownerList = globalData.value.userInfo?.ownerList || []
     const adminList = globalData.value.userInfo?.adminList || []
-    if ([...ownerList, ...adminList].includes(payload.shopId)) {
-      payload.isAdmin = true
-    } else {
-      payload.isAdmin = false
-    }
-    await reportCgi(payload)
+    const isAdmin = [...ownerList, ...adminList].includes(payload.shopId)
+    let payloadField = isAdmin ? 'admin' : 'custom'
+    const { shopId, field } = payload
+    if (!shopId) return
+    if (!field) return
+    payloadField = `${payloadField}.${field}`
+    await reportCgi({shopId, field: payloadField})
   }
   
   async handleMember({shopId}) {  // 统计人数，每天统计一次
@@ -61,23 +63,11 @@ class ReportManage {
     await this.toReport({  field: 'openTimes',  shopId })
   }
 
-  async handleViewDetial({to, shopId}) { // 统计打开产品详情页数量，每次打开统计一次
-    if (to.name !== 'product-detial') return
-    await this.toReport({ field: 'viewDetial', shopId})
-  }
-
-  async report(payload) {
+  async report(payload) { // 外部调用
     const {shopId} = payload
     if (!shopId) return
-    if (globalData.value.rid === 99) return //  超级管理员不上报
     await this.handleMember(payload)
     await this.handleOpenTims(payload)
-    await this.handleViewDetial(payload)
-
-    // this.handleMember(payload)
-    // this.handleOpenTims(payload)
-    // this.handleViewDetial(payload)
-    
   }
 }
 

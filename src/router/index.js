@@ -158,6 +158,12 @@ const router = createRouter({
           name: 'vip-concat',
           component: () => import('@/views/vip-concat/index.vue'),
           meta: {title: '会员权益'}
+        },
+        {
+          path: 'workbench',
+          name: 'workbench',
+          component: () => import('@/views/workbench/index.vue'),
+          meta: {title: '工作台'}
         }
       ]
     },
@@ -405,7 +411,6 @@ const setTitle = async (to, from) => {
   if (initTit) {
     newQuery.title = tit
     newQuery.imageUrl = imageUrl
-    console.log(to)
     return {name: to.name, params: {...to.params}, query: newQuery}
   } else {
     return true

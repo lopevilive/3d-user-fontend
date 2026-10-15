@@ -8,7 +8,7 @@
       <VanIcon name="photo-o"/>
       <div>产品</div>
     </div>
-    <div class="item" :class="{active: status === 2}" @click="toContact">
+    <div v-if="isShowContact" class="item" :class="{active: status === 2}" @click="toContact">
       <VanIcon name="user-o"/>
       <div>{{ displayTxt }}</div>
     </div>
@@ -16,6 +16,10 @@
       <VanIcon v-if="totalCount > 0" name="cart-o" :badge="totalCount" />
       <VanIcon v-else name="cart-o" />
       <div>清单</div>
+    </div>
+    <div class="item" v-if="isShowWorkbench" @click="toWorkbench" :class="{active: status === 5}">
+      <VanIcon name="chart-trending-o" />
+      <div>工作台</div>
     </div>
   </div>
 </template>
@@ -33,7 +37,7 @@ const shopId = +route.params.shopId
 const shopInfo = ref()
 
 const isShow = computed(() => {
-  if (['product-manage', 'contact', 'mul-manage', 'custom-home'].includes(route.name)) return true
+  if (['product-manage', 'contact', 'mul-manage', 'custom-home', 'workbench'].includes(route.name)) return true
   return false
 })
 
@@ -43,6 +47,7 @@ const status = computed(() => {
   if (route.name === 'contact') return 2
   if (route.name === 'mul-manage') return 1
   if (route.name === 'custom-home') return 4
+  if (route.name === 'workbench') return 5
   return 0
 })
 
@@ -67,6 +72,10 @@ const toHomePage = async () => {
 
 const toInventoryList = () => {
   router.push({name: 'inventory-list'})
+}
+
+const toWorkbench = () => {
+  router.replace({name: 'workbench', params: {shopId}})
 }
 
 const shopCarList = shopCarInstance.getAllData()
@@ -97,6 +106,20 @@ const isShowHome = computed(() => {
   if (globalData.value.mulManageId) return false
   const homePageCfg = JSON.parse(shopInfo.value?.homePageCfg)
   if (homePageCfg.isEnabled === 1) return true
+  return false
+})
+
+const isShowContact = computed(() => {
+  return true
+  if (!globalData.value.userInfo?.userId) return true
+  if ([2,3,99].includes(globalData.value.rid)) return false
+  return true
+})
+
+const isShowWorkbench = computed(() => {
+  return false
+  if (!globalData.value.userInfo?.userId) return false
+  if ([2,3,99].includes(globalData.value.rid)) return true
   return false
 })
 

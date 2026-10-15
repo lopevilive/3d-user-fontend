@@ -16,7 +16,10 @@
 
 <script setup>
 import {ref, computed } from 'vue'
-import { getFlexW, emitter, throttle } from '@/util'
+import {
+  getFlexW, emitter, throttle,
+  FLOAT_SIZE, getFloatOffset, saveFloatPos, bindScreenChange
+} from '@/util'
 
 const props = defineProps({
   listRef: {type: Object, default: () => {}}
@@ -29,31 +32,29 @@ const gap = getFlexW(24)
 
 const _change = ref(false)
 const localKey = 'goTopFloatPos'
+
+// 默认位置：右侧固定位置、垂直居中
+const getDefaultOffset = () => ({
+  x: getFlexW(375 - 24 - FLOAT_SIZE),
+  y: Math.floor(window.innerHeight / 2)
+})
+
 const offsetDiaplay = computed({
   get() {
     if (_change.value) {}
-    let x = getFlexW(375 - 24 - 30)
-    let y = Math.floor(window.innerHeight / 2)
-    let localData = localStorage.getItem(localKey)
-    if (localData) {
-      try {
-        localData = JSON.parse(localData)
-        x = localData.x
-        y = localData.y
-      } catch(e) {
-        console.error(e)
-      }
-    }
-    return {x, y}
+    // 换屏（如折叠屏合上使用外屏）时会丢弃失效缓存并回到默认位置
+    return getFloatOffset(localKey, getDefaultOffset(), gap)
   },
   set(val) {
-    let {x, y} = val
-    x = parseInt(x)
-    y = parseInt(y)
-    const localData = {x, y}
-    localStorage.setItem(localKey, JSON.stringify(localData))
+    // 记录位置的同时记录当前屏幕尺寸，供下次进入/换屏时对比
+    saveFloatPos(localKey, val)
     _change.value = !_change.value
   }
+})
+
+// 屏幕尺寸变化（折叠 / 旋转）时重新计算，必要时丢弃缓存
+bindScreenChange(() => {
+  _change.value = !_change.value
 })
 
 

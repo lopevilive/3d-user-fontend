@@ -194,6 +194,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import { IconUpload, IconDownload, IconInfoCircle } from '@arco-design/web-vue/es/icon'
 import { Button as AButton, Upload as AUpload } from '@arco-design/web-vue'
+import { downloadTemplate } from '../config'
 import { uploadZip } from '@/util/cos'
 import { processBatchZip, validBatchUploadToken } from '@/http'
 import { commonFetch } from '@/util'
@@ -268,15 +269,7 @@ const onZipSelected = async (fileList) => {
   }
 }
 
-// 下载示例模板
-const downloadTemplate = () => {
-  const link = document.createElement('a')
-  link.href = '//upload-1259129443.cos.ap-guangzhou.myqcloud.com/%E6%89%B9%E9%87%8F%E4%B8%8A%E4%BC%A0%E7%A4%BA%E4%BE%8B.zip'
-  // link.download = '批量上传模版.zip'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
+// 下载示例模板：统一走 ../config.js 的 downloadTemplate（地址与弹窗共用）
 </script>
 
 <style scoped lang="scss">

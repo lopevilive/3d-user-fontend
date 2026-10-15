@@ -319,6 +319,22 @@ export const useSysSetting = () => {
     }
   })
 
+  const modDownloadVideo = async (val) => {
+    await commonFetch(modShopStatus, {shopId, downloadVideo: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  const isDownloadVideo = computed({
+    get() {
+      if (shopInfo.value?.downloadVideo === 1) return true
+      return false
+    },
+    set(val) {
+      modDownloadVideo(val)
+    }
+  })
+
   const modOpenInH5 = async (val) => {
     if (val) {
       if (!isVip(shopInfo.value)) {
@@ -397,7 +413,7 @@ export const useSysSetting = () => {
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
     isForwardPermi, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-    toHomeMod, isHidePirce, isOpenInH5, gotoShare, isShowH5Mode
+    toHomeMod, isHidePirce, isDownloadVideo, isOpenInH5, gotoShare, isShowH5Mode
   }
 
 }

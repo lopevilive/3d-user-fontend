@@ -59,6 +59,32 @@
         </a-button>
       </div>
     </div>
+
+    <!-- 示例文件引导弹窗 -->
+    <div v-if="showGuide" class="guide-mask">
+      <div class="guide-card">
+        <div class="guide-icon">📦</div>
+        <div class="guide-title">上传前请先下载示例文件</div>
+        <div class="guide-desc">请先下载示例文件，按示例中的字段与命名规则整理好数据后，再打包上传。</div>
+
+        <div class="guide-steps">
+          <div class="guide-step" v-for="(item, idx) in guideSteps" :key="idx">
+            <span class="step-index">{{ idx + 1 }}</span>
+            <span class="step-text">{{ item }}</span>
+          </div>
+        </div>
+
+        <div class="guide-footer">
+          <a-button type="primary" size="large" @click="handleDownloadTemplate">
+            下载示例文件
+          </a-button>
+          <div class="guide-right">
+            <a-checkbox v-model="noTipChecked">近期不再提示</a-checkbox>
+            <a-button size="large" @click="closeGuide">我知道了</a-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -66,9 +92,10 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { IconEdit, IconFolder } from '@arco-design/web-vue/es/icon'
-import { Tabs as ATabs, TabPane as ATabPane, Button as AButton } from '@arco-design/web-vue'
+import { Tabs as ATabs, TabPane as ATabPane, Button as AButton, Checkbox as ACheckbox } from '@arco-design/web-vue'
 import '@arco-design/web-vue/dist/arco.css'
 import { mobileRegex, commonFetch } from '@/util'
+import { isNoTipValid, setNoTip, downloadTemplate } from './config'
 import ManualUpload from './components/ManualUpload.vue'
 import ZipUpload from './components/ZipUpload.vue'
 import {validBatchUploadToken, fetchBatchUploadTask} from '@/http'
@@ -88,6 +115,24 @@ const taskDone = ref(false)
 const taskPercent = ref(0)
 const taskResult = ref(0)
 const taskStatusText = ref('')
+
+// 示例文件引导弹窗
+const showGuide = ref(false)
+const noTipChecked = ref(false)
+const guideSteps = [
+  '下载示例文件（ZIP 包），内含 Excel 模板与示例图片',
+  '按示例填写 Excel 表头与产品数据，图片按行号命名',
+  '将 Excel 与图片一起打包成 ZIP 后上传'
+]
+
+const handleDownloadTemplate = () => {
+  downloadTemplate()
+}
+
+const closeGuide = () => {
+  if (noTipChecked.value) setNoTip() // 勾选后记录静默到期时间，过期后再次提示
+  showGuide.value = false
+}
 
 const startQueryBatchTask = async () => {
   const {taskId} = route.query
@@ -162,6 +207,8 @@ onMounted(async () => {
     globalData.value.userInfo.userId = userId
     shopId.value = sId
     sessionStorage.setItem('token', token)
+    // 非“近期不再提示”有效期内时，弹出示例文件引导
+    if (!isNoTipValid()) showGuide.value = true
     startQueryBatchTask()
   } catch(e) {
     linkExpired.value = true
@@ -333,6 +380,98 @@ onMounted(async () => {
     font-size: 14px;
     color: #86909c;
     line-height: 1.6;
+  }
+}
+
+/* ========== 示例文件引导弹窗 ========== */
+.guide-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-card {
+  width: 520px;
+  max-width: calc(100vw - 48px);
+  box-sizing: border-box;
+  padding: 32px 36px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  text-align: center;
+
+  .guide-icon {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .guide-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d2129;
+  }
+
+  .guide-desc {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #86909c;
+  }
+
+  .guide-steps {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: #f7f9fc;
+    text-align: left;
+
+    .guide-step {
+      display: flex;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4e5969;
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+
+      .step-index {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        margin-top: 1px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        background: #2f54eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .guide-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+
+    .guide-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: #86909c;
+    }
   }
 }
 </style>
