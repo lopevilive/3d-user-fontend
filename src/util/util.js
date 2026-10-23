@@ -292,6 +292,26 @@ export const toSharePage = (payload = {}) => {
   wx.miniProgram.navigateTo({url: `../share-page/share-page${query}`})
 }
 
+// 分享图册
+export const toShareAlbum = (shopInfo) => {
+  const {name, url, desc, forwardPermi, openInH5, id: shopId} = shopInfo
+  const sharePayload = {
+    src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
+    url: getImageUrl(url?.split(',')?.[0] || ''),
+    title: name,
+    desc1: [desc || ''],
+    desc2: [],
+    scene: {name: 'product-manage', shopId},
+    forwardPermi,
+  }
+  const currShopRid = getRidByShopId(shopId, globalData.value.userInfo)
+  if (openInH5 === 1 && [2,3,4,99].includes(currShopRid)) {
+    sharePayload.h5Url = `${location.origin}/dist/product-manage/${shopId}`
+  }
+  console.log(sharePayload, 'ssss')
+  toSharePage(sharePayload)
+}
+
 export const sleep = async (time = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {

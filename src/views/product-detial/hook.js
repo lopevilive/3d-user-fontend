@@ -201,8 +201,6 @@ export const useProductDetial = () => {
   })
 
   const displayInnerParams = computed(() => {
-    const {rid} = globalData.value
-    if (![2,3,99].includes(rid)) return []
     const {specs} = info.value
     return specs ? JSON.parse(specs) : []
   })

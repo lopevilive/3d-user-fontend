@@ -4,7 +4,7 @@ import { globalData } from '@/store'
 import { encryAlbum, getEncryCode, updateEncryCode, modShopStatus, saveWatermarkCfg } from '@/http'
 import {
   toContactSys, shopInfoManage, commonFetch, watermarkManage, watermark_cfg_def, formatWatermarkPayload,
-  globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName, toSharePage,
+  globalLoading, isVip, vipInfoManage, E_vip_map, toVip, getTypeName, toShareAlbum,
   getImageUrl
 } from '@/util'
 import { showConfirmDialog } from 'vant';
@@ -335,6 +335,23 @@ export const useSysSetting = () => {
     }
   })
 
+  const modInnerParamsType = async (val) => {
+    await commonFetch(modShopStatus, {shopId, innerParamsType: val ? 1: 0})
+    shopInfoManage.dirty(shopId)
+    initShopInfo()
+  }
+  
+  // 是否允许经销商查看内部参数（0-不允许、1-允许）
+  const isInnerParamsType = computed({
+    get() {
+      if (shopInfo.value?.innerParamsType === 1) return true
+      return false
+    },
+    set(val) {
+      modInnerParamsType(val)
+    }
+  })
+
   const modOpenInH5 = async (val) => {
     if (val) {
       if (!isVip(shopInfo.value)) {
@@ -379,17 +396,7 @@ export const useSysSetting = () => {
   }
 
   const gotoShare = () => {
-    const {name, url, desc, forwardPermi} = shopInfo.value
-    toSharePage({
-      src_path: `/product-manage/${shopId}?title=${encodeURIComponent(name)}&imageUrl=${encodeURIComponent(getImageUrl(url.split(',')[0]))}`,
-      url: url?.split(',')?.[0] || '',
-      title: name,
-      desc1: [desc || ''],
-      desc2: [],
-      scene: {name: 'product-manage', shopId},
-      forwardPermi,
-      h5Url: `${location.origin}/dist/product-manage/${shopId}`
-    })
+    toShareAlbum(shopInfo.value)
   }
   
   const isShowH5Mode = computed(() => { 
@@ -413,7 +420,7 @@ export const useSysSetting = () => {
     showVip, needAddress, inveExportStatus, toBannerCfg, bannerStatus, vipName, vipInfo,
     expiredTimeDisplay, isShowVip, displayRequiredType, handleRequiredType, typeSelectDialogRef,
     isForwardPermi, displayTypeSideMod, typeSideSelectRef, handleTypeSideClick,
-    toHomeMod, isHidePirce, isDownloadVideo, isOpenInH5, gotoShare, isShowH5Mode
+    toHomeMod, isHidePirce, isDownloadVideo, isInnerParamsType, isOpenInH5, gotoShare, isShowH5Mode
   }
 
 }

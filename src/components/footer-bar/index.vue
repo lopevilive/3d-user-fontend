@@ -117,6 +117,7 @@ const isShowContact = computed(() => {
 })
 
 const isShowWorkbench = computed(() => {
+  if (globalData.value.rid === 99) return true
   return false
   if (!globalData.value.userInfo?.userId) return false
   if ([2,3,99].includes(globalData.value.rid)) return true

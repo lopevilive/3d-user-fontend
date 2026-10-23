@@ -1,9 +1,16 @@
 <template>
   <VanField class="view-com-inner-params" :border="false" :rules="[{validator: validSync}]">
     <template #label>
-      <FormLabel label="内部备注" tips="仅管理员可见">
+      <FormLabel label="内部备注" tips="可见范围可在隐私设置中调整">
         <template #default>
-          <div class="admin-tag">仅管理员可见，客户无法看到。</div>
+          <div class="admin-tag">
+            <template v-if="allowInnerParamsDealer">
+              当前<span class="role">管理员</span>、<span class="role">分销员</span>可见，客户无法查看，可在「隐私设置 - 内部参数权限」中修改。
+            </template>
+            <template v-else>
+              当前仅<span class="role">管理员</span>可见，<span class="role">分销员</span>与客户无法查看，可在「隐私设置 - 内部参数权限」中修改。
+            </template>
+          </div>
         </template>
       </FormLabel>
     </template>
@@ -71,11 +78,33 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { shopInfoManage } from '@/util';
 
 const props = defineProps({
   modelValue: { type: String, default: '' }
 });
+
+const route = useRoute()
+const shopId = +route.params.shopId
+
+const shopInfo = ref({})
+
+// 内部参数可见范围：innerParamsType 1-管理员 + 分销员；0（默认）- 仅管理员
+const allowInnerParamsDealer = computed(() => shopInfo.value?.innerParamsType === 1)
+
+const initShopInfo = async () => {
+  if (!shopId) return
+  try {
+    const ret = await shopInfoManage.getData(shopId)
+    shopInfo.value = ret?.[0] || {}
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+onMounted(initShopInfo)
 
 const emits = defineEmits(['update:modelValue', 'resetValidation']);
 
@@ -256,5 +285,11 @@ const validSync = () => {
   padding: 20px 10px;
   color: $grey7;
   font-size: $fsM;
+  line-height: 1.6;
+
+  .role {
+    color: $themeColor;
+    font-weight: bold;
+  }
 }
 </style>

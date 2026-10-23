@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="album-setting" @click="emit('setting')">
+        <div class="album-setting" @click="goSetting">
           <VanIcon name="setting-o" />
         </div>
       </div>
@@ -39,7 +39,7 @@
           </span>
         </div>
 
-        <div v-if="showUpgradeBtn" class="ov-btn" :class="upgradeClass" @click="emit('upgrade')">
+        <div v-if="showUpgradeBtn" class="ov-btn" :class="upgradeClass" @click="gotoVip">
           {{ upgradeText }}
         </div>
       </div>
@@ -61,11 +61,13 @@
           class="action-btn primary add-prod"
           icon="plus"
           color="linear-gradient(135deg, #6b9bff 0%, #2f5fe0 100%)"
+          @click="toAddProd"
         >新增产品</VanButton>
         <VanButton
           class="action-btn primary share-album"
           icon="share-o"
           color="linear-gradient(135deg, #4ade9f 0%, #06b663 100%)"
+          @click="toShare"
         >分享图册</VanButton>
       </div>
 
@@ -74,7 +76,7 @@
           v-for="item in visibleSubActions"
           :key="item.key"
           class="action-btn sub"
-          @click="emit('sub', item.key)"
+          @click="btnClickHandle(item)"
         >
           <VanIcon :name="item.icon" class="sub-icon" />
           <span class="sub-title">{{ item.label }}</span>
@@ -108,6 +110,7 @@
               class="learn-btn"
               icon="arrow"
               icon-position="right"
+              @click="gotoVip"
             >前往了解</VanButton>
           </div>
         </div>
@@ -118,17 +121,16 @@
 
 <script setup>
 import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { globalData } from '@/store'
-import { vipInfoManage, shopInfoManage, getImageUrl, E_vip_map } from '@/util'
+import { vipInfoManage, shopInfoManage, getImageUrl, E_vip_map, toShareAlbum, toVip } from '@/util'
 
 const OperaAnalysis = defineAsyncComponent({
   loader: () => import('@/views/workbench/OperaAnalysis.vue')
 })
 
-const emit = defineEmits(['upgrade', 'setting', 'sub'])
-
 const route = useRoute()
+const router = useRouter()
 const shopId = +route.params.shopId
 
 const vipInfo = ref(null)
@@ -143,14 +145,33 @@ const coverUrl = computed(() => {
 
 const shopName = computed(() => shopInfo.value?.name || '')
 
+const goSetting = () => {
+  router.push({name: 'sys-setting'})
+}
+
 // 次级操作按钮配置（一行 4 个，超出的默认折叠）
 const subActions = [
-  { key: 'mul-manage', label: '批量管理', icon: 'apps-o' },
-  { key: 'type-manage', label: '分类管理', icon: 'cluster-o' },
-  { key: 'cus-inventory', label: '客户清单', icon: 'orders-o' },
-  { key: 'sys-setting', label: '图册设置', icon: 'setting-o' },
-  { key: 'home-mod', label: '首页装饰', icon: 'wap-home-o' },
-  { key: 'staff-manage', label: '人员管理', icon: 'manager-o' }
+  { key: 'type-manage', label: '分类管理', icon: 'cluster-o', action: () => {
+    router.push({name: 'type-manage'})
+  } },
+  { key: 'cus-inventory', label: '客户清单', icon: 'orders-o', action: () => {
+    globalData.value.cusInventoryNeedUpdate = true
+    router.push({name: 'cus-inventory'})
+  } },
+  { key: 'staff-manage', label: '人员管理', icon: 'manager-o', action: () => {
+    router.push({name: 'staff-manage'})
+  } },
+  { key: 'sys-setting', label: '图册设置', icon: 'setting-o', action: () => {
+    goSetting()
+  } },
+  { key: 'mul-manage', label: '批量管理', icon: 'apps-o', action: () => {
+    router.push({name: 'product-manage', params: {shopId}})
+    globalData.value.editStatus = 1;
+  } },
+  { key: 'home-mod', label: '首页装饰', icon: 'wap-home-o', action: () => {
+    router.push({name: 'home-mod', params: {shopId}})
+  } },
+
 ]
 
 const SUB_VISIBLE_COUNT = 4
@@ -201,7 +222,10 @@ const vipItem = computed(() => {
 const levelName = computed(() => vipItem.value?.name || '普通用户')
 
 // 会员是否有效（是会员且未过期）
-const isVipActive = computed(() => !!vipItem.value?.isVip && !isExpired.value)
+const isVipActive = computed(() => {
+  if (globalData.value.rid === 99) return true
+  return !!vipItem.value?.isVip && !isExpired.value
+})
 
 // 会员行右侧的轻量标签：未开通会员 / 到期时间
 const expireText = computed(() => {
@@ -243,6 +267,24 @@ const upgradeClass = computed(() => {
   return 'is-open'
 })
 
+const toAddProd = () => {
+  router.push({name: 'product-edit'})
+}
+
+const toShare = () => {
+  toShareAlbum(shopInfo.value)
+}
+
+const btnClickHandle = ({action}) => {
+  action && action()
+
+}
+
+const gotoVip = () => {
+  toVip(shopId)
+}
+
+
 const init = async () => {
   try {
     const [vipList, shopList] = await Promise.all([
@@ -261,6 +303,12 @@ const init = async () => {
 onMounted(() => {
   init()
 })
+</script>
+
+<script>
+export default {
+  name: 'Workbench'
+}
 </script>
 
 <style scoped lang="scss">

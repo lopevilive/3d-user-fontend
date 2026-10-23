@@ -20,7 +20,7 @@ import ShareFloat from '@/components/shareFloat/index.vue'
 import GoTopFloat from '@/components/gotop-float/index.vue'
 
 const aliveList = computed(() => {
-  const ret = ['ProductManage', 'MulManage', 'CusInventory', 'CustomHome']
+  const ret = ['ProductManage', 'MulManage', 'CusInventory', 'CustomHome', 'Workbench']
   if (globalData.value.prodEditNeedAlive) ret.push('ProductEdit')
   if (globalData.value.specEditNeedAlive) ret.push('SpecEdit')
   if (globalData.value.homeModNeedAlive) ret.push('HomeMod')

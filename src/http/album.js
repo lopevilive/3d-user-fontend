@@ -177,3 +177,7 @@ export const processBatchZip = (payload) => {
 export const fetchBatchUploadTask = (payload) => {
   return post(`${album}FetchBatchUploadTask`, payload)
 }
+
+export const fetchViewRecord = (payload) => {
+  return post(`${album}FetchViewRecord`, payload)
+}
