@@ -94,8 +94,8 @@ export const replaceCDN = (str) =>{
 }
 
 export const getImageUrl = (url, payload = {}) => {
-  const defauQua = 70
-  const defauPx = 800
+  const defauQua = 80
+  const defauPx = 900
   const {shopId, qua, w} = payload
   let quality = qua ? qua : defauQua
   let px = w ? w : defauPx

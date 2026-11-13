@@ -154,6 +154,7 @@ export const E_img_qua_map = [
   // {shopId: 2361, qua: 65},
   // {shopId: 2357, qua: 65},
   {shopId: 358, qua: 95, w: 1080 },
+  {shopId: 3898, qua: 95, w: 1080 },
 ]
 
 export const E_img_url_map = {
